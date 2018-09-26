@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qcap.cac.dao.LocationMapper" >
+ 	 
+  <select id="selectLocationByPage" parameterType="java.util.Map" resultType="java.util.Map">
+  		SELECT id,name,code,pId,deleteFlag,remark,parentName from(
+	  	SELECT t.ID_  as id,t.NAME_ as name,
+		t.CODE_ as code,
+		t.PID_ as pId, t.DELETE_FLAG_ as deleteFlag,
+		t.REMARK_ as remark,b.NAME_  as parentName
+		FROM
+		(SELECT  ID_, NAME_, CODE_, PID_, DELETE_FLAG_, REMARK_, CREATE_EMP_, CREATE_DATE_, UPDATE_DATE_, 
+        UPDATE_EMP_, VERSION 
+		FROM tb_sys_location
+		where DELETE_FLAG_='0'
+		<if test="@com.qcap.core.utils.Ognl@isNotEmpty(pId)">
+            AND PID_ = #{pId} OR ID_= #{pId}
+     	</if> 
+		)t
+		LEFT JOIN tb_sys_location b
+		ON t.PID_=b.ID_ ) location
+		 ORDER BY id ASC
+  </select>
+<!-- 查找 -->
+  <select id="selectAll" resultType="java.util.Map"  parameterType="java.util.Map">
+  select 
+	ID_ as id, NAME_ as name,CODE_ as code, PID_ as pId, DELETE_FLAG_ as deleteFlag   
+  from tb_sys_location 
+  where DELETE_FLAG_='0'
+  </select>
+  
+  
+</mapper>

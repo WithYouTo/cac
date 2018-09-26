@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.fame.dao.PositionMapper">
+  <!-- 职位管理分页查询 -->
+  <select id="selectPositionsByPage" parameterType="java.util.Map" resultType="java.util.Map">
+	  	SELECT 
+	  	bb05.POSITION_ID_  AS tbbb05Id,	
+	  	bb05.POSITION_NAME_ AS positionName,
+	  	bb08.FULL_NAME_ AS name,
+	  	pp01a.DESC1_ AS positionLevel
+		FROM tb_sys_position bb05 LEFT JOIN tbpubcode01 pp01a ON bb05.POSITION_LEVEL_ = pp01a.DESC_
+		LEFT JOIN tb_sys_company bb08 ON bb05.COMPANY_CODE_ = bb08.COMPANY_CODE_
+		WHERE bb05.DELETE_FLAG_= '0' AND  pp01a.CONFIG_CODE_='POSITION_LEVEL_'
+		<if test="@com.qcap.core.utils.Ognl@isNotEmpty(positionName)">  
+            AND bb05.POSITION_NAME_ LIKE #{positionName}
+     	</if> 
+     	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(companyCode)">  
+            AND bb05.COMPANY_CODE_ = #{companyCode}
+     	</if> 
+		ORDER BY bb05.COMPANY_CODE_ ASC,bb05.POSITION_NAME_ ASC
+  </select>
+  
+	<!--新增职位 -->
+	<insert id="insertNewPosition" parameterType="com.qcap.cac.model.TbSysPosition" >
+    insert into tb_sys_position (POSITION_ID_, POSITION_NAME_, POSITION_LEVEL_, 
+      COMPANY_CODE_ , START_TIME_ , END_TIME_, DELETE_FLAG_,  
+      CREATE_EMP_, CREATE_DATE_, UPDATE_DATE_, 
+      UPDATE_EMP_, VERSION_)
+    values (#{positionId}, #{positionName}, #{positionLevel}, 
+      #{companyCode},#{startTime}, #{endTime}, #{deleteFlag}, 
+      #{createEmp}, #{createDate}, #{updateDate}, 
+      #{updateEmp}, #{version})
+	</insert>
+
+	<!-- 修改职位信息 -->
+	<update id="updatePositionInfo" parameterType="com.qcap.cac.model.TbSysPosition" >
+    UPDATE tb_sys_position
+    <set>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(positionName)"> 
+    	POSITION_NAME_ = #{positionName},
+    </if>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(positionLevel)">
+   		POSITION_LEVEL_ = #{positionLevel},
+    </if>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(companyCode)">
+   		COMPANY_CODE_ = #{companyCode},
+    </if>
+        UPDATE_DATE_ = #{updateDate},
+        UPDATE_EMP_ = #{updateEmp} 
+    </set>
+    	WHERE  POSITION_ID_=#{positionId}
+	</update>
+	
+	<!-- 根据主键查询 -->
+	<select id="selectByPrimaryKey" resultType="java.util.Map" parameterType="String" >
+    	SELECT bb05.POSITION_ID_  AS tbbb05Id,bb05.POSITION_NAME_ AS positionName,
+	  	bb05.POSITION_LEVEL_ AS positionLevel,bb05.COMPANY_CODE_ AS companyCode,
+	  	bb08.FULL_NAME_ AS companyName
+	    FROM tb_sys_position bb05 LEFT JOIN tb_sys_company bb08 ON bb05.COMPANY_CODE_ = bb08.COMPANY_CODE_
+	    WHERE POSITION_ID_ = #{tbbb05Id}  AND DELETE_FLAG_='0'
+   </select>
+  
+  <select id ="selectExistNum" parameterType="java.util.Map" resultType="String">
+   	SELECT COUNT(*) FROM tb_sys_position
+   	WHERE POSITION_NAME_ = #{positionName} AND COMPANY_CODE_ = #{companyCode}
+   </select>
+   
+    <!-- 查询是否关联用户 -->
+   <select id="selectIfUsed" parameterType="String" resultType="String">
+   		SELECT COUNT(*) FROM tb_user WHERE POSITION_ID_ = #{tbbb05Id} AND STATUS_ ='1'
+   </select>
+   
+   <!-- 删除职位 -->
+  <delete id="deletePosition" parameterType="String"  >
+  		DELETE FROM tb_sys_position WHERE POSITION_ID_=#{tbbb05Id}
+  </delete>
+  
+  <!-- 根据公司全称查询公司别 -->
+  <select id="selectCompCode" parameterType="String" resultType="String">
+   		SELECT COMPANY_CODE_ AS companyCode  
+   		FROM tb_sys_company WHERE FULL_NAME_ = #{fullName} 
+   </select>
+</mapper>

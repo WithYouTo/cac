@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="ibox float-e-margins">
+<div class="ibox-content">
+   <div class="form-horizontal" >
+	 <input type="hidden" id="companyId" th:value="${info.companyId}"/>
+	 <input type="hidden" id="oldCompName" th:value="${info.compName}"/>
+	 <input type="hidden" id="oldFullName" th:value="${info.fullName}"/>
+	 <input type="hidden" id="oldCompBrand" th:value="${info.compBrand}"/>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">公司编码</label>
+			<div class="col-xs-3">
+   				<input class="form-control" id="companyCode" th:value="${info.companyCode}" disabled="disabled"/>
+			</div>
+			
+			<label class="col-xs-2 col-xs-offset-1 control-label">公司品牌</label>
+			<div class="col-xs-3">
+   				<input class="form-control" id="newCompBrand" th:value="${info.compBrand}"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">公司全称</label>
+			<div class="col-xs-3">
+				 <input class="form-control" id="newFullName" th:value="${info.fullName}"></input>
+			</div>
+			
+			<label class="col-xs-2 col-xs-offset-1 control-label">公司简称</label>
+			<div class="col-xs-3">
+				 <input class="form-control"  id="newCompName" th:value="${info.compName}"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">公司地址</label>
+			<div class="col-xs-3">
+				 <input class="form-control"  id="address" th:value="${info.address}"></input>
+			</div>
+		
+			<label class="col-xs-2 col-xs-offset-1 control-label">邮政编码</label>
+			<div class="col-xs-3">
+   				<input class="form-control" id="mail" th:value="${info.mail}"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">公司电话</label>
+			<div class="col-xs-3">
+				 <input class="form-control" id="compTel" th:value="${info.compTel}"></input>
+			</div>
+		
+			<label class="col-xs-2 col-xs-offset-1 control-label">传真号码</label>
+			<div class="col-xs-3">
+				 <input class="form-control"  id="fax" th:value="${info.fax}"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">公司网址</label>
+			<div class="col-xs-3">
+				 <input class="form-control"  id="compWeb" th:value="${info.compWeb}"></input>
+			</div>
+		
+			<label class="col-xs-2 col-xs-offset-1 control-label">电子邮箱</label>
+			<div class="col-xs-3">
+				 <input class="form-control"  id="email" th:value="${info.email}"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">国税号</label>
+			<div class="col-xs-3">
+   				<input class="form-control" id="nationalTax" th:value="${info.nationalTax}"/>
+			</div>
+		
+			<label class="col-xs-2 col-xs-offset-1 control-label">地税号</label>
+			<div class="col-xs-3">
+				 <input class="form-control" id="landTax" th:value="${info.landTax}"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">开户银行</label>
+			<div class="col-xs-3">
+				 <input class="form-control"  id="bank" th:value="${info.bank}"></input>
+			</div>
+		
+			<label class="col-xs-2 col-xs-offset-1 control-label">银行账号</label>
+			<div class="col-xs-3">
+				 <input class="form-control"  id="bankAccount" th:value="${info.bankAccount}"></input>
+			</div>
+		</div>
+		 <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-info " onclick="CompanyInfoDlg.updateInfo()" id="ensure">
+                        <i class="fa fa-check"></i>&nbsp;提交
+                    </button>
+
+
+                    <button type="button" class="btn btn-danger " onclick="CompanyInfoDlg.close()" id="cancel">
+                        <i class="fa fa-eraser"></i>&nbsp;取消
+                    </button>
+                </div>
+            </div>
+	</div>
+	</div>
+	</div>
+</div>
+
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/modular/system/company/company_info.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.common.dao.WebMsgSendMapper">
+
+	<!--批量新增实体tb_msg-->
+  <insert id="insertTbMsgBatch" parameterType="java.util.List" >
+        insert into  tb_msg(TB_MSG_ID_,CONTENT_,
+        READ_FLAG_,USER_ID_,REMARK1_,
+        REMARK2_,REMARK3_,CREATE_EMP_,
+        CREATE_DATE_,UPDATE_DATE_,UPDATE_EMP_,
+        VERSION)
+    values
+     <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.tbMsgId},#{item.content},
+        #{item.readFlag},#{item.userId},#{item.remark1},
+        #{item.remark2},#{item.remark3},#{item.createEmp},
+        #{item.createDate},#{item.updateDate},#{item.updateEmp},
+        #{item.version})
+      </foreach>
+  </insert>
+  
+  <!-- 查询角色下的所有     用户 -->
+  <select id="selectUserIdListByRole"   parameterType="Map"  resultType="String">
+  		select DISTINCT  mr.managerId_ userId from tb_role  r,tb_manager_role  mr
+		where r.num_=mr.roleId_  and r.name_=#{roleName}  
+  </select>
+  
+</mapper>

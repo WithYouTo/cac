@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+<style type="text/css" rel="styleSheet">
+.select2-container .select2-selection--single{  
+      height:34px;  
+      line-height: 34px ;  
+} 
+</style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>用户管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                             <!--<div class="form-group col-xs-4">
+								<label for="main_CompName">公司简称</label>
+								<input id="main_CompName" class="form-control" />
+						     </div>
+							  <div class="form-group col-xs-4">
+								<label for="main_UserCode">公司编码</label>
+								<input id="main_UserCode" class="form-control" />
+							  </div>-->
+							  <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">公司名称
+                                        </button>
+                                    </div>
+                                    <select type="text" class="form-control select2" id="companyName" onchange="User.loadDepts()"  placeholder="" />
+                                </div>
+                             </div>
+                              <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">所属部门
+                                        </button>
+                                    </div>
+                                    <select type="text" class="form-control select2" id="deptName" placeholder="" />
+                                </div>
+                             </div>
+                             <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">姓名
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" id="name" placeholder="" />
+                                </div>
+                             </div>
+                              <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">手机号码
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" id="phone" placeholder="" />
+                                </div>
+                             </div
+                            
+                        </div>
+                       
+                        <div class="row" style="margin-left:15px;">
+                       			 <button type="button" class="btn btn-primary "  style="margin-top:12px;"   onclick="User.search()">
+                                <i class="fa fa-search"></i>&nbsp;搜索
+	                            </button>
+	                             <button type="button" class="btn btn-primary button-margin" style="margin-top:12px;"  onclick="User.clear()">
+                                <i class="fa fa-trash"></i>&nbsp;重置
+	                            </button>
+                                 <button type="button" class="btn btn-primary button-margin"  style="margin-top:12px;" onclick="User.openAddUser()">
+                                <i class="fa fa-plus"></i>&nbsp;添加
+	                            </button>
+	                            <button type="button" class="btn btn-primary button-margin" style="margin-top:12px;" onclick="User.openUserDetail()">
+	                                <i class="fa fa-edit"></i>&nbsp;修改
+	                            </button>
+	                            <button type="button" class="btn btn-primary button-margin" style="margin-top:12px;" onclick="User.delete()">
+	                                <i class="fa fa-remove"></i>&nbsp;删除
+	                            </button>
+                        </div>
+                   
+                        <div class="hidden-xs" id="UserTableToolbar" role="group">
+                       			 <button type="button" class="btn btn-primary "  style="margin-left:15px" onclick="User.freeze()">
+                                <i class="fa fa-search"></i>&nbsp;冻结
+	                            </button>
+	                             <button type="button" class="btn btn-primary button-margin" onclick="User.unFreeze()">
+                                <i class="fa fa-trash"></i>&nbsp;解除冻结
+	                            </button>
+                                 <button type="button" class="btn btn-primary button-margin" onclick="User.roleAssgin()">
+                                <i class="fa fa-plus"></i>&nbsp;角色分配
+	                            </button>
+	                            <button type="button" class="btn btn-primary button-margin" onclick="User.resetPwd()" >
+										<i class="fa fa-refresh"></i>&nbsp;重置密码
+								</button>
+	                           
+                        </div>
+                        <table id="UserTable" class="table table-striped table_list"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/modular/system/webuser/webuser.js"></script>
+</body>
+</html>

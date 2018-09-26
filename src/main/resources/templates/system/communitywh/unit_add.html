@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+	<div class="form-horizontal" >
+	
+			<input type="hidden" id="tbaa01Id" th:value="${tbaa01Id }"/>
+			<input type="hidden" id="areaName" th:value="${areaName }"/>
+			<input type="hidden" id="areaCode" th:value="${areaCode }"/>
+			<input type="hidden" id="companyCode2" th:value="${companyCode }" />
+			<input type="hidden" id="tbaa02Id" th:value="${tbaa02Id }"/>
+			<input type="hidden" id="buildingName" th:value="${building }"/>
+			<input type="hidden" id="buildingCode" th:value="${buildingCode }"/>
+			<input type="hidden" id="code" th:value="${code }"/>
+			<div class="form-group">
+				<label class="col-xs-2  control-label">单元编码：</label>
+				<div class="col-xs-3">
+	   				<input class="form-control" id="cellCode"/>
+				</div>
+			
+				<label class="col-xs-2 col-xs-offset-1 control-label">单元名称：</label>
+				<div class="col-xs-3">
+	   				<input class="form-control" id="cellName"  />
+				</div>
+			</div>
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">公司：</label>
+				 <div class="col-xs-3">
+	   				<select class="form-control" id="companyCode" ></select>
+				</div>
+			 
+				 <label class="col-xs-2 col-xs-offset-1 control-label">是否有门：</label>
+	   			 <div class="col-xs-3" style="padding-top:6px;">
+	   				<input id="yes_haveGate" type="radio"  name="haveGate"  value="1"  />是
+					<input id="no_haveGate"  type="radio"  name="haveGate" value="0"  />否
+				</div>
+			</div>
+			
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">备注：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="remark1" />
+				</div>
+			 
+				 
+			</div>
+	
+	</div>
+	<div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-info " onclick="UnitInfoDlg.add()" id="ensure">
+                        <i class="fa fa-check"></i>&nbsp;提交
+                    </button>
+
+
+                    <button type="button" class="btn btn-danger " onclick="UnitInfoDlg.close()" id="cancel">
+                        <i class="fa fa-eraser"></i>&nbsp;取消
+                    </button>
+                </div>
+            </div>
+   </div>
+   </div>
+</div>
+
+<script src="/js/content.js?v=1.0.0"></script>
+<script type="text/javascript">
+
+var UnitInfoDlg={};
+
+$(function(){
+	var code=$("#code").val();
+	var companyCode;
+	if(!code){
+		//code为空，则是在维护页面新增的小区，暂时没有单元信息
+		//则其所需信息从hsjj06_update的buildingTable中获取
+		//var data=$("#buildingTable").DataTable().data().toArray();
+		//var rowData=data[clickaa02Index];
+		//获取父页面    楼栋表格的数据
+		var rowData=window.parent.Building.seItem;
+		
+		
+		if(rowData ){
+			companyCode=rowData.companyCode;
+			$("#cellCode").val("01");
+			$("#cellName").val("01单元");
+		}
+		
+	}else{
+		companyCode=$("#companyCode2").val();
+		var cellCode=getNumber(code);
+		$("#cellCode").val(cellCode);
+		$("#cellName").val(cellCode+"单元");
+	}
+	
+	$.ajax({
+		type : 'POST',
+		url : Feng.ctxPath + "/communityWh/selectCompany",
+		async : false,
+		dataType : 'json',
+		success : function(data) {
+			$("#companyCode").empty();
+			$.each(data, function(index, value){
+				var option = "<option value='"+value.id+"'>"+value.text+"</option>";
+				$("#companyCode").append(option);
+			})
+			$("#companyCode").val(companyCode);
+		}
+	});
+	
+	$("input[name='haveGate'][value="+1+"]").attr("checked",true);
+	
+})
+
+/**
+ * 关闭此对话框
+ */
+UnitInfoDlg.close=function(){
+	
+	 parent.layer.close(window.parent.Unit.layerIndex);
+	
+}
+
+
+
+function getNumber(num){
+	num=eval(num)+1;
+	var code="";
+	var loop=num+"";
+	if(loop.length<2){
+		for(var n=1;n<=2-loop.length;n++){
+			code+="0";
+		}
+		code+=num;
+	}else{
+		code+=num;
+	}
+	return code;
+}
+
+
+
+UnitInfoDlg.add=  function(){
+	var tbaa01Id;
+	var areaName;
+	var areaCode;
+	var tbaa02Id;
+	var building;
+	var buildingCode;
+	var companyCode;
+	
+	//var data=$("#buildingTable").DataTable().data().toArray();
+	//var rowData=data[clickaa02Index];
+	//获取父页面    楼栋表格的数据
+	var rowData=window.parent.Building.seItem;
+	
+	
+	var code=$("#code").val();
+	if(!code && rowData){
+		tbaa01Id=rowData.tbaa01Id;
+		areaName=rowData.areaName;
+		areaCode=rowData.areaCode;
+		companyCode=rowData.companyCode;
+		tbaa02Id=rowData.tbaa02Id;
+		building=rowData.building;
+		buildingCode=rowData.buildingCode;
+		
+	}else if(code){
+		tbaa01Id=$("#tbaa01Id").val();
+		areaName=$("#areaName").val();
+		areaCode=tbaa01Id;
+		companyCode=$("#companyCode").val();
+		tbaa02Id=$("#tbaa02Id").val();
+		building=$("#buildingName").val();
+		buildingCode=$("#buildingCode").val();
+		
+	}
+	
+	var cellCode=$("#cellCode").val();
+	var cellName=$("#cellName").val();
+	
+	var remark1=$("#remark1").val();
+	//var wyPrice=$("#wyPrice").val();
+	var haveGate=$("input[name='haveGate']:checked").val();
+	if(companyCode == ''){
+		message('请选择物业公司');
+		return;
+	}
+	
+	 /* var reg=/^([1-9][0-9]*|([0-9]\.\d{1,2})|([1-9][0-9]*\.\d{1,2}))$/;
+	if(wyPrice && !reg.test(wyPrice)){
+		message('请正确填写物业费单价(只能为数字)');
+		return;
+	} */ 
+	
+	var params={
+			tbaa01Id:tbaa01Id,
+			areaName:areaName,
+			areaCode:areaCode,
+			tbaa02Id:tbaa02Id,
+			buildingName:building,
+			buildingCode:buildingCode,
+			companyCode:companyCode,
+			cellCode:cellCode,
+			cellName:cellName,
+			remark1:remark1,
+			//wyPrice:wyPrice,
+			haveGate:haveGate
+			
+	}
+	$.ajax({
+		type:'post',
+		async:false,
+		data:params,
+		dataType:'json',
+		url:Feng.ctxPath+"/communityWh/insertSingleTbaa03",
+		beforeSend:function(){
+			
+		},
+		success:function(data){
+		
+			if(data.result=='1'){
+				Feng.success('新增单元信息成功');
+				
+				window.parent.Unit.table.refresh();
+				UnitInfoDlg.close();
+			}else{
+				Feng.error(data.message);
+			}
+			
+		}
+	});
+}
+
+
+</script>
+</body>
+</html>

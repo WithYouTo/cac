@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.DeptMapper">
+  <!--投诉建议列表分页查询-->
+  <select id="selectPp01ByPage" parameterType="java.util.Map" resultType="java.util.Map">
+	  	SELECT t.DEPARTMENT_ID_  as tbbb04Id,t.DEPT_NAME_ as deptName,t.SHORT_NAME_ AS shortName,
+		t.CODE_ AS code, t.DEPT_CODE_ as deptCode,t.LAYER_ as layer,
+		t.PARENT_DEPT_ID_ as parentTbbb04Id, t.DELETE_FLAG_ as deleteFlag,
+		t.COMPANY_CODE_ as companyCode,
+		t.REMARK1_ as remark1,b.DEPT_NAME_  as parentDeptName,t.HAVE_CHILD_ as haveChild 
+		FROM
+		(SELECT DEPARTMENT_ID_,DEPT_NAME_,DEPT_CODE_,LAYER_,PARENT_DEPT_ID_,DELETE_FLAG_,REMARK1_,HAVE_CHILD_,
+		COMPANY_CODE_ , SHORT_NAME_ ,CODE_
+		FROM tb_sys_department
+		where DELETE_FLAG_='0' AND LAYER_ !='-1'
+		<if test="@com.qcap.core.utils.Ognl@isNotEmpty(parentTbbb04Id)">  
+            AND PARENT_DEPT_ID_ = #{parentTbbb04Id} OR DEPARTMENT_ID_= #{parentTbbb04Id}
+     	</if> 
+		)t
+		LEFT JOIN tb_sys_department b
+		ON t.PARENT_DEPT_ID_=b.DEPARTMENT_ID_ 
+		WHERE 1 = 1
+		<if test="@com.qcap.core.utils.Ognl@isNotEmpty(companyCode)">
+			AND t.COMPANY_CODE_ = #{companyCode} 
+  		</if>
+  		<if test="@com.qcap.core.utils.Ognl@isNotEmpty(workId)">
+			AND t.DEPARTMENT_ID_ like CONCAT((SELECT DEPARTMENT_ID_ 
+				FROM tb_user WHERE ACCOUNT_ = #{workId}),'%')
+ 		</if>
+ 		ORDER BY t.DEPARTMENT_ID_ ASC
+  </select>
+  
+	<!--增加 -->
+	<insert id="insert" parameterType="com.qcap.cac.model.Department" >
+    insert into tb_sys_department (DEPARTMENT_ID_, DEPT_NAME_, LAYER_, 
+      DEPT_CODE_, PARENT_DEPT_ID_, DELETE_FLAG_, COMPANY_CODE_,
+      SHORT_NAME_,CODE_,REMARK1_, REMARK2_, REMARK3_, 
+      CREATE_EMP_, CREATE_DATE_, UPDATE_DATE_, 
+      UPDATE_EMP_, VERSION,HAVE_CHILD_)
+    values (#{departmentId}, #{deptName}, #{layer}, 
+      #{deptCode}, #{parentDeptId}, #{deleteFlag},#{companyCode}, 
+      #{shortName}, #{code},#{remark1}, #{remark2}, #{remark3}, 
+      #{createEmp}, #{createDate}, #{updateDate}, 
+      #{updateEmp}, #{version},#{haveChild})
+	</insert>
+
+	<!-- 组织结构修改 -->
+	<update id="updateByPrimaryKey" parameterType="com.qcap.cac.model.Department" >
+    update tb_sys_department
+    set
+      DEPT_NAME_ = #{deptName},
+      LAYER_ = #{layer},
+      DEPT_CODE_ = #{deptCode},
+      PARENT_DEPT_ID_ = #{parentDeptId},
+      REMARK1_ = #{remark1},
+      REMARK2_ = #{remark2},
+      REMARK3_ = #{remark3},
+      UPDATE_DATE_ = #{updateDate},
+      UPDATE_EMP_ = #{updateEmp},
+      VERSION = #{version}
+     where  DEPARTMENT_ID_=#{departmentId}
+     
+	</update>
+	
+	<!-- 修改组织结构名称 -->
+	<update id="updateCompanyName" parameterType="java.util.Map" >
+    update tb_sys_department
+    set DEPT_NAME_ = #{deptName}
+    where  COMPANY_CODE_=#{companyCode} AND LAYER_ = #{layer}
+     
+	</update>
+	<!-- 根据主键查询 ==-->
+	<select id="selectByPrimaryKey" resultType="com.qcap.cac.model.Department" parameterType="java.lang.String" >
+    select 
+	  DEPARTMENT_ID_ as departmentId, DEPT_NAME_ as deptName, LAYER_ as layer, COMPANY_CODE_ AS companyCode,
+      DEPT_CODE_ as deptCode, PARENT_DEPT_ID_ as parentDeptId, DELETE_FLAG_ as deleteFlag, 
+      REMARK1_ as remark1, REMARK2_ as remark2, REMARK3_ as remark3, 
+      CREATE_EMP_ as createEmp, CREATE_DATE_ as createDate, UPDATE_DATE_ as updateDate, 
+      UPDATE_EMP_ as updateEmp, VERSION as version
+    from tb_sys_department
+    where DEPARTMENT_ID_ = #{tbbb04Id}
+    and DELETE_FLAG_='0'
+  </select>
+  
+   <!-- 查找 -->
+  <select id="selectAll" resultType="java.util.Map"  parameterType="java.util.Map">
+  select 
+	DEPARTMENT_ID_ as tbbb04Id, DEPT_NAME_ as deptName, LAYER_ as layer, 
+      DEPT_CODE_ as deptCode, PARENT_DEPT_ID_ as parentTbbb04Id, DELETE_FLAG_ as deleteFlag   
+  from tb_sys_department 
+  where DELETE_FLAG_='0' AND LAYER_ !='-1'
+  <if test="@com.qcap.core.utils.Ognl@isNotEmpty(companyCode)">
+		AND COMPANY_CODE_ = #{companyCode}
+  </if>
+  <if test="@com.qcap.core.utils.Ognl@isNotEmpty(workId)">
+		AND DEPARTMENT_ID_ like CONCAT((SELECT DEPARTMENT_ID_ 
+				FROM tb_user WHERE ACCOUNT_ = #{workId}),'%')
+  </if>
+  </select>
+  
+  <!-- 查找最大id -->
+  <select id="selectMaxId" resultType="String" parameterType="java.lang.String" >
+  select 
+	Max(DEPARTMENT_ID_) as tbbb04Id
+  from tb_sys_department 
+  where DELETE_FLAG_='0' and PARENT_DEPT_ID_=#{pId}
+  </select>
+  <!-- 根据主键删除，修改状态== -->
+  <update id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM tb_sys_department
+    where DEPARTMENT_ID_ = #{tbbb04Id} 
+  </update>
+  
+   <!-- 判断是否重名== -->
+  <select id="selectByName" resultType="int" parameterType="java.lang.String" >
+  select 
+	count(*) 
+  from tb_sys_department 
+  where DELETE_FLAG_='0' and DEPT_NAME_=#{name}
+  </select>
+  
+  <!-- 修改有无子节点标识 ==-->
+  <update id="updateChild" parameterType="java.util.Map" >
+    update tb_sys_department
+    set
+    HAVE_CHILD_=#{haveChild}
+    where DEPARTMENT_ID_ =#{tbbb04Id}
+  </update>
+  
+   <!-- 判断是否有子部门 ==-->
+  <select id="selectChild" resultType="int" parameterType="java.lang.String" >
+  select 
+	count(*) 
+  from tb_sys_department 
+  where DELETE_FLAG_='0' and PARENT_DEPT_ID_=
+	(select PARENT_DEPT_ID_ from tb_sys_department where 
+	DELETE_FLAG_='0' and DEPARTMENT_ID_=#{id})
+  </select>
+  
+  <!-- 新增：判断是否有子部门 ==-->
+  <select id="queryChildDept" resultType="String" parameterType="String" >
+  SELECT COUNT(*)  FROM tb_sys_department 
+  WHERE DELETE_FLAG_='0' and DEPARTMENT_ID_ LIKE #{tbbb04Id}
+  </select>
+  
+  <!-- 查询部门是否被使用== -->
+  <select id="selectIfUsed" parameterType="String" resultType="String">
+   		SELECT COUNT(*) FROM tb_user WHERE DEPARTMENT_ID_=#{deptId} AND STATUS_ ='1'
+   </select>
+   
+   <!-- 根据部门名称和父级节点  判断部门是否存在 -->
+   <select id="selectByNameAndParentId" resultType="int" parameterType="java.util.Map" >
+    select 
+	count(*) 
+ 	 from tb_sys_department 
+ 	 where DELETE_FLAG_='0' and DEPT_NAME_=#{name} and PARENT_DEPT_ID_=#{parentId}
+   </select>
+   
+   <!-- 根据当前登录人加载管理单位下拉框 -->
+	<select id="getManagementUnitList" parameterType="String" resultType="java.util.Map">
+		SELECT
+		CODE_ AS id,
+		SHORT_NAME_ AS text
+		FROM tb_sys_department
+		WHERE DEPARTMENT_ID_ LIKE CONCAT((SELECT DEPARTMENT_ID_ FROM tb_user WHERE ID_ =#{userId}) ,'%') 
+			 AND CODE_ IS NOT NULL
+	</select>
+	
+	<!-- 根据当前登录人加载楼宇的下拉框 -->
+	<select id="getBuildingList" parameterType="Map" resultType="java.util.Map">
+		SELECT
+		distinct 
+		BUILDING_CODE_ AS id,
+		BUILDING_NAME_ AS text
+		FROM tb_management_building
+		WHERE DEPARTMENT_ID_ LIKE CONCAT((SELECT DEPARTMENT_ID_ FROM tb_user WHERE ID_ =#{userId}) ,'%') 
+		 <if test="@com.qcap.core.utils.Ognl@isNotEmpty(flag)">
+			AND AORB_FLAG_ = #{flag}
+ 		</if>
+			AND BUILDING_CODE_ IS NOT NULL
+	</select>
+</mapper>

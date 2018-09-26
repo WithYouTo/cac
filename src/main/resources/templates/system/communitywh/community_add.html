@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+	<div class="form-horizontal" >
+		<div class="form-group">
+				<label class="col-xs-2  control-label">小区名称：</label>
+				<div class="col-xs-3">
+	   				<input class="form-control" id="areaName"/>
+				</div>
+			
+				 <label class="col-xs-2 col-xs-offset-1 control-label">省：</label>
+	   			 <div class="col-xs-3">
+	   				<input class="form-control" id="province" />
+				</div>
+			</div>
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">公司：</label>
+				 <div class="col-xs-3">
+	   				<select class="form-control" id="companyCode" ></select>
+				</div>
+			   <label class="col-xs-2  col-xs-offset-1 control-label">市：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="city" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				 <label class="col-xs-2 control-label">区：</label>
+	   			 <div class="col-xs-3">
+	   				<input class="form-control" id="district" />
+				</div>
+				
+				<label class="col-xs-2 col-xs-offset-1 control-label">街道：</label>
+	   			 <div class="col-xs-3">
+	   				<input class="form-control" id="street" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">片区：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="zone" />
+				</div>
+			 
+				 <label class="col-xs-2 col-xs-offset-1 control-label">地址：</label>
+	   			 <div class="col-xs-3">
+	   				<input class="form-control" id="address" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">备注：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="remark1" />
+				</div>
+			 
+				 <label class="col-xs-2 col-xs-offset-1 control-label">是否有门：</label>
+	   			 <div class="col-xs-3" style="padding-top:6px;">
+	   				<input id="yes_haveGate" type="radio"  name="haveGate"  value="1"  />是
+					<input id="no_haveGate"  type="radio"  name="haveGate" value="0"  />否
+				</div>
+			</div>
+			
+	</div>
+	<div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-info " onclick="CommunityInfoDlg.add()" id="ensure">
+                        <i class="fa fa-check"></i>&nbsp;提交
+                    </button>
+
+
+                    <button type="button" class="btn btn-danger " onclick="CommunityInfoDlg.close()" id="cancel">
+                        <i class="fa fa-eraser"></i>&nbsp;取消
+                    </button>
+                </div>
+            </div>
+   </div>
+   </div>
+</div>
+
+<script src="/js/content.js?v=1.0.0"></script>
+<script type="text/javascript">
+
+var  CommunityInfoDlg={};
+
+CommunityInfoDlg.add=function(){
+	
+	var areaName=$("#areaName").val();
+	var areaType=$("#areaType").val();
+	var companyCode=$("#companyCode").val();
+	var province=$("#province").val();
+	var city=$("#city").val();
+	var district=$("#district").val();
+	var parkingLots=$("#parkingLots").val();
+	var street=$("#street").val();
+	var zone=$("#zone").val();
+	var address=$("#address").val();
+	var remark1=$("#remark1").val();
+	var haveGate=$("input[name='haveGate']:checked").val();
+	var useFlag=$("input[name='useFlag']:checked").val();
+	var bankPayFlag=$("input[name='bankPayFlag']:checked").val();
+	
+	if(companyCode == ''){
+		Feng.info('请选择物业公司');
+		return;
+	}
+	//检查汉字的正则表达式
+	var ch_reg=/^[\u4E00-\u9FA5]+$/;
+	//检测省
+	if(ch_reg.test(province)){
+		//如果province的value的最后一个汉字不是“省”，则加上“省”字
+		var pro_reg=/^[\u4E00-\u9FA5]+["省"]$/;
+		if(!pro_reg.test(province)){
+			province=province+"省";
+		}
+	}else{
+		Feng.info("请填写省份，只能填写汉字");
+		return;
+	}
+	
+	//检测市
+	if(ch_reg.test(city)){
+		//如果city的value的最后一个汉字不是“市”，则加上“市”字
+		var pro_reg=/^[\u4E00-\u9FA5]+["市"]$/;
+		if(!pro_reg.test(city)){
+			city=city+"市";
+		}
+	}else{
+		Feng.info("请填写城市，只能填写汉字");
+		return;
+	}
+	
+	//检测区
+	if(ch_reg.test(district)){
+		//如果district的value的最后一个汉字不是“区”，则加上“区”字
+		var pro_reg=/^[\u4E00-\u9FA5]+["区"]$/;
+		if(!pro_reg.test(district)){
+			district=district+"区";
+		}
+	}else{
+		Feng.info("请填写地区，只能填写汉字");
+		return;
+	}
+	
+	var params={
+			areaName:areaName,
+			areaType:areaType,
+			company:companyCode,
+			province:province,
+			city:city,
+			district:district,
+			parkingLots:parkingLots,
+			street:street,
+			zone:zone,
+			address:address,
+			remark1:remark1,
+			haveGate:haveGate,
+			useFlag:useFlag,
+			bankPayFlag:bankPayFlag
+			
+	}
+	$.ajax({
+		type:'post',
+		async:false,
+		data:params,
+		dataType:'json',
+		url:Feng.ctxPath+"/communityWh/insertTbaa01",
+		beforeSend:function(){
+			
+		},
+		success:function(data){
+			if(data.result=='1'){
+				Feng.success('新增小区成功');
+				/* Community.search(); */
+				window.parent.Community.table.refresh();
+				CommunityInfoDlg.close();
+			}else{
+				Feng.error(data.message);
+			}
+			
+		}
+	});
+	
+	
+}
+/**
+ * 关闭此对话框
+ */
+CommunityInfoDlg.close=function(){
+	
+	 parent.layer.close(window.parent.Community.layerIndex);
+	
+}
+
+
+$(function(){
+	$.ajax({
+		type : 'POST',
+		url : rootPath + "/communityWh/selectCompany",
+		async : false,
+		dataType : 'json',
+		success : function(data) {
+			$("#companyCode").empty();
+			$.each(data, function(index, value){
+				var option = "<option value='"+value.id+"'>"+value.text+"</option>";
+				$("#companyCode").append(option);
+			})
+		}
+	});
+	
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+<style type="text/css" rel="styleSheet">
+
+
+</style>
+</head>
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+           <div class="ibox float-e-margins">
+             <div class="ibox-title">
+                <h5>部门管理</h5>
+            </div>
+			
+			<div class="ibox-content">
+               <div class="row">
+	            <div class="col-xs-3 col-sm-3 col-md-3">
+	           		<div class="row">
+		           		<div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-xs-2 col-sm-2 col-md-2 div1">
+		           			<ul id="tree" class="ztree"></ul>
+		           		</div>
+	            	</div>
+	        	</div>
+        
+				<div class=" col-xs-9 col-sm-9 col-md-9">     
+					<div class="row " >
+					 <!--  <div class="form-group" style="margin-top:44px;">
+						<label for="name" class="label_font col-xs-2 col-sm-2 col-md-2 ">部门名称</label>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-xs-pull-1 col-sm-pull-1 col-md-pull-1">
+						<input id="name" class="form-control" >
+						</div>
+					  </div> -->
+					  
+					    <div class="form-group col-sm-4" style="margin-top:44px;">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button   class="label_font col-xs-2 col-sm-2 col-md-2 "   data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">部门名称
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" id="name" placeholder="" />
+                                </div>
+                             </div>
+					  
+					  
+				    </div>
+			
+				       <div class="hidden-xs" id="DeptTableToolbar" role="group">
+                                 <button  id="addLeaf"   type="button" class="btn btn-primary " onclick="return false;">
+                                <i class="fa fa-plus"></i>&nbsp;增加下级部门
+	                            </button>
+	                            <button   id="editName"    type="button" class="btn btn-primary button-margin" onclick="return false;">
+	                                <i class="fa fa-edit"></i>&nbsp;编辑名称
+	                            </button>
+	                            <button     type="button" class="btn btn-primary button-margin" onclick="Dept.del()">
+	                                <i class="fa fa-remove"></i>&nbsp;删除
+	                            </button>
+                        </div>
+			
+               <table id="DeptTable"/>
+          </div>
+            
+          </div>
+		  
+		  </div>
+        </div>
+      </div>
+   </div>
+ </div>
+ 
+ 
+<link rel="stylesheet" href="/js/plugins/zTree_boot/css/zTreeStyle/metro.css" type="text/css">
+ <style type="text/css" rel="styleSheet">
+  .float_left{
+  float: left;
+  }
+
+  .float_right {
+  float:right;
+  }
+.div1{
+	margin-top:35px;
+ 	left:10px;
+ 	top:10px; 
+ 	width:80%;
+ 	height:664px;
+ 	border: 1px solid #D4D4D4;
+ 	overflow:auto;
+ 	display:inline;
+}
+.label_font{
+line-height:34px;
+}
+#tree.ztree li span.button.diy01_ico_docu {
+    margin-right: 2px;
+    vertical-align: top;
+    background-position: -147px -42px;
+} 
+ #tree.ztree li span.button.ico_docu { 
+     margin-right: 2px; 
+     background-position: -147px 0; 
+     vertical-align: top; 
+ }
+ 
+ #tree.ztree li span.button.root_open {
+    background-position: -105px -42px;
+}
+#tree.ztree li span.button.root_close {
+    background-position: -126px -42px;
+}
+
+</style>
+<script src="/js/plugins/ztree/jquery.ztree.all.min.js"></script>
+<!-- <script src="/js/plugins/ztree/jquery.ztree.core-3.5.min.js"></script>
+<script src="/js/plugins/ztree/jquery.ztree.excheck-3.5.js"></script>
+<script src="/js/plugins/ztree/jquery.ztree.exedit-3.5.js"></script> -->
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/modular/system/department/department.js"></script>
+
+
+</body>
+</html>

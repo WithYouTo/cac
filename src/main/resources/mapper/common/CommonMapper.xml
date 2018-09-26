@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.common.dao.CommonMapper">
+	
+	<select id="selectBuildingByCode" parameterType="String" resultType="Map">
+	SELECT BUILDING_CODE_ AS buildingCode,BUILDING_NAME_ AS buildingName 
+	FROM tb_management_building where 1=1
+	 <if test="@com.qcap.core.utils.Ognl@isNotEmpty(managementId) ">
+	AND CODE_=#{managementId}
+	</if>
+	</select>
+	
+	 <insert id="insertMsg" parameterType="com.qcap.cac.model.TbMsg" >
+    insert into tb_msg (TB_MSG_ID_, CONTENT_, READ_FLAG_, 
+      USER_ID_, REMARK1_, REMARK2_, 
+      REMARK3_, CREATE_EMP_, CREATE_DATE_, 
+      UPDATE_DATE_, UPDATE_EMP_, VERSION
+      )
+    values (#{tbMsgId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{readFlag,jdbcType=CHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, 
+      #{remark3,jdbcType=VARCHAR}, #{createEmp,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{updateEmp,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <select id="selectLocation" resultType="Map">
+  SELECT ID_ AS id,NAME_ AS name from tb_sys_location 
+	where 1=1
+	 <if test="@com.qcap.core.utils.Ognl@isNotEmpty(name) ">
+	AND NAME_ LIKE CONCAT(#{name},'%')
+	</if>
+	 <if test="@com.qcap.core.utils.Ognl@isNotEmpty(id) ">
+	AND ID_=#{id}
+	</if>
+	limit 1
+  </select>
+  
+  <select id="selectBuildingOrAreaByUserId" parameterType="Map" resultType="Map">
+  	SELECT distinct   BUILDING_CODE_ AS id,BUILDING_NAME_ AS text FROM tb_management_building 
+	WHERE DEPARTMENT_ID_ LIKE CONCAT(
+	(SELECT DEPARTMENT_ID_ FROM tb_user WHERE ID_ =#{userId}),'%')
+	AND AORB_FLAG_ =#{aORb}
+  </select>
+
+</mapper>

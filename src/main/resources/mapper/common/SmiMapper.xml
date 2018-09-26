@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.common.dao.SmiMapper">
+
+	<!-- 插入短信验证实体 -->
+	<insert id="insertSmi" parameterType="com.qcap.cac.model.Tbsmi01">
+    insert into tbsmi01 (TBSMI01_ID_, MOBILE_, MESSIDTF_NO_, 
+      MESSIDTF_TIME_, MESSIDTF_TIMEOUT_, USER_TYPE_, 
+      REMARK1_, REMARK2_, REMARK3_, 
+      CREATE_EMP_, CREATE_DATE_, UPDATE_DATE_, 
+      UPDATE_EMP_, VERSION)
+    values (#{tbsmi01Id}, #{mobile}, #{messidtfNo}, 
+      #{messidtfTime}, #{messidtfTimeout}, #{userType}, 
+      #{remark1}, #{remark2}, #{remark3}, 
+      #{createEmp}, #{createDate}, #{updateDate}, 
+      #{updateEmp}, #{version})
+	</insert>
+	
+		
+	<!-- 获取验证码 -->
+	<select id="selectCode" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT 
+		MESSIDTF_NO_ messidtfNo,
+		DATE_FORMAT(MESSIDTF_TIMEOUT_,'%Y-%m-%d %T')  messidtfTimeout
+		FROM TBSMI01
+		WHERE 1=1
+		<if test="@com.qcap.core.utils.Ognl@isNotEmpty(mobile)">
+			AND MOBILE_ = #{mobile}
+	    </if>
+	    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(userType)">
+		    AND USER_TYPE_ =#{userType}
+	    </if> 
+		ORDER BY CREATE_DATE_ DESC
+		LIMIT 1
+	</select>
+  
+</mapper>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.CompanyMapper">
+
+  <!-- 公司管理分页查询 -->
+  <select id="getCompaniesByPage" parameterType="java.util.Map" resultType="java.util.Map">
+	  	SELECT 
+		COMPANY_ID_  AS  companyId,
+		COMPANY_CODE_  AS  companyCode,
+		COMP_NAME_  AS  compName,
+		FULL_NAME_  AS  fullName,
+		COMP_BRAND_  AS  compBrand,
+		ADDRESS_  AS  address,
+		MAIL_  AS  mail,
+		COMP_TEL_  AS  compTel,
+		FAX_  AS  fax,
+		COMP_WEB_  AS  compWeb,
+		EMAIL_  AS  email,
+		NATIONAL_TAX_  AS  nationalTax,
+		LAND_TAX_  AS  landTax,
+		BANK_ACCOUNT_  AS  bankAccount,
+		BANK_  AS  bank,
+		LEVEL_  AS  level,
+		REMARK1_  AS  remark1,
+		REMARK2_  AS  remark2,
+		REMARK3_  AS  remark3
+		FROM tb_sys_company
+		WHERE 1 = 1
+		<if  test="compName != null and compName !=''">  
+            AND COMP_NAME_ LIKE #{compName}
+     	</if> 
+     	<if test="companyCode != null and companyCode !=''">  
+            AND COMPANY_CODE_ like #{companyCode}
+     	</if> 
+     	<if test="code != null and code !=''">  
+            AND COMPANY_CODE_ LIKE #{code}
+     	</if> 
+     	ORDER BY CAST(COMPANY_CODE_ AS SIGNED)
+  </select>
+  
+  <select id="selectExistNum" resultType="String" parameterType="java.util.Map">
+  	SELECT COUNT(*) FROM tb_sys_company WHERE 1 = 1
+  	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(companyCode)">
+		AND COMPANY_CODE_ = #{companyCode}
+	</if>
+ 	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(compName)">
+		AND COMP_NAME_ = #{compName}
+	</if>
+	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(fullName)">
+	 	AND FULL_NAME_ = #{fullName}
+	</if>
+	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(compBrand)">
+		AND COMP_BRAND_ = #{compBrand}
+	</if>
+	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(compTel)">
+	 	AND COMP_TEL_ = #{compTel}
+	</if>
+  </select>
+  
+  <!-- 判断编码是否重复-->
+  <select id="selectCompNum" resultType="String" parameterType="String">
+  	SELECT COUNT(*) FROM tb_sys_department WHERE LAYER_ =#{layer} AND  LENGTH(DEPT_CODE_) ='3'
+  </select>
+  
+   <!-- 生成新的公司编码 -->
+  <select id="selectNewCompCode" resultType="String" parameterType="String">
+  	select  LPAD(max(DEPARTMENT_ID_)+1,3,'0') as newid from tb_sys_department a 
+  	where a.PARENT_DEPT_ID_= #{newId}
+  </select>
+  
+  <!-- 自动生成新的公司编码 -->
+  <select id="selectNewCompanyCode" resultType="String">
+  	SELECT LPAD(MAX(CAST(COMPANY_CODE_ AS SIGNED)+1),3,'0') newCompanyCode from tb_sys_company
+  </select>
+  
+  <!-- 根据tb_sys_company_ID_查询公司编码-->
+  <select id="selectCompCodeByBb08Id" resultType="String" parameterType="String">
+  	select  COMPANY_CODE_ AS companyCode from tb_sys_company 
+  	where COMPANY_ID_= #{tbbb08Id}
+  </select>
+  
+   <!-- 判断编码是否重复 -->
+  <select id="selectCodeNum" resultType="String" parameterType="java.util.Map" >
+	  select count(*) from tb_sys_department 
+	  where DELETE_FLAG_='0'
+	  	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(deptCode)">
+			AND DEPT_CODE_=#{deptCode}
+		</if>
+		<if test="@com.qcap.core.utils.Ognl@isNotEmpty(parentTbbb04Id)">  
+            AND PARENT_DEPT_ID_ = #{parentTbbb04Id}
+     	</if> 
+  </select>
+  
+	<!-- 增加公司  -->
+	<insert id="insertNewComp" parameterType="com.qcap.cac.model.Company" >
+    insert into tb_sys_company (COMPANY_ID_, COMPANY_CODE_, COMP_NAME_,FULL_NAME_, COMP_BRAND_, 
+      ADDRESS_, MAIL_,COMP_TEL_,FAX_,COMP_WEB_,EMAIL_, 
+      NATIONAL_TAX_,LAND_TAX_ ,BANK_ACCOUNT_,BANK_,LEVEL_,
+      REMARK1_, REMARK2_, REMARK3_, 
+      CREATE_EMP_, CREATE_DATE_, UPDATE_DATE_, 
+      UPDATE_EMP_, VERSION)
+    values (#{companyId}, #{companyCode}, #{compName},#{fullName}, #{compBrand},
+      #{address},#{mail},#{compTel},#{fax},#{compWeb},#{email},
+      #{nationalTax},#{landTax},#{bankAccount},#{bank},#{level},
+      #{remark1}, #{remark2}, #{remark3}, 
+      #{createEmp}, #{createDate}, #{updateDate}, 
+      #{updateEmp}, #{version})
+	</insert>
+
+	<!-- 修改公司信息 -->
+	<update id="updateCompanyInfo" parameterType="com.qcap.cac.model.Company" >
+    UPDATE tb_sys_company
+    SET COMP_NAME_ = #{compName},
+		FULL_NAME_ = #{fullName},
+		COMP_BRAND_ = #{compBrand},
+		ADDRESS_ = #{address},
+		MAIL_ = #{mail},
+		COMP_TEL_ = #{compTel},
+		FAX_ = #{fax},
+		COMP_WEB_ = #{compWeb},
+		EMAIL_ = #{email},
+		NATIONAL_TAX_ = #{nationalTax},
+		LAND_TAX_ = #{landTax},
+		BANK_ACCOUNT_ = #{bankAccount},
+		BANK_ = #{bank},
+		LEVEL_ = #{level},
+		UPDATE_DATE_ = #{updateDate} ,
+		UPDATE_EMP_ = #{updateEmp}
+     WHERE  COMPANY_ID_=#{companyId}
+	</update>
+	
+	<!-- 根据主键查询公司信息 -->
+	<select id="selectDetailByPk" resultType="java.util.Map" parameterType="String" >
+    select 
+	  Company_ID_ as companyId, COMPANY_CODE_ as companyCode, COMP_NAME_ as compName, FULL_NAME_ as fullName,
+      COMP_BRAND_ as compBrand, ADDRESS_ as address, MAIL_ as mail, COMP_TEL_ as compTel,
+      FAX_ as fax, COMP_WEB_ as compWeb, EMAIL_ as email, NATIONAL_TAX_ as nationalTax,
+      LAND_TAX_ as landTax, BANK_ACCOUNT_ as bankAccount, BANK_ as bank
+    from tb_sys_company
+    WHERE Company_ID_ = #{tbbb08Id} 
+   </select>
+  
+   <!-- 公司下拉框 -->
+  <select id="selectSubCompanies" resultType="java.util.Map" parameterType="java.util.Map">
+  	SELECT  Company_ID_ as id, COMPANY_CODE_ as code, 
+  	FULL_NAME_ as name
+  	FROM tb_sys_company WHERE 1 = 1
+  	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(companyCode)">  
+         AND COMPANY_CODE_ = #{companyCode}
+    </if> 
+  </select>
+  
+  <delete id="deleteInfoByPk" parameterType="String">
+		DELETE FROM tb_sys_company WHERE COMPANY_CODE_ =#{companyCode}	
+  </delete>
+  
+  <!--增加 -->
+	<insert id="insert" parameterType="com.qcap.cac.model.Department" >
+    insert into tb_sys_department (DEPARTMENT_ID_, DEPT_NAME_, LAYER_, 
+      DEPT_CODE_, PARENT_DEPT_ID_, DELETE_FLAG_, COMPANY_CODE_,
+      REMARK1_, REMARK2_, REMARK3_, 
+      CREATE_EMP_, CREATE_DATE_, UPDATE_DATE_, 
+      UPDATE_EMP_, VERSION,HAVE_CHILD_)
+    values (#{departmentId}, #{deptName}, #{layer}, 
+      #{deptCode}, #{parentDeptId}, #{deleteFlag},#{companyCode}, 
+      #{remark1}, #{remark2}, #{remark3}, 
+      #{createEmp}, #{createDate}, #{updateDate}, 
+      #{updateEmp}, #{version},#{haveChild})
+	</insert>
+	
+	<!-- 修改组织结构名称 -->
+	<update id="updateCompanyName" parameterType="java.util.Map" >
+    update tb_sys_department
+    set DEPT_NAME_ = #{deptName}
+    where  COMPANY_CODE_=#{companyCode} AND LAYER_ = #{layer}
+	</update>
+  
+     <!-- 根据主键删除，修改状态 -->
+   <update id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE FROM tb_sys_department
+    where DEPARTMENT_ID_ = #{tbbb04Id} 
+    </update>
+  
+  
+</mapper>

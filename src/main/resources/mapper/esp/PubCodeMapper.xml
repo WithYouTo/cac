@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.PubCodeMapper">
+
+	<!-- 查询编码下拉框 -->
+	<select id="selectConfigCode" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		DESC_ id,
+		DESC1_ text
+		FROM tbpubcode01
+		WHERE CONFIG_CODE_= #{configCode} 
+		<if test="desc != null and desc != ''">
+			AND  NOT find_in_set(DESC_ ,(#{desc})) 
+		</if>
+		<if test="desc1 != null and desc1 != ''">
+			AND DESC1_ = #{desc1}
+		</if>
+		<if test="desc2 != null and desc2 != ''">
+			AND DESC2_ = #{desc2}
+		</if>
+		ORDER BY SEQ_ 
+	</select>
+	
+	<!-- 获取合同模板存储基础路径 -->
+	<select id="getFileBasePath" resultType="String">
+		SELECT DESC1_ AS text FROM tbpubcode01
+		WHERE CONFIG_CODE_= 'FILE_BASE_PATH' AND DESC_ = '1'
+	</select>
+	
+	<!-- 查询App编码下拉框 -->
+	<select id="selectConfigCodeApp" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		DESC_ value,
+		DESC1_ text
+		FROM tbpubcode01
+		WHERE CONFIG_CODE_= #{configCode} 
+		<if test="desc2 != null and desc2 != ''">
+			AND DESC2_ = #{desc2}
+		</if>
+		ORDER BY SEQ_ 
+	</select>
+	
+	<!-- 查询一级项目是否有二级项目 -->
+	<select id="selectIfDelete" parameterType="String"
+		resultType="java.util.Map">
+		SELECT
+		TBPUBCODE01_ID_   tbpubcode01Id
+		FROM tbpubcode01
+		WHERE TBPUBCODE_ID_= #{tbpubcodeId}
+	</select>
+	
+	<!-- 查询二级项目顺序号重复 -->
+	<select id="selectRepeatSeq" parameterType="java.util.Map"
+		resultType="String">
+		SELECT
+		TBPUBCODE01_ID_   tbpubcode01Id
+		FROM tbpubcode01
+		WHERE CONFIG_CODE_= #{configCode} 
+		AND SEQ_ = #{seq}
+	</select>
+	
+	<!-- 查询编码重复 -->
+	<select id="selectRepeatCode" parameterType="java.util.Map"
+		resultType="String">
+		SELECT
+		TBPUBCODE_ID_   tbpubcodeId
+		FROM tbpubcode
+		WHERE CONFIG_CODE_= #{configCode} 
+		 AND DEL_FLAG_ = '0'
+	</select>
+	
+	
+	<!-- 查询一级编码 分页-->
+	<select id="selectPubCodeByPage" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		AREA_ID_  areaId, 
+		COMPANY_CODE_ companyCode,
+		TBPUBCODE_ID_   tbpubcodeId,
+		CONFIG_CODE_ 	configCode,
+		CONFIG_NAME_ 	configName,
+		LAYER_TYPE_ 	layerType,
+		NOTICE_ 		notice,
+		DATE_FORMAT(CREATE_DATE_,'%Y-%m-%d %T') createDate,
+		CREATE_EMP_ createEmp,
+		DATE_FORMAT(UPDATE_DATE_,'%Y-%m-%d %T') updateDate,
+		UPDATE_EMP_ updateEmp,
+		VERSION version
+		FROM tbpubcode
+		WHERE DEL_FLAG_ = '0'
+		<if test="configCode != null and configCode != ''">
+			AND CONFIG_CODE_ LIKE CONCAT('%',#{configCode},'%') 
+		</if>
+		<if test="configName != null and configName != ''">
+			AND CONFIG_NAME_ LIKE CONCAT('%',#{configName},'%') 
+		</if>
+	</select>
+	
+	<!-- 根据查询一级编码id -->
+	<select id="selectPubCodeById" parameterType="String"
+		resultType="java.util.Map">
+		SELECT
+		TBPUBCODE_ID_   tbpubcodeId,
+		AREA_ID_  areaId, 
+		COMPANY_CODE_ companyCode,
+		CONFIG_CODE_ configCode,
+		CONFIG_NAME_ configName,
+		LAYER_TYPE_ layerType,
+		NOTICE_ notice,
+		DATE_FORMAT(CREATE_DATE_,'%Y-%m-%d %T') createDate,
+		CREATE_EMP_ createEmp,
+		DATE_FORMAT(UPDATE_DATE_,'%Y-%m-%d %T') updateDate,
+		UPDATE_EMP_ updateEmp,
+		VERSION version
+		FROM tbpubcode
+		WHERE TBPUBCODE_ID_ = #{tbpubcodeId} AND DEL_FLAG_ = '0'
+	</select>
+
+	<!-- 查询二级编码分页 -->
+	<select id="selectPubCode01ByPage" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		TBPUBCODE01_ID_   tbpubcode01Id,
+		AREA_ID_  areaId, 
+		COMPANY_CODE_ companyCode,
+		CONFIG_CODE_ configCode,
+		SEQ_ seq,
+		DESC_ desc0,
+		DESC1_ desc1,
+		DESC2_ desc2,
+		DESC3_ desc3,
+		DATE_FORMAT(CREATE_DATE_,'%Y-%m-%d %T') createDate,
+		CREATE_EMP_ createEmp,
+		DATE_FORMAT(UPDATE_DATE_,'%Y-%m-%d %T') updateDate,
+		UPDATE_EMP_ updateEmp,
+		VERSION version
+		FROM tbpubcode01
+		WHERE TBPUBCODE_ID_ = #{tbpubcodeId}		
+		ORDER BY SEQ_+0 
+	</select>
+	
+	<!-- 查询二级编码id -->
+	<select id="selectPubCode01ById" parameterType="String"
+		resultType="java.util.Map">
+		SELECT
+		TBPUBCODE01_ID_   tbpubcode01Id,
+		AREA_ID_  areaId, 
+		COMPANY_CODE_ companyCode,
+		CONFIG_CODE_ configCode,
+		SEQ_ seq,
+		DESC_ desc0,
+		DESC1_ desc1,
+		ifnull(DESC2_,'') desc2,
+		ifnull(DESC3_,'') desc3,
+		ifnull(DESC4_,'') desc4,
+		ifnull(DESC5_,'') desc5,
+		ifnull(DESC6_,'') desc6,
+		ifnull(DESC7_,'') desc7,
+		ifnull(DESC8_,'') desc8,
+		ifnull(DESC9_,'') desc9,
+		DATE_FORMAT(CREATE_DATE_,'%Y-%m-%d %T') createDate,
+		CREATE_EMP_ createEmp,
+		DATE_FORMAT(UPDATE_DATE_,'%Y-%m-%d %T') updateDate,
+		UPDATE_EMP_ updateEmp,
+		VERSION version
+		FROM tbpubcode01
+		WHERE TBPUBCODE01_ID_ = #{tbpubcode01Id}
+	</select>
+	
+	<!-- 新增一级编码 -->
+	<insert id="insertPubCode" parameterType="com.qcap.cac.model.Tbpubcode">
+    insert into tbpubcode (TBPUBCODE_ID_, AREA_ID_, COMPANY_CODE_, 
+      CONFIG_CODE_, CONFIG_NAME_, LAYER_TYPE_, 
+      DEL_FLAG_, CONFIG_VALUE_, NOTICE_, 
+      REMARK1_, REMARK2_, REMARK3_, 
+      CREATE_EMP_, CREATE_DATE_, UPDATE_DATE_, 
+      UPDATE_EMP_, VERSION)
+    values (#{tbpubcodeId}, #{areaId}, #{companyCode}, 
+      #{configCode}, #{configName}, #{layerType}, 
+      #{delFlag}, #{configValue}, #{notice}, 
+      #{remark1}, #{remark2}, #{remark3}, 
+      #{createEmp}, #{createDate}, #{updateDate}, 
+      #{updateEmp}, #{version})
+	</insert>
+
+	<!-- 新增二级编码 -->
+	<insert id="insertPubCode01" parameterType="com.qcap.cac.model.Tbpubcode01">
+    insert into tbpubcode01 (TBPUBCODE01_ID_, AREA_ID_, COMPANY_CODE_, 
+      TBPUBCODE_ID_, CONFIG_CODE_, SEQ_, 
+      DESC_, DESC1_, DESC2_, 
+      DESC3_, DESC4_, DESC5_, 
+      DESC6_, DESC7_, DESC8_, 
+      DESC9_, CREATE_EMP_, CREATE_DATE_, 
+      UPDATE_DATE_, UPDATE_EMP_, VERSION
+      )
+    values (#{tbpubcode01Id}, #{areaId}, #{companyCode}, 
+      #{tbpubcodeId}, #{configCode}, #{seq}, 
+      #{desc}, #{desc1}, #{desc2}, 
+      #{desc3}, #{desc4}, #{desc5}, 
+      #{desc6}, #{desc7}, #{desc8}, 
+      #{desc9}, #{createEmp}, #{createDate}, 
+      #{updateDate}, #{updateEmp}, #{version}
+      )
+	</insert>
+
+
+	<!-- 修改一级编码 -->
+	<update id="updatePubCode" parameterType="com.qcap.cac.model.Tbpubcode" >
+		UPDATE  tbpubcode SET
+		 	CONFIG_NAME_ = #{configName},
+			LAYER_TYPE_ = #{layerType},
+			NOTICE_ = #{notice},
+			UPDATE_EMP_ = #{updateEmp},
+			UPDATE_DATE_ = #{updateDate},
+			VERSION = VERSION+1
+		WHERE  TBPUBCODE_ID_ = #{tbpubcodeId}
+  	</update>
+  	
+  	<!-- 修改二级编码 -->
+	<update id="updatePubCode01" parameterType="com.qcap.cac.model.Tbpubcode01" >
+		UPDATE tbpubcode01 SET
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(seq)">
+		SEQ_ = #{seq},
+		</if>
+	 	<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc)">
+	 	DESC_ = #{desc},
+	 	</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc1)">
+		DESC1_ = #{desc1},
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc2)">
+		DESC2_ = #{desc2}, 
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc3)">
+		DESC3_ = #{desc3}, 
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc4)">
+		DESC4_ = #{desc4}, 
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc5)">
+		DESC5_ = #{desc5}, 
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc6)">
+		DESC6_ = #{desc6},
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc7)">
+		DESC7_ = #{desc7}, 
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc8)">
+		DESC8_ = #{desc8}, 
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc9)">
+		DESC9_ = #{desc9},
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(updateEmp)">
+		UPDATE_EMP_ = #{updateEmp},
+		</if>
+		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(updateDate)">
+		UPDATE_DATE_ = #{updateDate},
+		</if>
+		VERSION = VERSION+1
+		WHERE  TBPUBCODE01_ID_ = #{tbpubcode01Id}
+  	</update>
+
+	<delete id="deletePubCode" parameterType="String">
+		UPDATE tbpubcode SET DEL_FLAG_ = '1' WHERE TBPUBCODE_ID_ = #{tbpubcodeId}
+	</delete>
+	
+	<delete id="deletePubCode01" parameterType="String">
+		DELETE FROM tbpubcode01
+		WHERE TBPUBCODE01_ID_ = #{tbpubcode01Id}
+	</delete>
+  
+</mapper>

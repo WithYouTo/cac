@@ -1,0 +1,68 @@
+# Log file
+*.log
+logs
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+
+.mvn/
+mvnw
+mvnw.cmd
+
+######ignore maven generated target folders###########
+
+target
+
+#####class file######
+*.class
+
+#####Package files #####
+*.jar
+*.war
+*.ear
+
+###ignore eclipse files###
+.project
+.classpath
+.settings
+.metadata
+bin
+.externalToolBuilders
+
+### project ###
+
+*.mwb
+target/
+.mvn
+
+### virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml ###
+hs_err_pid*
+

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+<style type="text/css" rel="styleSheet">
+.checkbox{
+width:175px;
+vertical-align:middle !important; 
+}
+
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
+    margin-top: 6px;
+}
+.select2-container .select2-selection--single{  
+      height:34px;  
+      line-height: 34px ;  
+} 
+</style>
+</head>
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+      <div class="row">
+        <div class="col-xs-12">
+         
+		 <div class="ibox float-e-margins">
+             <div class="ibox-title">
+                <h5>部门和小区关联</h5>
+            </div>
+		  
+            <div class="ibox-content">
+			<div class="row" >
+			  <!-- <div class="form-group col-xs-4">
+			    <label for="main_CompName">公司名称</label>
+			    <select id="main_CompName" onchange="DeptRefCom.loadDepts()"  class="form-control"></select>
+			  </div>
+			  <div class="form-group col-xs-4">
+			    <label for="main_DeptName">所属部门</label>
+			    <select id="main_DeptName"  class="form-control" ></select>
+			  </div>
+			  <div class="form-group col-xs-4">
+			    <label for="selectArea">选择小区</label>
+			  	<select multiple="multiple" id="selectArea"  class="form-control" ></select>
+			  </div> -->
+			                 <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">公司名称
+                                        </button>
+                                    </div>
+                                    <select type="text"  onchange="DeptRefCom.loadDepts()"  class="form-control select2" id="main_CompName" placeholder="" />
+                                </div>
+                             </div>
+                              <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">所属部门
+                                        </button>
+                                    </div>
+                                    <select type="text" class="form-control select2" id="main_DeptName" placeholder="" />
+                                </div>
+                               </div>
+			 				 <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">选择小区
+                                        </button>
+                                    </div>
+                                    <select  multiple="multiple"  id="selectArea" placeholder="" />
+                                </div>
+                               </div>
+			  
+			  </div>	
+			  
+		       <div class="hidden-xs" id="DeptRefComtableToolbar" role="group"  style="margin-top:15px;" >
+		       <button      type="button" class="btn btn-primary" onclick="DeptRefCom.search()">
+                               <i class="fa fa-search"></i>&nbsp;查询
+                           </button>
+                           <button     type="button" class="btn btn-primary button-margin" onclick="DeptRefCom.clear()">
+                               <i class="fa fa-remove"></i>&nbsp;重置
+                           </button>
+                             <button     type="button" class="btn btn-primary button-margin" onclick="DeptRefCom.add()">
+                              <i class="fa fa-plus"></i>&nbsp;关联
+                           </button>
+                           <button     type="button" class="btn btn-primary button-margin" onclick="DeptRefCom.del()">
+                              <i class="fa fa-edit"></i>&nbsp;解除关联
+                           </button>
+                           
+                </div>
+			  
+				
+             <table id="DeptRefComtable"/>
+			</div>
+          </div>
+        </div>
+      </div>
+</div>
+
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/modular/system/deptrefcomunity/deptrefcomunity.js"></script>
+</body>
+</html>
+
+
+

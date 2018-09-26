@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+	<div class="form-horizontal" >
+		<input type="hidden" id="companyCode2" th:value="${companyCode }" />
+					<input type="hidden" id="haveGate" th:value="${haveGate }" />
+					<div class="form-group">
+						<label class="col-xs-2  control-label">单元ID：</label>
+						<div class="col-xs-3">
+			   				<input class="form-control"  id="tbaa03Id" th:value="${tbaa03Id }" disabled/>
+						</div>
+						
+						<label class="col-xs-2 col-xs-offset-1 control-label">单元编码：</label>
+						<div class="col-xs-3">
+			   				<input class="form-control" id="cellCode" th:value="${cellCode } " disabled/>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-xs-2  control-label">单元名称：</label>
+						<div class="col-xs-3">
+			   				<input class="form-control" id="cellName"  th:value="${cellName }"/>
+						</div>
+					
+						 <label class="col-xs-2 col-xs-offset-1 control-label">公司：</label>
+						 <div class="col-xs-3">
+			   				<select class="form-control" id="companyCode" ></select>
+						</div>
+					 </div>
+					 
+					<div class="form-group">
+						 <label class="col-xs-2  control-label">备注：</label>
+						 <div class="col-xs-3">
+			   				<input class="form-control" id="remark1" th:value="${remark1 }"/>
+						</div>
+						 <label class="col-xs-2 col-xs-offset-1 control-label">是否有门：</label>
+			   			 <div class="col-xs-3" style="padding-top:6px;">
+			   				<input id="yes_haveGate" type="radio"  name="haveGate"  value="1"  />是
+							<input id="no_haveGate"  type="radio"  name="haveGate" value="0"  />否
+						</div>
+					 </div>
+	
+	</div>
+	<div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-info " onclick="UnitEditDlg.edit()" id="ensure">
+                        <i class="fa fa-check"></i>&nbsp;提交
+                    </button>
+
+
+                    <button type="button" class="btn btn-danger " onclick="UnitEditDlg.close()" id="cancel">
+                        <i class="fa fa-eraser"></i>&nbsp;取消
+                    </button>
+                </div>
+            </div>
+   </div>
+   </div>
+</div>
+
+<script src="/js/content.js?v=1.0.0"></script>
+<script type="text/javascript">
+
+var  UnitEditDlg={};
+
+$(function(){
+	var companyCode=$("#companyCode2").val();
+	var haveGate=$("#haveGate").val();
+	$.ajax({
+		type : 'POST',
+		url : Feng.ctxPath + "/communityWh/selectCompany",
+		async : false, 
+		dataType : 'json',
+		success : function(data) {
+			$("#companyCode").empty();
+			$.each(data, function(index, value){
+				var option = "<option value='"+value.id+"'>"+value.text+"</option>";
+				$("#companyCode").append(option);
+			})
+			$("#companyCode").val(companyCode);
+		}
+	});
+	
+	$("input[name='haveGate'][value="+haveGate+"]").attr("checked",true);
+})
+
+
+/**
+ * 关闭此对话框
+ */
+ UnitEditDlg.close=function(){
+	
+	 parent.layer.close(window.parent.Unit.layerIndex);
+	
+}
+
+UnitEditDlg.edit= function (){
+	var tbaa03Id=$("#tbaa03Id").val();
+	var cellName=$("#cellName").val();
+	var cellCode=$("#cellCode").val();
+	var companyCode=$("#companyCode").val();
+	var remark1=$("#remark1").val();
+	var wyPrice=$("#wyPrice").val();
+	var haveGate=$("input[name='haveGate']:checked").val();
+	if(companyCode == ''){
+		Feng.info('请选择物业公司');
+		return;
+	}
+	
+	
+	var params={
+			tbaa03Id:tbaa03Id,
+			companyCode:companyCode,
+			remark1:remark1,
+		//	wyPriceStr:wyPrice,
+			haveGate:haveGate,
+			cellName:cellName,
+			cellCode:cellCode
+			
+	}
+	$.ajax({
+		type:'post',
+		async:false,
+		data:params,
+		dataType:'json',
+		url:Feng.ctxPath+"/communityWh/updateTbaa03",
+		beforeSend:function(){
+			
+		},
+		success:function(data){
+			if(data.result==1){
+				Feng.success('更新单元信息成功');
+				window.parent.Unit.table.refresh();
+				UnitEditDlg.close();
+			}
+		}
+	});
+}
+
+</script>
+</body>
+</html>

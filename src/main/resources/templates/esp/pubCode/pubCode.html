@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>通用代码档</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                        
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">项目代码：
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" id="configCode" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                  <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">项目名称：
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" id="configName" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary " onclick="pubcode.search()">
+                                    <i class="fa fa-search"></i>&nbsp;搜索
+                                </button>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary " onclick="pubcode.reset()">
+                                    <i class="fa fa-eraser"></i>&nbsp;重置
+                                </button>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="pubcodeTableToolbar" role="pubcode">
+
+                            <button type="button" class="btn btn-primary " onclick="pubcode.openAddpubcode()">
+                                <i class="fa fa-plus"></i>&nbsp;新增
+                            </button>
+                            <button type="button" class="btn btn-primary button-margin" onclick="pubcode.modify()">
+                                <i class="fa fa-pencil"></i>&nbsp;修改
+                            </button>
+                            <button type="button" class="btn btn-danger button-margin" onclick="pubcode.del()">
+                                <i class="fa fa-trash"></i>&nbsp;删除
+                            </button>
+                            <button type="button" class="btn btn-primary button-margin" onclick="pubcode.openpubcode01()">
+                                <i class="fa fa-list"></i>&nbsp;查看二级菜单
+                            </button>
+                        </div>
+                        <table id="pubcodeTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/modular/esp/pubcode/pubcode.js"></script>
+</body>
+</html>

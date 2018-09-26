@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qcap.cac.dao.WebUserMapper" >
+  
+
+ <select id="selectUserByPage" resultType="java.util.Map" parameterType="java.util.Map" >
+    select 
+    a.ID_ AS id,
+	PASSWORD_ AS password,
+	ACCOUNT_ AS account,
+	SALT_ AS salt,
+	b.FULL_NAME_ AS companyCode,
+	a.COMPANY_CODE_ comcode,
+	c.DEPT_NAME_ AS departmentId,
+	COMMUNITY_ID_ AS communityId,
+	(CASE WHEN a.SEX_ ='0' THEN '女' WHEN a.SEX_ ='1' THEN '男' ELSE '其它' END) AS sex,
+	a.NAME_ AS name,
+	(CASE WHEN a.STATUS_ ='1' THEN '启用' WHEN a.STATUS_ ='2' THEN '冻结' ELSE '删除' END) AS status,
+	PHONE_ AS phone,
+	a.MAIL_ AS mail,
+	a.USER_TYPE_ AS userType,
+	a.BIRTHDAY_ AS birthday,
+	a.IMG_ AS img,
+	a.ID_CARD_ AS idCard,
+	a.ADDRESS_ AS address,
+	a.START_DATE_ AS startDate,
+	a.END_DATE_ AS endDate,
+	a.NEW_ADDRESS_ AS newAddress,
+	RACE_ AS race,
+	pp01a.DESC1_ AS managerType,
+	MANAGEMENT_ AS management,
+	a.REMARK_ AS remark,
+	d.POSITION_NAME_ AS positionId
+    from tb_user a left join tb_sys_company b
+    on a.COMPANY_CODE_=b.COMPANY_CODE_
+    left join tb_sys_department c
+    on a.DEPARTMENT_ID_=c.DEPARTMENT_ID_
+    left join tb_sys_position d
+    on a.POSITION_ID_=d.POSITION_ID_
+    LEFT JOIN tbpubcode01 pp01a 
+    ON IFNUll(a.MANAGER_TYPE_,'0') = pp01a.DESC_
+    where a.USER_TYPE_='W'
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(companyCode)">
+    	and a.COMPANY_CODE_=#{companyCode}
+    </if>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(departmentId)">
+    	and a.DEPARTMENT_ID_=#{departmentId}
+    </if>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(name)">
+    	and a.NAME_ like CONCAT('%',#{name},'%') 
+    </if>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(phone)">
+    	and a.PHONE_ like CONCAT('%',#{phone},'%')   
+    </if>
+    and pp01a.CONFIG_CODE_='MANAGER_TYPE_'
+    ORDER BY a.COMPANY_CODE_ ASC,a.PHONE_ ASC
+  </select>
+
+<select id="selectUserById" resultType="java.util.Map" parameterType="java.util.Map" >
+    select 
+    a.ID_ AS id,
+	PASSWORD_ AS password,
+	ACCOUNT_ AS account,
+	SALT_ AS salt,
+	b.FULL_NAME_ AS companyCode,
+	a.COMPANY_CODE_ comcode,
+	c.DEPT_NAME_ AS departmentId,
+	COMMUNITY_ID_ AS communityId,
+	(CASE WHEN a.SEX_ ='0' THEN '女' WHEN a.SEX_ ='1' THEN '男' ELSE '其它' END) AS sex,
+	a.NAME_ AS name,
+	(CASE WHEN a.STATUS_ ='1' THEN '启用' WHEN a.STATUS_ ='2' THEN '冻结' ELSE '删除' END) AS status,
+	PHONE_ AS phone,
+	a.MAIL_ AS mail,
+	a.USER_TYPE_ AS userType,
+	a.BIRTHDAY_ AS birthday,
+	a.IMG_ AS img,
+	a.ID_CARD_ AS idCard,
+	a.ADDRESS_ AS address,
+	a.START_DATE_ AS startDate,
+	a.END_DATE_ AS endDate,
+	a.NEW_ADDRESS_ AS newAddress,
+	RACE_ AS race,
+	pp01a.DESC1_ AS managerType,
+	MANAGEMENT_ AS management,
+	a.REMARK_ AS remark,
+	d.POSITION_NAME_ AS positionId
+    from tb_user a left join tb_sys_company b
+    on a.COMPANY_CODE_=b.COMPANY_CODE_
+    left join tb_sys_department c
+    on a.DEPARTMENT_ID_=c.DEPARTMENT_ID_
+    left join tb_sys_position d
+    on a.POSITION_ID_=d.POSITION_ID_
+    LEFT JOIN tbpubcode01 pp01a 
+    ON IFNUll(a.MANAGER_TYPE_,'0') = pp01a.DESC_
+    where a.USER_TYPE_='W'
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(companyCode)">
+    	and a.COMPANY_CODE_=#{companyCode}
+    </if>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(departmentId)">
+    	and a.DEPARTMENT_ID_=#{departmentId}
+    </if>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(name)">
+    	and a.NAME_ like CONCAT('%',#{name},'%') 
+    </if>
+    <if test="@com.qcap.core.utils.Ognl@isNotEmpty(phone)">
+    	and a.PHONE_ like CONCAT('%',#{phone},'%')   
+    </if>
+     <if test="@com.qcap.core.utils.Ognl@isNotEmpty(id)">
+    	and a.ID_=#{id}
+    </if>
+    and pp01a.CONFIG_CODE_='MANAGER_TYPE_'
+  </select>
+
+
+   <sql id="commonSQL">
+        select 
+	    ID_ AS id,
+		PASSWORD_ AS password,
+		ACCOUNT_ AS account,
+		SALT_ AS salt,
+		COMPANY_CODE_ AS companyCode,
+		DEPARTMENT_ID_ AS departmentId,
+		COMMUNITY_ID_ AS communityId,
+		SEX_ AS sex,
+		NAME_ AS name,
+		STATUS_ AS status,
+		PHONE_ AS phone,
+		MAIL_ AS mail,
+		USER_TYPE_ AS userType,
+		BIRTHDAY_ AS birthday,
+		IMG_ AS img,
+		ID_CARD_ AS idCard,
+		ADDRESS_ AS address,
+		START_DATE_ AS startDate,
+		END_DATE_ AS endDate,
+		NEW_ADDRESS_ AS newAddress,
+		RACE_ AS race,
+		MANAGEMENT_ AS management,
+		REMARK_ AS remark,
+		CREATE_TIME_ AS createTime,
+		CREATE_EMP_ AS createEmp,
+		UPDATE_TIME_ AS updateTime,
+		UPDATE_EMP_ AS updateEmp,
+		MANAGER_TYPE_ AS managerType,
+		VERSION_ AS version,
+		POSITION_ID_ AS positionId
+	    from tb_user
+	    where ID_ = #{id}
+   </sql>
+
+  <select id="selectByPrimaryKey" resultType="java.util.Map" parameterType="java.lang.String" >
+       <include refid="commonSQL"/>
+  </select>
+  
+  
+  
+  <select id="getByUserId" resultType="com.qcap.cac.model.TbUser" parameterType="java.lang.String" >
+       <include refid="commonSQL"/>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+      This element was generated on Fri Apr 20 10:31:35 CST 2018.
+    -->
+    delete from tb_user
+    where ID_ = #{id}
+  </delete>
+  
+
+  <insert id="insert" parameterType="com.qcap.cac.model.TbUser" >
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+      This element was generated on Fri Apr 20 10:31:35 CST 2018.
+    -->
+    insert into tb_user (ID_, PASSWORD_, ACCOUNT_, 
+      SALT_, COMPANY_CODE_, DEPARTMENT_ID_, 
+      COMMUNITY_ID_, SEX_, NAME_, 
+      STATUS_, PHONE_, 
+      MAIL_, USER_TYPE_, BIRTHDAY_, 
+      IMG_, ID_CARD_, ADDRESS_, 
+      START_DATE_, END_DATE_, NEW_ADDRESS_, 
+      RACE_, MANAGEMENT_, REMARK_, 
+      CREATE_TIME_, CREATE_EMP_, UPDATE_TIME_, 
+      UPDATE_EMP_, VERSION_, POSITION_ID_,MANAGER_TYPE_
+      )
+    values (#{id}, #{password}, #{account}, 
+      #{salt}, #{companyCode}, #{departmentId}, 
+      #{communityId}, #{sex}, #{name}, 
+      #{status}, #{phone},  
+      #{mail}, #{userType}, #{birthday}, 
+      #{img}, #{idCard}, #{address}, 
+      #{startDate}, #{endDate}, #{newAddress}, 
+      #{race}, #{management}, #{remark}, 
+      #{createTime}, #{createEmp}, #{updateTime}, 
+      #{updateEmp}, #{version}, #{positionId},#{managerType}
+      )
+  </insert>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.qcap.cac.model.TbUser" >
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+      This element was generated on Fri Apr 20 10:31:35 CST 2018.
+    -->
+    update tb_user
+    set 
+	ACCOUNT_=#{account},
+	COMPANY_CODE_=#{companyCode},
+	DEPARTMENT_ID_=#{departmentId},
+	SEX_=#{sex},
+	NAME_=#{name},
+	PHONE_=#{phone},
+	MAIL_=#{mail},
+	IMG_=#{img},
+	ID_CARD_=#{idCard},
+	RACE_=#{race},
+	ADDRESS_=#{address},
+	NEW_ADDRESS_=#{newAddress},
+	UPDATE_TIME_=#{updateTime},
+	UPDATE_EMP_=#{updateEmp},
+	VERSION_=VERSION_+1,
+	POSITION_ID_=#{positionId}
+    where ID_ = #{id}
+  </update>
+  
+  
+  <update id="updatePass" parameterType="java.util.Map" >
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+      This element was generated on Fri Apr 20 10:31:35 CST 2018.
+    -->
+    update tb_user
+    set PASSWORD_=#{password},
+        SALT_=#{salt}
+    where ID_ = #{id}
+  </update>
+  
+  
+   <!-- 根据公司别查询职位信息 -->
+   <select id="selectPositionInfo" parameterType="String" resultType="java.util.Map">
+  	SELECT POSITION_ID_ AS id, POSITION_NAME_ AS text FROM tb_sys_position
+  	WHERE DELETE_FLAG_ ='0' AND COMPANY_CODE_ = #{companyCode}
+  	ORDER BY CONVERT(POSITION_NAME_ using gbk)
+   </select>
+   
+   <!-- 根据公司别查询职位信息 -->
+   <select id="selectRoleInfo" parameterType="String" resultType="java.util.Map">
+  	SELECT id_ AS id, name_ AS text FROM tb_role
+  	WHERE status_ ='1' AND companyCode_ = #{companyCode}
+  	ORDER BY CONVERT(name_ using gbk)
+   </select>
+   
+   <!-- 查询用户是否已经存在 -->
+   <select id ="selectExistNum" parameterType="java.util.Map" resultType="String">
+   	SELECT COUNT(*) FROM tb_user
+   	WHERE 1 = 1
+   	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(id)">
+		AND ID_ &lt;&gt; #{id} 
+	</if>
+   	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(account)">
+		AND ACCOUNT_ = #{account} 
+	</if>
+	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(phone)">
+		AND PHONE_ = #{phone} 
+	</if>
+	<if test="@com.qcap.core.utils.Ognl@isNotEmpty(idCard)">
+		AND ID_CARD_ = #{idCard} 
+	</if>
+	and USER_TYPE_='W'
+   </select>
+   
+   
+   <!-- 查询用户ID -->
+   <select id ="selectWebUserIdByPhone" parameterType="String" resultType="String">
+   	SELECT ID_ id FROM tb_user
+   	WHERE PHONE_ = #{phone} 
+	and USER_TYPE_='W'
+	limit 1
+   </select>
+   
+   
+    <!-- 改变用户状态 -->
+    <update id="changeUserStatus"   parameterType="java.util.Map">
+    update tb_user 
+   	 set STATUS_ =#{status}
+     where ID_=#{id}
+    </update>
+    
+     <select id="roleTreeListByRoleIdAndCom" resultType="com.qcap.cac.model.ZTreeNode">
+  select id, pId,name,open,checked
+	from 
+        (SELECT
+        r.num_ "id",
+        pnum_ "pId",
+        companyCode_ companyCode,
+        NAME_ AS "name",
+        (
+        CASE
+        WHEN (pnum_ = 0 OR pnum_ IS NULL) THEN
+        'true'
+        ELSE
+        'false'
+        END
+        ) "open",
+        (
+        CASE
+        WHEN (r1.num_ = 0 OR r1.num_ IS NULL) THEN
+        'false'
+        ELSE
+        'true'
+        END
+        ) "checked"
+        FROM
+        tb_role r
+        LEFT JOIN (
+        SELECT
+        num_
+        FROM
+        tb_role
+        WHERE
+        num_ IN
+
+        <foreach collection="array" index="index" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+
+        ) r1 ON r.num_ = r1.num_ ) a
+        where a.companyCode=#{companyCode}
+    </select>
+    
+     <!-- 根据companyCode 来加载角色 -->
+    <select id="roleTreeListByCom" parameterType="String"  resultType="com.qcap.cac.model.ZTreeNode">
+        select
+        num_ "id",
+        pnum_ "pId",
+        name_ as "name",
+        (case when (pnum_=0 or pnum_ is null) then 'true' else 'false' end) "open"
+        from tb_role
+        where companyCode_=#{companyCode}
+    </select>
+    
+    
+</mapper>

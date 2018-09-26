@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+	<div class="form-horizontal"
+	
+	<input type="hidden" id="tbaa01Id" th:value="${tbaa01Id }"/>
+			<input type="hidden" id="areaName" th:value="${areaName }"/>
+			<input type="hidden" id="areaCode" th:value="${areaCode }"/>
+			<input type="hidden" id="companyCode2" th:value="${companyCode }" />
+			<input type="hidden" id="tbaa02Id" th:value="${tbaa02Id }"/>
+			<input type="hidden" id="buildingName" th:value="${building }"/>
+			<input type="hidden" id="buildingCode" th:value="${buildingCode }"/>
+			<input type="hidden" id="tbaa03Id" th:value="${tbaa03Id }"/>
+			<input type="hidden" id="cellName" th:value="${cellName }"/>
+			<input type="hidden" id="cellCode" th:value="${cellCode }"/>
+		<!-- 	<input type="hidden" id="tbaa04Id" value="${tbaa04Id }"/>
+			<input type="hidden" id="floorName" value="${floorName }"/>
+			<input type="hidden" id="floorCode" value="${floorCode }"/> -->
+			<input type="hidden" id="code" th:value="${code }"/>
+			<div class="form-group">
+			
+			
+				<label class="col-xs-2  control-label">房间名称：</label>
+				<div class="col-xs-3">
+	   				<input class="form-control" id="roomName"  />
+				</div>
+				
+				 <label class="col-xs-2 col-xs-offset-1 control-label">房间全名：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="roomFullName" />
+				</div>
+			</div>
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">公司：</label>
+				 <div class="col-xs-3">
+	   				<select class="form-control" id="companyCode" ></select>
+				</div>
+				
+			  <label class="col-xs-2 col-xs-offset-1 control-label">房间编码：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="roomCode" />
+				</div>
+				
+			</div>
+			
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">户主名字：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="ownerName" />
+				</div>
+			     <label class="col-xs-2 col-xs-offset-1 control-label">户主电话：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="ownerTel" />
+				</div>
+				
+			</div>
+			
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">水务房号：</label>
+				 <div class="col-xs-3">
+				 	<input class="form-control" id="fh" />
+				</div>
+			 
+				 <label class="col-xs-2 col-xs-offset-1 control-label">水务户号：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="hh" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">建筑面积：</label>
+				 <div class="col-xs-3">
+				 	<input class="form-control" id="calArea" />
+				</div>
+			 
+				 <label class="col-xs-2 col-xs-offset-1 control-label">实用面积：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="realArea" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				 <label class="col-xs-2  control-label">物业费单价：</label>
+				 <div class="col-xs-3">
+				 	 <input class="form-control" id="wyPrice" />
+				</div>
+			 
+				 <label class="col-xs-2 col-xs-offset-1 control-label">物业费：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="wyAmount" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-2  control-label">备注：</label>
+				 <div class="col-xs-3">
+	   				<input class="form-control" id="remark1" />
+				</div>
+				 
+				<label class="col-xs-2  col-xs-offset-1 control-label">是否有门：</label>
+	   			 <div class="col-xs-3" style="padding-top:6px;">
+	   				<input id="yes_haveGate" type="radio"  name="haveGate"  value="1"  />是
+					<input id="no_haveGate"  type="radio"  name="haveGate" value="0"  />否
+				</div>
+			</div>
+	
+	</div>
+	<div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-info " onclick="RoomInfoDlg.add()" id="ensure">
+                        <i class="fa fa-check"></i>&nbsp;提交
+                    </button>
+
+
+                    <button type="button" class="btn btn-danger " onclick="RoomInfoDlg.close()" id="cancel">
+                        <i class="fa fa-eraser"></i>&nbsp;取消
+                    </button>
+                </div>
+            </div>
+   </div>
+   </div>
+</div>
+
+<script src="/js/content.js?v=1.0.0"></script>
+<script type="text/javascript">
+
+var RoomInfoDlg={
+		areaName:null,
+		buildName:null,
+		cellName:null
+};
+
+
+function accMul(arg1,arg2){
+	var m=0,s1=arg1.toString(),s2=arg2.toString();
+	try{m+=s1.split(".")[1].length}catch(e){}
+	try{m+=s2.split(".")[1].length}catch(e){}
+	return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)
+ }
+
+$(function(){
+	var code=$("#code").val();
+	var companyCode;
+	if(!code){
+		//code为空，则是在维护页面新增的小区，暂时没有房间信息
+		//则其所需信息从hsjj06_update的floorTable中获取
+		//var data=$("#floorTable").DataTable().data().toArray();
+		//var rowData=data[clickaa04Index];
+		
+		var rowData=window.parent.Unit.seItem;
+		
+		if(rowData){
+			companyCode=rowData.companyCode;
+			$("#roomCode").val("101");
+			$("#roomName").val("101号");
+			if(rowData.areaName&&rowData.areaName.indexOf("小区")>=0){
+				$("#roomFullName").val(rowData.areaName+rowData.building+rowData.cellName+"101号");
+			}else{
+				$("#roomFullName").val(rowData.areaName+"小区"+rowData.building+rowData.cellName+"101号");
+			}
+			RoomInfoDlg.areaName=rowData.areaName;
+			RoomInfoDlg.buildName=rowData.rowData.building;
+			RoomInfoDlg.cellName=rowData.cellName;
+		}
+	}else{
+		companyCode=$("#companyCode2").val();
+		var buildingCode=$("#buildingCode").val();
+		var roomId_prefix=new Number(buildingCode).valueOf();
+		var roomId=roomId_prefix+""+RoomInfoDlg.getNumber(code);
+		$("#roomCode").val(roomId);
+		$("#roomName").val(roomId+"号");
+		
+		var areaName=$("#areaName").val();
+		var building=$("#buildingName").val();
+		var cellName=$("#cellName").val();
+		//var floorName=$("#floorName").val();
+		if(areaName&&areaName.indexOf("小区")>=0){
+			$("#roomFullName").val(areaName+building+cellName+roomId+"号");
+		}else{
+			$("#roomFullName").val(areaName+"小区"+building+cellName+roomId+"号");
+		}
+		
+		
+		RoomInfoDlg.areaName=$("#areaName").val();
+		RoomInfoDlg.buildName=$("#buildingName").val();
+		RoomInfoDlg.cellName=$("#cellName").val();
+	}
+	
+	$.ajax({
+		type : 'POST',
+		url : Feng.ctxPath + "/communityWh/selectCompany",
+		async : false,
+		dataType : 'json',
+		success : function(data) {
+			$("#companyCode").empty();
+			$.each(data, function(index, value){
+				var option = "<option value='"+value.id+"'>"+value.text+"</option>";
+				$("#companyCode").append(option);
+			})
+			$("#companyCode").val(companyCode);
+		}
+	});
+	
+	$("input[name='haveGate'][value="+1+"]").attr("checked",true);
+	
+})
+
+
+$("#roomName").bind("change",
+	function(){
+		if(RoomInfoDlg&&RoomInfoDlg.areaName&&RoomInfoDlg.areaName.indexOf("小区")>=0){
+			$("#roomFullName").val(RoomInfoDlg.areaName+RoomInfoDlg.buildName+RoomInfoDlg.cellName+$("#roomName").val());
+		}else{
+			$("#roomFullName").val(RoomInfoDlg.areaName+"小区"+RoomInfoDlg.buildName+RoomInfoDlg.cellName+$("#roomName").val());
+		}
+	}
+);
+
+
+
+
+RoomInfoDlg.close=function(){
+	 parent.layer.close(window.parent.Room.layerIndex);
+}
+
+RoomInfoDlg.getNumber=  function(num){
+	num=eval(num)+1;
+	var code="";
+	var loop=num+"";
+	if(loop.length<2){
+		for(var n=1;n<=2-loop.length;n++){
+			code+="0";
+		}
+		code+=num;
+	}else{
+		code+=num;
+	}
+	return code;
+}
+
+var reg=/^([1-9][0-9]*|([0-9]\.\d{1,2})|([1-9][0-9]*\.\d{1,2}))$/;
+$("#calArea").change(function(){
+	var calArea=$(this).val();
+	var wyPrice=$("#wyPrice").val();
+	if(calArea && reg.test(calArea)){
+		var amount=accMul(calArea,wyPrice);
+		$("#wyAmount").val(amount);
+	}else{
+		Feng.info('请输入正确的建筑面积');
+		$("#calArea").val("");
+	}
+});
+
+
+
+$("#wyPrice").change(function(){
+	var calArea=$("#calArea").val();
+	var newWyPrice=$(this).val();
+	if(newWyPrice && reg.test(newWyPrice)){
+		var amount=accMul(calArea,newWyPrice);
+		$("#wyAmount").val(amount);
+	}else{
+		Feng.info('请输入正确的物业费单价');
+		$("#wyPrice").val("");
+	}
+});
+
+
+$("#calArea").change(function(){
+	var calArea=$(this).val();
+	if(calArea && !reg.test(calArea)){
+		Feng.info('请输入正确的建筑面积');
+		$("#calArea").val('');
+	}
+});
+
+$("#realArea").change(function(){
+	var realArea=$(this).val();
+	if(realArea && !reg.test(realArea)){
+		Feng.info('请输入正确的实用面积');
+		$("#realArea").val('');
+	}
+});
+
+RoomInfoDlg.add= function (){
+	var tbaa01Id;
+	var areaName;
+	var areaCode;
+	var tbaa02Id;
+	var building;
+	var buildingCode;
+	var companyCode;
+	var tbaa03Id;
+	var cellName;
+	var cellCode;
+	var roomCode;
+	//var tbaa04Id;
+	//var floorName;
+	//var floorCode;
+	
+	//var data=$("#floorTable").DataTable().data().toArray();
+	//var rowData=data[clickaa03Index];
+	
+	var rowData=window.parent.Unit.seItem;
+	
+	var code=$("#code").val();
+	if(!code &&rowData ){
+		tbaa01Id=rowData.tbaa01Id;
+		areaName=rowData.areaName;
+		areaCode=rowData.areaCode;
+		companyCode=rowData.companyCode;
+		tbaa02Id=rowData.tbaa02Id;
+		building=rowData.building;
+		buildingCode=rowData.buildingCode;
+		
+		tbaa03Id=rowData.tbaa03Id;
+		cellName=rowData.cellName;
+		cellCode=rowData.cellCode;
+		
+		//tbaa04Id=rowData.tbaa04Id;
+		//floorName=rowData.floorName;
+		//floorCode=rowData.floorCode;
+		
+	}else if(code){
+		tbaa01Id=$("#tbaa01Id").val();
+		areaName=$("#areaName").val();
+		areaCode=tbaa01Id;
+		companyCode=$("#companyCode").val();
+		tbaa02Id=$("#tbaa02Id").val();
+		building=$("#buildingName").val();
+		buildingCode=$("#buildingCode").val();
+		tbaa03Id=$("#tbaa03Id").val();
+		cellName=$("#cellName").val();
+		cellCode=$("#cellCode").val();
+		//tbaa04Id=$("#tbaa04Id").val();
+		//floorName=$("#floorName").val();
+		//floorCode=$("#floorCode").val();
+		
+	}
+	
+	//var roomId=$("#roomId").val();
+	var roomCode=$("#roomCode").val();
+	var roomName=$("#roomName").val();
+	
+	
+	var calArea=$("#calArea").val();
+	var realArea=$("#realArea").val();
+	
+	var ownerName=$("#ownerName").val();
+	var ownerTel=$("#ownerTel").val();
+	var roomFullName=$("#roomFullName").val();
+	//var pmsCellId=$("#pmsCellId").val();
+	var fh=$("#fh").val();
+	var hh=$("#hh").val();
+	var wyPrice=$("#wyPrice").val();
+	var wyAmount=$("#wyAmount").val();
+	
+	var remark1=$("#remark1").val();
+	var haveGate=$("input[name='haveGate']:checked").val();
+	if(companyCode == ''){
+		Feng.info('请选择物业公司');
+		return;
+	}
+	
+	
+	var params={
+			tbaa01Id:tbaa01Id,
+			areaName:areaName,
+			areaCode:areaCode,
+			tbaa02Id:tbaa02Id,
+			buildingName:building,
+			buildingCode:buildingCode,
+			companyCode:companyCode,
+			tbaa03Id:tbaa03Id,
+			cellCode:cellCode,
+			cellName:cellName,
+			//roomId:roomId,
+			roomCode:roomCode,
+			roomName:roomName,
+			remark1:remark1,
+			haveGate:haveGate,
+			//tbaa04Id:tbaa04Id,
+		//	floorName:floorName,
+		//	floorCode:floorCode,
+			calArea:calArea,
+			realArea:realArea,
+			ownerName:ownerName,
+			ownerTel:ownerTel,
+			roomFullName:roomFullName,
+		//	pmsCellId:pmsCellId,
+			fh:fh,
+			hh:hh,
+			wyPrice:wyPrice,
+			wyAmount:wyAmount
+			
+			
+	}
+	$.ajax({
+		type:'post',
+		async:false,
+		data:params,
+		dataType:'json',
+		url:Feng.ctxPath+"/communityWh/insertSingleTbaa05",
+		beforeSend:function(){
+			
+		},
+		success:function(data){
+			if(data.result==1){
+				Feng.success('新增房间信息成功');
+				
+				window.parent.Room.table.refresh();
+				RoomInfoDlg.close();
+			}else{
+				Feng.error(data.message);
+			}
+		}
+	});
+}
+
+
+
+</script>
+</body>
+</html>

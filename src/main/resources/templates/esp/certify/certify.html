@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html layout:decorator="/common/head_link" >
+<head>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>客户登记认证</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                        
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">客户姓名
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" id="name" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                  <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">联系电话
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" id="phone" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">小区名称
+                                        </button>
+                                    </div>
+                                    <select class="form-control" id="community" ></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                  <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">楼栋名称
+                                        </button>
+                                    </div>
+                                    <select class="form-control" id="block" ></select>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-sm-3">
+                                  <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">单元名称
+                                        </button>
+                                    </div>
+                                    <select class="form-control" id="unit" ></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">房间号
+                                        </button>
+                                    </div>
+                                    <select class="form-control" id="room" ></select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                  <div class="input-group">
+                                    <div class="input-group-btn ">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle"
+                                                type="button">客户类型
+                                        </button>
+                                    </div>
+                                    <select class="form-control" id="mainType" >
+                                    	<option value = "">请选择客户类型</option>
+                                    	<option value = "1">业主</option>
+										<option value = "2">家属</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary " onclick="certify.search()">
+                                    <i class="fa fa-search"></i>&nbsp;搜索
+                                </button>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary " onclick="certify.reset()">
+                                    <i class="fa fa-eraser"></i>&nbsp;重置
+                                </button>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="pubcodeTableToolbar" role="pubcode">
+
+                            <button type="button" class="btn btn-primary " onclick="certify.openAddCertify()">
+                                <i class="fa fa-plus"></i>&nbsp;新增
+                            </button>
+                            <button type="button" class="btn btn-primary button-margin" onclick="certify.modify()">
+                                <i class="fa fa-pencil"></i>&nbsp;修改
+                            </button>
+                            <button type="button" class="btn btn-danger button-margin" onclick="certify.del()">
+                                <i class="fa fa-trash"></i>&nbsp;删除
+                            </button>
+                        </div>
+                        <table id="certifyTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/modular/esp/certify/certify.js"></script>
+<script type="text/javascript">
+
+$(function(){
+ 	$('#community').select2Ajax({
+ 	    url:'/property/wyAreaName',
+	}); 
+  	$('#community').select2();
+  	$('#block').select2();
+  	$('#unit').select2();
+  	$('#room').select2();
+ })
+ 
+$('#community').on('change',function(){
+		$("#block").val('');
+		$("#unit").val('');
+		$("#room").val('');
+		$('#block').select2Ajax({
+		    url:'/property/building?communityId='+$('#community').val(),
+	}); 
+	 	$('#block').select2();
+	});
+
+	$('#block').on('change',function(){
+		$("#unit").val('');
+		$("#room").val('');
+		$('#unit').select2Ajax({
+		    url:'/property/cellName?blockId='+$('#block').val(),
+	}); 
+	 	$('#unit').select2();
+	});
+	
+	$('#unit').on('change',function(){
+		$("#room").val('');
+		$('#room').select2Ajax({
+		    url:'/property/roomName?unitId='+$('#unit').val(),
+	}); 
+	 	$('#room').select2();
+	});
+</script>
+</body>
+</html>

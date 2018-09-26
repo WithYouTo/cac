@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.core.dao.LoginLogTestMapper">
+
+<!--     <insert id="insert" parameterType="LoginLog">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO tb_login_log
+        (id_,logname_,userid_,createtime_,succeed_,message_,ip_)
+        values
+        (#{id},#{logname},#{userid},#{createtime},#{succeed},#{message},#{ip})
+    </insert>
+ -->
+
+    <select id="getLoginLogs" resultType="map" parameterType="java.util.Map">
+        select
+        tl.id_ id,
+        tl.logname_ logname,
+        tu.NAME_  username,
+        tl.message_ message,
+        tl.ip_ ip,
+         date_format(tl.createtime_, '%Y-%m-%d %H:%i:%s') createtime
+        from tb_login_log  tl LEFT JOIN tb_user tu on tu.ID_=tl.userid_ where 1 = 1
+        <if test="beginTime != null and beginTime !='' and endTime != null and endTime != ''">
+            and (tl.createtime_ between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        <if test="userName != null and userName !=''">
+            and tu.NAME_ like CONCAT('%',#{userName},'%')
+        </if>
+        <if test="logName !=null and logName !=''">
+            and tl.logname_ like CONCAT('%',#{logName},'%')
+        </if>
+          order by tl.createtime_ DESC
+    </select>
+
+    <delete id="delLoginLog" parameterType="java.lang.String">
+        DELETE FROM tb_login_log WHERE id_=#{id}
+    </delete>
+
+</mapper>

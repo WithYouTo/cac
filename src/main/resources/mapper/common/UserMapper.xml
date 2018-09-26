@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.common.dao.UserMapper">
+
+    <insert id="insertManagerRole" parameterType="com.qcap.core.model.ManagerRole">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO tb_manager_role
+        (id_,managerId_,roleId_)
+        values
+        (#{id},#{managerid},#{roleid})
+    </insert>
+
+	<select id="getRoleNameById" parameterType="String" resultType="String">
+        SELECT
+          a.name_ name
+        FROM tb_role a
+        left JOIN tb_manager_role b
+        on a.num_ = b.roleId_
+        WHERE
+        b.managerId_ = #{id}
+    </select>
+    
+    <select id="getRoleIdById"  parameterType="String" resultType="String">
+        SELECT
+        roleId_ roleId
+        FROM tb_manager_role
+        WHERE
+        managerId_ = #{id}
+    </select>
+    
+	<sql id="user_info">
+		ID_ AS id, ACCOUNT_ AS account, PASSWORD_ AS password, SALT_ AS salt, COMPANY_CODE_ AS companyCode, DEPARTMENT_ID_ AS departmentId,
+		COMMUNITY_ID_ AS communityId, SEX_ AS sex, NAME_ AS name, STATUS_ AS status, PHONE_ AS phone,  MAIL_ AS mail,
+		USER_TYPE_ AS userType, BIRTHDAY_ AS birthday, IMG_ AS img, ID_CARD_ AS idCard, ADDRESS_ AS address, date_format(START_DATE_, '%Y-%m-%d %H:%i:%s') AS startDate,
+		date_format(END_DATE_, '%Y-%m-%d %H:%i:%s') AS endDate, NEW_ADDRESS_ AS newAddress, RACE_ AS race, MANAGEMENT_  AS management, REMARK_ AS remark,
+		date_format(CREATE_TIME_, '%Y-%m-%d %H:%i:%s') AS createTime, CREATE_EMP_ AS createEmp, UPDATE_TIME_ AS updateTime, UPDATE_EMP_ AS updateEmp,VERSION_ AS version
+	</sql> 
+	
+    <select id="getByAccount" parameterType="String" resultType="com.qcap.cac.model.TbUser">
+        SELECT
+        <include refid="user_info"></include>
+        FROM tb_user
+        WHERE
+        ACCOUNT_ = #{account}
+    </select>
+
+	<select id="getByPhone" parameterType="String" resultType="com.qcap.cac.model.TbUser">
+        SELECT
+        <include refid="user_info"></include>
+        FROM tb_user
+        WHERE
+        PHONE_ = #{phone}
+    </select>
+
+    <select id="getById" parameterType="String" resultType="com.qcap.cac.model.TbUser">
+        SELECT
+        <include refid="user_info"></include>
+        FROM tb_user
+        WHERE
+        ID_ = #{id}
+    </select>
+
+
+    <select id="selectUsers" resultType="map">
+        select
+        <include refid="user_info"></include>
+        FROM tb_user
+        where STATUS_ != 3
+        <if test="name != null and name != ''">
+            and (PHONE_ like CONCAT('%',#{name},'%')
+            or ACCOUNT_ like CONCAT('%',#{name},'%')
+            or NAME_ like CONCAT('%',#{name},'%'))
+        </if>
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (CREATE_TIME_ between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+    </select>
+
+    <select id="listManager" resultType="com.qcap.core.poiEntity.ManagerPoiEntity">
+        select
+        ID_ id,
+        ACCOUNT_ account,
+        PASSWORD_ password,
+        NAME_ name,
+        PHONE_ phone,
+        MAIL_ mail,
+        CREATE_TIME_ createtime,
+        CREATE_EMP_ createemp,
+        UPDATE_TIME_ updatetime,
+        UPDATE_EMP_ updateemp,
+        STATUS_ status
+        from tb_user
+    </select>
+
+    
+    <insert id="insertUser" parameterType="com.qcap.cac.model.TbUser">
+        INSERT INTO tb_user
+        (ID_ ,ACCOUNT_ ,PASSWORD_ ,SALT_ ,COMPANY_CODE_ ,COMMUNITY_ID_ ,SEX_ ,NAME_ ,
+        STATUS_,PHONE_,EDUCATION_, CAREER_ ,INCOME_ ,USER_TYPE_,IMG_,ID_CARD_,
+        CREATE_TIME_,CREATE_EMP_ ,UPDATE_TIME_,UPDATE_EMP_,VERSION_)
+        VALUES
+        (#{id},#{account},#{password},#{salt},#{companyCode},#{communityId},#{sex},#{name},
+        #{status},#{phone},#{education},#{career},#{income},#{userType},#{img},#{idCard},
+        now(),#{createEmp},#{updateTime},#{updateEmp},#{version})
+    </insert>
+
+	<update id="updateUser" parameterType="com.qcap.cac.model.TbUser">
+        UPDATE tb_user
+        <set>
+          <if test="@com.qcap.core.utils.Ognl@isNotEmpty(name)">
+	          NAME_ = #{name},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(account)">
+	          ACCOUNT_ = #{account},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(password)">
+	          PASSWORD_ = #{password},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(salt)">
+	          SALT_ = #{salt},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(phone)">
+	          PHONE_ = #{phone},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(sex)">
+	          SEX_ = #{sex},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(img)">
+	          IMG_ = #{img},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(career)">
+	          CAREER_ = #{career},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(education)">
+	          EDUCATION_ = #{education},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(income)">
+	          INCOME_ = #{income},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(img)">
+	          IMG_ = #{img},
+	      </if>
+	      <if test="@com.qcap.core.utils.Ognl@isNotEmpty(updateEmp)">
+	          UPDATE_EMP_ = #{updateEmp},
+	      </if>
+	     	  UPDATE_TIME_ = now()
+	    </set>
+        WHERE ID_ = #{id}
+    </update>
+    
+    <insert id="insertManagerOrg" parameterType="com.qcap.core.model.ManagerOrg">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO tb_manager_org
+        (id_,managerId_,orgId_)
+        values
+        (#{id},#{managerId},#{orgId})
+    </insert>
+
+    <update id="updateStatus" parameterType="com.qcap.cac.model.TbUser">
+        UPDATE tb_user
+        SET
+        STATUS_ = #{code}
+        WHERE
+        ID_ = #{id}
+    </update>
+
+
+    <delete id="deleteRolesById">
+        delete FROM tb_manager_role WHERE managerId_= #{id}
+    </delete>
+
+    <delete id="deleteOrgById" parameterType="String">
+        delete FROM tb_manager_org WHERE managerId_= #{id}
+    </delete>
+
+</mapper>
