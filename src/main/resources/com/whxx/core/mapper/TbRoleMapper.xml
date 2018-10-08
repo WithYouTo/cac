@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whxx.core.dao.TbRoleMapper">
+
+
+    <select id="getRoleTreeListByManagerId" resultType="com.whxx.core.model.ZTreeNode">
+        select num                     id,
+               parent_num              pid,
+               name,
+               CASE
+                   WHEN (parent_num = 0 OR parent_num IS NULL) THEN 'true'
+                   ELSE 'false' END AS open,
+               CASE
+                   WHEN EXISTS(SELECT 'X' FROM tb_manager_role b WHERE b.manager_id = #{managerId}
+                                                                   AND b.role_id = num) THEN 'true'
+                   ELSE 'false' END AS checked
+        FROM tb_role
+    </select>
+    <select id="getRoleListByManagerId" resultType="com.whxx.core.entity.TbRole">
+        select a.*
+        from tb_role a
+                 left join tb_manager_role b on a.num = b.role_id
+                 left join tb_manager c on b.manager_id = c.id
+        where c.id = #{managerId}
+    </select>
+</mapper>

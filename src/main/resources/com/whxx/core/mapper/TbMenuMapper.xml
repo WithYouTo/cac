@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whxx.core.dao.TbMenuMapper">
+
+    <select id="getMenuTreeListByManagerId" resultType="com.whxx.core.model.MenuTree">
+        SELECT DISTINCT c.url jump, c.code, c.parent_code pcode, c.name title, c.icon, c.name
+        FROM tb_manager_role a
+                 left JOIN tb_role_menu b on a.role_id = b.role_num
+                 left JOIN tb_menu c ON c.code = b.menu_code
+        WHERE c.is_menu = 1
+          AND a.manager_id = #{managerId}
+        ORDER BY c.level, c.seq
+    </select>
+
+    <select id="getMenuTreeList" resultType="com.whxx.core.model.ZTreeNode">
+        SELECT m1.code                   id,
+               m1.name,
+               (CASE
+                    WHEN (m2.code = 0 OR m2.code IS NULL)
+                          THEN 0
+                    ELSE m2.code END) AS pId,
+               (CASE
+                    WHEN (m2.code = 0 OR m2.code IS NULL)
+                          THEN 'true'
+                    ELSE 'false' END) as isOpen
+        FROM tb_menu m1
+                 LEFT join tb_menu m2 ON m1.parent_code = m2.code
+        ORDER BY m1.seq
+    </select>
+
+    <select id="getMenuTreeListByMenuCode" resultType="com.whxx.core.model.ZTreeNode">
+        SELECT m1.code id,m1.name,
+        (CASE WHEN (m2.code = 0 OR m2.code IS NULL) THEN 0 ELSE m2.code END) AS pId,
+        (CASE WHEN (m2.code = 0 OR m2.code IS NULL) THEN 'true' ELSE 'false' END) AS isOpen,
+        (CASE WHEN (m3.code = 0 OR m3.code IS NULL) THEN 'false' ELSE 'true' END) 'checked'
+        FROM tb_menu m1 LEFT JOIN tb_menu m2 ON m1.parent_code = m2.code
+        left join (SELECT code FROM tb_menu WHERE code IN
+        <foreach collection="list" index="index" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+        ) m3 on m1.code = m3.code ORDER BY m1.seq ASC
+    </select>
+
+
+</mapper>

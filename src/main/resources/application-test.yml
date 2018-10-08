@@ -1,0 +1,53 @@
+server:
+  port: 8061
+spring:
+  datasource:
+    url: jdbc:mysql://10.10.0.12:3333/whxxerp
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    password: root
+    username: root
+    druid:
+      max-pool-prepared-statement-per-connection-size: 20
+      min-idle: 5
+      max-active: 200
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      validation-query: SELECT 'x'
+      use-global-data-source-stat: true
+      filters: stat,wall,slf4j
+      max-wait: 60000
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      test-on-borrow: false
+      pool-prepared-statements: false
+      initial-size: 5
+      min-evictable-idle-time-millis: 300000
+      test-on-return: false
+  session:
+    store-type: none
+  messages:
+    basename: i18n/messages
+  servlet:
+    multipart:
+      maxRequestSize: 100MB
+      maxFileSize: 100MB
+  redis:
+    host: 192.168.185.13
+    password: whxx123.
+    database: 0
+    port: 6379
+    lettuce:
+      pool:
+        max-idle: 8
+        min-idle: 0
+        max-active: 8
+        max-wait: -1ms
+    timeout: 5000ms
+logging:
+  config: classpath:logback-dev.xml
+
+# DIY
+rest:
+  restfulSign: /rest
+  coreOpen: true
+  swaggerEnable: false

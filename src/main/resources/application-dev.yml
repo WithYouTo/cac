@@ -1,0 +1,73 @@
+server:
+  port: 8060
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://10.10.0.12:3333/whxxfame
+    driver-class-name: com.mysql.jdbc.Driver
+    password: root
+    username: root
+    druid:
+      max-pool-prepared-statement-per-connection-size: 20
+      min-idle: 5
+      max-active: 200
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      validation-query: SELECT 'x' from dual
+      use-global-data-source-stat: true
+      filters: stat,wall,slf4j
+      max-wait: 60000
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      test-on-borrow: false
+      pool-prepared-statements: false
+      initial-size: 5
+      min-evictable-idle-time-millis: 300000
+      test-on-return: false
+  session:
+    store-type: none
+  messages:
+    basename: i18n/messages
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  redis:
+    host: 192.168.185.13
+    password: whxx123.
+    database: 0
+    port: 6379
+    timeout: 5000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        min-idle: 0
+        max-idle: 8
+mybatis-plus:
+  type-aliases-package: com.whxx.*.model, com.whxx.*.entity
+  mapper-locations: classpath:/com/whxx/core/mapper/*.xml
+  global-config:
+    db-config:
+      id-type: uuid
+      field-strategy: not_null
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      capital-mode: false
+      column-underline: true
+  configuration:
+    cache-enabled:  false
+    jdbc-type-for-null: 'null'
+    map-underscore-to-camel-case: true
+logging:
+  config: classpath:logback-dev.xml
+
+# DIY
+rest:
+  restfulSign: /rest
+  coreOpen: true
+  swaggerEnable: false
+mybatis:
+  mapper-refresh: true
+  iPage:
+    page-parameter: page
+    size-parameter: size

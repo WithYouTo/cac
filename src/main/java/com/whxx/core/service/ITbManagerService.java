@@ -1,0 +1,62 @@
+package com.whxx.core.service;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.whxx.core.entity.TbManager;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * <p>
+ * 管理员表 服务类
+ * </p>
+ *
+ * @author PH
+ * @since 2018-07-29
+ */
+public interface ITbManagerService
+{
+    String login(String account, String password) throws Exception;
+
+    Optional<TbManager> getTbManagerFromToken(String token);
+
+    void getUserList(IPage<Map<String, Object>> page, Map<String, Object> params);
+
+    /**
+     * 添加用户
+     *
+     * @param manager 参数对象
+     */
+    void insertItem(TbManager manager) throws Exception;
+
+    /**
+     * 添加用户
+     *
+     * @param manager 参数对象
+     */
+    void updateItem(TbManager manager);
+
+    /**
+     * 根据Id逻辑删除用户
+     *
+     * @param id 主键Id
+     */
+    void deleteManagerById(String id);
+
+    /**
+     * 为用户分配角色
+     *
+     * @param managerId   用户表主键Id
+     * @param roleNumbers 角色表num集合
+     */
+    void buildRoleForManager(String managerId, Collection<String> roleNumbers);
+
+    /**
+     * 为用户分配组织
+     *
+     * @param managerId 用户表主键id
+     * @param orgId     组织代码
+     */
+    void buildOrfForManager(String managerId, String orgId);
+}

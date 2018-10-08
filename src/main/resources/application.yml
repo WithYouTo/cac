@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: dev
+  http:
+    encoding:
+      force: true

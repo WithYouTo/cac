@@ -1,0 +1,10 @@
+# Initializers
+org.springframework.context.ApplicationContextInitializer=
+# Application Listeners
+org.springframework.context.ApplicationListener=com.whxx.core.listener.InitialConfigListener
+# Auto Configuration Import Listeners
+org.springframework.boot.autoconfigure.AutoConfigurationImportListener=
+# Auto Configuration Import Filters
+org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=
+# Auto Configure ===========这里就是全部的自动配置类===============================
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=
