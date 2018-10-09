@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,6 +41,8 @@ public class GlobalExceptionHandler {
 
 	@Resource
 	private RedisUtil redisUtil;
+	
+	private Logger log=AppUtils.getLogger(GlobalExceptionHandler.class, true);
 
 	/**
 	 *

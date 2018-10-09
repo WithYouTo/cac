@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.qcap.core.entity.TbCommonConfig;
+import com.qcap.core.utils.AppUtils;
 
 import cn.afterturn.easypoi.entity.vo.BigExcelConstants;
 import cn.afterturn.easypoi.entity.vo.MapExcelConstants;
@@ -45,6 +47,8 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/demo")
 public class PoiController {
+	
+	private Logger log=AppUtils.getLogger(PoiController.class, true);
 	/**
 	 * 常规导出EXCEL 结合MODEL 相关注解实现快速导入excel功能 orderNum 用于列表排序
 	 *

@@ -28,4 +28,30 @@ public class RestProperties {
 
 	private String restfulSign = "/rest";
 
+	public String getCoreOpen() {
+		return coreOpen;
+	}
+
+	public String getSwaggerEnable() {
+		return swaggerEnable;
+	}
+
+	public String getRestfulSign() {
+		return restfulSign;
+	}
+
+	public void setCoreOpen(String coreOpen) {
+		this.coreOpen = coreOpen;
+	}
+
+	public void setSwaggerEnable(String swaggerEnable) {
+		this.swaggerEnable = swaggerEnable;
+	}
+
+	public void setRestfulSign(String restfulSign) {
+		this.restfulSign = restfulSign;
+	}
+	
+	
+
 }

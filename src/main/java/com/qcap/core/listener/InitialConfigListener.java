@@ -1,9 +1,11 @@
 package com.qcap.core.listener;
 
+import org.slf4j.Logger;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 import com.qcap.core.service.ITbCommonConfigService;
+import com.qcap.core.utils.AppUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class InitialConfigListener implements ApplicationListener<ContextRefreshedEvent> {
+	
+	private Logger log=AppUtils.getLogger(InitialConfigListener.class, true);
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent context) {
