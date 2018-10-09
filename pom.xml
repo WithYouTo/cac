@@ -130,6 +130,11 @@
             <artifactId>jool-java-8</artifactId>
             <version>0.9.13</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.2</version>
+        </dependency>
     </dependencies>
 
     <!-- poi 版本冲突解决 -->
