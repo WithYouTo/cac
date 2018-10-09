@@ -1,7 +1,7 @@
 # Initializers
 org.springframework.context.ApplicationContextInitializer=
 # Application Listeners
-org.springframework.context.ApplicationListener=com.whxx.core.listener.InitialConfigListener
+org.springframework.context.ApplicationListener=com.qcap.core.listener.InitialConfigListener
 # Auto Configuration Import Listeners
 org.springframework.boot.autoconfigure.AutoConfigurationImportListener=
 # Auto Configuration Import Filters

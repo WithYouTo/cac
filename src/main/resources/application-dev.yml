@@ -44,8 +44,8 @@ spring:
         min-idle: 0
         max-idle: 8
 mybatis-plus:
-  type-aliases-package: com.whxx.*.model, com.whxx.*.entity
-  mapper-locations: classpath:/com/whxx/core/mapper/*.xml
+  type-aliases-package: com.qcap.*.model, com.qcap.*.entity
+  mapper-locations: classpath:/com/qcap/core/mapper/*.xml
   global-config:
     db-config:
       id-type: uuid

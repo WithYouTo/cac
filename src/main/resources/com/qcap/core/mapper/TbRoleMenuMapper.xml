@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.core.dao.TbRoleMenuMapper">
+
+
+    <select id="getRoleMenuByRoleId" resultType="com.qcap.core.entity.TbRoleMenu">
+        select *
+        from tb_role_menu
+        where role_num = (select num from tb_role where id = #{roleId})
+    </select>
+
+    <update id="updateRoleMenuByMenuCode">
+        update tb_role_menu
+        SET menu_code = #{newCode}
+        where menu_code = #{oldCode}
+    </update>
+</mapper>

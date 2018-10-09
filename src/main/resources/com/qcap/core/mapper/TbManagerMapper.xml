@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.core.dao.TbManagerMapper">
+
+    <select id="getTbMangerList" resultType="java.util.Map">
+        select m.id,
+        m.account,
+        m.name,
+        m.phone,
+        m.mail,
+        m.create_time createTime,
+        m.status,
+        o.fullnames orgName
+        from tb_manager m
+        left join tb_manager_org mo on m.id = mo.manager_id
+        left join tb_org o ON mo.org_id = o.id
+        where m.status != 3
+        <if test="map.userName!=null and map.userName!=''">
+            and m.name like #{map.userName}
+        </if>
+        <if test="map.phone!=null and map.phone!=''">
+            and m.phone like #{map.phone}
+        </if>
+    </select>
+</mapper>
