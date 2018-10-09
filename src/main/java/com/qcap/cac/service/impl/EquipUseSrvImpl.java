@@ -2,7 +2,7 @@ package com.qcap.cac.service.impl;
 
 import com.qcap.cac.dao.EquipChargeMapper;
 import com.qcap.cac.dao.EquipUseMapper;
-import com.qcap.cac.model.dto.EquipUseSearchParam;
+import com.qcap.cac.dto.EquipUseSearchParam;
 import com.qcap.cac.service.EquipUseSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
