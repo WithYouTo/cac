@@ -52,7 +52,7 @@
 		where pid_ = #{pid} AND code_ = #{code}
 	</select>
 
-	<select id="selectByPidAndNum" resultType="com.whxx.core.model.Dict">
+	<select id="selectByPidAndNum" resultType="com.qcap.core.model.Dict">
 		select
 		id_ id,
 		num_ num,
