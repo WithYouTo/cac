@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.EquipChargeMapper">
+
+    <select id="listEquipCharge" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipChargeSearchParam">
+        select
+        EQUIP_CHARGE_ID equipChargeId,
+        EQUIP_ID equipId,
+        EQUIP_NAME equipName,
+        EQUIP_NO equipNo,
+        EQUIP_TYPE equipType,
+        EQUIP_MODEL equipModel,
+        START_CHARGE_TIME startChargeTime,
+        END_CHARGE_TIME endChargeTime,
+        TOTAL_CHARGE_TIME totalChargeTime,
+        AREA area,
+        PERSON_NAME personName,
+        PERSON_MOBILE personMobile,
+        STATUS status
+        from TB_EQUIP_CHARGE
+        where 1=1
+        <if test="equipNo != null and equipNo != ''">
+            and EQUIP_NO = #{equipNo}
+        </if>
+        <if test="startChargeTime != null and startChargeTime != ''">
+            and START_CHARGE_TIME &gt; #{startChargeTime}
+        </if>
+        <if test="status != null and status != ''">
+            and STATUS = #{status}
+        </if>
+    </select>
+
+
+    <select id="getChargeTotalTimeByEquipId" resultType="java.lang.String" parameterType="java.lang.String">
+        select
+        sum(TOTAL_CHARGE_TIME) total
+        from TB_EQUIP_CHARGE
+        where
+        EQUIP_ID = #{equipId}
+    </select>
+</mapper>

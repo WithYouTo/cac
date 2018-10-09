@@ -33,7 +33,7 @@ public class EquipUseController{
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getChargeTotalTimeByEquipId", method = RequestMethod.POST)
+    @RequestMapping(value = "/getUseTotalTimeByEquipId", method = RequestMethod.POST)
     public Object getChargeTotalTimeByEquipId(String equipId){
         String totalTime = this.equipUseSrv.getUseTotalTimeByEquipId(equipId);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", totalTime);

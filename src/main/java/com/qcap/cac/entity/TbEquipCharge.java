@@ -5,6 +5,8 @@ import java.util.Date;
 public class TbEquipCharge {
     private String equipChargeId;
 
+    private String equipId;
+
     private String equipName;
 
     private String equipNo;
@@ -181,5 +183,13 @@ public class TbEquipCharge {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getEquipId() {
+        return equipId;
+    }
+
+    public void setEquipId(String equipId) {
+        this.equipId = equipId;
     }
 }

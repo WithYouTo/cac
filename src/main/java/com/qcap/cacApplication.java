@@ -1,5 +1,6 @@
 package com.qcap;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableCaching
 @SpringBootApplication
+@MapperScan(basePackages = "com.qcap.**.dao")
 public class cacApplication {
 	public static void main(String[] args) {
 		new SpringApplicationBuilder().sources(cacApplication.class).bannerMode(Banner.Mode.OFF).run(args);

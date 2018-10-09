@@ -20,12 +20,13 @@ public class EquipChargeController{
     @Autowired
     private EquipChargeSrv equipChargeSrv;
 
+
     @ResponseBody
     @RequestMapping(value = "/listEquipCharge", method = RequestMethod.POST)
     public Object listEquipCharge(EquipChargeSearchParam equipChargeSearchParam){
         List<Map> list = this.equipChargeSrv.listEquipCharge(equipChargeSearchParam);
         PageInfo pageInfo = new PageInfo(list);
-        Page pageList = (Page) list;
+//        Page pageList = (Page) list;
         return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
     }
 

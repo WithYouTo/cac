@@ -10,17 +10,6 @@ import java.util.Map;
 @SuppressWarnings("rawtypes")
 @Repository
 public interface EquipUseMapper {
-    int deleteByPrimaryKey(String equipUseId);
-
-    int insert(TbEquipUse record);
-
-    int insertSelective(TbEquipUse record);
-
-    TbEquipUse selectByPrimaryKey(String equipUseId);
-
-    int updateByPrimaryKeySelective(TbEquipUse record);
-
-    int updateByPrimaryKey(TbEquipUse record);
 
     List<Map> listEquipUse(EquipUseSearchParam equipUseSearchParam);
 
