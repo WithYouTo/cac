@@ -19,9 +19,9 @@
 		m.EMPLOYEE_CODE  AS  employeeCode,
 		m.EMPLOYEE_NAME  AS  employeeName,
 		m.EMPLOYEE_TEL  AS  employeeTel,
-		m.COMPLETE_TIME  AS  completeTime,
-		m.START_TIME  AS  startTime,
-		m.END_TIME  AS  endTime,
+		DATE_FORMAT(m.COMPLETE_TIME,'%Y-%m-%d %T') AS  completeTime,
+		DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T') AS  startTime,
+		DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')  AS  endTime,
 		m.TASK_STATUS  AS  taskStatus,
 		m.CHECK_STATUS  AS  checkStatus,
 		m.TASK_SCORE  AS  taskScore,
@@ -31,7 +31,7 @@
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,
 		m.REMARK3  AS  remark3,
-		m.CREATE_DATE AS createDate
+		DATE_FORMAT(m.CREATE_DATE,'%Y-%m-%d %T') AS createDate
 		FROM tb_task m
 		WHERE m.TASK_STATUS !='CANCLE'
 		AND m.EMPLOYEE_NAME LIKE CONCAT('%',#{employeeName},'%')
