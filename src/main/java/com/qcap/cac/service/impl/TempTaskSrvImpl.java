@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.druid.util.StringUtils;
+import com.qcap.cac.constant.Common;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.TempTaskDto;
@@ -42,23 +43,24 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String taskStatus=this.tempTaskMapper.selectTaskStatus(taskCode);
 		if(CommonConstant.TASK_STATUS_WAIT.equals(taskStatus)) {
 			this.tempTaskMapper.deleteTempTask(taskCode);
-			 map.put("flag", "1");
-			 map.put("message", "该任务已成功取消");
+			
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该任务已成功取消");
 			 return map;
 		}
 		if(CommonConstant.TASK_STATUS_WORKING.equals(taskStatus)) {
-			 map.put("flag", "-1");
-			 map.put("message", "该任务正在进行中，不允许取消");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该任务正在进行中，不允许取消");
 			 return map;
 		}
 		if(CommonConstant.TASK_STATUS_FINISH.equals(taskStatus)) {
-			 map.put("flag", "-1");
-			 map.put("message", "该任务已完成，不允许取消");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该任务已完成，不允许取消");
 			 return map;
 		}
 		if(CommonConstant.TASK_STATUS_CANCLE.equals(taskStatus)) {
-			 map.put("flag", "-1");
-			 map.put("message", "该任务已取消");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该任务已取消");
 			 return map;
 		}
 		return null;
@@ -93,8 +95,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		 //查询标准详细信息
 		 List<Map>standardList=this.tempTaskMapper.selectStandardItem(standardCode);
 		 if(standardList ==null || standardList.isEmpty() ) {
-			 map.put("flag", "-1");
-			 map.put("message", "该标准不存在");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
 			 return map;
 		 }
 		 String uploadPicFlag=ToolUtil.toStr(standardList.get(0).get("uploadPicFlag")) ;
@@ -105,8 +107,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			 positionCode=ToolUtil.toStr(positionMap.get("positionCode"));
 			 positionName=ToolUtil.toStr(positionMap.get("positionName"));
 		 }else {
-			 map.put("flag", "-1");
-			 map.put("message", "该区域未设置岗位");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
 			 return map;
 		 }
 		 
@@ -185,8 +187,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeTel(employeeTel);
 		this.tempTaskMapper.insertTempTask(task);
 		
-		 map.put("flag", "1");
-		 map.put("message", "新增临时任务成功");
+		 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
+		 map.put(CommonConstant.BACK_MESSAGE, "新增临时任务成功");
 		 return map;
 	}
 
@@ -209,24 +211,25 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		  */
 		 String taskStatus=this.tempTaskMapper.selectTaskStatus(taskCode);
 		 if(CommonConstant.TASK_STATUS_WORKING.equals(taskStatus)) {
-			 map.put("flag", "-1");
-			 map.put("message", "该任务正在执行中，不允许修改");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该任务正在执行中，不允许修改");
 			 return map;
 		 }else if(CommonConstant.TASK_STATUS_FINISH.equals(taskStatus)) {
-			 map.put("flag", "-1");
-			 map.put("message", "该任务已完成，不允许修改");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该任务已完成，不允许修改");
 			 return map;
 		 }else if(CommonConstant.TASK_STATUS_CANCLE.equals(taskStatus)) {
-			 map.put("flag", "-1");
-			 map.put("message", "该任务已取消，不允许修改");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该任务已取消，不允许修改");
+			 
 			 return map;
 		 }
 		 
 		 //查询标准详细信息
 		 List<Map>standardList=this.tempTaskMapper.selectStandardItem(standardCode);
 		 if(standardList ==null || standardList.isEmpty() ) {
-			 map.put("flag", "-1");
-			 map.put("message", "该标准不存在");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
 			 return map;
 		 }
 		 String uploadPicFlag=ToolUtil.toStr(standardList.get(0).get("uploadPicFlag")) ;
@@ -237,8 +240,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			 positionCode=ToolUtil.toStr(positionMap.get("positionCode"));
 			 positionName=ToolUtil.toStr(positionMap.get("positionName"));
 		 }else {
-			 map.put("flag", "-1");
-			 map.put("message", "该区域未设置岗位");
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
 			 return map;
 		 }
 		 
@@ -309,8 +312,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeTel(employeeTel);
 		this.tempTaskMapper.updateTempTask(task);
 		
-		 map.put("flag", "1");
-		 map.put("message", "修改临时任务成功");
+		 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
+		 map.put(CommonConstant.BACK_MESSAGE, "修改临时任务成功");
 		 return map;
 	}
 

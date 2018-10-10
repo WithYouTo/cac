@@ -7,7 +7,7 @@
         <artifactId>whxx-springboot-core</artifactId>
         <version>2.0.0</version>
     </parent>
-    <artifactId>whBackEndDemoCenter</artifactId>
+    <artifactId>cac</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
@@ -56,8 +56,9 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.0-RC</version>
+            <version>3.0-RELEASE</version>
         </dependency>
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>

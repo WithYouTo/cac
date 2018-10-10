@@ -5,16 +5,34 @@ import java.util.Map;
 
 public class CommonConstant {
 
-    public final static String EQUIP_CHARGE_STATUS_ALL = "ALL";
+    //设备充电状态
     public final static String EQUIP_CHARGE_STATUS_INCHARGE = "INCHARGE";
     public final static String EQUIP_CHARGE_STATUS_CHARGED = "CHARGED";
     public static Map<String,String> EQUIP_CHARGE_STATUS = new LinkedHashMap<String,String>();
     static {
-        EQUIP_CHARGE_STATUS.put("ALL","全部");
         EQUIP_CHARGE_STATUS.put("INCHARGE","充电中");
         EQUIP_CHARGE_STATUS.put("CHARGED","充电完成");
     }
     
+    //设备使用状态
+    public final static String EQUIP_CHARGE_STATUS_INUSE = "INUSE";
+    public final static String EQUIP_CHARGE_STATUS_USED = "USED";
+    public static Map<String,String> EQUIP_USE_STATUS = new LinkedHashMap<String,String>();
+    static {
+        EQUIP_USE_STATUS.put("INUSE","使用中");
+        EQUIP_USE_STATUS.put("USED","使用完成");
+    }
+
+    //设备维修状态
+    public final static String EQUIP_CHARGE_STATUS_REPAIR = "REPAIR";
+    public final static String EQUIP_CHARGE_STATUS_REPAIRED = "REPAIRED";
+    public static Map<String,String> EQUIP_REPAIR_STATUS = new LinkedHashMap<String,String>();
+    static {
+        EQUIP_REPAIR_STATUS.put("REPAIR","维修中");
+        EQUIP_REPAIR_STATUS.put("REPAIRED","维修完成");
+    }
+    
+    //任务状态
     public final static String TASK_STATUS_WAIT="WAIT";
     public final static String TASK_STATUS_WORKING="WORKING";
     public final static String TASK_STATUS_FINISH="FINISH";
@@ -27,6 +45,7 @@ public class CommonConstant {
     	TASK_STATUS.put("CANCLE", "已取消");
     }
     
+    //任务编码前缀
     public final static String TASK_PREFIX_T="T";
     public final static String TASK_PREFIX_R="R";
     public final static String TASK_PREFIX_E="E";
@@ -39,6 +58,7 @@ public class CommonConstant {
     	TASK_PREFIX.put("DQ", "不合格任务前缀");
     }
     
+    //任务类型
     public final static String TASK_TYPE_TEMP="TEMP";
     public final static String TASK_TYPE_REGULAR="REGULAR";
     public final static String TASK_TYPE_EVENT="EVENT";
@@ -51,6 +71,7 @@ public class CommonConstant {
     	TASK_TYPE.put("SPECIAL", "专项任务");
     }
     
+    //任务检查状态
     public final static String TASK_CHECK_STATUS_TOCHECK="TOCHECK";
     public final static String TASK_CHECK_STATUS_QUALIFIED="QUALIFIED";
     public final static String TASK_CHECK_STATUS_DISQUALIFIED="DISQUALIFIED";
@@ -61,6 +82,7 @@ public class CommonConstant {
     	TASK_CHECK_STATUS.put("DISQUALIFIED", "不合格");
     }
     
+    //任务是否必须检查标识
     public final static String TASK_CHECK_FLAG_MUST="MUST";
     public final static String TASK_CHECK_FLAG_OPTIONAL="OPTIONAL";
     public static Map<String,String> TASK_CHECK_FLAG = new LinkedHashMap<String,String>();
@@ -69,6 +91,7 @@ public class CommonConstant {
     	TASK_CHECK_FLAG.put("OPTIONAL", "非必须");
     }
     
+    //班次类型
     public final static String SHIFT_DAYTIME="DAYTIME";
     public final static String SHIFT_NIGHT="NIGHT";
     public static Map<String,String> SHIFT = new LinkedHashMap<String,String>();
@@ -76,7 +99,10 @@ public class CommonConstant {
     	SHIFT.put("DAYTIME", "白班");
     	SHIFT.put("NIGHT", "夜班");
     }
-    public final static String SUCCESS_FLAG="1";
-    public final static String FAIL_FLAG="-1";
-    
+    //返回状态
+    public final static String BACK_FLAG="flag";
+    public final static String BACK_SUCCESS_FLAG="1";
+    public final static String BACK_FAIL_FLAG="-1";
+    public final static String BACK_MESSAGE="message";
+
 }
