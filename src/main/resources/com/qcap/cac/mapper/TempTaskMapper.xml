@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.TempTaskMapper">
+
+	<select id="listTask" parameterType="com.qcap.cac.dto.TempTaskSearchParam" resultType="Map">
+		SELECT 
+		m.TASK_ID  AS  taskId,
+		m.TASK_CODE  AS  taskCode,
+		m.PLAN_ID  AS  planId,
+		m.TASK_TYPE  AS  taskType,
+		m.POSITION_CODE  AS  positionCode,
+		m.POSITION_NAME  AS  positionName,
+		m.AREA_CODE  AS  areaCode,
+		m.AREA_NAME  AS  areaName,
+		m.STANDARD_CODE  AS  standardCode,
+		m.STANDARD_NAME  AS  standardName,
+		m.SHIFT  AS  shift,
+		m.SPEC  AS  spec,
+		m.EMPLOYEE_CODE  AS  employeeCode,
+		m.EMPLOYEE_NAME  AS  employeeName,
+		m.EMPLOYEE_TEL  AS  employeeTel,
+		m.COMPLETE_TIME  AS  completeTime,
+		m.START_TIME  AS  startTime,
+		m.END_TIME  AS  endTime,
+		m.TASK_STATUS  AS  taskStatus,
+		m.CHECK_STATUS  AS  checkStatus,
+		m.TASK_SCORE  AS  taskScore,
+		m.CHECK_FLAG  AS  checkFlag,
+		m.UPLOAD_PIC_FLAG  AS  uploadPicFlag,
+		m.TASK_ADVICE  AS  taskAdvice,
+		m.REMARK1  AS  remark1,
+		m.REMARK2  AS  remark2,
+		m.REMARK3  AS  remark3,
+		m.CREATE_DATE AS createDate
+		FROM tb_task m
+		WHERE m.TASK_STATUS !='CANCLE'
+		AND m.EMPLOYEE_NAME LIKE CONCAT('%',#{employeeName},'%')
+		AND m.EMPLOYEE_TEL LIKE CONCAT('%',#{employeeTel},'%')
+		AND m.TASK_STATUS=#{taskStatus}
+	</select>
+	
+	<insert id="insertTempTask" parameterType="com.qcap.cac.entity.TbTask">
+	    insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID, 
+      TASK_TYPE, POSITION_CODE, POSITION_NAME, 
+      AREA_CODE, AREA_NAME, STANDARD_CODE, 
+      STANDARD_NAME, SHIFT, SPEC, 
+      EMPLOYEE_CODE, EMPLOYEE_NAME, EMPLOYEE_TEL, 
+      COMPLETE_TIME, START_TIME, END_TIME, 
+      TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
+      CHECK_FLAG, TASK_ADVICE, REMARK1, 
+      REMARK2, REMARK3, CREATE_EMP, 
+      CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
+      VERSION,UPLOAD_PIC_FLAG)
+    values (#{taskId}, #{taskCode}, #{planId}, 
+      #{taskType}, #{positionCode}, #{positionName}, 
+      #{areaCode}, #{areaName}, #{standardCode}, 
+      #{standardName}, #{shift}, #{spec}, 
+      #{employeeCode}, #{employeeName}, #{employeeTel}, 
+      #{completeTime}, #{startTime}, #{endTime}, 
+      #{taskStatus}, #{checkStatus}, #{taskScore}, 
+      #{checkFlag}, #{taskAdvice}, #{remark1}, 
+      #{remark2}, #{remark3}, #{createEmp}, 
+      #{createDate}, #{updateDate}, #{updateEmp}, 
+      #{version},#{uploadPicFlag})
+	</insert>
+	
+	  <update id="updateTempTask" parameterType="com.qcap.cac.entity.TbTask">
+    update tb_task
+    <set>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskCode)">
+        TASK_CODE = #{taskCode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(planId)">
+        PLAN_ID = #{planId},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskType)">
+        TASK_TYPE = #{taskType},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(positionCode)">
+        POSITION_CODE = #{positionCode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(positionName)">
+        POSITION_NAME = #{positionName},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaCode)">
+        AREA_CODE = #{areaCode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaName)">
+        AREA_NAME = #{areaName},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardCode)">
+        STANDARD_CODE = #{standardCode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardName)">
+        STANDARD_NAME = #{standardName},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(shift)">
+        SHIFT = #{shift},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(spec)">
+        SPEC = #{spec},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
+        EMPLOYEE_CODE = #{employeeCode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeName)">
+        EMPLOYEE_NAME = #{employeeName},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeTel)">
+        EMPLOYEE_TEL = #{employeeTel},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(completeTime)">
+        COMPLETE_TIME = #{completeTime},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTime)">
+        START_TIME = #{startTime},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTime)">
+        END_TIME = #{endTime},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
+        TASK_STATUS = #{taskStatus},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkStatus)">
+        CHECK_STATUS = #{checkStatus},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskScore)">
+        TASK_SCORE = #{taskScore},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkFlag)">
+        CHECK_FLAG = #{checkFlag},
+      </if> 
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(uploadPicFlag)">
+        UPLOAD_PIC_FLAG = #{uploadPicFlag},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskAdvice)">
+        TASK_ADVICE = #{taskAdvice},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark1)">
+        REMARK1 = #{remark1},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark2)">
+        REMARK2 = #{remark2},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark3)">
+        REMARK3 = #{remark3},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(createEmp)">
+        CREATE_EMP = #{createEmp},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(createDate)">
+        CREATE_DATE = #{createDate},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(updateDate)">
+        UPDATE_DATE = #{updateDate},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(updateEmp)">
+        UPDATE_EMP = #{updateEmp},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(version)">
+        VERSION = #{version},
+      </if>
+    </set>
+    where TASK_CODE = #{taskCode}
+  </update>
+	
+	<select id="selectTaskStatus" parameterType="String" resultType="String">
+	SELECT TASK_STATUS AS taskStatus FROM tb_task WHERE TASK_CODE=#{taskCode}
+	</select>
+	
+	<update id="deleteTempTask" parameterType="String">
+	UPDATE tb_task SET TASK_STATUS ='CANCLE' 
+	WHERE  TASK_TYPE ='TEMP' AND TASK_CODE = #{taskCode}
+	</update>
+	
+	<select id="selectStandardItem" parameterType="String" resultType="Map">
+	SELECT STANDARD_CODE standardCode,STANDARD_NAME standardName ,UPLOAD_PIC_FLAG AS uploadPicFlag,CHECK_FLAG As checkFlag
+	FROM tb_area_standard 
+	WHERE 1=1
+	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardCode)">
+	AND STANDARD_CODE =#{standardCode}
+	</if>
+	ORDER BY STANDARD_CODE
+	</select>
+	
+	<select id="selectAreaItem" resultType="Map">
+	SELECT m.AREA_CODE id,m.AREA_NAME name,m.SUPER_AREA_CODE pId,n.AREA_NAME pName 
+	FROM tb_area m LEFT JOIN tb_area n
+	ON m.SUPER_AREA_CODE =n.AREA_CODE
+	<!-- SELECT AREA_CODE areaCode,AREA_NAME areaName,SUPER_AREA_CODE PAreaCode FROM tb_area -->
+	</select>
+	
+	<select id="selectPositionInfoByAreaCode" parameterType="String" resultType="Map">
+	SELECT POSITION_CODE positionCode,POSITION_NAME positionName from tb_area_position 
+	WHERE FIND_IN_SET(#{areaCode},AREA_CODE)
+	</select>
+	
+	<sql id="selectWorkIngItem">
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day1)">
+		AND DAY_1 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day2)">
+		AND DAY_2 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day3)">
+		AND DAY_3 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day4)">
+		AND DAY_4 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day5)">
+		AND DAY_5 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day6)">
+		AND DAY_6 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day7)">
+		AND DAY_7 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day8)">
+		AND DAY_8 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day9)">
+		AND DAY_9 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day10)">
+		AND DAY_10 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day11)">
+		AND DAY_11 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day12)">
+		AND DAY_12 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day13)">
+		AND DAY_13 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day14)">
+		AND DAY_14 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day15)">
+		AND DAY_15 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day16)">
+		AND DAY_16 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day17)">
+		AND DAY_17 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day18)">
+		AND DAY_18 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day19)">
+		AND DAY_19 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day20)">
+		AND DAY_20 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day21)">
+		AND DAY_21 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day22)">
+		AND DAY_22 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day23)">
+		AND DAY_23 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day24)">
+		AND DAY_24 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day25)">
+		AND DAY_25 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day26)">
+		AND DAY_26 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day27)">
+		AND DAY_27 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day28)">
+		AND DAY_28 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day29)">
+		AND DAY_29 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day30)">
+		AND DAY_30 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day31)">
+		AND DAY_31 ='√'
+		</if>
+	</sql>
+	
+	<select id="selectWorkingEmployee" parameterType="Map" resultType="Map">
+	SELECT EMPLOYEE_CODE employeeCode,EMPLOYEE_NAME employeeName,EMPLOYEE_TEL employeeTel 
+	FROM tb_task_arrangement 
+	WHERE SHIFT =#{shift} 
+	AND MONTH=#{month} 
+	AND POSITION_CODE=#{positionCode} 
+	<include refid="selectWorkIngItem"/>
+	</select>
+	
+</mapper>
