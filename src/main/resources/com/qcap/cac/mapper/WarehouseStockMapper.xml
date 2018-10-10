@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.WarehouseStockMapper">
+
+    <!--查詢库存信息-->
+    <select id="getWarehouseStockList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntrySearchParam">
+        select
+        a.WAREHOUSE_STOCK_ID,
+        a.STOREROOM_ID,
+        a.STOREROOM,
+        a.GOODS_NO,
+        a.GOODS_NAME,
+        a.SUPPLIER_NAME,
+        sum(a.GOODS_NUM) goodsNum,
+        b.MIN_UNIT,
+        a.GOODS_TYPE,
+        a.REMARK
+        from tb_warehouse_stock a
+        LEFT JOIN tb_warehouse_entry b
+        on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
+        where 1 = 1 AND a.DELETE_FLAG = 'N'
+        <if test="storeRoomId!=null and storeRoomId!=''">
+            and a.STOREROOM_ID = #{storeRoomId}
+        </if>
+        <if test="goodsNo!=null and goodsNo!=''">
+            and a.GOODS_NO like concat('%',#{goodsNo},'%')
+        </if>
+        <if test="goodsName!=null and goodsName!=''">
+            and a.GOODS_NAME like  concat('%',#{goodsName},'%')
+        </if>
+        <if test="supplierName!=null and supplierName!=''">
+            and a.SUPPLIER_NAME like concat('%',#{supplierName},'%')
+        </if>
+        group by  a.GOODS_NO
+        ORDER BY  a.GOODS_NO
+    </select>
+
+    <!--查询物品存放的货位信息-->
+    <select id="getPositionList" parameterType="String" resultType="Map">
+        SELECT
+        a.GOODS_NAME,
+        CONCAT(IFNULL(c.BULIDING_NAME,''),IFNULL(c.ROOM_NAME,''),IFNULL(c.RANGE_SHELF,'')) rangeShelf,
+        a.GOODS_NUM,
+        (SELECT MIN_UNIT from tb_warehouse_entry e where e.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID LIMIT 1)
+        FROM tb_warehouse_stock a
+        LEFT JOIN tb_warehouse_storage b
+        on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
+        LEFT JOIN tb_warehouse_position c
+        on b.WAREHOUSE_POSITION_ID = c.WAREHOUSE_POSITION_ID
+        WHERE a.WAREHOUSE_STOCK_ID = #{warehouseStockId}
+    </select>
+</mapper>

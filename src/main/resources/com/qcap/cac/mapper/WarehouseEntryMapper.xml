@@ -14,11 +14,11 @@
         b.SUPPLIER_NAME,
         b.GOODS_TYPE,
         a.WAREHOUSE_STOCK_ID,
-        ENTRY_NUM,
-        ENTRY_UNIT_,
+        a.ENTRY_NUM,
+        a.ENTRY_UNIT,
         SUM_NUM,
         MIN_UNIT,
-        DATE(ENTRY_TIME),
+        DATE(a.ENTRY_TIME) entryTime,
         b.REMARK
         from tb_warehouse_entry a
         left join tb_warehouse_stock b
@@ -28,22 +28,22 @@
             and a.STOREROOM_ID = #{storeRoomId}
         </if>
         <if test="entryBatchNo!=null and entryBatchNo!=''">
-            and a.ENTRY_BATCH_NO like #{entryBatchNo}
+            and a.ENTRY_BATCH_NO like concat('%',#{entryBatchNo},'%')
         </if>
         <if test="goodsNo!=null and goodsNo!=''">
-            and b.GOODS_NO like #{goodsNo}
+            and b.GOODS_NO like concat('%',#{goodsNo},'%')
         </if>
         <if test="goodsName!=null and goodsName!=''">
-            and b.GOODS_NAME like #{goodsName}
+            and b.GOODS_NAME like  concat('%',#{goodsName},'%')
         </if>
         <if test="startDate!=null and startDate!=''">
-            and a.ENTRY_TIME &gt; #{startDate}
+            and a.ENTRY_TIME &gt;= #{startDate}
         </if>
         <if test="endDate!=null and endDate!=''">
-            and a.ENTRY_TIME &lt; #{endDate}
+            and a.ENTRY_TIME &lt;= #{endDate}
         </if>
         <if test="supplierName!=null and supplierName!=''">
-            and a.SUPPLIER_NAME like #{supplierName}
+            and b.SUPPLIER_NAME like concat('%',#{supplierName},'%')
         </if>
         order by a.ENTRY_TIME DESC,b.GOODS_NO ASC
     </select>
