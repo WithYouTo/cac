@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.EquipRepairMapper">
+
+    <select id="listEquipRepair" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipRepairSearchParam">
+        select
+        EQUIP_REPAIR_ID equipRepairId,
+        EQUIP_ID equipId,
+        EQUIP_NAME equipName,
+        EQUIP_NO equipNo,
+        EQUIP_TYPE equipType,
+        EQUIP_MODEL equipModel,
+        DATE_FORMAT(REPAIR_TIME,'%Y-%m-%d %H:%i:%S') repairTime,
+        PERSON_NAME personName,
+        PERSON_MOBILE personMobile,
+        EQUIP_DESC equipDesc,
+        STATUS status
+        from TB_EQUIP_REPAIR
+        where 1=1
+        <if test="equipType != null and equipType != ''">
+            and EQUIP_TYPE = #{equipType}
+        </if>
+        <if test="equipName != null and equipName != ''">
+            and EQUIP_NAME = #{equipName}
+        </if>
+        <if test="repairTime != null and repairTime != ''">
+            and REPAIR_TIME &gt; #{repairTime}
+        </if>
+        <if test="status != null and status != ''">
+            and STATUS = #{status}
+        </if>
+    </select>
+
+    <update id="updateEquipRepair" parameterType="String">
+      update TB_EQUIP_REPAIR
+      SET
+      STATUS = 'REPAIRED'
+      WHERE
+      EQUIP_REPAIR_ID = #{equipRepairId}
+    </update>
+
+</mapper>

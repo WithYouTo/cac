@@ -1,21 +1,19 @@
 package com.qcap.cac.dao;
 
+import com.qcap.cac.dto.EquipRepairSearchParam;
 import com.qcap.cac.entity.TbEquipRepair;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 
 @SuppressWarnings("rawtypes")
 @Repository
 public interface EquipRepairMapper {
-    int deleteByPrimaryKey(String equipRepairId);
-
     int insert(TbEquipRepair record);
 
-    int insertSelective(TbEquipRepair record);
+    List<Map> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam);
 
-    TbEquipRepair selectByPrimaryKey(String equipRepairId);
-
-    int updateByPrimaryKeySelective(TbEquipRepair record);
-
-    int updateByPrimaryKey(TbEquipRepair record);
+    void updateEquipRepair(String equipRepairId);
 }

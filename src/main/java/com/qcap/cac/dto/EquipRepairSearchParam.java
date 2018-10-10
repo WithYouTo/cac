@@ -4,7 +4,7 @@ public class EquipRepairSearchParam {
 
     private String equipType;
     private String equipName;
-    private String equipModel;
+    private String repairTime;
     private String status;
 
     public String getEquipType() {
@@ -23,12 +23,12 @@ public class EquipRepairSearchParam {
         this.equipName = equipName;
     }
 
-    public String getEquipModel() {
-        return equipModel;
+    public String getRepairTime() {
+        return repairTime;
     }
 
-    public void setEquipModel(String equipModel) {
-        this.equipModel = equipModel;
+    public void setRepairTime(String repairTime) {
+        this.repairTime = repairTime;
     }
 
     public String getStatus() {

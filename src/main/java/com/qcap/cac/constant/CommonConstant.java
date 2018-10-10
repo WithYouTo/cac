@@ -14,7 +14,6 @@ public class CommonConstant {
         EQUIP_CHARGE_STATUS.put("CHARGED","充电完成");
     }
 
-
     //设备使用状态
     public final static String EQUIP_CHARGE_STATUS_INUSE = "INUSE";
     public final static String EQUIP_CHARGE_STATUS_USED = "USED";
@@ -24,4 +23,12 @@ public class CommonConstant {
         EQUIP_USE_STATUS.put("USED","使用完成");
     }
 
+    //设备维修状态
+    public final static String EQUIP_CHARGE_STATUS_REPAIR = "REPAIR";
+    public final static String EQUIP_CHARGE_STATUS_REPAIRED = "REPAIRED";
+    public static Map<String,String> EQUIP_REPAIR_STATUS = new LinkedHashMap<String,String>();
+    static {
+        EQUIP_REPAIR_STATUS.put("REPAIR","维修中");
+        EQUIP_REPAIR_STATUS.put("REPAIRED","维修完成");
+    }
 }

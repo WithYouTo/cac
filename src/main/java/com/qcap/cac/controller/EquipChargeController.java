@@ -1,11 +1,10 @@
 package com.qcap.cac.controller;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dto.EquipChargeSearchParam;
 import com.qcap.cac.service.EquipChargeSrv;
-import com.qcap.core.common.CoreConstant;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,18 @@ public class EquipChargeController{
     @Autowired
     private EquipChargeSrv equipChargeSrv;
 
-
+    /**
+     *
+     * @Description: 获取设备充电记录列表
+     *
+     *
+     * @MethodName: listEquipCharge
+     * @Parameters: [equipChargeSearchParam]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/10 15:24
+     */
     @ResponseBody
     @RequestMapping(value = "/listEquipCharge", method = RequestMethod.POST)
     public Object listEquipCharge(EquipChargeSearchParam equipChargeSearchParam){
@@ -32,13 +42,26 @@ public class EquipChargeController{
             CommonConstant.EQUIP_CHARGE_STATUS.get(status);
             map.put("statusName", CommonConstant.EQUIP_CHARGE_STATUS.get(status));
         }
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
+        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
     }
 
+
+    /**
+     *
+     * @Description: 获取设备充电总时长
+     *
+     *
+     * @MethodName: getChargeTotalTimeByEquipId
+     * @Parameters: [equipId]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/10 15:24
+     */
     @ResponseBody
     @RequestMapping(value = "/getChargeTotalTimeByEquipId", method = RequestMethod.POST)
     public Object getChargeTotalTimeByEquipId(String equipId){
         String totalTime = this.equipChargeSrv.getChargeTotalTimeByEquipId(equipId);
-        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", totalTime);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, totalTime);
     }
 }
