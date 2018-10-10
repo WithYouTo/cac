@@ -4,6 +4,7 @@ package com.qcap.cac.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseEntryMapper;
+import com.qcap.cac.dto.WarehouseEntrySearchParam;
 import com.qcap.cac.entity.WarehouseEntry;
 import com.qcap.cac.service.IWarehouseEntryService;
 import com.qcap.core.dao.TbManagerMapper;
@@ -31,8 +32,13 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
     private WarehouseEntryMapper warehouseEntryMapper;
 
     @Override
-    public void getEntryList(IPage<Map<String, Object>> page, Map<String, Object> params) {
-        List<Map<String, Object>> list = warehouseEntryMapper.getWarehouseEntryList(page, params);
-        page.setRecords(list);
+    public List<Map> getEntryList(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+        List<Map> list = warehouseEntryMapper.getWarehouseEntryList(warehouseEntrySearchParam);
+        return list;
+    }
+
+    @Override
+    public List<Map> getStoreRoomList() {
+        return this.warehouseEntryMapper.getStoreRoomList();
     }
 }

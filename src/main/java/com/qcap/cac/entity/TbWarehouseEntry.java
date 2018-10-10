@@ -42,7 +42,7 @@ public class TbWarehouseEntry {
     /**
      *   总数量
      */
-    private BigDecimal sumNum;
+    private String sumNum;
 
     /**
      *   最小单位
@@ -52,7 +52,7 @@ public class TbWarehouseEntry {
     /**
      *   入库时间
      */
-    private Date entryTime;
+    private String entryTime;
 
     /**
      *   删除标志(Y删除N未删除)
@@ -260,7 +260,7 @@ public class TbWarehouseEntry {
      *
      * @mbggenerated Tue Oct 09 19:52:33 CST 2018
      */
-    public BigDecimal getSumNum() {
+    public String getSumNum() {
         return sumNum;
     }
 
@@ -272,7 +272,7 @@ public class TbWarehouseEntry {
      *
      * @mbggenerated Tue Oct 09 19:52:33 CST 2018
      */
-    public void setSumNum(BigDecimal sumNum) {
+    public void setSumNum(String sumNum) {
         this.sumNum = sumNum;
     }
 
@@ -308,7 +308,7 @@ public class TbWarehouseEntry {
      *
      * @mbggenerated Tue Oct 09 19:52:33 CST 2018
      */
-    public Date getEntryTime() {
+    public String getEntryTime() {
         return entryTime;
     }
 
@@ -320,7 +320,7 @@ public class TbWarehouseEntry {
      *
      * @mbggenerated Tue Oct 09 19:52:33 CST 2018
      */
-    public void setEntryTime(Date entryTime) {
+    public void setEntryTime(String entryTime) {
         this.entryTime = entryTime;
     }
 
