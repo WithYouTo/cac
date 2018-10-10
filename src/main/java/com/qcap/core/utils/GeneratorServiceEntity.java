@@ -16,7 +16,7 @@ public class GeneratorServiceEntity {
 		dataSourceConfig.setDbType(DbType.MYSQL).setUrl(dbUrl).setUsername("root").setPassword("root")
 				.setDriverName("com.mysql.jdbc.Driver");
 		StrategyConfig strategyConfig = new StrategyConfig();
-		strategyConfig.setCapitalMode(true).setEntityLombokModel(false).setDbColumnUnderline(true)
+		strategyConfig.setCapitalMode(true).setEntityLombokModel(false)
 				.setNaming(NamingStrategy.underline_to_camel)
 				// 修改替换成你需要的表名，多个表名传数组
 				.setInclude(tableNames);
