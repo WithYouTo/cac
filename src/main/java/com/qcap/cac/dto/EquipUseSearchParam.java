@@ -3,7 +3,7 @@ package com.qcap.cac.dto;
 public class EquipUseSearchParam {
     private String area;
     private String equipNo;
-    private String startChargeTime;
+    private String startUseTime;
     private String status;
 
     public String getArea() {
@@ -22,12 +22,12 @@ public class EquipUseSearchParam {
         this.equipNo = equipNo;
     }
 
-    public String getStartChargeTime() {
-        return startChargeTime;
+    public String getStartUseTime() {
+        return startUseTime;
     }
 
-    public void setStartChargeTime(String startChargeTime) {
-        this.startChargeTime = startChargeTime;
+    public void setStartUseTime(String startUseTime) {
+        this.startUseTime = startUseTime;
     }
 
     public String getStatus() {

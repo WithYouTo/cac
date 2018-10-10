@@ -24,4 +24,10 @@ public class CommonController {
     public Object initEquipChargeStatusSelect(){
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", CommonConstant.EQUIP_CHARGE_STATUS);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/initEquipUseStatusSelect", method = RequestMethod.POST)
+    public Object initEquipUseStatusSelect(){
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", CommonConstant.EQUIP_USE_STATUS);
+    }
 }

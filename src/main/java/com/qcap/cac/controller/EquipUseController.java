@@ -2,6 +2,7 @@ package com.qcap.cac.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dto.EquipUseSearchParam;
 import com.qcap.cac.service.EquipUseSrv;
 import com.qcap.core.common.CoreConstant;
@@ -28,7 +29,11 @@ public class EquipUseController{
     public Object listEquipCharge(EquipUseSearchParam equipUseSearchParam){
         List<Map> list = this.equipUseSrv.listEquipUse(equipUseSearchParam);
         PageInfo pageInfo = new PageInfo(list);
-        Page pageList = (Page) list;
+        for(Map map:list){
+            String status = map.get("status").toString();
+            CommonConstant.EQUIP_USE_STATUS.get(status);
+            map.put("statusName", CommonConstant.EQUIP_CHARGE_STATUS.get(status));
+        }
         return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
     }
 

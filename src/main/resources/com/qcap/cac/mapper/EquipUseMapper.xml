@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qcap.cac.dao.EquipChargeMapper">
+<mapper namespace="com.qcap.cac.dao.EquipUseMapper">
 
-    <select id="listEquipCharge" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipChargeSearchParam">
+    <select id="listEquipUse" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipUseSearchParam">
         select
-        EQUIP_CHARGE_ID equipChargeId,
+        EQUIP_USE_ID equipUseId,
         EQUIP_ID equipId,
         EQUIP_NAME equipName,
         EQUIP_NO equipNo,
         EQUIP_TYPE equipType,
         EQUIP_MODEL equipModel,
-        FORMAT(START_CHARGE_TIME,'YYYY-MM-DD HH:mm:ss') as startChargeTime,
-        FORMAT(END_CHARGE_TIME,'YYYY-MM-DD HH:mm:ss') as endChargeTime,
-        TOTAL_CHARGE_TIME totalChargeTime,
+        FORMAT(START_USE_TIME,'YYYY-MM-DD HH:mm:ss') as startUseTime,
+        FORMAT(END_USE_TIME,'YYYY-MM-DD HH:mm:ss') as endUseTime,
+        TOTAL_USE_TIME totalUseTime,
         AREA area,
         PERSON_NAME personName,
         PERSON_MOBILE personMobile,
         STATUS status
-        from TB_EQUIP_CHARGE
+        from TB_EQUIP_USE
         where 1=1
         <if test="equipNo != null and equipNo != ''">
             and EQUIP_NO = #{equipNo}
         </if>
-        <if test="startChargeTime != null and startChargeTime != ''">
-            and START_CHARGE_TIME &gt; #{startChargeTime}
+        <if test="startUseTime != null and startUseTime != ''">
+            and START_USE_TIME &gt; #{startUseTime}
         </if>
         <if test="status != null and status != ''">
             and STATUS = #{status}
@@ -31,10 +31,10 @@
     </select>
 
 
-    <select id="getChargeTotalTimeByEquipId" resultType="java.lang.String" parameterType="java.lang.String">
+    <select id="getUseTotalTimeByEquipId" resultType="java.lang.String" parameterType="java.lang.String">
         select
-        sum(TOTAL_CHARGE_TIME) total
-        from TB_EQUIP_CHARGE
+        sum(TOTAL_USE_TIME) total
+        from TB_EQUIP_USE
         where
         EQUIP_ID = #{equipId}
     </select>
