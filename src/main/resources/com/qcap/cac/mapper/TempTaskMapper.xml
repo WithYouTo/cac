@@ -37,6 +37,8 @@
 		AND m.EMPLOYEE_NAME LIKE CONCAT('%',#{employeeName},'%')
 		AND m.EMPLOYEE_TEL LIKE CONCAT('%',#{employeeTel},'%')
 		AND m.TASK_STATUS=#{taskStatus}
+		AND m.TASK_Type=#{taskType}
+		AND m.SHIFT=#{shift}
 	</select>
 	
 	<insert id="insertTempTask" parameterType="com.qcap.cac.entity.TbTask">
@@ -62,6 +64,34 @@
       #{remark2}, #{remark3}, #{createEmp}, 
       #{createDate}, #{updateDate}, #{updateEmp}, 
       #{version},#{uploadPicFlag})
+	</insert>
+	
+	<insert id="insertTaskBatch" parameterType="java.util.List">
+	  insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID, 
+      TASK_TYPE, POSITION_CODE, POSITION_NAME, 
+      AREA_CODE, AREA_NAME, STANDARD_CODE, 
+      STANDARD_NAME, SHIFT, SPEC, 
+      EMPLOYEE_CODE, EMPLOYEE_NAME, EMPLOYEE_TEL, 
+      COMPLETE_TIME, START_TIME, END_TIME, 
+      TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
+      CHECK_FLAG, TASK_ADVICE, REMARK1, 
+      REMARK2, REMARK3, CREATE_EMP, 
+      CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
+      VERSION,UPLOAD_PIC_FLAG)
+    values 
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.taskId}, #{item.taskCode}, #{item.planId}, 
+      #{item.taskType}, #{item.positionCode}, #{item.positionName}, 
+      #{item.areaCode}, #{item.areaName}, #{item.standardCode}, 
+      #{item.standardName}, #{item.shift}, #{item.spec}, 
+      #{item.employeeCode}, #{item.employeeName}, #{item.employeeTel}, 
+      #{item.completeTime}, #{item.startTime}, #{item.endTime}, 
+      #{item.taskStatus}, #{item.checkStatus}, #{item.taskScore}, 
+      #{item.checkFlag}, #{item.taskAdvice}, #{item.remark1}, 
+      #{item.remark2}, #{item.remark3}, #{item.createEmp}, 
+      #{item.createDate}, #{item.updateDate}, #{item.updateEmp}, 
+      #{item.version},#{item.uploadPicFlag})
+      </foreach>
 	</insert>
 	
 	  <update id="updateTempTask" parameterType="com.qcap.cac.entity.TbTask">
@@ -300,4 +330,12 @@
 	<include refid="selectWorkIngItem"/>
 	</select>
 	
+	<select id="selectShiftByTime" parameterType="String" resultType="Map">
+		<![CDATA[
+			SELECT DESC_ shift ,DESC1_ startTime,DESC2_ endTime 
+			FROM tbpubcode01 where CONFIG_CODE_='SHIFT_TYPE' 
+			AND (CASE WHEN DESC1_ < DESC2_ THEN ( DESC1_ <=#{startTime} AND DESC2_  >#{startTime})
+			ELSE (DESC1_ <=#{startTime} OR   DESC2_ >#{startTime})END)
+		]]>
+	</select>
 </mapper>
