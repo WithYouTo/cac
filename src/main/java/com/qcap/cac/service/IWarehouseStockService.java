@@ -24,4 +24,7 @@ public interface IWarehouseStockService extends IService<TbWarehouseStock> {
 
     List<Map> getPositionList(String warehouseStockId);
 
+
+    List<Map> getGoodsConfigList(WarehouseEntrySearchParam warehouseEntrySearchParam);
+
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 @Repository
 public interface EquipUseMapper {
 
-    List<Map> listEquipUse(EquipUseSearchParam equipUseSearchParam);
+    List<Map<String, Object>> listEquipUse(EquipUseSearchParam equipUseSearchParam);
 
     String getUseTotalTimeByEquipId(String equipId);
 }

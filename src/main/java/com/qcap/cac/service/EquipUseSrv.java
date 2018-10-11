@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface EquipUseSrv {
-    List<Map> listEquipUse(EquipUseSearchParam equipUseSearchParam);
+    List<Map<String, Object>> listEquipUse(EquipUseSearchParam equipUseSearchParam);
 
     String getUseTotalTimeByEquipId(String equipId);
 }

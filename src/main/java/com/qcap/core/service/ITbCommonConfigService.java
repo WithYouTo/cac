@@ -2,6 +2,7 @@ package com.qcap.core.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.core.entity.TbCommonConfig;
@@ -30,7 +31,7 @@ public interface ITbCommonConfigService {
 	 *
 	 * @return List
 	 */
-	List<String> selectTypes();
+	List<Map<String, String>> selectTypes();
 
 	/**
 	 * 插入记录

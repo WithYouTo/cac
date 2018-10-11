@@ -19,7 +19,7 @@ public class EquipRepairSrvImpl implements EquipRepairSrv {
 
 
     @Override
-    public List<Map> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam) {
+    public List<Map<String,Object>> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam) {
         return this.equipRepairMapper.listEquipRepair(equipRepairSearchParam);
     }
 

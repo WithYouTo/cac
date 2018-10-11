@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -45,7 +44,7 @@ public class CommonConfigController {
 	 */
 	@PostMapping("/types")
 	public ResParams getTypes() {
-		List<String> list = commonConfigService.selectTypes();
+		List<Map<String, String>> list = commonConfigService.selectTypes();
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
 	}
 
@@ -124,12 +123,7 @@ public class CommonConfigController {
 
 	@PostMapping("/select")
 	public Object selectTree() {
-		List<String> types = commonConfigService.selectTypes();
-		List<Map<String, String>> list = types.stream().map(e -> {
-			Map<String, String> map = new HashMap<>();
-			map.put("type", e);
-			return map;
-		}).collect(Collectors.toList());
+		List<Map<String, String>> list = commonConfigService.selectTypes();
 		Map<String, Object> map = new HashMap<>();
 		map.put("type", "类型");
 		map.put("open", true);

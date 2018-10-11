@@ -24,8 +24,8 @@
         left join tb_warehouse_stock b
         on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
         where 1 = 1 AND a.DELETE_FLAG = 'N'
-        <if test="storeRoomId!=null and storeRoomId!=''">
-            and a.STOREROOM_ID = #{storeRoomId}
+        <if test="storeroomId!=null and storeroomId!=''">
+            and a.STOREROOM_ID = #{storeroomId}
         </if>
         <if test="entryBatchNo!=null and entryBatchNo!=''">
             and a.ENTRY_BATCH_NO like concat('%',#{entryBatchNo},'%')
@@ -37,10 +37,10 @@
             and b.GOODS_NAME like  concat('%',#{goodsName},'%')
         </if>
         <if test="startDate!=null and startDate!=''">
-            and a.ENTRY_TIME &gt;= #{startDate}
+            and DATE(a.ENTRY_TIME) &gt;= #{startDate}
         </if>
         <if test="endDate!=null and endDate!=''">
-            and a.ENTRY_TIME &lt;= #{endDate}
+            and DATE(a.ENTRY_TIME) &lt;= #{endDate}
         </if>
         <if test="supplierName!=null and supplierName!=''">
             and b.SUPPLIER_NAME like concat('%',#{supplierName},'%')

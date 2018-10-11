@@ -1,10 +1,13 @@
 package com.qcap.cac.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dto.EquipRepairSearchParam;
 import com.qcap.cac.service.EquipRepairSrv;
+import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +41,19 @@ public class EquipRepairController{
      */
     @ResponseBody
     @RequestMapping(value = "/listEquipRepair", method = RequestMethod.POST)
-    public Object listEquipRepair(EquipRepairSearchParam equipRepairSearchParam){
-        List<Map> list = this.equipRepairSrv.listEquipRepair(equipRepairSearchParam);
+    public Object listEquipRepair(IPage<Map<String, Object>> page,EquipRepairSearchParam equipRepairSearchParam){
+        new PageFactory<Map<String, Object>>().defaultPage();
+
+        List<Map<String, Object>> list = this.equipRepairSrv.listEquipRepair(equipRepairSearchParam);
         PageInfo pageInfo = new PageInfo(list);
-        for(Map map:list){
+        for(Map<String, Object> map:list){
             String status = map.get("status").toString();
             CommonConstant.EQUIP_REPAIR_STATUS.get(status);
             map.put("statusName", CommonConstant.EQUIP_REPAIR_STATUS.get(status));
         }
-        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
+        Page pageList = (Page) list;
+
+        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), pageList);
     }
 
     /**

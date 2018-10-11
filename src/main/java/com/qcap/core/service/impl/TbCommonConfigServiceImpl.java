@@ -1,10 +1,14 @@
 package com.qcap.core.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,17 +43,27 @@ public class TbCommonConfigServiceImpl implements ITbCommonConfigService {
 	public void getCommonConfigList(IPage<TbCommonConfig> page, TbCommonConfig commonConfig) {
 		QueryWrapper<TbCommonConfig> wrapper = new QueryWrapper<>();
 		if (StringUtils.isNotEmpty(commonConfig.getKeyName())) {
-			wrapper.lambda().eq(TbCommonConfig::getKeyName, commonConfig.getKeyName());
+			wrapper.eq("keyName", commonConfig.getKeyName());
 		}
 		if (StringUtils.isNotEmpty(commonConfig.getType())) {
-			wrapper.lambda().eq(TbCommonConfig::getType, commonConfig.getType());
+			wrapper.eq("type", commonConfig.getType());
 		}
 		tbCommonConfigMapper.selectPage(page, wrapper);
 	}
 
 	@Override
-	public List<String> selectTypes() {
-		return tbCommonConfigMapper.selectDistinctType();
+	public List<Map<String, String>> selectTypes() {
+		List<Map<String, String>> lsRecord = new ArrayList<Map<String, String>>();
+		List<String> ls = tbCommonConfigMapper.selectDistinctType();
+		if (CollectionUtils.isNotEmpty(ls)) {
+			for (String type : ls) {
+				Map<String, String> map = new HashMap<>();
+				map.put("type", type);
+				lsRecord.add(map);
+			}
+		}
+
+		return lsRecord;
 	}
 
 	@Override
@@ -57,7 +71,11 @@ public class TbCommonConfigServiceImpl implements ITbCommonConfigService {
 	public void insertItem(TbCommonConfig commonConfig) throws Exception {
 		String keyName = commonConfig.getKeyName();
 		TbCommonConfig config = tbCommonConfigMapper
-				.selectOne(new QueryWrapper<TbCommonConfig>().lambda().eq(TbCommonConfig::getKeyName, keyName));
+				.selectOne(new QueryWrapper<TbCommonConfig>().eq("key_name", keyName));
+		// TbCommonConfig config = tbCommonConfigMapper
+		// .selectOne(new
+		// QueryWrapper<TbCommonConfig>().lambda().eq(TbCommonConfig::getKeyName,
+		// keyName));
 		if (config != null) {
 			throw new Exception("所选类型的Key已经存在");
 		}

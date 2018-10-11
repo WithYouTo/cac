@@ -19,7 +19,7 @@ public class EquipUseSrvImpl implements EquipUseSrv {
     private EquipUseMapper equipUseMapper;
 
     @Override
-    public List<Map> listEquipUse(EquipUseSearchParam equipUseSearchParam) {
+    public List<Map<String, Object>> listEquipUse(EquipUseSearchParam equipUseSearchParam) {
         return this.equipUseMapper.listEquipUse(equipUseSearchParam);
     }
 

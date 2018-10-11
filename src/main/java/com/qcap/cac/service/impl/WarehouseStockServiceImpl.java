@@ -2,6 +2,7 @@ package com.qcap.cac.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseEntryMapper;
 import com.qcap.cac.dao.WarehouseStockMapper;
@@ -47,5 +48,24 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
     @Override
     public List<Map> getPositionList(String warehouseStockId) {
         return this.warehouseStockMapper.getPositionList(warehouseStockId);
+    }
+
+    @Override
+    public List<Map> getGoodsConfigList(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+
+        //组装参数
+        QueryWrapper<TbWarehouseStock> queryWrapper = new QueryWrapper<TbWarehouseStock>()
+                .eq("STOREROOM_ID", warehouseEntrySearchParam.getStoreroomId());
+        queryWrapper.or(wrapper->{
+            wrapper.like( "GOODS_NO", "%" + warehouseEntrySearchParam.getGoodsNo() + "%")
+            .or().like("GOODS_NAME", "%" + warehouseEntrySearchParam.getGoodsName()  + "%")
+            .or().like( "SUPPLIER_NAME", "%" + warehouseEntrySearchParam.getSupplierName()  + "%");
+            wrapper.groupBy("GOODS_NO");
+            return wrapper;
+
+        });
+
+        //List<Map> list = this.warehouseStockMapper.selectObjs(queryWrapper);
+        return null;
     }
 }

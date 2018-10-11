@@ -13,7 +13,7 @@ import java.util.Map;
 public interface EquipRepairMapper {
     int insert(TbEquipRepair record);
 
-    List<Map> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam);
+    List<Map<String,Object>> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam);
 
     void updateEquipRepair(String equipRepairId);
 }

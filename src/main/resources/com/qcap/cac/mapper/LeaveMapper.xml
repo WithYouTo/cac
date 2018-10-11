@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.LeaveMapper">
+
+    <select id="listLeave" resultType="java.util.Map" parameterType="com.qcap.cac.dto.AttenceSearchParam">
+        SELECT
+        LEAVE_ID leaveId,
+        PERSON_ID personId,
+        WORK_NO workNo,
+        PERSON_NAME personName,
+        PERSON_MOBILE personMobile,
+        LEAVE_REASON leaveReason,
+        DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%i:%S') leaveStartTime,
+        DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%i:%S') leaveEndTime,
+        LEAVE_TOTAL_TIME leaveTotalTime,
+        REMARK remark
+        FROM TB_LEAVE
+        WHERE 1=1
+        <if test="workNo != null and workNo != ''">
+            and WORK_NO = #{workNo}
+        </if>
+        <if test="personName != null and personName != ''">
+            and PERSON_NAME = #{personName}
+        </if>
+        <if test="leaveStartTime != null and leaveStartTime != ''">
+            and LEAVE_START_TIME &gt; #{leaveStartTime}
+        </if>
+    </select>
+
+</mapper>

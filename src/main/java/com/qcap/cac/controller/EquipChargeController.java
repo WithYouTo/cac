@@ -1,10 +1,14 @@
 package com.qcap.cac.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dto.EquipChargeSearchParam;
 import com.qcap.cac.service.EquipChargeSrv;
+import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/equipCharge")
-public class EquipChargeController{
+public class EquipChargeController {
 
     @Autowired
     private EquipChargeSrv equipChargeSrv;
@@ -35,14 +39,17 @@ public class EquipChargeController{
     @ResponseBody
     @RequestMapping(value = "/listEquipCharge", method = RequestMethod.POST)
     public Object listEquipCharge(EquipChargeSearchParam equipChargeSearchParam){
-        List<Map> list = this.equipChargeSrv.listEquipCharge(equipChargeSearchParam);
+        new PageFactory<Map<String, Object>>().defaultPage();
+
+        List<Map<String, Object>> list = this.equipChargeSrv.listEquipCharge(equipChargeSearchParam);
         PageInfo pageInfo = new PageInfo(list);
-        for(Map map:list){
+        for(Map<String, Object> map:list){
             String status = map.get("status").toString();
             CommonConstant.EQUIP_CHARGE_STATUS.get(status);
             map.put("statusName", CommonConstant.EQUIP_CHARGE_STATUS.get(status));
         }
-        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
+        Page pageList = (Page) list;
+        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(),pageList);
     }
 
 

@@ -125,16 +125,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer, EnvironmentAware {
 			String va2 = env.getProperty("mybatis.iPage.page-size", "size");
 			int pageNumber = NumberUtils.toInt(nativeWebRequest.getParameter(va1));
 			int pageSize = NumberUtils.toInt(nativeWebRequest.getParameter(va2));
-			return new Page<>(pageNumber + 1, pageSize);
+			return new Page<>(pageNumber, pageSize);
 		}
 	}
-	
-	
+
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	    registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-	    registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
-
 
 }
