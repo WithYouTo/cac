@@ -34,11 +34,22 @@
 		DATE_FORMAT(m.CREATE_DATE,'%Y-%m-%d %T') AS createDate
 		FROM tb_task m
 		WHERE m.TASK_STATUS !='CANCLE'
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeName)">
 		AND m.EMPLOYEE_NAME LIKE CONCAT('%',#{employeeName},'%')
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeTel)">
 		AND m.EMPLOYEE_TEL LIKE CONCAT('%',#{employeeTel},'%')
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
 		AND m.TASK_STATUS=#{taskStatus}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskType)">
 		AND m.TASK_Type=#{taskType}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(shift)">
 		AND m.SHIFT=#{shift}
+		</if>
+		ORDER BY m.CREATE_DATE DESC
 	</select>
 	
 	<insert id="insertTempTask" parameterType="com.qcap.cac.entity.TbTask">

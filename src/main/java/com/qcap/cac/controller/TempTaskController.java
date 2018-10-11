@@ -97,10 +97,6 @@ public class TempTaskController {
 	@RequestMapping(value="/selectShift",method=RequestMethod.POST)
 	public Object selectShiftType() {
 		List<Map>list=new ArrayList<>();
-		Map mapInit= new HashMap<String,String>();
-		mapInit.put("key", "");
-		mapInit.put("value", "全部");
-		list.add(mapInit);
 		Set<Entry<String,String>>entrys=CommonConstant.SHIFT.entrySet();
 		for(Entry<String,String>en:entrys) {
 			Map map=new HashMap<>();
@@ -108,7 +104,7 @@ public class TempTaskController {
 			map.put("value", en.getValue());
 			list.add(map);
 		}
-		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
+		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
 		
 	}
 	
