@@ -16,7 +16,9 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -32,6 +34,7 @@ import com.qcap.core.properties.RestProperties;
  * @author Zhousheng
  * @date 2017年11月15日 上午10:02:16
  */
+@EnableWebMvc
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer, EnvironmentAware {
 	private Environment env;
@@ -125,5 +128,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer, EnvironmentAware {
 			return new Page<>(pageNumber + 1, pageSize);
 		}
 	}
+	
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	    registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+	    registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
+
 
 }

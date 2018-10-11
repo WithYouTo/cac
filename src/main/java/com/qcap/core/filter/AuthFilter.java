@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.qcap.core.common.RestConstant;
@@ -31,7 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
 
-	private static final List<String> NO_CHECK_URL_LIST = Arrays.asList("/login", "/register", "/logout");
+	private static final List<String> NO_CHECK_URL_LIST = Arrays.asList("/login", "/register",
+			"/logout","/v2/**","/swagger-ui.html","/swagger-resources/**","/eventTask/**");
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -41,6 +43,8 @@ public class AuthFilter extends OncePerRequestFilter {
 	private RestProperties restProperties;
 	@Autowired
 	private RedisUtil redisUtil;
+	
+	private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -49,7 +53,8 @@ public class AuthFilter extends OncePerRequestFilter {
 		// 过滤静态资源
 		if (!doFilterResource(servletPath)) {
 			// 过滤路径
-			if (!NO_CHECK_URL_LIST.contains(servletPath)) {
+//			if (!NO_CHECK_URL_LIST.contains(servletPath)) {
+			if (NO_CHECK_URL_LIST.stream().noneMatch(e -> antPathMatcher.match(e, servletPath))) {
 				String token = request.getHeader(JwtProperties.getTokenHeader());
 				if (StringUtils.isNotEmpty(token)) {
 					try {
