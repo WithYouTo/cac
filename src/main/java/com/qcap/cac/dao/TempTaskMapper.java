@@ -29,6 +29,14 @@ public interface TempTaskMapper {
 	 */
 	void insertTempTask(TbTask task);
 	/**
+	 * 批量新增任务
+	 * @Title: insertTaskBatch 
+	 * @Description: TODO
+	 * @param list
+	 * @return: void
+	 */
+	void insertTaskBatch(List<TbTask> list);
+	/**
 	 * 修改任务
 	 * @Title: updateTempTask 
 	 * @Description: TODO
@@ -88,4 +96,13 @@ public interface TempTaskMapper {
 	 * @return: List<Map>
 	 */
 	List<Map>selectWorkingEmployee(Map map);
+	/**
+	 * 查询班次:**注意传入时间格式严格为：hh:mm:ss
+	 * @Title: selectShiftByTime 
+	 * @Description: TODO
+	 * @param startTime
+	 * @return
+	 * @return: Map<String,String>
+	 */
+	Map<String, String>selectShiftByTime(String startTime);
 }

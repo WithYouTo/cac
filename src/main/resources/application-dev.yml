@@ -65,9 +65,10 @@ logging:
 rest:
   restfulSign: /rest
   coreOpen: true
-  swaggerEnable: false
+  swaggerEnable: true
 mybatis:
   mapper-refresh: true
   iPage:
     page-parameter: page
     size-parameter: size
+EVENT_TASK_MIN_INTERVAL: 30

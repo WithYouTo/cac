@@ -110,6 +110,16 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			 return map;
 		 }
 		 
+		//查询班次
+		 String queryTime=startTime.substring(11);
+		 Map<String, String>shiftMap=this.tempTaskMapper.selectShiftByTime(queryTime);
+		 if(shiftMap == null || shiftMap.isEmpty()) {
+			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			map.put(CommonConstant.BACK_MESSAGE, "根据计划时间未查询到班次，请先设置班次");
+			return map;
+		 }
+		 String shift=shiftMap.get("shift");
+		 
 		Date now=new Date();
 		TbTask task=new TbTask();
 		task.setTaskId(UUIDUtils.getUUID());
@@ -122,12 +132,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setAreaName(areaName);
 		task.setStandardCode(standardCode);
 		task.setStandardName(standardName);
-		/**
-		 * 班次没做，无法获取班次
-		 * TODO
-		 */
-		
-//		task.setShift(shift);
+		task.setShift(shift);
 		task.setSpec(spec);
 //		task.setCompleteTime(completeTime);
 		task.setStartTime(DateUtil.stringToDateTime(startTime));
@@ -145,11 +150,6 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		 */
 		task.setCreateEmp("SYS_TODO");
 		task.setVersion(0);
-		 //查询班次
-		 /**
-		  * TODO
-		  */
-		 String shift="DAYTIME";
 		 //处理日期
 		 Date startDate=DateUtil.stringToDate(startTime);
 		 Calendar calendar=Calendar.getInstance();
@@ -165,6 +165,11 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		 param.put(queryDay, queryDay);
 		 //查询当班人员
 		List<Map>list= this.tempTaskMapper.selectWorkingEmployee(param);
+		if(ToolUtil.isEmpty(list)) {
+			 map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			 map.put(CommonConstant.BACK_MESSAGE, "未查询到当班人员");
+			 return map;
+		}
 		List<String> employeeCodeList=new ArrayList<>();
 		List<String> employeeNameList=new ArrayList<>();
 		List<String> employeeTelList=new ArrayList<>();
@@ -243,6 +248,16 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			 return map;
 		 }
 		 
+		//查询班次
+		 String queryTime=startTime.substring(11);
+		 Map<String, String>shiftMap=this.tempTaskMapper.selectShiftByTime(queryTime);
+		 if(shiftMap == null || shiftMap.isEmpty()) {
+			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			map.put(CommonConstant.BACK_MESSAGE, "根据计划时间未查询到班次，请先设置班次");
+			return map;
+		 }
+		 String shift=shiftMap.get("shift");
+		 
 		Date now=new Date();
 		TbTask task=new TbTask();
 		task.setTaskCode(taskCode);
@@ -252,12 +267,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setAreaName(areaName);
 		task.setStandardCode(standardCode);
 		task.setStandardName(standardName);
-		/**
-		 * 班次没做，无法获取班次
-		 * TODO
-		 */
-		
-//		task.setShift(shift);
+		task.setShift(shift);
 		task.setSpec(spec);
 		task.setStartTime(DateUtil.stringToDateTime(startTime));
 		task.setEndTime(DateUtil.stringToDateTime(endTime));
@@ -270,11 +280,6 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		 * TODO
 		 */
 		task.setUpdateEmp("SYS_TODO");
-		 //查询班次
-		 /**
-		  * TODO
-		  */
-		 String shift="DAYTIME";
 		 //处理日期
 		 Date startDate=DateUtil.stringToDate(startTime);
 		 Calendar calendar=Calendar.getInstance();

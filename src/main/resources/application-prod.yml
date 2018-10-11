@@ -1,4 +1,4 @@
-`server:
+server:
   port: 8062
 spring:
   datasource:
@@ -51,3 +51,4 @@ rest:
   restfulSign: /rest
   coreOpen: true
   swaggerEnable: false
+EVENT_TASK_MIN_INTERVAL: 30

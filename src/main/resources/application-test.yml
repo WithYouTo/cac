@@ -50,4 +50,5 @@ logging:
 rest:
   restfulSign: /rest
   coreOpen: true
-  swaggerEnable: false
+  swaggerEnable: true
+EVENT_TASK_MIN_INTERVAL: 30
