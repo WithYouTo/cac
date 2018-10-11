@@ -12,8 +12,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.druid.util.StringUtils;
-import com.qcap.cac.constant.Common;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.TempTaskDto;
@@ -21,7 +19,7 @@ import com.qcap.cac.dto.TempTaskSearchParam;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.ToolUtil;
-import com.qcap.cac.tools.UUIDUtil;
+import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
 @Service
 @Transactional
@@ -114,7 +112,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		 
 		Date now=new Date();
 		TbTask task=new TbTask();
-		task.setTaskId(UUIDUtil.getUUID());
+		task.setTaskId(UUIDUtils.getUUID());
 		task.setTaskCode(CommonConstant.TASK_PREFIX_T+DateUtil.dateTimeToStringForLineNo(now));
 //		task.setPlanId(planId);
 		task.setTaskType(CommonConstant.TASK_TYPE_TEMP);
