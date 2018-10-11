@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface EquipRepairSrv {
-    List<Map> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam);
+    List<Map<String, Object>> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam);
 
     void updateEquipRepair(String equipRepairId);
 }

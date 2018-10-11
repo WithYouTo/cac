@@ -1,10 +1,12 @@
 package com.qcap.cac.controller;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dto.EquipUseSearchParam;
 import com.qcap.cac.service.EquipUseSrv;
+import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +40,18 @@ public class EquipUseController{
     @ResponseBody
     @RequestMapping(value = "/listEquipUse", method = RequestMethod.POST)
     public Object listEquipUse(EquipUseSearchParam equipUseSearchParam){
-        List<Map> list = this.equipUseSrv.listEquipUse(equipUseSearchParam);
+        new PageFactory<Map<String, Object>>().defaultPage();
+
+        List<Map<String, Object>> list = this.equipUseSrv.listEquipUse(equipUseSearchParam);
         PageInfo pageInfo = new PageInfo(list);
-        for(Map map:list){
+        for(Map<String, Object> map:list){
             String status = map.get("status").toString();
             CommonConstant.EQUIP_USE_STATUS.get(status);
             map.put("statusName", CommonConstant.EQUIP_CHARGE_STATUS.get(status));
         }
-        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
+        Page pageList = (Page) list;
+
+        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), pageList);
     }
 
 
