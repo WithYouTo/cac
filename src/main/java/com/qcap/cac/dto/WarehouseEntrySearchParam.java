@@ -2,7 +2,7 @@ package com.qcap.cac.dto;
 
 public class WarehouseEntrySearchParam {
 
-    private String storeRoomId;
+    private String storeroomId;
     private String entryBatchNo;
     private String goodsNo;
     private String goodsName;
@@ -10,12 +10,12 @@ public class WarehouseEntrySearchParam {
     private String endDate;
     private String supplierName;
 
-    public String getStoreRoomId() {
-        return storeRoomId;
+    public String getStoreroomId() {
+        return storeroomId;
     }
 
-    public void setStoreRoomId(String storeRoomId) {
-        this.storeRoomId = storeRoomId;
+    public void setStoreroomId(String storeroomId) {
+        this.storeroomId = storeroomId;
     }
 
     public String getEntryBatchNo() {

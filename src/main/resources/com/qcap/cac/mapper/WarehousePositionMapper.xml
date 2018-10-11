@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.WarehousePositionMapper">
+
+    <!--查詢仓库信息-->
+    <select id="getStoreRoomInfo" resultType="com.qcap.cac.entity.TbArea" parameterType="String">
+        SELECT
+        `AREA_ID`,
+        `AREA_CODE`,
+        `AREA_NAME`,
+        `AREA_TYPE`,
+        `SUPER_AREA_CODE`,
+        `LEVEL`,
+        `SEQ_NO`,
+        `FINAL_FLAG`,
+        `BUILDING_PURPOSE`,
+        `BUILDING_CODE`,
+        `ROOM_CODE`,
+        `DOOR_CODE`,
+        `ROOM_NO`,
+        `ROOM_AREA`,
+        `ACREAGE`,
+        `PERIMETER`,
+        `REMARK1`,
+        `REMARK2`,
+        `REMARK3`,
+        `VERSION`
+        FROM tb_area where AREA_ID = #{storeroomId}
+        limit 1
+    </select>
+
+    <update id="updateById" parameterType="com.qcap.cac.entity.TbWarehousePosition" >
+        update tb_warehouse_position
+        <set >
+            <if test="storeroomId != null" >
+                STOREROOM_ID = #{storeroomId,jdbcType=VARCHAR},
+            </if>
+            <if test="storeroom != null" >
+                STOREROOM = #{storeroom,jdbcType=VARCHAR},
+            </if>
+            <if test="buildingCode != null" >
+                BUILDING_CODE = #{buildingCode,jdbcType=VARCHAR},
+            </if>
+            <if test="buildingName != null" >
+                BUILDING_NAME = #{buildingName,jdbcType=VARCHAR},
+            </if>
+            <if test="floorCode != null" >
+                FLOOR_CODE = #{floorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="floorName != null" >
+                FLOOR_NAME = #{floorName,jdbcType=VARCHAR},
+            </if>
+            <if test="roomCode != null" >
+                ROOM_CODE = #{roomCode,jdbcType=VARCHAR},
+            </if>
+            <if test="roomName != null" >
+                ROOM_NAME = #{roomName,jdbcType=VARCHAR},
+            </if>
+            <if test="rangeShelf != null" >
+                RANGE_SHELF = #{rangeShelf,jdbcType=VARCHAR},
+            </if>
+            <if test="instruction != null" >
+                INSTRUCTION = #{instruction,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteFlag != null" >
+                DELETE_FLAG = #{deleteFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="updateEmp != null" >
+                UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            VERSION = VERSION + 1
+        </set>
+        where WAREHOUSE_POSITION_ID = #{warehousePositionId,jdbcType=VARCHAR}
+    </update>
+
+
+
+</mapper>

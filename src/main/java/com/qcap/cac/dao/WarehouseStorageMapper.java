@@ -3,8 +3,8 @@ package com.qcap.cac.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.entity.TbWarehousePosition;
+import com.qcap.cac.entity.TbWarehouseStorage;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 
 /**
@@ -15,12 +15,9 @@ import org.apache.ibatis.annotations.Select;
  * @author stylefeng
  * @since 2018-10-09
  */
-public interface WarehousePositionMapper extends BaseMapper<TbWarehousePosition> {
+public interface WarehouseStorageMapper extends BaseMapper<TbWarehouseStorage> {
 
 
-    TbArea getStoreRoomInfo(@Param("storeroomId") String storeroomId);
-
-    int updateById(TbWarehousePosition warehousePosition);
 
 
 }

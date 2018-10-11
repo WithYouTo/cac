@@ -19,8 +19,8 @@
         LEFT JOIN tb_warehouse_entry b
         on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
         where 1 = 1 AND a.DELETE_FLAG = 'N'
-        <if test="storeRoomId!=null and storeRoomId!=''">
-            and a.STOREROOM_ID = #{storeRoomId}
+        <if test="storeroomId!=null and storeroomId!=''">
+            and a.STOREROOM_ID = #{storeroomId}
         </if>
         <if test="goodsNo!=null and goodsNo!=''">
             and a.GOODS_NO like concat('%',#{goodsNo},'%')

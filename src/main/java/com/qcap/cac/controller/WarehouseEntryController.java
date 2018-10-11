@@ -51,7 +51,7 @@ public class WarehouseEntryController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public PageResParams list(WarehouseEntrySearchParam warehouseEntrySearchParam) {
-        if (StringUtils.isEmpty(warehouseEntrySearchParam.getStoreRoomId())) {
+        if (StringUtils.isEmpty(warehouseEntrySearchParam.getStoreroomId())) {
             //return PageResParams.newInstance()
         }
         List<Map> list = warehouseEntryService.getEntryList(warehouseEntrySearchParam);
