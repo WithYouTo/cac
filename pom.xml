@@ -136,6 +136,16 @@
             <artifactId>pagehelper</artifactId>
             <version>5.1.2</version>
         </dependency>
+        <dependency>
+        	<groupId>cn.jpush.api</groupId>
+        	<artifactId>jiguang-common</artifactId>
+        	<version>1.1.1</version>
+    	</dependency>
+    	<dependency>
+	    	<groupId>cn.jpush.api</groupId>
+	    	<artifactId>jpush-client</artifactId>
+	    	<version>3.3.7</version>
+		</dependency>
     </dependencies>
 
     <!-- poi 版本冲突解决 -->
