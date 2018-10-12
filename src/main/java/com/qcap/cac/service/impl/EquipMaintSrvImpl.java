@@ -35,6 +35,9 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
 
     @Override
     public List<Map<String, Object>> listEquipMaint(EquipMaintSearchParam equipMaintSearchParam) {
+        QueryWrapper<TbEquip> qw = new QueryWrapper();
+        qw.eq("maint_Type",equipMaintSearchParam.getMaintType())
+                .eq("equip_Name",equipMaintSearchParam.getEquipName()).eq("parts_Name",equipMaintSearchParam.getPartsName());
         return this.equipMaintMapper.listEquipMaint(equipMaintSearchParam);
     }
 

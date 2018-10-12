@@ -8,7 +8,7 @@ import com.qcap.cac.dto.EquipChargeSearchParam;
 import com.qcap.cac.dto.EquipMaintInsertParam;
 import com.qcap.cac.dto.EquipMaintSearchParam;
 import com.qcap.cac.service.EquipChargeSrv;
-import com.qcap.cac.service.EquipMiantSrv;
+import com.qcap.cac.service.EquipMaintSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
@@ -26,14 +26,14 @@ import java.util.Map;
 public class EquipMaintController {
 
     @Autowired
-    private EquipMiantSrv equipMiantSrv;
+    private EquipMaintSrv equipMaintSrv;
 
 
     @ResponseBody
     @RequestMapping(value = "/listEquipMaint", method = RequestMethod.POST)
     public Object listEquipMaint(EquipMaintSearchParam equipMaintSearchParam){
         new PageFactory<Map<String, Object>>().defaultPage();
-        List<Map<String, Object>> list = this.equipMiantSrv.listEquipMaint(equipMaintSearchParam);
+        List<Map<String, Object>> list = this.equipMaintSrv.listEquipMaint(equipMaintSearchParam);
 
         PageInfo pageInfo = new PageInfo(list);
         for(Map<String, Object> map:list){
@@ -49,7 +49,7 @@ public class EquipMaintController {
     @ResponseBody
     @RequestMapping(value = "/insertEquipMaint", method = RequestMethod.POST)
     public Object insertEquipMaint(EquipMaintInsertParam equipMaintInsertParam){
-        this.equipMiantSrv.insertEquipMaint(equipMaintInsertParam);
+        this.equipMaintSrv.insertEquipMaint(equipMaintInsertParam);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, null);
     }
 }
