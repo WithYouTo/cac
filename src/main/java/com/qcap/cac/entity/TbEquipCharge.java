@@ -1,52 +1,111 @@
 package com.qcap.cac.entity;
 
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableName;
+import java.time.LocalDateTime;
+import java.io.Serializable;
 
-public class TbEquipCharge {
+/**
+ * <p>
+ * 设备充电记录表
+ * </p>
+ *
+ * @author huangxiang
+ * @since 2018-10-12
+ */
+@TableName("tb_equip_charge")
+public class TbEquipCharge implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键ID
+     */
     private String equipChargeId;
-
     private String equipId;
-
+    /**
+     * 设备名称
+     */
     private String equipName;
-
+    /**
+     * 设备编号
+     */
     private String equipNo;
-
+    /**
+     * 设备类别
+     */
     private String equipType;
-
+    /**
+     * 设备型号
+     */
     private String equipModel;
-
-    private Date startChargeTime;
-
-    private Date endChargeTime;
-
+    /**
+     * 充电开始时间
+     */
+    private LocalDateTime startChargeTime;
+    /**
+     * 充电结束时间
+     */
+    private LocalDateTime endChargeTime;
+    /**
+     * 充电时长
+     */
     private String totalChargeTime;
-
+    /**
+     * 区域
+     */
     private String area;
-
-    private String name;
-
-    private String mobile;
-
+    /**
+     * 操作人姓名
+     */
+    private String personName;
+    /**
+     * 操作人电话
+     */
+    private String personMobile;
+    /**
+     * 设备状态
+     */
     private String status;
-
+    /**
+     * 备注
+     */
     private String remark;
-
+    /**
+     * 新增人
+     */
     private String createEmp;
-
-    private Date createDate;
-
+    /**
+     * 新增时间
+     */
+    private LocalDateTime createDate;
+    /**
+     * 修改人
+     */
     private String updateEmp;
-
-    private Date updateDate;
-
+    /**
+     * 修改时间
+     */
+    private LocalDateTime updateDate;
+    /**
+     * 版本
+     */
     private Integer version;
+
 
     public String getEquipChargeId() {
         return equipChargeId;
     }
 
     public void setEquipChargeId(String equipChargeId) {
-        this.equipChargeId = equipChargeId == null ? null : equipChargeId.trim();
+        this.equipChargeId = equipChargeId;
+    }
+
+    public String getEquipId() {
+        return equipId;
+    }
+
+    public void setEquipId(String equipId) {
+        this.equipId = equipId;
     }
 
     public String getEquipName() {
@@ -54,7 +113,7 @@ public class TbEquipCharge {
     }
 
     public void setEquipName(String equipName) {
-        this.equipName = equipName == null ? null : equipName.trim();
+        this.equipName = equipName;
     }
 
     public String getEquipNo() {
@@ -62,7 +121,7 @@ public class TbEquipCharge {
     }
 
     public void setEquipNo(String equipNo) {
-        this.equipNo = equipNo == null ? null : equipNo.trim();
+        this.equipNo = equipNo;
     }
 
     public String getEquipType() {
@@ -70,7 +129,7 @@ public class TbEquipCharge {
     }
 
     public void setEquipType(String equipType) {
-        this.equipType = equipType == null ? null : equipType.trim();
+        this.equipType = equipType;
     }
 
     public String getEquipModel() {
@@ -78,22 +137,22 @@ public class TbEquipCharge {
     }
 
     public void setEquipModel(String equipModel) {
-        this.equipModel = equipModel == null ? null : equipModel.trim();
+        this.equipModel = equipModel;
     }
 
-    public Date getStartChargeTime() {
+    public LocalDateTime getStartChargeTime() {
         return startChargeTime;
     }
 
-    public void setStartChargeTime(Date startChargeTime) {
+    public void setStartChargeTime(LocalDateTime startChargeTime) {
         this.startChargeTime = startChargeTime;
     }
 
-    public Date getEndChargeTime() {
+    public LocalDateTime getEndChargeTime() {
         return endChargeTime;
     }
 
-    public void setEndChargeTime(Date endChargeTime) {
+    public void setEndChargeTime(LocalDateTime endChargeTime) {
         this.endChargeTime = endChargeTime;
     }
 
@@ -102,7 +161,7 @@ public class TbEquipCharge {
     }
 
     public void setTotalChargeTime(String totalChargeTime) {
-        this.totalChargeTime = totalChargeTime == null ? null : totalChargeTime.trim();
+        this.totalChargeTime = totalChargeTime;
     }
 
     public String getArea() {
@@ -110,23 +169,23 @@ public class TbEquipCharge {
     }
 
     public void setArea(String area) {
-        this.area = area == null ? null : area.trim();
+        this.area = area;
     }
 
-    public String getName() {
-        return name;
+    public String getPersonName() {
+        return personName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getPersonMobile() {
+        return personMobile;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile == null ? null : mobile.trim();
+    public void setPersonMobile(String personMobile) {
+        this.personMobile = personMobile;
     }
 
     public String getStatus() {
@@ -134,7 +193,7 @@ public class TbEquipCharge {
     }
 
     public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.status = status;
     }
 
     public String getRemark() {
@@ -142,7 +201,7 @@ public class TbEquipCharge {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
     public String getCreateEmp() {
@@ -150,14 +209,14 @@ public class TbEquipCharge {
     }
 
     public void setCreateEmp(String createEmp) {
-        this.createEmp = createEmp == null ? null : createEmp.trim();
+        this.createEmp = createEmp;
     }
 
-    public Date getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
@@ -166,14 +225,14 @@ public class TbEquipCharge {
     }
 
     public void setUpdateEmp(String updateEmp) {
-        this.updateEmp = updateEmp == null ? null : updateEmp.trim();
+        this.updateEmp = updateEmp;
     }
 
-    public Date getUpdateDate() {
+    public LocalDateTime getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -185,11 +244,28 @@ public class TbEquipCharge {
         this.version = version;
     }
 
-    public String getEquipId() {
-        return equipId;
-    }
-
-    public void setEquipId(String equipId) {
-        this.equipId = equipId;
+    @Override
+    public String toString() {
+        return "TbEquipCharge{" +
+        ", equipChargeId=" + equipChargeId +
+        ", equipId=" + equipId +
+        ", equipName=" + equipName +
+        ", equipNo=" + equipNo +
+        ", equipType=" + equipType +
+        ", equipModel=" + equipModel +
+        ", startChargeTime=" + startChargeTime +
+        ", endChargeTime=" + endChargeTime +
+        ", totalChargeTime=" + totalChargeTime +
+        ", area=" + area +
+        ", personName=" + personName +
+        ", personMobile=" + personMobile +
+        ", status=" + status +
+        ", remark=" + remark +
+        ", createEmp=" + createEmp +
+        ", createDate=" + createDate +
+        ", updateEmp=" + updateEmp +
+        ", updateDate=" + updateDate +
+        ", version=" + version +
+        "}";
     }
 }

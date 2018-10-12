@@ -1,34 +1,31 @@
 package com.qcap.cac.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * 设备及配件维保计划
  * </p>
  *
  * @author huangxiang
  * @since 2018-10-12
  */
-@TableName("tb_equip_maint")
-public class TbEquipMaint implements Serializable {
+@TableName("tb_equip_plan")
+public class TbEquipPlan implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 主键ID
      */
-    private String equipMaintId;
+    private String planId;
     /**
-     * 设备管理表主键
+     * 设备ID
      */
     private String equipId;
-    /**
-     * 设备编号
-     */
-    private String equipNo;
     /**
      * 设备名称
      */
@@ -42,47 +39,47 @@ public class TbEquipMaint implements Serializable {
      */
     private String equipModel;
     /**
-     * 配件名称
+     * 启用日期
      */
-    private String partsName;
+    private LocalDate startUseDate;
+    /**
+     * 生命周期
+     */
+    private String lifeCycle;
+    /**
+     * 配件ID
+     */
+    private String partsId;
     /**
      * 配件编号
      */
     private String partsNo;
     /**
-     * 维保类别
+     * 配件名称
      */
-    private String maintType;
+    private String partsName;
     /**
      * 维保周期
      */
-    private String equipCycle;
+    private String maintCycle;
     /**
-     * 维保时间
+     * 最近维保时间
      */
-    private LocalDateTime maintTime;
+    private LocalDate latestMaintDate;
     /**
-     * 维保记录
+     * 下次维保时间
      */
-    private String maintRecord;
-    /**
-     * 维保状态
-     */
-    private String maintState;
-    /**
-     * 维保描述
-     */
-    private String maintDesc;
+    private LocalDate nextMaintDate;
     /**
      * 备注
      */
     private String remark;
     /**
-     * 新增人
+     * 创建人
      */
     private String createEmp;
     /**
-     * 新增时间
+     * 创建时间
      */
     private LocalDateTime createDate;
     /**
@@ -96,15 +93,15 @@ public class TbEquipMaint implements Serializable {
     /**
      * 版本
      */
-    private Integer version;
+    private String version;
 
 
-    public String getEquipMaintId() {
-        return equipMaintId;
+    public String getPlanId() {
+        return planId;
     }
 
-    public void setEquipMaintId(String equipMaintId) {
-        this.equipMaintId = equipMaintId;
+    public void setPlanId(String planId) {
+        this.planId = planId;
     }
 
     public String getEquipId() {
@@ -113,14 +110,6 @@ public class TbEquipMaint implements Serializable {
 
     public void setEquipId(String equipId) {
         this.equipId = equipId;
-    }
-
-    public String getEquipNo() {
-        return equipNo;
-    }
-
-    public void setEquipNo(String equipNo) {
-        this.equipNo = equipNo;
     }
 
     public String getEquipName() {
@@ -147,12 +136,28 @@ public class TbEquipMaint implements Serializable {
         this.equipModel = equipModel;
     }
 
-    public String getPartsName() {
-        return partsName;
+    public LocalDate getStartUseDate() {
+        return startUseDate;
     }
 
-    public void setPartsName(String partsName) {
-        this.partsName = partsName;
+    public void setStartUseDate(LocalDate startUseDate) {
+        this.startUseDate = startUseDate;
+    }
+
+    public String getLifeCycle() {
+        return lifeCycle;
+    }
+
+    public void setLifeCycle(String lifeCycle) {
+        this.lifeCycle = lifeCycle;
+    }
+
+    public String getPartsId() {
+        return partsId;
+    }
+
+    public void setPartsId(String partsId) {
+        this.partsId = partsId;
     }
 
     public String getPartsNo() {
@@ -163,52 +168,36 @@ public class TbEquipMaint implements Serializable {
         this.partsNo = partsNo;
     }
 
-    public String getMaintType() {
-        return maintType;
+    public String getPartsName() {
+        return partsName;
     }
 
-    public void setMaintType(String maintType) {
-        this.maintType = maintType;
+    public void setPartsName(String partsName) {
+        this.partsName = partsName;
     }
 
-    public String getEquipCycle() {
-        return equipCycle;
+    public String getMaintCycle() {
+        return maintCycle;
     }
 
-    public void setEquipCycle(String equipCycle) {
-        this.equipCycle = equipCycle;
+    public void setMaintCycle(String maintCycle) {
+        this.maintCycle = maintCycle;
     }
 
-    public LocalDateTime getMaintTime() {
-        return maintTime;
+    public LocalDate getLatestMaintDate() {
+        return latestMaintDate;
     }
 
-    public void setMaintTime(LocalDateTime maintTime) {
-        this.maintTime = maintTime;
+    public void setLatestMaintDate(LocalDate latestMaintDate) {
+        this.latestMaintDate = latestMaintDate;
     }
 
-    public String getMaintRecord() {
-        return maintRecord;
+    public LocalDate getNextMaintDate() {
+        return nextMaintDate;
     }
 
-    public void setMaintRecord(String maintRecord) {
-        this.maintRecord = maintRecord;
-    }
-
-    public String getMaintState() {
-        return maintState;
-    }
-
-    public void setMaintState(String maintState) {
-        this.maintState = maintState;
-    }
-
-    public String getMaintDesc() {
-        return maintDesc;
-    }
-
-    public void setMaintDesc(String maintDesc) {
-        this.maintDesc = maintDesc;
+    public void setNextMaintDate(LocalDate nextMaintDate) {
+        this.nextMaintDate = nextMaintDate;
     }
 
     public String getRemark() {
@@ -251,31 +240,30 @@ public class TbEquipMaint implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public Integer getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 
     @Override
     public String toString() {
-        return "TbEquipMaint{" +
-        ", equipMaintId=" + equipMaintId +
+        return "TbEquipPlan{" +
+        ", planId=" + planId +
         ", equipId=" + equipId +
-        ", equipNo=" + equipNo +
         ", equipName=" + equipName +
         ", equipType=" + equipType +
         ", equipModel=" + equipModel +
-        ", partsName=" + partsName +
+        ", startUseDate=" + startUseDate +
+        ", lifeCycle=" + lifeCycle +
+        ", partsId=" + partsId +
         ", partsNo=" + partsNo +
-        ", maintType=" + maintType +
-        ", equipCycle=" + equipCycle +
-        ", maintTime=" + maintTime +
-        ", maintRecord=" + maintRecord +
-        ", maintState=" + maintState +
-        ", maintDesc=" + maintDesc +
+        ", partsName=" + partsName +
+        ", maintCycle=" + maintCycle +
+        ", latestMaintDate=" + latestMaintDate +
+        ", nextMaintDate=" + nextMaintDate +
         ", remark=" + remark +
         ", createEmp=" + createEmp +
         ", createDate=" + createDate +

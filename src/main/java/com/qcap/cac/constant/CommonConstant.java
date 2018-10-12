@@ -23,6 +23,15 @@ public class CommonConstant {
         EQUIP_USE_STATUS.put("USED","使用完成");
     }
 
+    //设备维保类型
+    public final static String MAINT_TYPE_EQUIP = "EQUIP";
+    public final static String MAINT_TYPE_PARTS = "PARTS";
+    public static Map<String,String> MAINT_TYPE = new LinkedHashMap<String,String>();
+    static {
+        EQUIP_USE_STATUS.put("EQUIP","设备");
+        EQUIP_USE_STATUS.put("PARTS","配件");
+    }
+
     //设备维修状态
     public final static String EQUIP_CHARGE_STATUS_REPAIR = "REPAIR";
     public final static String EQUIP_CHARGE_STATUS_REPAIRED = "REPAIRED";

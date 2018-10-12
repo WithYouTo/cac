@@ -1,84 +1,167 @@
 package com.qcap.cac.entity;
 
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableName;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.io.Serializable;
 
-public class TbEquip {
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author huangxiang
+ * @since 2018-10-12
+ */
+@TableName("tb_equip")
+public class TbEquip implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键ID
+     */
     private String equipId;
-
+    /**
+     * 设备编号
+     */
     private String equipNo;
-
+    /**
+     * 设备二维码地址
+     */
     private String equipCodeUrl;
-
+    /**
+     * 设备名称
+     */
     private String equipName;
-
+    /**
+     * 设备全名
+     */
     private String equipFullName;
-
+    /**
+     * 设备类别
+     */
     private String equipType;
-
+    /**
+     * 设备型号
+     */
     private String equipModel;
-
+    /**
+     * 设备参数
+     */
+    private String equipParams;
+    /**
+     * 责任人编号
+     */
     private String responseNo;
-
+    /**
+     * 建筑物
+     */
     private String buliding;
-
+    /**
+     * 楼层
+     */
     private String floor;
-
+    /**
+     * 区域
+     */
     private String area;
-
+    /**
+     * 房间
+     */
     private String room;
-
+    /**
+     * 房间分区
+     */
     private String roomArea;
-
+    /**
+     * 设备用途
+     */
     private String equipUse;
-
+    /**
+     * 使用区域
+     */
     private String useArea;
-
+    /**
+     * 存放地点
+     */
     private String storeArea;
-
+    /**
+     * 生产厂家
+     */
     private String manufact;
-
+    /**
+     * 生命周期
+     */
     private String recycle;
-
+    /**
+     * 维保周期
+     */
     private String maintCycle;
-
-    private Date latestMaintTime;
-
-    private Date nextMaintTime;
-
+    /**
+     * 最近维保时间
+     */
+    private LocalDate latestMaintTime;
+    /**
+     * 下次维保时间
+     */
+    private LocalDate nextMaintTime;
+    /**
+     * 保修期
+     */
     private String maintenPeriod;
-
-    private Date buyTime;
-
-    private Date startUseTime;
-
-    private Date scrapTime;
-
+    /**
+     * 购买日期
+     */
+    private LocalDateTime buyTime;
+    /**
+     * 启用日期
+     */
+    private LocalDateTime startUseTime;
+    /**
+     * 报废日期
+     */
+    private LocalDateTime scrapTime;
+    /**
+     * 报废原因
+     */
     private String scrapReason;
-
+    /**
+     * 设备状态
+     */
     private String equipState;
-
+    /**
+     * 备注
+     */
     private String remark;
-
+    /**
+     * 新增人
+     */
     private String createEmp;
-
-    private Date createDate;
-
+    /**
+     * 新增时间
+     */
+    private LocalDateTime createDate;
+    /**
+     * 修改人
+     */
     private String updateEmp;
-
-    private Date updateDate;
-
+    /**
+     * 修改时间
+     */
+    private LocalDateTime updateDate;
+    /**
+     * 版本
+     */
     private Integer version;
 
-    private String column35;
-
-    private String equipParams;
 
     public String getEquipId() {
         return equipId;
     }
 
     public void setEquipId(String equipId) {
-        this.equipId = equipId == null ? null : equipId.trim();
+        this.equipId = equipId;
     }
 
     public String getEquipNo() {
@@ -86,7 +169,7 @@ public class TbEquip {
     }
 
     public void setEquipNo(String equipNo) {
-        this.equipNo = equipNo == null ? null : equipNo.trim();
+        this.equipNo = equipNo;
     }
 
     public String getEquipCodeUrl() {
@@ -94,7 +177,7 @@ public class TbEquip {
     }
 
     public void setEquipCodeUrl(String equipCodeUrl) {
-        this.equipCodeUrl = equipCodeUrl == null ? null : equipCodeUrl.trim();
+        this.equipCodeUrl = equipCodeUrl;
     }
 
     public String getEquipName() {
@@ -102,7 +185,7 @@ public class TbEquip {
     }
 
     public void setEquipName(String equipName) {
-        this.equipName = equipName == null ? null : equipName.trim();
+        this.equipName = equipName;
     }
 
     public String getEquipFullName() {
@@ -110,7 +193,7 @@ public class TbEquip {
     }
 
     public void setEquipFullName(String equipFullName) {
-        this.equipFullName = equipFullName == null ? null : equipFullName.trim();
+        this.equipFullName = equipFullName;
     }
 
     public String getEquipType() {
@@ -118,7 +201,7 @@ public class TbEquip {
     }
 
     public void setEquipType(String equipType) {
-        this.equipType = equipType == null ? null : equipType.trim();
+        this.equipType = equipType;
     }
 
     public String getEquipModel() {
@@ -126,7 +209,15 @@ public class TbEquip {
     }
 
     public void setEquipModel(String equipModel) {
-        this.equipModel = equipModel == null ? null : equipModel.trim();
+        this.equipModel = equipModel;
+    }
+
+    public String getEquipParams() {
+        return equipParams;
+    }
+
+    public void setEquipParams(String equipParams) {
+        this.equipParams = equipParams;
     }
 
     public String getResponseNo() {
@@ -134,7 +225,7 @@ public class TbEquip {
     }
 
     public void setResponseNo(String responseNo) {
-        this.responseNo = responseNo == null ? null : responseNo.trim();
+        this.responseNo = responseNo;
     }
 
     public String getBuliding() {
@@ -142,7 +233,7 @@ public class TbEquip {
     }
 
     public void setBuliding(String buliding) {
-        this.buliding = buliding == null ? null : buliding.trim();
+        this.buliding = buliding;
     }
 
     public String getFloor() {
@@ -150,7 +241,7 @@ public class TbEquip {
     }
 
     public void setFloor(String floor) {
-        this.floor = floor == null ? null : floor.trim();
+        this.floor = floor;
     }
 
     public String getArea() {
@@ -158,7 +249,7 @@ public class TbEquip {
     }
 
     public void setArea(String area) {
-        this.area = area == null ? null : area.trim();
+        this.area = area;
     }
 
     public String getRoom() {
@@ -166,7 +257,7 @@ public class TbEquip {
     }
 
     public void setRoom(String room) {
-        this.room = room == null ? null : room.trim();
+        this.room = room;
     }
 
     public String getRoomArea() {
@@ -174,7 +265,7 @@ public class TbEquip {
     }
 
     public void setRoomArea(String roomArea) {
-        this.roomArea = roomArea == null ? null : roomArea.trim();
+        this.roomArea = roomArea;
     }
 
     public String getEquipUse() {
@@ -182,7 +273,7 @@ public class TbEquip {
     }
 
     public void setEquipUse(String equipUse) {
-        this.equipUse = equipUse == null ? null : equipUse.trim();
+        this.equipUse = equipUse;
     }
 
     public String getUseArea() {
@@ -190,7 +281,7 @@ public class TbEquip {
     }
 
     public void setUseArea(String useArea) {
-        this.useArea = useArea == null ? null : useArea.trim();
+        this.useArea = useArea;
     }
 
     public String getStoreArea() {
@@ -198,7 +289,7 @@ public class TbEquip {
     }
 
     public void setStoreArea(String storeArea) {
-        this.storeArea = storeArea == null ? null : storeArea.trim();
+        this.storeArea = storeArea;
     }
 
     public String getManufact() {
@@ -206,7 +297,7 @@ public class TbEquip {
     }
 
     public void setManufact(String manufact) {
-        this.manufact = manufact == null ? null : manufact.trim();
+        this.manufact = manufact;
     }
 
     public String getRecycle() {
@@ -214,7 +305,7 @@ public class TbEquip {
     }
 
     public void setRecycle(String recycle) {
-        this.recycle = recycle == null ? null : recycle.trim();
+        this.recycle = recycle;
     }
 
     public String getMaintCycle() {
@@ -222,22 +313,22 @@ public class TbEquip {
     }
 
     public void setMaintCycle(String maintCycle) {
-        this.maintCycle = maintCycle == null ? null : maintCycle.trim();
+        this.maintCycle = maintCycle;
     }
 
-    public Date getLatestMaintTime() {
+    public LocalDate getLatestMaintTime() {
         return latestMaintTime;
     }
 
-    public void setLatestMaintTime(Date latestMaintTime) {
+    public void setLatestMaintTime(LocalDate latestMaintTime) {
         this.latestMaintTime = latestMaintTime;
     }
 
-    public Date getNextMaintTime() {
+    public LocalDate getNextMaintTime() {
         return nextMaintTime;
     }
 
-    public void setNextMaintTime(Date nextMaintTime) {
+    public void setNextMaintTime(LocalDate nextMaintTime) {
         this.nextMaintTime = nextMaintTime;
     }
 
@@ -246,30 +337,30 @@ public class TbEquip {
     }
 
     public void setMaintenPeriod(String maintenPeriod) {
-        this.maintenPeriod = maintenPeriod == null ? null : maintenPeriod.trim();
+        this.maintenPeriod = maintenPeriod;
     }
 
-    public Date getBuyTime() {
+    public LocalDateTime getBuyTime() {
         return buyTime;
     }
 
-    public void setBuyTime(Date buyTime) {
+    public void setBuyTime(LocalDateTime buyTime) {
         this.buyTime = buyTime;
     }
 
-    public Date getStartUseTime() {
+    public LocalDateTime getStartUseTime() {
         return startUseTime;
     }
 
-    public void setStartUseTime(Date startUseTime) {
+    public void setStartUseTime(LocalDateTime startUseTime) {
         this.startUseTime = startUseTime;
     }
 
-    public Date getScrapTime() {
+    public LocalDateTime getScrapTime() {
         return scrapTime;
     }
 
-    public void setScrapTime(Date scrapTime) {
+    public void setScrapTime(LocalDateTime scrapTime) {
         this.scrapTime = scrapTime;
     }
 
@@ -278,7 +369,7 @@ public class TbEquip {
     }
 
     public void setScrapReason(String scrapReason) {
-        this.scrapReason = scrapReason == null ? null : scrapReason.trim();
+        this.scrapReason = scrapReason;
     }
 
     public String getEquipState() {
@@ -286,7 +377,7 @@ public class TbEquip {
     }
 
     public void setEquipState(String equipState) {
-        this.equipState = equipState == null ? null : equipState.trim();
+        this.equipState = equipState;
     }
 
     public String getRemark() {
@@ -294,7 +385,7 @@ public class TbEquip {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
     public String getCreateEmp() {
@@ -302,14 +393,14 @@ public class TbEquip {
     }
 
     public void setCreateEmp(String createEmp) {
-        this.createEmp = createEmp == null ? null : createEmp.trim();
+        this.createEmp = createEmp;
     }
 
-    public Date getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
@@ -318,14 +409,14 @@ public class TbEquip {
     }
 
     public void setUpdateEmp(String updateEmp) {
-        this.updateEmp = updateEmp == null ? null : updateEmp.trim();
+        this.updateEmp = updateEmp;
     }
 
-    public Date getUpdateDate() {
+    public LocalDateTime getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -337,19 +428,43 @@ public class TbEquip {
         this.version = version;
     }
 
-    public String getColumn35() {
-        return column35;
-    }
-
-    public void setColumn35(String column35) {
-        this.column35 = column35 == null ? null : column35.trim();
-    }
-
-    public String getEquipParams() {
-        return equipParams;
-    }
-
-    public void setEquipParams(String equipParams) {
-        this.equipParams = equipParams == null ? null : equipParams.trim();
+    @Override
+    public String toString() {
+        return "TbEquip{" +
+        ", equipId=" + equipId +
+        ", equipNo=" + equipNo +
+        ", equipCodeUrl=" + equipCodeUrl +
+        ", equipName=" + equipName +
+        ", equipFullName=" + equipFullName +
+        ", equipType=" + equipType +
+        ", equipModel=" + equipModel +
+        ", equipParams=" + equipParams +
+        ", responseNo=" + responseNo +
+        ", buliding=" + buliding +
+        ", floor=" + floor +
+        ", area=" + area +
+        ", room=" + room +
+        ", roomArea=" + roomArea +
+        ", equipUse=" + equipUse +
+        ", useArea=" + useArea +
+        ", storeArea=" + storeArea +
+        ", manufact=" + manufact +
+        ", recycle=" + recycle +
+        ", maintCycle=" + maintCycle +
+        ", latestMaintTime=" + latestMaintTime +
+        ", nextMaintTime=" + nextMaintTime +
+        ", maintenPeriod=" + maintenPeriod +
+        ", buyTime=" + buyTime +
+        ", startUseTime=" + startUseTime +
+        ", scrapTime=" + scrapTime +
+        ", scrapReason=" + scrapReason +
+        ", equipState=" + equipState +
+        ", remark=" + remark +
+        ", createEmp=" + createEmp +
+        ", createDate=" + createDate +
+        ", updateEmp=" + updateEmp +
+        ", updateDate=" + updateDate +
+        ", version=" + version +
+        "}";
     }
 }

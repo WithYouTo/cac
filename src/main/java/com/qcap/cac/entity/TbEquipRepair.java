@@ -1,48 +1,98 @@
 package com.qcap.cac.entity;
 
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableName;
+import java.time.LocalDateTime;
+import java.io.Serializable;
 
-public class TbEquipRepair {
+/**
+ * <p>
+ * 设备保修记录
+ * </p>
+ *
+ * @author huangxiang
+ * @since 2018-10-12
+ */
+@TableName("tb_equip_repair")
+public class TbEquipRepair implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 设备报修ID
+     */
     private String equipRepairId;
-
+    /**
+     * 设备ID
+     */
     private String equipId;
-
+    /**
+     * 设备编号
+     */
     private String equipNo;
-
+    /**
+     * 设备名称
+     */
     private String equipName;
-
+    /**
+     * 设备型号
+     */
     private String equipModel;
-
+    /**
+     * 设备类别
+     */
     private String equipType;
-
-    private String name;
-
-    private String mobile;
-
-    private String repairTime;
-
-    private String desc;
-
+    /**
+     * 报修人姓名
+     */
+    private String personName;
+    /**
+     * 报修人联系方式
+     */
+    private String personMobile;
+    /**
+     * 报修时间
+     */
+    private LocalDateTime repairTime;
+    /**
+     * 描述
+     */
+    private String equipDesc;
+    /**
+     * 设备状态
+     */
     private String status;
-
+    /**
+     * 备注
+     */
     private String remark;
-
+    /**
+     * 新增人
+     */
     private String createEmp;
-
-    private Date createDate;
-
+    /**
+     * 新增时间
+     */
+    private LocalDateTime createDate;
+    /**
+     * 修改人
+     */
     private String updateEmp;
-
-    private Date updateDate;
-
+    /**
+     * 修改时间
+     */
+    private LocalDateTime updateDate;
+    /**
+     * 版本
+     */
     private Integer version;
+
 
     public String getEquipRepairId() {
         return equipRepairId;
     }
 
     public void setEquipRepairId(String equipRepairId) {
-        this.equipRepairId = equipRepairId == null ? null : equipRepairId.trim();
+        this.equipRepairId = equipRepairId;
     }
 
     public String getEquipId() {
@@ -50,7 +100,7 @@ public class TbEquipRepair {
     }
 
     public void setEquipId(String equipId) {
-        this.equipId = equipId == null ? null : equipId.trim();
+        this.equipId = equipId;
     }
 
     public String getEquipNo() {
@@ -58,7 +108,7 @@ public class TbEquipRepair {
     }
 
     public void setEquipNo(String equipNo) {
-        this.equipNo = equipNo == null ? null : equipNo.trim();
+        this.equipNo = equipNo;
     }
 
     public String getEquipName() {
@@ -66,7 +116,7 @@ public class TbEquipRepair {
     }
 
     public void setEquipName(String equipName) {
-        this.equipName = equipName == null ? null : equipName.trim();
+        this.equipName = equipName;
     }
 
     public String getEquipModel() {
@@ -74,7 +124,7 @@ public class TbEquipRepair {
     }
 
     public void setEquipModel(String equipModel) {
-        this.equipModel = equipModel == null ? null : equipModel.trim();
+        this.equipModel = equipModel;
     }
 
     public String getEquipType() {
@@ -82,39 +132,39 @@ public class TbEquipRepair {
     }
 
     public void setEquipType(String equipType) {
-        this.equipType = equipType == null ? null : equipType.trim();
+        this.equipType = equipType;
     }
 
-    public String getName() {
-        return name;
+    public String getPersonName() {
+        return personName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getPersonMobile() {
+        return personMobile;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile == null ? null : mobile.trim();
+    public void setPersonMobile(String personMobile) {
+        this.personMobile = personMobile;
     }
 
-    public String getRepairTime() {
+    public LocalDateTime getRepairTime() {
         return repairTime;
     }
 
-    public void setRepairTime(String repairTime) {
-        this.repairTime = repairTime == null ? null : repairTime.trim();
+    public void setRepairTime(LocalDateTime repairTime) {
+        this.repairTime = repairTime;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getEquipDesc() {
+        return equipDesc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setEquipDesc(String equipDesc) {
+        this.equipDesc = equipDesc;
     }
 
     public String getStatus() {
@@ -122,7 +172,7 @@ public class TbEquipRepair {
     }
 
     public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.status = status;
     }
 
     public String getRemark() {
@@ -130,7 +180,7 @@ public class TbEquipRepair {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
     public String getCreateEmp() {
@@ -138,14 +188,14 @@ public class TbEquipRepair {
     }
 
     public void setCreateEmp(String createEmp) {
-        this.createEmp = createEmp == null ? null : createEmp.trim();
+        this.createEmp = createEmp;
     }
 
-    public Date getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
@@ -154,14 +204,14 @@ public class TbEquipRepair {
     }
 
     public void setUpdateEmp(String updateEmp) {
-        this.updateEmp = updateEmp == null ? null : updateEmp.trim();
+        this.updateEmp = updateEmp;
     }
 
-    public Date getUpdateDate() {
+    public LocalDateTime getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -171,5 +221,28 @@ public class TbEquipRepair {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return "TbEquipRepair{" +
+        ", equipRepairId=" + equipRepairId +
+        ", equipId=" + equipId +
+        ", equipNo=" + equipNo +
+        ", equipName=" + equipName +
+        ", equipModel=" + equipModel +
+        ", equipType=" + equipType +
+        ", personName=" + personName +
+        ", personMobile=" + personMobile +
+        ", repairTime=" + repairTime +
+        ", equipDesc=" + equipDesc +
+        ", status=" + status +
+        ", remark=" + remark +
+        ", createEmp=" + createEmp +
+        ", createDate=" + createDate +
+        ", updateEmp=" + updateEmp +
+        ", updateDate=" + updateDate +
+        ", version=" + version +
+        "}";
     }
 }
