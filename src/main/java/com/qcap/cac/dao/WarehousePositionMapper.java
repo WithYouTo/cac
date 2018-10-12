@@ -20,7 +20,7 @@ public interface WarehousePositionMapper extends BaseMapper<TbWarehousePosition>
 
     TbArea getStoreRoomInfo(@Param("storeroomId") String storeroomId);
 
-    int updateById(TbWarehousePosition warehousePosition);
+    Integer updateById(TbWarehousePosition warehousePosition);
 
 
 }
