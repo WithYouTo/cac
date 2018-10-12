@@ -1,6 +1,7 @@
 package com.qcap.cac.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,11 @@ public class PubCodeController {
 			ResParams.newInstance(CoreConstant.MANAGER_IMPORT_HAS_ERROR_DATA_CODE,
 					CoreConstant.MANAGER_IMPORT_HAS_ERROR_DATA_MSG, null);
 		}
-
+		/**
+		 * 人员管理没做，暂时将createEmp设置为sys
+		 */
+		pubcode.setCreateEmp("sys");
+		pubcode.setCreateDate(new Date());
 		pubCodeSrv.insertPubCode(pubcode);
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.ADD_SUCCESS, null);
 	}
@@ -158,7 +163,11 @@ public class PubCodeController {
 		if (result.hasErrors()) {
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
-
+		/**
+		 * 人员管理没做，暂时将createEmp设置为sys
+		 */
+		tbpubCode.setUpdateEmp("sys");
+		tbpubCode.setUpdateDate(new Date());
 		this.pubCodeSrv.updatePubCode(tbpubCode);
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.EDIT_SUCCESS, null);
 	}
@@ -257,7 +266,11 @@ public class PubCodeController {
 		tbpubCode01.setDesc2(desc2);
 		tbpubCode01.setDesc3(desc3);
 		tbpubCode01.setVersion(0);
-
+		/**
+		 * 人员管理没做，暂时将createEmp设置为sys
+		 */
+		tbpubCode01.setCreateEmp("sys");
+		tbpubCode01.setCreateDate(new Date());
 		Map pubCode = pubCodeSrv.selectPubCodeById(tbpubcodeId);
 
 		if (null != pubCode) {
@@ -285,7 +298,8 @@ public class PubCodeController {
 		tbpubCode01.setDesc1(desc1);
 		tbpubCode01.setDesc2(desc2);
 		tbpubCode01.setDesc3(desc3);
-
+		tbpubCode01.setUpdateEmp("sys");
+		tbpubCode01.setUpdateDate(new Date());
 		this.pubCodeSrv.updatePubCode01(tbpubCode01);
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.EDIT_SUCCESS, null);
 	}
