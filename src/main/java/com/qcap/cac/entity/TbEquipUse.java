@@ -1,54 +1,110 @@
 package com.qcap.cac.entity;
 
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableName;
+import java.time.LocalDateTime;
+import java.io.Serializable;
 
-public class TbEquipUse {
+/**
+ * <p>
+ * 设备使用记录
+ * </p>
+ *
+ * @author huangxiang
+ * @since 2018-10-12
+ */
+@TableName("tb_equip_use")
+public class TbEquipUse implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键ID
+     */
     private String equipUseId;
-
+    /**
+     * 设备管理表主键
+     */
     private String equipId;
-
+    /**
+     * 设备编号
+     */
     private String equipNo;
-
+    /**
+     * 设备名称
+     */
     private String equipName;
-
+    /**
+     * 设备类别
+     */
     private String equipType;
-
+    /**
+     * 设备型号
+     */
     private String equipModel;
-
+    /**
+     * 区域
+     */
     private String area;
-
-    private String useNo;
-
-    private String useName;
-
-    private String useTel;
-
-    private Date startUseTime;
-
-    private Date endUseTime;
-
+    /**
+     * 使用人工号
+     */
+    private String personNo;
+    /**
+     * 使用人姓名
+     */
+    private String personName;
+    /**
+     * 使用人电话
+     */
+    private String personMobile;
+    /**
+     * 使用开始时间
+     */
+    private LocalDateTime startUseTime;
+    /**
+     * 使用结束时间
+     */
+    private LocalDateTime endUseTime;
+    /**
+     * 使用时长
+     */
     private String totalUseTime;
-
+    /**
+     * 状态
+     */
     private String status;
-
+    /**
+     * 备注
+     */
     private String remark;
-
+    /**
+     * 新增人
+     */
     private String createEmp;
-
-    private Date createDate;
-
+    /**
+     * 新增时间
+     */
+    private LocalDateTime createDate;
+    /**
+     * 修改人
+     */
     private String updateEmp;
-
-    private Date updateDate;
-
+    /**
+     * 修改时间
+     */
+    private LocalDateTime updateDate;
+    /**
+     * 版本
+     */
     private Integer version;
+
 
     public String getEquipUseId() {
         return equipUseId;
     }
 
     public void setEquipUseId(String equipUseId) {
-        this.equipUseId = equipUseId == null ? null : equipUseId.trim();
+        this.equipUseId = equipUseId;
     }
 
     public String getEquipId() {
@@ -56,7 +112,7 @@ public class TbEquipUse {
     }
 
     public void setEquipId(String equipId) {
-        this.equipId = equipId == null ? null : equipId.trim();
+        this.equipId = equipId;
     }
 
     public String getEquipNo() {
@@ -64,7 +120,7 @@ public class TbEquipUse {
     }
 
     public void setEquipNo(String equipNo) {
-        this.equipNo = equipNo == null ? null : equipNo.trim();
+        this.equipNo = equipNo;
     }
 
     public String getEquipName() {
@@ -72,7 +128,7 @@ public class TbEquipUse {
     }
 
     public void setEquipName(String equipName) {
-        this.equipName = equipName == null ? null : equipName.trim();
+        this.equipName = equipName;
     }
 
     public String getEquipType() {
@@ -80,7 +136,7 @@ public class TbEquipUse {
     }
 
     public void setEquipType(String equipType) {
-        this.equipType = equipType == null ? null : equipType.trim();
+        this.equipType = equipType;
     }
 
     public String getEquipModel() {
@@ -88,7 +144,7 @@ public class TbEquipUse {
     }
 
     public void setEquipModel(String equipModel) {
-        this.equipModel = equipModel == null ? null : equipModel.trim();
+        this.equipModel = equipModel;
     }
 
     public String getArea() {
@@ -96,46 +152,46 @@ public class TbEquipUse {
     }
 
     public void setArea(String area) {
-        this.area = area == null ? null : area.trim();
+        this.area = area;
     }
 
-    public String getUseNo() {
-        return useNo;
+    public String getPersonNo() {
+        return personNo;
     }
 
-    public void setUseNo(String useNo) {
-        this.useNo = useNo == null ? null : useNo.trim();
+    public void setPersonNo(String personNo) {
+        this.personNo = personNo;
     }
 
-    public String getUseName() {
-        return useName;
+    public String getPersonName() {
+        return personName;
     }
 
-    public void setUseName(String useName) {
-        this.useName = useName == null ? null : useName.trim();
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
-    public String getUseTel() {
-        return useTel;
+    public String getPersonMobile() {
+        return personMobile;
     }
 
-    public void setUseTel(String useTel) {
-        this.useTel = useTel == null ? null : useTel.trim();
+    public void setPersonMobile(String personMobile) {
+        this.personMobile = personMobile;
     }
 
-    public Date getStartUseTime() {
+    public LocalDateTime getStartUseTime() {
         return startUseTime;
     }
 
-    public void setStartUseTime(Date startUseTime) {
+    public void setStartUseTime(LocalDateTime startUseTime) {
         this.startUseTime = startUseTime;
     }
 
-    public Date getEndUseTime() {
+    public LocalDateTime getEndUseTime() {
         return endUseTime;
     }
 
-    public void setEndUseTime(Date endUseTime) {
+    public void setEndUseTime(LocalDateTime endUseTime) {
         this.endUseTime = endUseTime;
     }
 
@@ -144,7 +200,7 @@ public class TbEquipUse {
     }
 
     public void setTotalUseTime(String totalUseTime) {
-        this.totalUseTime = totalUseTime == null ? null : totalUseTime.trim();
+        this.totalUseTime = totalUseTime;
     }
 
     public String getStatus() {
@@ -152,7 +208,7 @@ public class TbEquipUse {
     }
 
     public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.status = status;
     }
 
     public String getRemark() {
@@ -160,7 +216,7 @@ public class TbEquipUse {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
     public String getCreateEmp() {
@@ -168,14 +224,14 @@ public class TbEquipUse {
     }
 
     public void setCreateEmp(String createEmp) {
-        this.createEmp = createEmp == null ? null : createEmp.trim();
+        this.createEmp = createEmp;
     }
 
-    public Date getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
@@ -184,14 +240,14 @@ public class TbEquipUse {
     }
 
     public void setUpdateEmp(String updateEmp) {
-        this.updateEmp = updateEmp == null ? null : updateEmp.trim();
+        this.updateEmp = updateEmp;
     }
 
-    public Date getUpdateDate() {
+    public LocalDateTime getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -201,5 +257,31 @@ public class TbEquipUse {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return "TbEquipUse{" +
+        ", equipUseId=" + equipUseId +
+        ", equipId=" + equipId +
+        ", equipNo=" + equipNo +
+        ", equipName=" + equipName +
+        ", equipType=" + equipType +
+        ", equipModel=" + equipModel +
+        ", area=" + area +
+        ", personNo=" + personNo +
+        ", personName=" + personName +
+        ", personMobile=" + personMobile +
+        ", startUseTime=" + startUseTime +
+        ", endUseTime=" + endUseTime +
+        ", totalUseTime=" + totalUseTime +
+        ", status=" + status +
+        ", remark=" + remark +
+        ", createEmp=" + createEmp +
+        ", createDate=" + createDate +
+        ", updateEmp=" + updateEmp +
+        ", updateDate=" + updateDate +
+        ", version=" + version +
+        "}";
     }
 }

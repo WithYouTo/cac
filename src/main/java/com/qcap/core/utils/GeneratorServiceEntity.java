@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 public class GeneratorServiceEntity {
 	private static void generateByTables(boolean serviceNameStartWithI, String packageName, String... tableNames) {
 		GlobalConfig config = new GlobalConfig();
-		String dbUrl = "jdbc:mysql://localhost:3306/whxxerp";
+		String dbUrl = "jdbc:mysql://10.10.0.12:3333/whxxfame";
 		DataSourceConfig dataSourceConfig = new DataSourceConfig();
 		dataSourceConfig.setDbType(DbType.MYSQL).setUrl(dbUrl).setUsername("root").setPassword("root")
 				.setDriverName("com.mysql.jdbc.Driver");
@@ -20,7 +20,7 @@ public class GeneratorServiceEntity {
 				.setNaming(NamingStrategy.underline_to_camel)
 				// 修改替换成你需要的表名，多个表名传数组
 				.setInclude(tableNames);
-		config.setActiveRecord(false).setAuthor("PH").setOutputDir("/Users/yandixuan/Desktop/").setFileOverride(true);
+		config.setActiveRecord(false).setAuthor("huangxiang").setOutputDir("G:\\机场保洁项目").setFileOverride(true);
 		if (!serviceNameStartWithI) {
 			config.setServiceName("%sService");
 		}
@@ -31,7 +31,8 @@ public class GeneratorServiceEntity {
 	}
 
 	public static void main(String[] args) {
-		generateByTables(true, "com.qcap.core", "tb_manager_role");
+		String[] list = {"tb_equip","tb_equip_charge","tb_equip_maint","tb_equip_plan","tb_equip_repair","tb_equip_use"};//静态初始化的简化版
+		generateByTables(true, "com.qcap.cac.entity", "TB_EQUIP_PARTS");
 	}
 
 }
