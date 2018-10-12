@@ -33,8 +33,11 @@ public class DemoController {
 		String userNo = "user1";
 		List<String> userArr = Arrays.asList("user1", "user2", "user3");
 		String msg = "helloworld!";
+		// 广播
 		JpushTools.broadcast(masterSecret, appKey, msg);
+		// 发送单一目标
 		JpushTools.pushSingle(masterSecret, appKey, userNo, msg);
+		// 发送多个目标
 		JpushTools.pushArray(masterSecret, appKey, userArr, msg);
 		return null;
 	}

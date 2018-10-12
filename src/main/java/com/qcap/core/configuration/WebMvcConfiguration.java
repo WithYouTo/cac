@@ -37,6 +37,7 @@ import com.qcap.core.properties.RestProperties;
 @EnableWebMvc
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer, EnvironmentAware {
+
 	private Environment env;
 
 	/**
@@ -122,7 +123,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer, EnvironmentAware {
 		public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
 				NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
 			String va1 = env.getProperty("mybatis.iPage.page-parameter", "page");
-			String va2 = env.getProperty("mybatis.iPage.page-size", "size");
+			String va2 = env.getProperty("mybatis.iPage.page-size", "limit");
 			int pageNumber = NumberUtils.toInt(nativeWebRequest.getParameter(va1));
 			int pageSize = NumberUtils.toInt(nativeWebRequest.getParameter(va2));
 			return new Page<>(pageNumber, pageSize);

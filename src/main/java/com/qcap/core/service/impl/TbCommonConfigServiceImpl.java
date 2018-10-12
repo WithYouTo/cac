@@ -43,7 +43,7 @@ public class TbCommonConfigServiceImpl implements ITbCommonConfigService {
 	public void getCommonConfigList(IPage<TbCommonConfig> page, TbCommonConfig commonConfig) {
 		QueryWrapper<TbCommonConfig> wrapper = new QueryWrapper<>();
 		if (StringUtils.isNotEmpty(commonConfig.getKeyName())) {
-			wrapper.eq("keyName", commonConfig.getKeyName());
+			wrapper.eq("key_name", commonConfig.getKeyName());
 		}
 		if (StringUtils.isNotEmpty(commonConfig.getType())) {
 			wrapper.eq("type", commonConfig.getType());

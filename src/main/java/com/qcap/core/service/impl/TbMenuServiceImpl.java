@@ -59,15 +59,15 @@ public class TbMenuServiceImpl implements ITbMenuService {
 	@Override
 	public IPage<TbMenu> getMenuList(TbMenu menu, IPage<TbMenu> page) {
 		QueryWrapper<TbMenu> wrapper = new QueryWrapper<>();
-		wrapper.lambda().eq(TbMenu::getStatus, "1");
+		wrapper.eq("status", "1");
 		if (StringUtils.isNotEmpty(menu.getName())) {
-			wrapper.lambda().like(TbMenu::getName, menu.getName() + "%");
+			wrapper.like("name", menu.getName() + "%");
 		}
 		if (menu.getLevel() != null) {
-			wrapper.lambda().eq(TbMenu::getLevel, menu.getLevel());
+			wrapper.eq("level", menu.getLevel());
 		}
 		if (StringUtils.isNotEmpty(menu.getCode())) {
-			wrapper.lambda().eq(TbMenu::getCode, menu.getCode());
+			wrapper.eq("code", menu.getCode());
 		}
 		wrapper.orderByAsc("level", "seq");
 		return tbMenuMapper.selectPage(page, wrapper);
