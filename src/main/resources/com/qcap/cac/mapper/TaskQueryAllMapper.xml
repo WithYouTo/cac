@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.TaskQueryAllMapper">
+
+	<select id="selectAllTask" parameterType="com.qcap.cac.dto.TaskQueryAllSearchDto" resultType="Map">
+		SELECT 
+		m.TASK_ID  AS  taskId,
+		m.TASK_CODE  AS  taskCode,
+		m.PLAN_ID  AS  planId,
+		m.TASK_TYPE  AS  taskType,
+		m.POSITION_CODE  AS  positionCode,
+		m.POSITION_NAME  AS  positionName,
+		m.AREA_CODE  AS  areaCode,
+		m.AREA_NAME  AS  areaName,
+		m.STANDARD_CODE  AS  standardCode,
+		m.STANDARD_NAME  AS  standardName,
+		m.SHIFT  AS  shift,
+		m.SPEC  AS  spec,
+		m.EMPLOYEE_CODE  AS  employeeCode,
+		m.EMPLOYEE_NAME  AS  employeeName,
+		m.EMPLOYEE_TEL  AS  employeeTel,
+		DATE_FORMAT(m.COMPLETE_TIME,'%Y-%m-%d %T') AS  completeTime,
+		DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T') AS  startTime,
+		DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')  AS  endTime,
+		m.TASK_STATUS  AS  taskStatus,
+		m.CHECK_STATUS  AS  checkStatus,
+		m.TASK_SCORE  AS  taskScore,
+		m.CHECK_FLAG  AS  checkFlag,
+		m.UPLOAD_PIC_FLAG  AS  uploadPicFlag,
+		m.TASK_ADVICE  AS  taskAdvice,
+		m.REMARK1  AS  remark1,
+		m.REMARK2  AS  remark2,
+		m.REMARK3  AS  remark3,
+		DATE_FORMAT(m.CREATE_DATE,'%Y-%m-%d %T') AS createDate
+		FROM tb_task m
+		WHERE 1=1
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(positionCode)">
+		AND m.POSITION_CODE = #{positionCode}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
+		AND m.EMPLOYEE_CODE =#{employeeCode}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeTel)">
+		AND m.EMPLOYEE_TEL =#{employeeTel}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardCode)">
+		AND m.STANDARD_CODE =#{standardCode}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(shift)">
+		AND m.SHIFT =#{shift}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaCode)">
+		AND m.AREA_CODE =#{areaCode}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskType)">
+		AND m.TASK_TYPE =#{taskType}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
+		AND m.TASK_STATUS =#{taskStatus}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskCode)">
+		AND m.TASK_CODE =#{taskCode}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkStatus)">
+		AND m.CHECK_STATUS =#{checkStatus}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkFlag)">
+		AND m.CHECK_FLAG =#{checkFlag}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(uploadPicFlag)">
+		AND m.UPLOAD_PIC_FLAG =#{uploadPicFlag}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(planId)">
+		AND m.PLAN_ID =#{planId}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTimeStart)">
+		AND m.START_TIME &gt;=#{startTimeStart}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTimeEnd)">
+		AND m.START_TIME &lt;=#{startTimeEnd}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTimeStart)">
+		AND m.END_TIME &gt;=#{endTimeStart}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTimeEnd)">
+		AND m.END_TIME &lt;=#{endTimeEnd}
+		</if>
+		ORDER BY m.CREATE_DATE DESC
+	</select>
+	
+	<select id="selectStandard"  resultType="Map">
+	SELECT STANDARD_CODE AS code,STANDARD_NAME AS text 
+	FROM tb_area_standard 
+	ORDER BY STANDARD_CODE
+	</select>
+	
+	<select id="selectPosition" resultType="Map">
+	SELECT POSITION_CODE AS code,POSITION_NAME AS text 
+	FROM tb_area_position 
+	ORDER BY POSITION_CODE 
+	</select>
+	
+<!-- 	<select id="selectEmployee" resultType="Map">
+	SELECT WORK_NO AS code,CONCAT(NAME,'_',WORK_NO) AS text 
+	FROM tb_user ORDER BY WORK_NO
+	</select> -->
+	
+	
+<!-- 	<select id="selectAreaItem" resultType="Map">
+	SELECT m.AREA_CODE id,m.AREA_NAME name,m.SUPER_AREA_CODE pId,n.AREA_NAME pName 
+	FROM tb_area m LEFT JOIN tb_area n
+	ON m.SUPER_AREA_CODE =n.AREA_CODE
+	</select> -->
+
+</mapper>

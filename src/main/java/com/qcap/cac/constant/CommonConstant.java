@@ -99,6 +99,16 @@ public class CommonConstant {
     	SHIFT.put("DAYTIME", "白班");
     	SHIFT.put("NIGHT", "夜班");
     }
+    
+    //任务是否必须上传图片标识
+    public final static String UPLOAD_PIC_FLAG_MUST="MUST";
+    public final static String UPLOAD_PIC_FLAG_OPTIONAL="OPTIONAL";
+    public static Map<String,String> UPLOAD_PIC_FLAG = new LinkedHashMap<String,String>();
+    static {
+    	UPLOAD_PIC_FLAG.put("MUST", "必须");
+    	UPLOAD_PIC_FLAG.put("OPTIONAL", "非必须");
+    }
+    
     //返回状态
     public final static String BACK_FLAG="flag";
     public final static String BACK_SUCCESS_FLAG="1";
