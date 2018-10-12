@@ -567,4 +567,23 @@ public class ToolUtil {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 判断字符串是否为数字类型（包括小数点）
+     * @param str
+     * @return
+     */
+    public static boolean isNumeric(String str){
+        Boolean strResult = true;
+        try {
+            new BigDecimal(str);
+        } catch (Exception e) {
+            strResult = false;
+        }
+        return strResult;
+    }
+
+
 }
+
+

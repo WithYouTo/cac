@@ -49,4 +49,66 @@
         on b.WAREHOUSE_POSITION_ID = c.WAREHOUSE_POSITION_ID
         WHERE a.WAREHOUSE_STOCK_ID = #{warehouseStockId}
     </select>
+
+    <update id="updateById" parameterType="com.qcap.cac.entity.TbWarehouseStock">
+        update tb_warehouse_stock
+        <set >
+            <if test="storeroomId != null" >
+                STOREROOM_ID = #{storeroomId,jdbcType=VARCHAR},
+            </if>
+            <if test="storeroom != null" >
+                STOREROOM = #{storeroom,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsType != null" >
+                GOODS_TYPE = #{goodsType,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsNo != null" >
+                GOODS_NO = #{goodsNo,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null" >
+                GOODS_NAME = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="limitStore != null" >
+                LIMIT_STORE = #{limitStore,jdbcType=INTEGER},
+            </if>
+            <if test="buyType != null" >
+                BUY_TYPE = #{buyType,jdbcType=VARCHAR},
+            </if>
+            <if test="buyNo != null" >
+                BUY_NO = #{buyNo,jdbcType=VARCHAR},
+            </if>
+            <if test="buyNum != null" >
+                BUY_NUM = #{buyNum,jdbcType=VARCHAR},
+            </if>
+            <if test="entryUnit != null" >
+                ENTRY_UNIT = #{entryUnit,jdbcType=CHAR},
+            </if>
+            <if test="supplierNo != null" >
+                SUPPLIER_NO = #{supplierNo,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierName != null" >
+                SUPPLIER_NAME = #{supplierName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsNum != null" >
+                GOODS_NUM = #{goodsNum,jdbcType=VARCHAR},
+            </if>
+            <if test="stockInstrution != null" >
+                STOCK_INSTRUTION = #{stockInstrution,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteFlag != null" >
+                DELETE_FLAG = #{deleteFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="updateEmp != null" >
+                UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            VERSION = VERSION + 1
+        </set>
+        where WAREHOUSE_STOCK_ID = #{warehouseStockId,jdbcType=VARCHAR}
+    </update>
 </mapper>

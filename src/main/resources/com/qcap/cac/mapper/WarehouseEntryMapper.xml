@@ -18,7 +18,7 @@
         a.ENTRY_UNIT,
         SUM_NUM,
         MIN_UNIT,
-        DATE(a.ENTRY_TIME) entryTime,
+        DATE_FORMAT(a.ENTRY_TIME,'%Y-%m-%d') entryTime,
         b.REMARK
         from tb_warehouse_entry a
         left join tb_warehouse_stock b

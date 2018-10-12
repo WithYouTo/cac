@@ -2,30 +2,28 @@ package com.qcap.cac.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseEntryMapper;
 import com.qcap.cac.dao.WarehouseStockMapper;
 import com.qcap.cac.dto.WarehouseEntrySearchParam;
 import com.qcap.cac.entity.TbWarehouseEntry;
 import com.qcap.cac.entity.TbWarehouseStock;
-import com.qcap.cac.entity.WarehouseEntry;
 import com.qcap.cac.poiEntity.EntryPoiEntity;
 import com.qcap.cac.service.IWarehouseEntryService;
+import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
-import com.qcap.core.common.CoreConstant;
-import com.qcap.core.dao.TbManagerMapper;
-import com.qcap.core.entity.TbRole;
-import com.qcap.core.model.ResParams;
 import com.qcap.core.utils.DateUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -57,6 +55,9 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
 
     @Override
     public Integer importExcel(List<EntryPoiEntity> entryList) {
+
+        //库入库批次号
+        String batchNo = UUIDUtils.getBatchNo();
 
         Integer count = 0;
         for(int i = 0 ; i < entryList.size(); i++){
@@ -95,6 +96,10 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             if(StringUtils.isEmpty(entryNum)){
                 throw new RuntimeException("第" + (i + 1) + "行的数量不能为空！");
             }
+            if(!ToolUtil.isNumeric(entryNum)){
+                throw new RuntimeException("第" + (i + 1) + "行的数量的格式不正确！");
+            }
+
             String entryUnit = item.getEntryUnit();
             if(StringUtils.isEmpty(entryUnit)){
                 throw new RuntimeException("第" + (i + 1) + "行的入库单位不能为空！");
@@ -104,7 +109,10 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             if(StringUtils.isEmpty(limitStore)){
                 throw new RuntimeException("第" + (i + 1) + "行的最低警戒线不能为空！");
             }
-            String limitUnit = item.getEntryUnit();
+            if(!ToolUtil.isNumeric(limitStore)){
+                throw new RuntimeException("第" + (i + 1) + "行的最低警戒线的格式不正确！");
+            }
+            String limitUnit = item.getLimitStoreUnit();
             if(StringUtils.isEmpty(limitUnit)){
                 throw new RuntimeException("第" + (i + 1) + "行的最低警戒线单位不能为空！");
             }
@@ -112,6 +120,9 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             String sumNum = item.getSumNum();
             if(StringUtils.isEmpty(sumNum)){
                 throw new RuntimeException("第" + (i + 1) + "行的总数量不能为空！");
+            }
+            if(!ToolUtil.isNumeric(sumNum)){
+                throw new RuntimeException("第" + (i + 1) + "行的总数量的格式不正确！");
             }
             String minUnit = item.getMinUnit();
             if(StringUtils.isEmpty(minUnit)){
@@ -122,28 +133,64 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             if(StringUtils.isEmpty(buyNum)){
                 throw new RuntimeException("第" + (i + 1) + "行的采购数量不能为空！");
             }
+            if(!ToolUtil.isNumeric(sumNum)){
+                throw new RuntimeException("第" + (i + 1) + "行的采购数量的格式不正确！");
+            }
             String buyUnit = item.getMinUnit();
             if(StringUtils.isEmpty(buyUnit)){
                 throw new RuntimeException("第" + (i + 1) + "行的采购单位不能为空！");
             }
 
-            //入库单位
+            //入库表
             TbWarehouseEntry entry = new TbWarehouseEntry();
             //库存表
             TbWarehouseStock stock = new TbWarehouseStock();
             BeanUtil.copyProperties(item,entry);
             BeanUtil.copyProperties(item,stock);
-
             //库存主键
             String  stockId = UUIDUtils.getUUID();
-            String batchNo = UUIDUtils.getBatchNo();
+            //判断物品编码是否在库存表中存在
+            QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
+            wrapper.eq("GOODS_NO",buyNo).eq("SUPPLIER_NAME",supplierName);
+            Integer existGoods = warehouseStockMapper.selectCount(wrapper);
+            if( warehouseStockMapper.selectCount(wrapper) > 0){
+                TbWarehouseStock warehouseStock = warehouseStockMapper.selectOne(wrapper);
+                BigDecimal oldNum = new BigDecimal(warehouseStock.getGoodsNum());
+                BigDecimal goodsNum = oldNum.add(new BigDecimal(sumNum));
+                warehouseStock.setGoodsNum(ToolUtil.toStr(goodsNum));
+                warehouseStockMapper.updateById(warehouseStock);
+                //库存主键
+                stockId = warehouseStock.getWarehouseStockId();
+            }else{
+                //新增库存表
+                stock.setWarehouseStockId(stockId);
+                stock.setStoreroom(storeRoom);
+                stock.setStoreroomId(stockId);
+                stock.setGoodsType(buyType);
+                stock.setGoodsNo(buyNo);
+                stock.setGoodsName(goodsName);
+                stock.setLimitStore(Integer.parseInt(limitStore));
+                stock.setBuyType(buyType);
+                stock.setBuyNo(buyNo);
+                stock.setBuyNum(buyNum);
+                stock.setEntryUnit(entryUnit);
+                stock.setSupplierNo(supplierName);
+                stock.setSupplierNo(supplierName);
+                stock.setGoodsNum(sumNum);
+                stock.setStockInstrution("EXCEL导入");
+                stock.setDeleteFlag("N");
+                stock.setCreateEmp("SYS");
+                stock.setCreateDate(new Date());
+                this.warehouseStockMapper.insert(stock);
+            }
+
             entry.setWarehouseEntryId(UUIDUtils.getUUID());
             entry.setStoreroom(storeRoom);
             String storeRoomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
             entry.setStoreroomId(storeRoomId);
             entry.setEntryBatchNo(batchNo);
             entry.setWarehouseStockId(stockId);
-            entry.setEntryNum(Integer.parseInt(entryNum));
+            entry.setEntryNum(ToolUtil.toStr(new BigDecimal(entryNum)));
             entry.setEntryUnit(entryUnit);
             entry.setSumNum(sumNum);
             entry.setMinUnit(minUnit);
@@ -153,27 +200,6 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             entry.setCreateDate(new Date());
             this.warehouseEntryMapper.insert(entry);
             count++;
-
-            //新增库存表
-            stock.setWarehouseStockId(stockId);
-            stock.setStoreroom(storeRoom);
-            stock.setStoreroomId(stockId);
-            stock.setGoodsType(buyType);
-            stock.setGoodsNo(buyNo);
-            stock.setGoodsName(goodsName);
-            stock.setLimitStore(Integer.parseInt(limitStore));
-            stock.setBuyType(buyType);
-            stock.setBuyNo(buyNo);
-            stock.setBuyNum(buyNum);
-            stock.setEntryUnit(entryUnit);
-            stock.setSupplierNo(supplierName);
-            stock.setSupplierNo(supplierName);
-            stock.setGoodsNum(sumNum);
-            stock.setStockInstrution("EXCEL导入");
-            stock.setDeleteFlag("N");
-            stock.setCreateEmp("SYS");
-            stock.setCreateDate(new Date());
-            this.warehouseStockMapper.insert(stock);
         }
         return count;
     }

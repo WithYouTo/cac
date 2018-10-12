@@ -3,6 +3,7 @@ package com.qcap.cac.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.dto.WarehouseEntrySearchParam;
 import com.qcap.cac.entity.WarehouseEntry;
@@ -10,6 +11,7 @@ import com.qcap.cac.poiEntity.EntryPoiEntity;
 import com.qcap.cac.service.IWarehouseEntryService;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.entity.TbMenu;
+import com.qcap.core.factory.PageFactory;
 import com.qcap.core.log.LogObjectHolder;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
@@ -31,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 入库管理控制器
+ * 入库管理
  *
  * @author cindy
  * @Date 2018-10-09 19:20:15
@@ -46,17 +48,22 @@ public class WarehouseEntryController {
 
 
     /**
-     * 获取入库管理列表
+     * 入库管理列表
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public PageResParams list(WarehouseEntrySearchParam warehouseEntrySearchParam) {
-        if (StringUtils.isEmpty(warehouseEntrySearchParam.getStoreroomId())) {
-            //return PageResParams.newInstance()
+
+        new PageFactory<Map<String, Object>>().defaultPage();
+
+        List<Map> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(warehouseEntrySearchParam.getStoreroomId())) {
+            list = warehouseEntryService.getEntryList(warehouseEntrySearchParam);
         }
-        List<Map> list = warehouseEntryService.getEntryList(warehouseEntrySearchParam);
         PageInfo pageInfo = new PageInfo(list);
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
+        Page pageList = (Page) list;
+
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), pageList);
     }
 
 
@@ -79,7 +86,12 @@ public class WarehouseEntryController {
     public Object importExcel(MultipartFile file){
         //解析excel，
         List<EntryPoiEntity> entryList = PoiUtils.importExcel(file,0,1,EntryPoiEntity.class);
-        Integer count =  this.warehouseEntryService.importExcel(entryList);
+        Integer count = 0;
+        try {
+            count = this.warehouseEntryService.importExcel(entryList);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
+        }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "成功导入" + count + "条记录", null);
     }
 

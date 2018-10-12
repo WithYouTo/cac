@@ -10,6 +10,7 @@ import com.qcap.cac.entity.TbWarehousePosition;
 import com.qcap.cac.entity.TbWarehouseStorage;
 import com.qcap.cac.service.IWarehousePositionService;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.common.CoreConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,7 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
                     .eq("BUILDING_NAME", tbWarehousePosition.getBuildingName())
                     .eq("FLOOR_NAME", tbWarehousePosition.getFloorName())
                     .eq("ROOM_NAME", tbWarehousePosition.getRoomName())
-                    .eq("INSTRUCTION", tbWarehousePosition.getInstruction())
+                    //.eq("INSTRUCTION", tbWarehousePosition.getInstruction())
                     .eq("RANGE_SHELF", tbWarehousePosition.getRangeShelf()));
             count = this.warehousePositionMapper.selectCount(wrapper);
         }

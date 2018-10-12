@@ -21,4 +21,7 @@ public interface WarehouseStockMapper extends BaseMapper<TbWarehouseStock> {
     List<Map> getWarehouseStockList(WarehouseEntrySearchParam warehouseEntrySearchParam);
 
     List<Map> getPositionList(String warehouseStockId);
+
+
+    Integer updateById(TbWarehouseStock warehouseStock);
 }

@@ -32,7 +32,7 @@ public class TbWarehouseEntry {
     /**
      *   数量
      */
-    private Integer entryNum;
+    private String entryNum;
 
     /**
      *   单位名称
@@ -212,7 +212,7 @@ public class TbWarehouseEntry {
      *
      * @mbggenerated Tue Oct 09 19:52:33 CST 2018
      */
-    public Integer getEntryNum() {
+    public String getEntryNum() {
         return entryNum;
     }
 
@@ -224,7 +224,7 @@ public class TbWarehouseEntry {
      *
      * @mbggenerated Tue Oct 09 19:52:33 CST 2018
      */
-    public void setEntryNum(Integer entryNum) {
+    public void setEntryNum(String entryNum) {
         this.entryNum = entryNum;
     }
 

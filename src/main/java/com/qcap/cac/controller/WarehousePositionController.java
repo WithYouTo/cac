@@ -3,6 +3,7 @@ package com.qcap.cac.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.dto.WarehouseEntrySearchParam;
 import com.qcap.cac.entity.TbArea;
@@ -11,6 +12,7 @@ import com.qcap.cac.service.IWarehousePositionService;
 import com.qcap.cac.service.IWarehouseStockService;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.common.CoreConstant;
+import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.apache.commons.lang3.StringUtils;
@@ -45,16 +47,18 @@ public class WarehousePositionController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public PageResParams list(WarehouseEntrySearchParam warehouseEntrySearchParam) {
-        List<TbWarehousePosition> list = new ArrayList<>();
-        if (StringUtils.isEmpty(warehouseEntrySearchParam.getStoreroomId())) {
 
-        }else{
+        new PageFactory<Map<String, Object>>().defaultPage();
+
+        List<TbWarehousePosition> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(warehouseEntrySearchParam.getStoreroomId())) {
             list = warehousePositionService.list(new QueryWrapper<TbWarehousePosition>()
-                                            .eq("storeroom_Id",warehouseEntrySearchParam.getStoreroomId())
-                                            .eq("delete_flag","N"));
+                    .eq("storeroom_Id",warehouseEntrySearchParam.getStoreroomId())
+                    .eq("delete_flag","N"));
         }
         PageInfo pageInfo = new PageInfo(list);
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
+        Page pageList = (Page) list;
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), pageList);
     }
 
 
