@@ -1,9 +1,5 @@
 package com.qcap.core.factory;
 
-import java.util.List;
-
-import com.qcap.core.model.Dict;
-
 /**
  * 常量生产工厂的接口
  *
@@ -43,7 +39,7 @@ public interface IConstantFactory {
 
 	Object getMenuName(String menuId);
 
-	List<Dict> findInDict(String id);
-
-	Object getDictName(String dictId);
+	// List<Dict> findInDict(String id);
+	//
+	// Object getDictName(String dictId);
 }

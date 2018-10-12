@@ -1,6 +1,5 @@
 package com.qcap.core.factory;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.cache.annotation.Cacheable;
@@ -8,14 +7,12 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.qcap.core.dao.DictMapper;
 import com.qcap.core.dao.TbManagerMapper;
 import com.qcap.core.dao.TbMenuMapper;
 import com.qcap.core.dao.TbRoleMapper;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.entity.TbMenu;
 import com.qcap.core.entity.TbRole;
-import com.qcap.core.model.Dict;
 import com.qcap.core.utils.SpringContextHolder;
 import com.qcap.core.utils.cache.Cache;
 import com.qcap.core.utils.cache.CacheKey;
@@ -36,7 +33,8 @@ public class ConstantFactory implements IConstantFactory {
 	private TbRoleMapper roleMapper = SpringContextHolder.getBean(TbRoleMapper.class);
 	private TbManagerMapper managerMapper = SpringContextHolder.getBean(TbManagerMapper.class);
 	private TbMenuMapper menuMapper = SpringContextHolder.getBean(TbMenuMapper.class);
-	private DictMapper dictMapper = SpringContextHolder.getBean(DictMapper.class);
+	// private DictMapper dictMapper =
+	// SpringContextHolder.getBean(DictMapper.class);
 
 	public static IConstantFactory me() {
 		return SpringContextHolder.getBean("constantFactory");
@@ -167,31 +165,31 @@ public class ConstantFactory implements IConstantFactory {
 		}
 	}
 
-	@Override
-	public List<Dict> findInDict(String id) {
-		if (StrUtil.isEmpty(id)) {
-			return null;
-		} else {
-			List<Dict> dicts = dictMapper.selectListByPid(id);
-			if (dicts == null || dicts.size() == 0) {
-				return null;
-			} else {
-				return dicts;
-			}
-		}
-	}
-
-	@Override
-	public Object getDictName(String dictId) {
-		if (StrUtil.isEmpty(dictId)) {
-			return "";
-		} else {
-			Dict dict = dictMapper.selectById(dictId);
-			if (dict == null) {
-				return "";
-			} else {
-				return dict.getName();
-			}
-		}
-	}
+	// @Override
+	// public List<Dict> findInDict(String id) {
+	// if (StrUtil.isEmpty(id)) {
+	// return null;
+	// } else {
+	// List<Dict> dicts = dictMapper.selectListByPid(id);
+	// if (dicts == null || dicts.size() == 0) {
+	// return null;
+	// } else {
+	// return dicts;
+	// }
+	// }
+	// }
+	//
+	// @Override
+	// public Object getDictName(String dictId) {
+	// if (StrUtil.isEmpty(dictId)) {
+	// return "";
+	// } else {
+	// Dict dict = dictMapper.selectById(dictId);
+	// if (dict == null) {
+	// return "";
+	// } else {
+	// return dict.getName();
+	// }
+	// }
+	// }
 }
