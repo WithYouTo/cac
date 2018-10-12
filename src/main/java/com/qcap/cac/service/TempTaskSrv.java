@@ -5,18 +5,19 @@ import java.util.Map;
 
 import com.qcap.cac.dto.TempTaskDto;
 import com.qcap.cac.dto.TempTaskSearchParam;
+import com.qcap.core.model.ZTreeNode;
 
 public interface TempTaskSrv {
-	
-	List<Map>listTask(TempTaskSearchParam paramDto);
-	
+
+	List<Map> listTask(TempTaskSearchParam paramDto);
+
 	Map deleteTempTask(String taskCode);
-	
-	List<Map>selectStandardItem();
-	
-	List<Map>selectAreaItem();
-	
-	Map<String,Object> insertTempTask(TempTaskDto taskDto);
-	
-	Map<String,Object> updateTempTask(TempTaskDto taskDto);
+
+	List<Map> selectStandardItem();
+
+	List<ZTreeNode> selectAreaItem();
+
+	Map<String, Object> insertTempTask(TempTaskDto taskDto);
+
+	Map<String, Object> updateTempTask(TempTaskDto taskDto);
 }

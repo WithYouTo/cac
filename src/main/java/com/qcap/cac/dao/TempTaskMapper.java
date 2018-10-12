@@ -13,96 +13,117 @@ import com.qcap.cac.entity.TbTask;
 public interface TempTaskMapper {
 	/**
 	 * 分页查询任务
-	 * @Title: listTask 
+	 * 
+	 * @Title: listTask
 	 * @Description: TODO
 	 * @param paramDto
 	 * @return
 	 * @return: List<Map>
 	 */
 	List<Map> listTask(TempTaskSearchParam paramDto);
+
 	/**
 	 * 新增任务
-	 * @Title: insertTempTask 
+	 * 
+	 * @Title: insertTempTask
 	 * @Description: TODO
 	 * @param task
 	 * @return: void
 	 */
 	void insertTempTask(TbTask task);
+
 	/**
 	 * 批量新增任务
-	 * @Title: insertTaskBatch 
+	 * 
+	 * @Title: insertTaskBatch
 	 * @Description: TODO
 	 * @param list
 	 * @return: void
 	 */
 	void insertTaskBatch(List<TbTask> list);
+
 	/**
 	 * 修改任务
-	 * @Title: updateTempTask 
+	 * 
+	 * @Title: updateTempTask
 	 * @Description: TODO
 	 * @param task
 	 * @return: void
 	 */
 	void updateTempTask(TbTask task);
+
 	/**
 	 * 取消任务前查询任务状态
-	 * @Title: selectTaskStatus 
+	 * 
+	 * @Title: selectTaskStatus
 	 * @Description: TODO
 	 * @param taskCode
 	 * @return
 	 * @return: String
 	 */
 	String selectTaskStatus(String taskCode);
+
 	/**
 	 * 将临时任务状态更改为取消
-	 * @Title: deleteTempTask 
+	 * 
+	 * @Title: deleteTempTask
 	 * @Description: TODO
 	 * @param taskCode
 	 * @return: void
 	 */
 	void deleteTempTask(String taskCode);
+
 	/**
 	 * 查询标准下拉列表
-	 * @Title: selectStandardItem 
+	 * 
+	 * @Title: selectStandardItem
 	 * @Description: TODO
 	 * @param standardCode
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map>selectStandardItem(@Param("standardCode")String standardCode);
+	List<Map> selectStandardItem(@Param("standardCode") String standardCode);
+
 	/**
 	 * 查询区域树形下拉列表
-	 * @Title: selectAreaItem 
+	 * 
+	 * @Title: selectAreaItem
 	 * @Description: TODO
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map>selectAreaItem();
+	List<Map<String, Object>> selectAreaItem();
+
 	/**
 	 * 根据区域编码查询岗位信息
-	 * @Title: selectPositionInfoByAreaCode 
+	 * 
+	 * @Title: selectPositionInfoByAreaCode
 	 * @Description: TODO
 	 * @param areaCode
 	 * @return
 	 * @return: Map
 	 */
 	Map selectPositionInfoByAreaCode(String areaCode);
+
 	/**
 	 * 查询当班值班人员
-	 * @Title: selectWorkingEmployee 
+	 * 
+	 * @Title: selectWorkingEmployee
 	 * @Description: TODO
 	 * @param map
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map>selectWorkingEmployee(Map map);
+	List<Map> selectWorkingEmployee(Map map);
+
 	/**
 	 * 查询班次:**注意传入时间格式严格为：hh:mm:ss
-	 * @Title: selectShiftByTime 
+	 * 
+	 * @Title: selectShiftByTime
 	 * @Description: TODO
 	 * @param startTime
 	 * @return
 	 * @return: Map<String,String>
 	 */
-	Map<String, String>selectShiftByTime(String startTime);
+	Map<String, String> selectShiftByTime(String startTime);
 }
