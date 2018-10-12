@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,44 +35,44 @@ import com.qcap.core.model.ResParams;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class PubCodeController {
 
-	private static String PREFIX = "/esp/pubCode/";
+	// private static String PREFIX = "/esp/pubCode/";
 
 	@Resource
 	public PubCodeSrv pubCodeSrv;
 
-	/**
-	 * 跳转代码主档管理主页
-	 * 
-	 * @Title: topubCode
-	 * @return
-	 * @return: String
-	 */
-	@RequestMapping("")
-	public String topubCode(Model model) {
-		return PREFIX + "pubCode";
-	}
-
-	/**
-	 * 跳转到新增代码主档页面
-	 */
-	@RequestMapping(value = "/toadd")
-	public String toadd() {
-		return PREFIX + "pubCode_add";
-	}
-
-	/**
-	 * 修改页面
-	 */
-	@RequestMapping(value = "/tomodify/{id}")
-	public String tomodify(@PathVariable String id, Model model) {
-		if (ToolUtil.isEmpty(id)) {
-			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-		}
-		Map pubCode = this.pubCodeSrv.selectPubCodeById(id);
-
-		model.addAttribute("pubCode", pubCode);
-		return PREFIX + "pubCode_modify";
-	}
+	// /**
+	// * 跳转代码主档管理主页
+	// *
+	// * @Title: topubCode
+	// * @return
+	// * @return: String
+	// */
+	// @RequestMapping("")
+	// public String topubCode(Model model) {
+	// return PREFIX + "pubCode";
+	// }
+	//
+	// /**
+	// * 跳转到新增代码主档页面
+	// */
+	// @RequestMapping(value = "/toadd")
+	// public String toadd() {
+	// return PREFIX + "pubCode_add";
+	// }
+	//
+	// /**
+	// * 修改页面
+	// */
+	// @RequestMapping(value = "/tomodify/{id}")
+	// public String tomodify(@PathVariable String id, Model model) {
+	// if (ToolUtil.isEmpty(id)) {
+	// throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+	// }
+	// Map pubCode = this.pubCodeSrv.selectPubCodeById(id);
+	//
+	// model.addAttribute("pubCode", pubCode);
+	// return PREFIX + "pubCode_modify";
+	// }
 
 	/**
 	 * 获取代码主档列表
@@ -167,43 +165,45 @@ public class PubCodeController {
 
 	// -----------------------------代码从档--------------------------------------
 
-	/**
-	 * 跳转代码从档管理主页
-	 * 
-	 * @Title: topubCode
-	 * @return
-	 * @return: String
-	 */
-	@RequestMapping("/pubCode01/{tbpubcodeId}")
-	public String topubCode01(Model model, @PathVariable String tbpubcodeId, HttpServletRequest reuqest) {
-		model.addAttribute("tbpubcodeId", tbpubcodeId);
-		model.addAttribute("configCode", reuqest.getParameter("configCode"));
-		return PREFIX + "pubCode01";
-	}
-
-	/**
-	 * 跳转到新增代码从档页面
-	 */
-	@RequestMapping(value = "/toAddPubCode01")
-	public String toAddPubCode01(Model model, @RequestParam String configCode, @RequestParam String tbpubcodeId) {
-		model.addAttribute("configCode", configCode);
-		model.addAttribute("tbpubcodeId", tbpubcodeId);
-		return PREFIX + "pubCode01_add";
-	}
-
-	/**
-	 * 修改页面
-	 */
-	@RequestMapping(value = "/toModifyPubCode01/{id}")
-	public String tomodifypubCode01(@PathVariable String id, Model model) {
-		if (ToolUtil.isEmpty(id)) {
-			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-		}
-		Map pubCode01 = this.pubCodeSrv.selectPubCode01ById(id);
-
-		model.addAttribute("pubCode01", pubCode01);
-		return PREFIX + "pubCode01_modify";
-	}
+	// /**
+	// * 跳转代码从档管理主页
+	// *
+	// * @Title: topubCode
+	// * @return
+	// * @return: String
+	// */
+	// @RequestMapping("/pubCode01/{tbpubcodeId}")
+	// public String topubCode01(Model model, @PathVariable String tbpubcodeId,
+	// HttpServletRequest reuqest) {
+	// model.addAttribute("tbpubcodeId", tbpubcodeId);
+	// model.addAttribute("configCode", reuqest.getParameter("configCode"));
+	// return PREFIX + "pubCode01";
+	// }
+	//
+	// /**
+	// * 跳转到新增代码从档页面
+	// */
+	// @RequestMapping(value = "/toAddPubCode01")
+	// public String toAddPubCode01(Model model, @RequestParam String
+	// configCode, @RequestParam String tbpubcodeId) {
+	// model.addAttribute("configCode", configCode);
+	// model.addAttribute("tbpubcodeId", tbpubcodeId);
+	// return PREFIX + "pubCode01_add";
+	// }
+	//
+	// /**
+	// * 修改页面
+	// */
+	// @RequestMapping(value = "/toModifyPubCode01/{id}")
+	// public String tomodifypubCode01(@PathVariable String id, Model model) {
+	// if (ToolUtil.isEmpty(id)) {
+	// throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+	// }
+	// Map pubCode01 = this.pubCodeSrv.selectPubCode01ById(id);
+	//
+	// model.addAttribute("pubCode01", pubCode01);
+	// return PREFIX + "pubCode01_modify";
+	// }
 
 	/**
 	 * 获取代码从档列表
