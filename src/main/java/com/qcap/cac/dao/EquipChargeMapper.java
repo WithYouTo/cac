@@ -14,7 +14,7 @@ import java.util.Map;
 @SuppressWarnings("rawtypes")
 @Repository
 public interface EquipChargeMapper extends BaseMapper<TbManager> {
-    List<Map<String, Object>> listEquipCharge(@Param("equipChargeSearchParam") EquipChargeSearchParam equipChargeSearchParam);
+    List<Map<String, Object>> listEquipCharge(EquipChargeSearchParam equipChargeSearchParam);
 
     String getChargeTotalTimeByEquipId(String equipId);
 }

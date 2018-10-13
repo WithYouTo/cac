@@ -23,5 +23,6 @@
         <if test="attenceTime != null and attenceTime != ''">
             and ATTENCE_TIME = #{attenceTime}
         </if>
+        ORDER BY ATTENCE_TIME
     </select>
 </mapper>

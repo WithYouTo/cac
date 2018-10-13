@@ -32,6 +32,7 @@
         <if test="latestMaintTime != null and latestMaintTime != ''">
             and LATEST_MAINT_TIME &gt; #{latestMaintTime}
         </if>
+        ORDER BY LATEST_MAINT_DATE
     </select>
 
 

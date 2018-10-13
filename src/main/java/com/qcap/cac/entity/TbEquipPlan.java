@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -65,11 +66,11 @@ public class TbEquipPlan implements Serializable {
     /**
      * 最近维保时间
      */
-    private LocalDate latestMaintDate;
+    private Date latestMaintDate;
     /**
      * 下次维保时间
      */
-    private LocalDate nextMaintDate;
+    private Date nextMaintDate;
     /**
      * 备注
      */
@@ -184,19 +185,19 @@ public class TbEquipPlan implements Serializable {
         this.maintCycle = maintCycle;
     }
 
-    public LocalDate getLatestMaintDate() {
+    public Date getLatestMaintDate() {
         return latestMaintDate;
     }
 
-    public void setLatestMaintDate(LocalDate latestMaintDate) {
+    public void setLatestMaintDate(Date latestMaintDate) {
         this.latestMaintDate = latestMaintDate;
     }
 
-    public LocalDate getNextMaintDate() {
+    public Date getNextMaintDate() {
         return nextMaintDate;
     }
 
-    public void setNextMaintDate(LocalDate nextMaintDate) {
+    public void setNextMaintDate(Date nextMaintDate) {
         this.nextMaintDate = nextMaintDate;
     }
 

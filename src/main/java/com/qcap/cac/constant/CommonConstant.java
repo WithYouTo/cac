@@ -20,7 +20,7 @@ public class CommonConstant {
     public static Map<String,String> EQUIP_USE_STATUS = new LinkedHashMap<String,String>();
     static {
         EQUIP_USE_STATUS.put("INUSE","使用中");
-        EQUIP_USE_STATUS.put("USED","使用完成");
+        EQUIP_USE_STATUS.put("USED","使用完毕");
     }
 
     //设备维保类型
@@ -28,8 +28,8 @@ public class CommonConstant {
     public final static String MAINT_TYPE_PARTS = "PARTS";
     public static Map<String,String> MAINT_TYPE = new LinkedHashMap<String,String>();
     static {
-        EQUIP_USE_STATUS.put("EQUIP","设备");
-        EQUIP_USE_STATUS.put("PARTS","配件");
+        MAINT_TYPE.put("EQUIP","设备");
+        MAINT_TYPE.put("PARTS","配件");
     }
 
     //设备维修状态

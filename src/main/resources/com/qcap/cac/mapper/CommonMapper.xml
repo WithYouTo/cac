@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.CommonMapper">
+
+    <select id="getEquipNameByEquipType" parameterType="String" resultType="java.util.Map">
+        SELECT
+        EQUIP_NO id,
+        concat(EQUIP_NAME,'(',EQUIP_NO,')') text
+        FROM
+        tb_equip
+        <where>
+          <if test="equipType != null and equipType != ''">EQUIP_TYPE=#{equipType}</if>　　　　　
+        </where>
+    </select>
+
+    <select id="getPartsNameByEquipNo" parameterType="String" resultType="java.util.Map">
+        SELECT
+        PARTS_NO id,
+        concat(PARTS_NAME,'(',PARTS_NO,')') text
+        FROM
+        tb_equip_parts
+        <where>
+            <if test="equipNo != null and equipNo != ''">EQUIP_NO=#{equipNo}</if>　　　　　
+        </where>
+    </select>
+
+
+</mapper>

@@ -19,15 +19,16 @@
         STATUS status
         from TB_EQUIP_CHARGE
         where 1=1
-        <if test="equipChargeSearchParam.equipNo != null and equipChargeSearchParam.equipNo != ''">
-            and EQUIP_NO = #{equipChargeSearchParam.equipNo}
+        <if test="equipNo != null and equipNo != ''">
+            and EQUIP_NO = #{equipNo}
         </if>
-        <if test="equipChargeSearchParam.startChargeTime != null and equipChargeSearchParam.startChargeTime != ''">
-            and START_CHARGE_TIME &gt; #{equipChargeSearchParam.startChargeTime}
+        <if test="startChargeTime != null and startChargeTime != ''">
+            and START_CHARGE_TIME &gt; #{startChargeTime}
         </if>
-        <if test="equipChargeSearchParam.status != null and equipChargeSearchParam.status != ''">
-            and STATUS = #{equipChargeSearchParam.status}
+        <if test="status != null and status != ''">
+            and STATUS = #{status}
         </if>
+        ORDER BY START_CHARGE_TIME
     </select>
 
 
