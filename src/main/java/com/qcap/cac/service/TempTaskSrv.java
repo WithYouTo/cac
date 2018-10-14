@@ -9,11 +9,11 @@ import com.qcap.core.model.ZTreeNode;
 
 public interface TempTaskSrv {
 
-	List<Map> listTask(TempTaskSearchParam paramDto);
+	List<Map<String,Object>> listTask(TempTaskSearchParam paramDto);
 
-	Map deleteTempTask(String taskCode);
+	Map<String,Object> deleteTempTask(String taskCode);
 
-	List<Map> selectStandardItem();
+	List<Map<String,Object>> selectStandardItem();
 
 	List<ZTreeNode> selectAreaItem();
 

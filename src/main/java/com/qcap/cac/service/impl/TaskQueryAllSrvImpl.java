@@ -37,23 +37,33 @@ public class TaskQueryAllSrvImpl implements TaskQueryAllSrv {
 	private TaskQueryAllMapper taskQueryMapper;
 
 	@Override
-	public List<Map> selectAllTask(TaskQueryAllSearchDto taskQueryDto) {
+	public List<Map<String,Object>> selectAllTask(TaskQueryAllSearchDto taskQueryDto) {
 		// TODO Auto-generated method stub
 		return taskQueryMapper.selectAllTask(taskQueryDto);
 	}
 
 
 	@Override
-	public List<Map> selectStandard() {
+	public List<Map<String,Object>> selectStandard() {
 		// TODO Auto-generated method stub
 		return taskQueryMapper.selectStandard();
 	}
 
 
 	@Override
-	public List<Map> selectPosition() {
+	public List<Map<String,Object>> selectPosition() {
 		// TODO Auto-generated method stub
 		return taskQueryMapper.selectPosition();
+	}
+
+
+	@Override
+	public Map<String,Object> selectStandardDetail(String standardCode) {
+		//查询标准
+		Map<String,Object> standardMap=this.taskQueryMapper.selectStandardInfo(standardCode);
+		List<Map<String,Object>>fileList=this.taskQueryMapper.selectFileInfo(standardCode);
+		standardMap.put("fileInfo", fileList);
+		return standardMap;
 	}
 	
 //	@Override

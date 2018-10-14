@@ -19,7 +19,7 @@
       )
   </insert>
   
-  <select id="selectEventPlan" parameterType="Map" resultType="Map">
+  <select id="selectEventPlan" parameterType="com.qcap.cac.dto.EventTaskRestDto" resultType="Map">
 	  SELECT 
 		m.PLAN_EVENT_ID  AS  planEventId,
 		m.AREA_CODE  AS  areaCode,
