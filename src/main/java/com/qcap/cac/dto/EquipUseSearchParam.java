@@ -38,4 +38,13 @@ public class EquipUseSearchParam {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "EquipUseSearchParam{" +
+                "area='" + area + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", startUseTime='" + startUseTime + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

@@ -14,6 +14,7 @@ import com.qcap.core.model.ResParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -38,9 +39,8 @@ public class EquipChargeController {
      */
     @ResponseBody
     @RequestMapping(value = "/listEquipCharge", method = RequestMethod.POST)
-    public Object listEquipCharge(EquipChargeSearchParam equipChargeSearchParam){
+    public Object listEquipCharge(@Valid EquipChargeSearchParam equipChargeSearchParam){
         new PageFactory<Map<String, Object>>().defaultPage();
-
         List<Map<String, Object>> list = this.equipChargeSrv.listEquipCharge(equipChargeSearchParam);
         PageInfo pageInfo = new PageInfo(list);
         for(Map<String, Object> map:list){

@@ -29,4 +29,13 @@ public class EquipMaintSearchParam {
     public void setPartsName(String partsName) {
         this.partsName = partsName;
     }
+
+    @Override
+    public String toString() {
+        return "EquipMaintSearchParam{" +
+                "maintType='" + maintType + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", partsName='" + partsName + '\'' +
+                '}';
+    }
 }

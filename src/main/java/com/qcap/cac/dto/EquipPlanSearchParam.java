@@ -38,4 +38,14 @@ public class EquipPlanSearchParam {
     public void setLatestMaintTime(String latestMaintTime) {
         this.latestMaintTime = latestMaintTime;
     }
+
+    @Override
+    public String toString() {
+        return "EquipPlanSearchParam{" +
+                "equipType='" + equipType + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", latestMaintTime='" + latestMaintTime + '\'' +
+                '}';
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class AttenceController {
      */
     @ResponseBody
     @RequestMapping(value = "/listAttence", method = RequestMethod.POST)
-    public Object listAttence(AttenceSearchParam attenceSearchParam){
+    public Object listAttence(@Valid AttenceSearchParam attenceSearchParam){
         new PageFactory<Map<String, Object>>().defaultPage();
         List<Map<String, Object>> list = this.attenceSrv.listAttence(attenceSearchParam);
         PageInfo pageInfo = new PageInfo(list);

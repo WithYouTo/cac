@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class EquipPlanController {
 
     @ResponseBody
     @RequestMapping(value = "/listEquipPlan", method = RequestMethod.POST)
-    public Object listEquipPlan(EquipPlanSearchParam equipPlanSearchParam){
+    public Object listEquipPlan(@Valid EquipPlanSearchParam equipPlanSearchParam){
         new PageFactory<Map<String, Object>>().defaultPage();
 
         List<Map<String, Object>> list = this.equipPlanSrv.listEquipPlan(equipPlanSearchParam);

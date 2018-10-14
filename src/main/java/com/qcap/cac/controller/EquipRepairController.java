@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class EquipRepairController{
      */
     @ResponseBody
     @RequestMapping(value = "/listEquipRepair", method = RequestMethod.POST)
-    public Object listEquipRepair(IPage<Map<String, Object>> page,EquipRepairSearchParam equipRepairSearchParam){
+    public Object listEquipRepair(IPage<Map<String, Object>> page,@Valid EquipRepairSearchParam equipRepairSearchParam){
         new PageFactory<Map<String, Object>>().defaultPage();
 
         List<Map<String, Object>> list = this.equipRepairSrv.listEquipRepair(equipRepairSearchParam);
