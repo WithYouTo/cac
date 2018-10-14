@@ -10,6 +10,7 @@ import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.IWarehouseReqDetailService;
 import com.qcap.cac.service.IWarehouseRequService;
+import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -101,6 +102,9 @@ public class WarehouseReqGoodsController {
            ResParams.newInstance(CoreConstant.FAIL_CODE,"领用单参数为空",null);
        }
 
+       warehouseRequ.setWarehouseRequId(UUIDUtils.getUUID());
+       warehouseRequ.setRequStatus("INIT");
+       warehouseRequ.setCreateEmp("SYS");
        this.warehouseRequService.save(warehouseRequ);
        return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.ADD_SUCCESS,null);
     }
