@@ -29,4 +29,13 @@ public class AttenceSearchParam {
     public void setAttenceTime(String attenceTime) {
         this.attenceTime = attenceTime;
     }
+
+    @Override
+    public String toString() {
+        return "AttenceSearchParam{" +
+                "workNo='" + workNo + '\'' +
+                ", personName='" + personName + '\'' +
+                ", attenceTime='" + attenceTime + '\'' +
+                '}';
+    }
 }

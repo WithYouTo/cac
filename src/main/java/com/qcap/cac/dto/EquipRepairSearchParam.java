@@ -38,4 +38,14 @@ public class EquipRepairSearchParam {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "EquipRepairSearchParam{" +
+                "equipType='" + equipType + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", repairTime='" + repairTime + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

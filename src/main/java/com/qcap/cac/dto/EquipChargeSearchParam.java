@@ -38,4 +38,14 @@ public class EquipChargeSearchParam {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "EquipChargeSearchParam{" +
+                "area='" + area + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", startChargeTime='" + startChargeTime + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

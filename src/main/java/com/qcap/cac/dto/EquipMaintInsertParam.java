@@ -65,4 +65,17 @@ public class EquipMaintInsertParam {
     public void setMaintDesc(String maintDesc) {
         this.maintDesc = maintDesc;
     }
+
+    @Override
+    public String toString() {
+        return "EquipMaintInsertParam{" +
+                "maintType='" + maintType + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", partsNo='" + partsNo + '\'' +
+                ", personName='" + personName + '\'' +
+                ", maintTime='" + maintTime + '\'' +
+                ", maintDesc='" + maintDesc + '\'' +
+                '}';
+    }
 }

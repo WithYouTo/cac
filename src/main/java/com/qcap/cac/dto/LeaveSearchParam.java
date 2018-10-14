@@ -29,4 +29,13 @@ public class LeaveSearchParam {
     public void setLeaveStartTime(String leaveStartTime) {
         this.leaveStartTime = leaveStartTime;
     }
+
+    @Override
+    public String toString() {
+        return "LeaveSearchParam{" +
+                "workNo='" + workNo + '\'' +
+                ", personName='" + personName + '\'' +
+                ", leaveStartTime='" + leaveStartTime + '\'' +
+                '}';
+    }
 }
