@@ -157,7 +157,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 TbWarehouseStock warehouseStock = warehouseStockMapper.selectOne(wrapper);
                 BigDecimal oldNum = new BigDecimal(warehouseStock.getGoodsNum());
                 BigDecimal goodsNum = oldNum.add(new BigDecimal(sumNum));
-                warehouseStock.setGoodsNum(ToolUtil.toStr(goodsNum));
+                warehouseStock.setGoodsNum(ToolUtil.toInt(goodsNum));
                 warehouseStockMapper.updateById(warehouseStock);
                 //库存主键
                 stockId = warehouseStock.getWarehouseStockId();
@@ -165,18 +165,19 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 //新增库存表
                 stock.setWarehouseStockId(stockId);
                 stock.setStoreroom(storeRoom);
-                stock.setStoreroomId(stockId);
+                String storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
+                stock.setStoreroomId(storeroomId);
                 stock.setGoodsType(buyType);
                 stock.setGoodsNo(buyNo);
                 stock.setGoodsName(goodsName);
                 stock.setLimitStore(Integer.parseInt(limitStore));
                 stock.setBuyType(buyType);
                 stock.setBuyNo(buyNo);
-                stock.setBuyNum(buyNum);
+                stock.setBuyNum(ToolUtil.toInt(buyNum));
                 stock.setEntryUnit(entryUnit);
                 stock.setSupplierNo(supplierName);
                 stock.setSupplierNo(supplierName);
-                stock.setGoodsNum(sumNum);
+                stock.setGoodsNum(ToolUtil.toInt(sumNum));
                 stock.setStockInstrution("EXCEL导入");
                 stock.setDeleteFlag("N");
                 stock.setCreateEmp("SYS");
@@ -190,9 +191,9 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             entry.setStoreroomId(storeRoomId);
             entry.setEntryBatchNo(batchNo);
             entry.setWarehouseStockId(stockId);
-            entry.setEntryNum(ToolUtil.toStr(new BigDecimal(entryNum)));
+            entry.setEntryNum(ToolUtil.toInt((entryNum)));
             entry.setEntryUnit(entryUnit);
-            entry.setSumNum(sumNum);
+            entry.setSumNum(ToolUtil.toInt((sumNum)));
             entry.setMinUnit(minUnit);
             entry.setEntryTime(DateUtil.dateTimeToString(new Date()));
             entry.setDeleteFlag("N");

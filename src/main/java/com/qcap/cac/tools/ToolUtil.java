@@ -569,14 +569,14 @@ public class ToolUtil {
     }
 
     /**
-     * 判断字符串是否为数字类型（包括小数点）
+     * 判断字符串是否为数字类型
      * @param str
      * @return
      */
     public static boolean isNumeric(String str){
         Boolean strResult = true;
         try {
-            new BigDecimal(str);
+            new Integer(str);
         } catch (Exception e) {
             strResult = false;
         }

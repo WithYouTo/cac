@@ -24,4 +24,5 @@ public interface WarehouseStockMapper extends BaseMapper<TbWarehouseStock> {
 
 
     Integer updateById(TbWarehouseStock warehouseStock);
+
 }

@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,21 +52,34 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
     }
 
     @Override
-    public List<Map> getGoodsConfigList(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+    public List<TbWarehouseStock> getGoodsConfigList(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+
+        if(StringUtils.isEmpty(warehouseEntrySearchParam.getStoreroomId())){
+            return new ArrayList<>();
+        }
 
         //组装参数
         QueryWrapper<TbWarehouseStock> queryWrapper = new QueryWrapper<TbWarehouseStock>()
                 .eq("STOREROOM_ID", warehouseEntrySearchParam.getStoreroomId());
-        queryWrapper.or(wrapper->{
-            wrapper.like( "GOODS_NO", "%" + warehouseEntrySearchParam.getGoodsNo() + "%")
-            .or().like("GOODS_NAME", "%" + warehouseEntrySearchParam.getGoodsName()  + "%")
-            .or().like( "SUPPLIER_NAME", "%" + warehouseEntrySearchParam.getSupplierName()  + "%");
-            wrapper.groupBy("GOODS_NO");
-            return wrapper;
 
-        });
+         if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getGoodsNo())) {
+             queryWrapper.like("GOODS_NO", "%" + warehouseEntrySearchParam.getGoodsNo() + "%");
+         }
 
-        //List<Map> list = this.warehouseStockMapper.selectObjs(queryWrapper);
-        return null;
+        if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getGoodsName())) {
+            queryWrapper.like("GOODS_NAME", "%" + warehouseEntrySearchParam.getGoodsName() + "%");
+        }
+
+        if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getSupplierName())) {
+            queryWrapper.like("SUPPLIER_NAME", "%" + warehouseEntrySearchParam.getSupplierName() + "%");
+        }
+
+        if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getGoodsNo())) {
+            queryWrapper.like("GOODS_NO", "%" + warehouseEntrySearchParam.getGoodsNo() + "%");
+        }
+
+        queryWrapper.groupBy("GOODS_NO").groupBy("SUPPLIER_NAME");
+        List<TbWarehouseStock> list = this.warehouseStockMapper.selectList(queryWrapper);
+        return list;
     }
 }

@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qcap.cac.dao.WarehouseStockMapper">
+<mapper namespace="com.qcap.cac.dao.WarehouseReqDetailMapper">
 
-    <!--查詢库存信息-->
-    <select id="getWarehouseStockList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntrySearchParam">
+    <!--查詢领用信息-->
+    <select id="getRequestedGoodsList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseReqSearchParam">
         select
+        WAREHOUSE_REQDETAIL_ID,
+        a.WAREHOUSE_REQU_ID,
         a.WAREHOUSE_STOCK_ID,
-        a.STOREROOM_ID,
-        a.STOREROOM,
-        a.GOODS_NO,
-        a.GOODS_NAME,
-        a.SUPPLIER_NAME,
-        sum(a.GOODS_NUM) goodsNum,
-        b.MIN_UNIT,
-        a.GOODS_TYPE,
-        a.REMARK
-        from tb_warehouse_stock a
-        LEFT JOIN tb_warehouse_entry b
-        on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
-        where 1 = 1 AND a.DELETE_FLAG = 'N'
+        REQU_LOC,
+        REQU_LOC_NAME,
+        APPLY_NUM,
+        REAL_NUM,
+        MIN_UNIT,
+        a.REQU_STATUS,
+        a.REQU_REMARK,
+        b.REQU_NAME
+        from tb_warehouse_reqdetail a
+        LEFT JOIN tb_warehouse_requ b
+        on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
+        LEFT JOIN tb_warehouse_stock c
+        on a.WAREHOUSE_STOCK_ID = c.WAREHOUSE_STOCK_ID
+        where a.REQU_STATUS = 'RECEIVE'
         <if test="storeroomId!=null and storeroomId!=''">
-            and a.STOREROOM_ID = #{storeroomId}
+            and c.STOREROOM_ID = #{storeroomId}
+        </if>
+        <if test="requLocName!=null and requLocName!=''">
+            and a.REQU_LOC_NAME like concat('%','#{requLocName}','%')
         </if>
         <if test="goodsNo!=null and goodsNo!=''">
-            and a.GOODS_NO like concat('%',#{goodsNo},'%')
+            and c.GOODS_NO like concat('%',#{goodsNo},'%')
         </if>
         <if test="goodsName!=null and goodsName!=''">
-            and a.GOODS_NAME like  concat('%',#{goodsName},'%')
+            and c.GOODS_NAME like  concat('%',#{goodsName},'%')
         </if>
-        <if test="supplierName!=null and supplierName!=''">
-            and a.SUPPLIER_NAME like concat('%',#{supplierName},'%')
+        <if test="requName!=null and requName!=''">
+            and b.REQU_NAME like  concat('%',#{requName},'%')
         </if>
-        group by  a.GOODS_NO
-        ORDER BY  a.GOODS_NO
+        <if test="startDate!=null and startDate!=''">
+            and DATE(b.REQU_TIME) &gt;= #{startDate}
+        </if>
+        <if test="endDate!=null and endDate!=''">
+            and DATE(b.REQU_TIME) &lt;= #{endDate}
+        </if>
+        ORDER BY  b.REQU_TIME desc
     </select>
 
     <!--查询物品存放的货位信息-->

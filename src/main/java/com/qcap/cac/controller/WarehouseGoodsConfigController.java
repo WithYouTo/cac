@@ -45,22 +45,11 @@ public class WarehouseGoodsConfigController {
 
         new PageFactory<TbWarehouseStock>().defaultPage();
 
-        List<TbWarehouseStock> list = new ArrayList<TbWarehouseStock>();
-        if (StringUtils.isNotEmpty(warehouseEntrySearchParam.getStoreroomId())) {
-            //组装参数
-            QueryWrapper<TbWarehouseStock> queryWrapper = new QueryWrapper<TbWarehouseStock>()
-                    .eq("STOREROOM_ID", warehouseEntrySearchParam.getStoreroomId()).groupBy("GOODS_NO");
-            queryWrapper.or(wrapper->{
-                wrapper.like( "GOODS_NO", "%" + warehouseEntrySearchParam.getGoodsNo() + "%")
-                        .or().like("GOODS_NAME", "%" + warehouseEntrySearchParam.getGoodsName()  + "%")
-                        .or().like( "SUPPLIER_NAME", "%" + warehouseEntrySearchParam.getSupplierName()  + "%");
-                return wrapper;
-            });
-            list = warehouseStockService.list(queryWrapper);
-       }
+        List<TbWarehouseStock> list =  this.warehouseStockService.getGoodsConfigList(warehouseEntrySearchParam);
 
-        PageInfo pageInfo = new PageInfo(list);
         Page pageList = (Page) list;
+        PageInfo pageInfo = new PageInfo(list);
+
         return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), pageList);
     }
 
