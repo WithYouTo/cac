@@ -43,4 +43,12 @@ public class ResParams implements Serializable {
 		restParams.setData(data);
 		return restParams;
 	}
+
+	public static ResParams newInstance(Integer code, String desc) {
+		ResParams restParams = new ResParams();
+		restParams.setCode(code);
+		restParams.setDesc(desc);
+		restParams.setData("");
+		return restParams;
+	}
 }

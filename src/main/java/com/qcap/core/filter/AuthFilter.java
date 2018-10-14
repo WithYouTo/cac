@@ -17,11 +17,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.qcap.core.common.RestConstant;
 import com.qcap.core.common.RestParams;
 import com.qcap.core.properties.RestProperties;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.RedisUtil;
 import com.qcap.core.utils.RenderUtil;
 import com.qcap.core.utils.jwt.JwtProperties;
 import com.qcap.core.utils.jwt.JwtTokenUtil;
 
+import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,18 +34,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
 
-	private static final List<String> NO_CHECK_URL_LIST = Arrays.asList("/login", "/register",
-			"/logout","/v2/**","/swagger-ui.html","/swagger-resources/**","/eventTask/**");
+	// private static final List<String> NO_CHECK_URL_LIST =
+	// Arrays.asList("/login", "/register", "/logout", "/v2/**",
+	// "/swagger-ui.html", "/swagger-resources/**", "/eventTask/**");
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
-	@Autowired
-	private JwtProperties jwtProperties;
+
 	@Autowired
 	private RestProperties restProperties;
+
 	@Autowired
 	private RedisUtil redisUtil;
-	
+
 	private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
 	@Override
@@ -53,29 +56,36 @@ public class AuthFilter extends OncePerRequestFilter {
 		// 过滤静态资源
 		if (!doFilterResource(servletPath)) {
 			// 过滤路径
-//			if (!NO_CHECK_URL_LIST.contains(servletPath)) {
-			if (NO_CHECK_URL_LIST.stream().noneMatch(e -> antPathMatcher.match(e, servletPath))) {
-				String token = request.getHeader(JwtProperties.getTokenHeader());
-				if (StringUtils.isNotEmpty(token)) {
-					try {
+			try {
+				List<String> noCheckUrlList = this.getNoCheckUrl();
+				if (noCheckUrlList.stream().noneMatch(e -> antPathMatcher.match(e, servletPath))) {
+					String token = request.getHeader(JwtProperties.getTokenHeader());
+					if (StringUtils.isNotEmpty(token)) {
+
 						// 验证token是否过期
 						jwtTokenUtil.isTokenExpired(token);
-					} catch (ExpiredJwtException e) {
-						// 过期直接抛异常
-						logger.error("token超时异常:" + "_" + e.getMessage(), e);
-						isAjaxOrRestful(servletPath, request, response);
-						return;
-					} catch (JwtException e) {
-						// 有异常就是token解析失败
-						logger.error("token解析异常:" + "_" + e.getMessage(), e);
+					} else {
+						// header没有token
 						isAjaxOrRestful(servletPath, request, response);
 						return;
 					}
-				} else {
-					// header没有token
-					isAjaxOrRestful(servletPath, request, response);
-					return;
+
 				}
+			} catch (ExpiredJwtException e) {
+				// 过期直接抛异常
+				logger.error("token超时异常:" + "_" + e.getMessage(), e);
+				isAjaxOrRestful(servletPath, request, response);
+				return;
+			} catch (JwtException e) {
+				// 有异常就是token解析失败
+				logger.error("token解析异常:" + "_" + e.getMessage(), e);
+				isAjaxOrRestful(servletPath, request, response);
+				return;
+			} catch (Exception e) {
+				// 获取配置异常
+				logger.error("获取配置异常:" + "_" + e.getMessage(), e);
+				isAjaxOrRestful(servletPath, request, response);
+				return;
 			}
 
 		}
@@ -126,6 +136,17 @@ public class AuthFilter extends OncePerRequestFilter {
 			}
 		}
 		return false;
+	}
+
+	private List<String> getNoCheckUrl() throws Exception {
+		String key = AppUtils.getApplicationName() + StrUtil.COLON + "SYSTEM" + StrUtil.COLON + "CAC_NO_CHECK_URL";
+		String value = redisUtil.get(key);
+		if (StringUtils.isNotBlank(value)) {
+			String[] urlArray = value.split(";");
+			return Arrays.asList(urlArray);
+		} else {
+			throw new Exception("缺少免登陆url配置");
+		}
 	}
 
 }
