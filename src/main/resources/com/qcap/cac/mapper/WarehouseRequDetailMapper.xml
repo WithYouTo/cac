@@ -26,7 +26,7 @@
             and c.STOREROOM_ID = #{storeroomId}
         </if>
         <if test="requLocName!=null and requLocName!=''">
-            and a.REQU_LOC_NAME like concat('%','#{requLocName}','%')
+            and a.REQU_LOC_NAME like concat('%',#{requLocName},'%')
         </if>
         <if test="goodsNo!=null and goodsNo!=''">
             and c.GOODS_NO like concat('%',#{goodsNo},'%')
