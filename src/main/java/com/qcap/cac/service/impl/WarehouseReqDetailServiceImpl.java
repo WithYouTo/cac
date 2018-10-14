@@ -37,28 +37,6 @@ public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetai
         if(StringUtils.isEmpty(warehouseReqSearchParam.getStoreroomId())){
             return new ArrayList<>();
         }
-//
-//        //组装参数
-//        QueryWrapper<TbWarehouseStock> queryWrapper = new QueryWrapper<TbWarehouseStock>()
-//                .eq("STOREROOM_ID", warehouseReqSearchParam.getStoreroomId());
-//
-//        if(StringUtils.isNotEmpty(warehouseReqSearchParam.getRequLocName())) {
-//            queryWrapper.like("REQU_LOC_NAME", "%" + warehouseReqSearchParam.getRequLocName() + "%");
-//        }
-//
-//        if(StringUtils.isNotEmpty(warehouseReqSearchParam.getGoodsNo())) {
-//            queryWrapper.like("GOODS_NO", "%" + warehouseReqSearchParam.getGoodsNo() + "%");
-//        }
-//
-//        if(StringUtils.isNotEmpty(warehouseReqSearchParam.getGoodsName())) {
-//            queryWrapper.like("GOODS_NAME", "%" + warehouseReqSearchParam.getGoodsName() + "%");
-//        }
-//
-//        if(StringUtils.isNotEmpty(warehouseReqSearchParam.getRequName())) {
-//            queryWrapper.like("REQU_NAME", "%" + warehouseEntrySearchParam.getGoodsNo() + "%");
-//        }
-//
-//        queryWrapper.groupBy("GOODS_NO").groupBy("SUPPLIER_NAME");
         List<Map> list = this.warehouseReqDetailMapper.getRequestedGoodsList(warehouseReqSearchParam);
         return list;
     }
