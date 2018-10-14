@@ -1,6 +1,7 @@
 package com.qcap.cac.dao;
 
 import com.qcap.cac.dto.EquipPlanSearchParam;
+import com.qcap.cac.entity.TbEquipPlan;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface EquipPlanMapper {
     List<Map<String, Object>> listEquipPlan(EquipPlanSearchParam equipPlanSearchParam);
 
     List<Map<String, Object>> listPartsPlanByEquipId(String equipId);
+
+    void updateEquipPlan(TbEquipPlan equipPlan);
 }

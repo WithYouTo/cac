@@ -4,30 +4,33 @@
 
     <select id="listEquipMaint" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipChargeSearchParam">
         select
-        EQUIP_CHARGE_ID equipChargeId,
+        EQUIP_MAINT_ID equipMaintId,
         EQUIP_ID equipId,
-        EQUIP_NAME equipName,
         EQUIP_NO equipNo,
+        EQUIP_NAME equipName,
         EQUIP_TYPE equipType,
         EQUIP_MODEL equipModel,
-        DATE_FORMAT(START_CHARGE_TIME,'%Y-%m-%d %H:%i:%S') startChargeTime,
-        DATE_FORMAT(END_CHARGE_TIME,'%Y-%m-%d %H:%i:%S') endChargeTime,
-        TOTAL_CHARGE_TIME totalChargeTime,
-        AREA area,
-        PERSON_NAME personName,
-        PERSON_MOBILE personMobile,
-        STATUS status
+        PARTS_NAME partsName,
+        PARTS_NO partsNo,
+        MAINT_TYPE maintType,
+        EQUIP_CYCLE equipCycle,
+        DATE_FORMAT(MAINT_TIME,'%Y-%m-%d %H:%i:%S') maintTime,
+        MAINT_RECORD maintRecord,
+        MAINT_STATE maintState,
+        MAINT_DESC maintDesc,
+        REMARK remark
         from TB_EQUIP_MAINT
         where 1=1
-        <if test="equipChargeSearchParam.equipNo != null and equipChargeSearchParam.equipNo != ''">
-            and EQUIP_NO = #{equipChargeSearchParam.equipNo}
+        <if test="maintType != null and maintType != ''">
+            and MAINT_TYPE = #{maintType}
         </if>
-        <if test="equipChargeSearchParam.startChargeTime != null and equipChargeSearchParam.startChargeTime != ''">
-            and START_CHARGE_TIME &gt; #{equipChargeSearchParam.startChargeTime}
+        <if test="equipName != null and equipName != ''">
+            and EQUIP_NAME = #{equipName}
         </if>
-        <if test="equipChargeSearchParam.status != null and equipChargeSearchParam.status != ''">
-            and STATUS = #{equipChargeSearchParam.status}
+        <if test="partsName != null and partsName != ''">
+            and PARTS_NAME = #{partsName}
         </if>
+        ORDER BY MAINT_TIME
     </select>
 
 </mapper>

@@ -6,6 +6,8 @@ public class EquipMaintInsertParam {
     private String equipName;
     private String equipNo;
     private String partsNo;
+    private String personName;
+    private String maintTime;
     private String maintDesc;
 
     public String getMaintType() {
@@ -38,6 +40,22 @@ public class EquipMaintInsertParam {
 
     public void setPartsNo(String partsNo) {
         this.partsNo = partsNo;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public String getMaintTime() {
+        return maintTime;
+    }
+
+    public void setMaintTime(String maintTime) {
+        this.maintTime = maintTime;
     }
 
     public String getMaintDesc() {

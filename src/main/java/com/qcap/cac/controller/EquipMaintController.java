@@ -36,11 +36,6 @@ public class EquipMaintController {
         List<Map<String, Object>> list = this.equipMaintSrv.listEquipMaint(equipMaintSearchParam);
 
         PageInfo pageInfo = new PageInfo(list);
-        for(Map<String, Object> map:list){
-            String status = map.get("status").toString();
-            CommonConstant.EQUIP_CHARGE_STATUS.get(status);
-            map.put("statusName", CommonConstant.EQUIP_CHARGE_STATUS.get(status));
-        }
         Page pageList = (Page) list;
         return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(),pageList);
     }
@@ -51,5 +46,11 @@ public class EquipMaintController {
     public Object insertEquipMaint(EquipMaintInsertParam equipMaintInsertParam){
         this.equipMaintSrv.insertEquipMaint(equipMaintInsertParam);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, null);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/initMaintTypeSelect", method = RequestMethod.POST)
+    public Object initEquipRepairStatusSelect(){
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, CommonConstant.MAINT_TYPE);
     }
 }

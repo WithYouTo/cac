@@ -29,6 +29,7 @@
         <if test="status != null and status != ''">
             and STATUS = #{status}
         </if>
+        ORDER BY REPAIR_TIME
     </select>
 
     <update id="updateEquipRepair" parameterType="String">

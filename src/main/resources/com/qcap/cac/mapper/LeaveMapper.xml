@@ -25,6 +25,7 @@
         <if test="leaveStartTime != null and leaveStartTime != ''">
             and LEAVE_START_TIME &gt; #{leaveStartTime}
         </if>
+        ORDER BY LEAVE_START_TIME
     </select>
 
 </mapper>

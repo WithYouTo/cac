@@ -6,17 +6,22 @@ import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.EquipMaintMapper;
 import com.qcap.cac.dao.EquipMapper;
 import com.qcap.cac.dao.EquipPartsMapper;
+import com.qcap.cac.dao.EquipPlanMapper;
 import com.qcap.cac.dto.EquipMaintInsertParam;
 import com.qcap.cac.dto.EquipMaintSearchParam;
 import com.qcap.cac.entity.TbEquip;
 import com.qcap.cac.entity.TbEquipMaint;
 import com.qcap.cac.entity.TbEquipParts;
+import com.qcap.cac.entity.TbEquipPlan;
 import com.qcap.cac.service.EquipMaintSrv;
+import com.qcap.core.utils.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,11 +38,11 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
     @Autowired
     private EquipPartsMapper equipPartsMapper;
 
+    @Autowired
+    private EquipPlanMapper equipPlanMapper;
+
     @Override
     public List<Map<String, Object>> listEquipMaint(EquipMaintSearchParam equipMaintSearchParam) {
-        QueryWrapper<TbEquip> qw = new QueryWrapper();
-        qw.eq("maint_Type",equipMaintSearchParam.getMaintType())
-                .eq("equip_Name",equipMaintSearchParam.getEquipName()).eq("parts_Name",equipMaintSearchParam.getPartsName());
         return this.equipMaintMapper.listEquipMaint(equipMaintSearchParam);
     }
 
@@ -46,12 +51,15 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
         String maintType=equipMaintInsertParam.getMaintType();
         TbEquipMaint equipMaint = new TbEquipMaint();
 
+        TbEquipPlan equipPlan = new TbEquipPlan();
+
         //mybatis-plus封装查询条件，根据设备编号获取设备信息
         QueryWrapper<TbEquip> equip = new QueryWrapper();
         equip.eq("equip_No",equipMaintInsertParam.getEquipNo());
         TbEquip equipInfo=this.equipMapper.selectOne(equip);
-
+        //1、重组维保记录对象
         BeanUtils.copyProperties(equipInfo,equipMaint);
+        BeanUtils.copyProperties(equipInfo,equipPlan);
         equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
         //若维保类型是配件，继续查询配件信息
         if((CommonConstant.MAINT_TYPE_PARTS).equals(maintType)){
@@ -59,12 +67,46 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
             QueryWrapper<TbEquipParts> parts = new QueryWrapper();
             parts.eq("PARTS_NO",equipMaintInsertParam.getPartsNo());
             TbEquipParts equipParts = this.equipPartsMapper.selectOne(parts);
+
             BeanUtils.copyProperties(equipParts,equipMaint);
+            BeanUtils.copyProperties(equipParts,equipPlan);
             equipMaint.setEquipType(CommonConstant.MAINT_TYPE_PARTS);
         }
-        //1、重组维保记录对象
+
         //2、新增一条维保记录
-        //3、更新维保计划
         this.equipMaintMapper.insert(equipMaint);
+
+        //3、更新维保计划
+        updateEquipPlanTime(equipMaintInsertParam.getMaintTime(),equipPlan);
+    }
+
+    private void updateEquipPlanTime(String maintTime,TbEquipPlan equipPlan) {
+        Date time = DateUtil.parseDate(maintTime);
+        equipPlan.setLatestMaintDate(time);
+        equipPlan.setNextMaintDate(getNewPlanDate(time,equipPlan.getMaintCycle()));
+        this.equipPlanMapper.updateEquipPlan(equipPlan);
+    }
+
+    /**
+     *
+     * @Description: 获取下次维保时间
+     *
+     *
+     * @MethodName: getNewPlanDate
+     * @Parameters: [time, maintCycle]
+     * @ReturnType: java.util.Date
+     *
+     * @author huangxiang
+     * @date 2018/10/13 10:42
+     */
+    private Date getNewPlanDate(Date time, String maintCycle){
+        Calendar c = Calendar.getInstance();
+        //设置时间
+        c.setTime(time);
+        //日期分钟加1,Calendar.DATE(天),Calendar.HOUR(小时)
+        c.add(Calendar.HOUR, Integer.parseInt(maintCycle));
+        //结果
+        Date date = c.getTime();
+        return date;
     }
 }

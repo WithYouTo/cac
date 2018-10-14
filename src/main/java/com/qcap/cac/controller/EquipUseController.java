@@ -47,7 +47,7 @@ public class EquipUseController{
         for(Map<String, Object> map:list){
             String status = map.get("status").toString();
             CommonConstant.EQUIP_USE_STATUS.get(status);
-            map.put("statusName", CommonConstant.EQUIP_CHARGE_STATUS.get(status));
+            map.put("statusName", CommonConstant.EQUIP_USE_STATUS.get(status));
         }
         Page pageList = (Page) list;
 
