@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author huangxiang
- * @since 2018-10-12
+ * @since 2018-10-15
  */
 @TableName("tb_equip_parts")
 public class TbEquipParts implements Serializable {
@@ -43,6 +44,10 @@ public class TbEquipParts implements Serializable {
      */
     private String partsModel;
     /**
+     * 供应商
+     */
+    private String partsAgence;
+    /**
      * 维保周期
      */
     private String maintCycle;
@@ -55,6 +60,14 @@ public class TbEquipParts implements Serializable {
      */
     private LocalDate nextMaintTime;
     /**
+     * 联系人
+     */
+    private String relatePerson;
+    /**
+     * 联系方式
+     */
+    private String relateMobile;
+    /**
      * 备注
      */
     private String remark;
@@ -65,7 +78,7 @@ public class TbEquipParts implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
     /**
      * 修改人
      */
@@ -73,12 +86,11 @@ public class TbEquipParts implements Serializable {
     /**
      * 修改时间
      */
-    private LocalDateTime updateDate;
+    private Date updateDate;
     /**
      * 版本
      */
-    private String version;
-
+    private int version;
 
     public String getPartsId() {
         return partsId;
@@ -128,6 +140,14 @@ public class TbEquipParts implements Serializable {
         this.partsModel = partsModel;
     }
 
+    public String getPartsAgence() {
+        return partsAgence;
+    }
+
+    public void setPartsAgence(String partsAgence) {
+        this.partsAgence = partsAgence;
+    }
+
     public String getMaintCycle() {
         return maintCycle;
     }
@@ -152,6 +172,22 @@ public class TbEquipParts implements Serializable {
         this.nextMaintTime = nextMaintTime;
     }
 
+    public String getRelatePerson() {
+        return relatePerson;
+    }
+
+    public void setRelatePerson(String relatePerson) {
+        this.relatePerson = relatePerson;
+    }
+
+    public String getRelateMobile() {
+        return relateMobile;
+    }
+
+    public void setRelateMobile(String relateMobile) {
+        this.relateMobile = relateMobile;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -168,11 +204,11 @@ public class TbEquipParts implements Serializable {
         this.createEmp = createEmp;
     }
 
-    public LocalDateTime getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
@@ -184,40 +220,43 @@ public class TbEquipParts implements Serializable {
         this.updateEmp = updateEmp;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 
-    public String getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
     @Override
     public String toString() {
         return "TbEquipParts{" +
-        ", partsId=" + partsId +
-        ", equipId=" + equipId +
-        ", partsNo=" + partsNo +
-        ", partsName=" + partsName +
-        ", partsType=" + partsType +
-        ", partsModel=" + partsModel +
-        ", maintCycle=" + maintCycle +
-        ", latestMaintTime=" + latestMaintTime +
-        ", nextMaintTime=" + nextMaintTime +
-        ", remark=" + remark +
-        ", createEmp=" + createEmp +
-        ", createDate=" + createDate +
-        ", updateEmp=" + updateEmp +
-        ", updateDate=" + updateDate +
-        ", version=" + version +
-        "}";
+                "partsId='" + partsId + '\'' +
+                ", equipId='" + equipId + '\'' +
+                ", partsNo='" + partsNo + '\'' +
+                ", partsName='" + partsName + '\'' +
+                ", partsType='" + partsType + '\'' +
+                ", partsModel='" + partsModel + '\'' +
+                ", partsAgence='" + partsAgence + '\'' +
+                ", maintCycle='" + maintCycle + '\'' +
+                ", latestMaintTime=" + latestMaintTime +
+                ", nextMaintTime=" + nextMaintTime +
+                ", relatePerson='" + relatePerson + '\'' +
+                ", relateMobile='" + relateMobile + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
     }
 }

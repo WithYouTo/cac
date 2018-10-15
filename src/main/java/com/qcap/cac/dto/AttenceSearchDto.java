@@ -1,10 +1,10 @@
 package com.qcap.cac.dto;
 
-public class LeaveSearchParam {
+public class AttenceSearchDto {
 
     private String workNo;
     private String personName;
-    private String leaveStartTime;
+    private String attenceTime;
 
     public String getWorkNo() {
         return workNo;
@@ -22,20 +22,20 @@ public class LeaveSearchParam {
         this.personName = personName;
     }
 
-    public String getLeaveStartTime() {
-        return leaveStartTime;
+    public String getAttenceTime() {
+        return attenceTime;
     }
 
-    public void setLeaveStartTime(String leaveStartTime) {
-        this.leaveStartTime = leaveStartTime;
+    public void setAttenceTime(String attenceTime) {
+        this.attenceTime = attenceTime;
     }
 
     @Override
     public String toString() {
-        return "LeaveSearchParam{" +
+        return "AttenceSearchDto{" +
                 "workNo='" + workNo + '\'' +
                 ", personName='" + personName + '\'' +
-                ", leaveStartTime='" + leaveStartTime + '\'' +
+                ", attenceTime='" + attenceTime + '\'' +
                 '}';
     }
 }

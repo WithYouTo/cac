@@ -1,7 +1,7 @@
 package com.qcap.cac.service.impl;
 
 import com.qcap.cac.dao.EquipRepairMapper;
-import com.qcap.cac.dto.EquipRepairSearchParam;
+import com.qcap.cac.dto.EquipRepairSearchDto;
 import com.qcap.cac.service.EquipRepairSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ public class EquipRepairSrvImpl implements EquipRepairSrv {
 
 
     @Override
-    public List<Map<String,Object>> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam) {
-        return this.equipRepairMapper.listEquipRepair(equipRepairSearchParam);
+    public List<Map<String,Object>> listEquipRepair(EquipRepairSearchDto equipRepairSearchDto) {
+        return this.equipRepairMapper.listEquipRepair(equipRepairSearchDto);
     }
 
     @Override

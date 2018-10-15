@@ -10,7 +10,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author huangxiang
- * @since 2018-10-12
+ * @since 2018-10-15
  */
 @TableName("tb_equip_use")
 public class TbEquipUse implements Serializable {
