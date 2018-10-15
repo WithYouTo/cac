@@ -24,9 +24,6 @@
     	VERSION version
     from tb_area_standard
     where 1=1
-    <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardId)">
-		AND STANDARD_ID =#{standardId}
-	</if>
 	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardName)">
 		AND STANDARD_NAME LIKE CONCAT('%',#{standardName},'%')
 	</if>
@@ -40,7 +37,7 @@
   </select>
   
   
-  <insert id="add" parameterType="com.qcap.cac.dto.CleaningStandardDto" >
+  <insert id="add" parameterType="com.qcap.cac.entity.TbAreaStandard" >
     insert into tb_area_standard (STANDARD_ID, STANDARD_CODE, STANDARD_NAME, 
       STANDARD_STEP, EQUITMET_TYPE, CLEAN_TOOLS, 
       STANDARD_REQUIREMENT, MARK_SCALE, CHECK_FLAG, 
@@ -58,12 +55,9 @@
   </insert>
   
   
-  <update id="edit" parameterType="com.qcap.cac.dto.CleaningStandardDto" >
+  <update id="edit" parameterType="com.qcap.cac.entity.TbAreaStandard" >
     update tb_area_standard
     <set >
-      <if test="standardCode != null" >
-        STANDARD_CODE = #{standardCode},
-      </if>
       <if test="standardName != null" >
         STANDARD_NAME = #{standardName},
       </if>
@@ -109,11 +103,28 @@
       <if test="updateEmp != null" >
         UPDATE_EMP = #{updateEmp},
       </if>
-      <if test="version != null" >
-        VERSION = #{version},
-      </if>
     </set>
-    where STANDAED_ID = #{standaedId}
+    where STANDARD_CODE = #{standardCode}
   </update>
  
+  <select id="selectStandardCode" resultType="String" >
+    select  
+    	STANDARD_CODE standardCode
+    from tb_area_standard
+	ORDER BY standardCode DESC
+	LIMIT 1
+  </select>
+  
+  <select id="selectStandardName" parameterType="String" resultType="int" >
+    select  
+    	COUNT(1)
+    from tb_area_standard
+	WHERE STANDARD_NAME = #{standaedName}
+  </select>
+  
+   <select id="delete" parameterType="String"  >
+    delete from tb_area_standard
+    where STANDARD_CODE = #{standardCode}
+  </select>
+  
 </mapper>

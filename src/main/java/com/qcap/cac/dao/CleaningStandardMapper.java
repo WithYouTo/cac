@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.qcap.cac.dto.CleaningStandardDto;
+import com.qcap.cac.entity.TbAreaStandard;
 
 /** 
  *
@@ -51,6 +52,47 @@ public interface CleaningStandardMapper {
 	 * @return: Integer
 	 */
 	Integer edit(@Valid CleaningStandardDto cleaningStandardDto);
+
+	/** 
+	 *
+	 * @Title: add 
+	 * @param tbAreaStandard
+	 * @return: void
+	 */
+	void add(TbAreaStandard tbAreaStandard);
+
+	/** 
+	 *
+	 * @Title: edit 
+	 * @param tbAreaStandard
+	 * @return: void
+	 */
+	void edit(TbAreaStandard tbAreaStandard);
+
+	/** 
+	 *
+	 * @Title: selectStandardName 
+	 * @param standardName
+	 * @return
+	 * @return: int
+	 */
+	int selectStandardName(String standardName);
+
+	/** 
+	 *
+	 * @Title: selectStandardCode 
+	 * @return
+	 * @return: String
+	 */
+	String selectStandardCode();
+
+	/** 
+	 *
+	 * @Title: delete 
+	 * @param standardCode
+	 * @return: void
+	 */
+	void delete(String standardCode);
 
 	
 

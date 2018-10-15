@@ -39,18 +39,27 @@ public interface CleaningStandardSrv {
 	 * @Title: add 
 	 * @param cleaningStandardDto
 	 * @return
-	 * @return: Integer
+	 * @return: Object
 	 */
-	Integer add(@Valid CleaningStandardDto cleaningStandardDto);
+	Object add(@Valid CleaningStandardDto cleaningStandardDto);
 
 	/** 
 	 *
 	 * @Title: edit 
 	 * @param cleaningStandardDto
 	 * @return
-	 * @return: Integer
+	 * @return: Object
 	 */
-	Integer edit(@Valid CleaningStandardDto cleaningStandardDto);
+	Object edit(@Valid CleaningStandardDto cleaningStandardDto);
+
+	/** 
+	 *
+	 * @Title: deleteStandard 
+	 * @param standardCode
+	 * @return
+	 * @return: Object
+	 */
+	Object deleteStandard(@Valid String standardCode);
 
 
 }

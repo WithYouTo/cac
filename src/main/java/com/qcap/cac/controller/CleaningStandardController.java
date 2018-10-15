@@ -15,6 +15,7 @@ import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.CleaningStandardDto;
 import com.qcap.cac.service.CleaningStandardSrv;
+import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
@@ -45,16 +46,13 @@ public class CleaningStandardController {
 	}
 	
 	
+	
 	//pc管理端增加清洁标准
 	@ResponseBody
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public Object addStandard(@Valid CleaningStandardDto cleaningStandardDto) {
 		
-		Integer exist = this.cleaningStandardSrvImpl.add(cleaningStandardDto);
-		if(exist > 0){
-			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, null);
-	       }
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "新增清洁标准失败", null);
+		return this.cleaningStandardSrvImpl.add(cleaningStandardDto);
 	}
 	
 	
@@ -63,14 +61,17 @@ public class CleaningStandardController {
 	@RequestMapping(value="/edit",method=RequestMethod.POST)
 	public Object editStandard(@Valid CleaningStandardDto cleaningStandardDto) {
 		
-		Integer exist = this.cleaningStandardSrvImpl.edit(cleaningStandardDto);
-		if(exist > 0){
-			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
-	       }
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "修改清洁标准失败", null);
+		return this.cleaningStandardSrvImpl.edit(cleaningStandardDto);
 		
 	}
 	
-	
+	//pc管理端修改清洁标准
+	@ResponseBody
+	@RequestMapping(value="/delete",method=RequestMethod.POST)
+	public Object deleteStandard(String standardCode) {
+		
+		return this.cleaningStandardSrvImpl.deleteStandard(standardCode);
+		
+	}
 
 }
