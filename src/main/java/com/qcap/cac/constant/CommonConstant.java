@@ -124,4 +124,15 @@ public class CommonConstant {
     public final static String BACK_FAIL_FLAG="-1";
     public final static String BACK_MESSAGE="message";
 
+    //领用状态
+    public final static String WAREHOUSE_REQ_STATUS_INIT = "INIT";
+    public final static String WAREHOUSE_REQ_STATUS_COMMIT = "COMMIT";
+    public final static String WAREHOUSE_REQ_STATUS_RECEIVE = "RECEIVE";
+    public static Map<String,String> WAREHOUSE_REQ_STATUS = new LinkedHashMap<String,String>();
+    static {
+        WAREHOUSE_REQ_STATUS.put("INIT","已申请");
+        WAREHOUSE_REQ_STATUS.put("COMMIT","已提交");
+        WAREHOUSE_REQ_STATUS.put("RECEIVE","已领用");
+    }
+
 }

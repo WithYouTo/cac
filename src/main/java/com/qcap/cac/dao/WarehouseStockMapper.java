@@ -1,7 +1,7 @@
 package com.qcap.cac.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
+import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public interface WarehouseStockMapper extends BaseMapper<TbWarehouseStock> {
 
-    List<Map> getWarehouseStockList(WarehouseEntrySearchParam warehouseEntrySearchParam);
+    List<Map> getWarehouseStockList(WarehouseEntryDto warehouseEntryDto);
 
     List<Map> getPositionList(String warehouseStockId);
 

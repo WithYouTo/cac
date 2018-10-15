@@ -1,6 +1,6 @@
 package com.qcap.cac.dto;
 
-public class WarehouseReqSearchParam {
+public class WarehouseReqDto {
 
     private String storeroomId;
     private String requLoc;
@@ -10,6 +10,34 @@ public class WarehouseReqSearchParam {
     private String startDate;
     private String endDate;
     private String requName;
+    private String requMobile;
+    private String requBatchNo;
+    private String requStatus;
+
+
+    public String getRequMobile() {
+        return requMobile;
+    }
+
+    public void setRequMobile(String requMobile) {
+        this.requMobile = requMobile;
+    }
+
+    public String getRequStatus() {
+        return requStatus;
+    }
+
+    public void setRequStatus(String requStatus) {
+        this.requStatus = requStatus;
+    }
+
+    public String getRequBatchNo() {
+        return requBatchNo;
+    }
+
+    public void setRequBatchNo(String requBatchNo) {
+        this.requBatchNo = requBatchNo;
+    }
 
     public String getStoreroomId() {
         return storeroomId;

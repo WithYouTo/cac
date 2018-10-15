@@ -3,7 +3,7 @@ package com.qcap.cac.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
+import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.poiEntity.EntryPoiEntity;
 import com.qcap.cac.service.IWarehouseEntryService;
 import com.qcap.core.common.CoreConstant;
@@ -44,13 +44,13 @@ public class WarehouseEntryController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams list(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+    public PageResParams list(WarehouseEntryDto warehouseEntryDto) {
 
         new PageFactory<Map<String, Object>>().defaultPage();
 
         List<Map> list = new ArrayList<>();
-        if (StringUtils.isNotEmpty(warehouseEntrySearchParam.getStoreroomId())) {
-            list = warehouseEntryService.getEntryList(warehouseEntrySearchParam);
+        if (StringUtils.isNotEmpty(warehouseEntryDto.getStoreroomId())) {
+            list = warehouseEntryService.getEntryList(warehouseEntryDto);
         }
         PageInfo pageInfo = new PageInfo(list);
         Page pageList = (Page) list;
