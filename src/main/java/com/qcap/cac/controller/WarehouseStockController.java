@@ -1,16 +1,14 @@
 package com.qcap.cac.controller;
 
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
+import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.IWarehouseStockService;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,10 +38,10 @@ public class WarehouseStockController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams list(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+    public PageResParams list(WarehouseEntryDto warehouseEntryDto) {
         new PageFactory<Map<String, Object>>().defaultPage();
 
-        List<Map> list = warehouseStockService.getWarehouseStockList(warehouseEntrySearchParam);
+        List<Map> list = warehouseStockService.getWarehouseStockList(warehouseEntryDto);
 
         PageInfo pageInfo = new PageInfo(list);
         //Page pageList = (Page) list;

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author huangxiang
- * @since 2018-10-12
+ * @since 2018-10-15
  */
 @TableName("tb_equip_charge")
 public class TbEquipCharge implements Serializable {
@@ -54,6 +54,7 @@ public class TbEquipCharge implements Serializable {
      * 区域
      */
     private String area;
+    private String personNo;
     /**
      * 操作人姓名
      */
@@ -172,6 +173,14 @@ public class TbEquipCharge implements Serializable {
         this.area = area;
     }
 
+    public String getPersonNo() {
+        return personNo;
+    }
+
+    public void setPersonNo(String personNo) {
+        this.personNo = personNo;
+    }
+
     public String getPersonName() {
         return personName;
     }
@@ -257,6 +266,7 @@ public class TbEquipCharge implements Serializable {
         ", endChargeTime=" + endChargeTime +
         ", totalChargeTime=" + totalChargeTime +
         ", area=" + area +
+        ", personNo=" + personNo +
         ", personName=" + personName +
         ", personMobile=" + personMobile +
         ", status=" + status +

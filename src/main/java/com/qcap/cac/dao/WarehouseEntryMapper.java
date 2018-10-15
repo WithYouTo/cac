@@ -2,10 +2,8 @@ package com.qcap.cac.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
+import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseEntry;
-import com.qcap.cac.entity.WarehouseEntry;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,7 +20,7 @@ import java.util.Map;
  */
 public interface WarehouseEntryMapper extends BaseMapper<TbWarehouseEntry> {
 
-    List<Map> getWarehouseEntryList(WarehouseEntrySearchParam warehouseEntrySearchParam);
+    List<Map> getWarehouseEntryList(WarehouseEntryDto warehouseEntryDto);
 
     List<Map> getStoreRoomList();
 

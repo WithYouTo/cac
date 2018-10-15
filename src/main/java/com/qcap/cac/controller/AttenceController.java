@@ -3,7 +3,7 @@ package com.qcap.cac.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
-import com.qcap.cac.dto.AttenceSearchParam;
+import com.qcap.cac.dto.AttenceSearchDto;
 import com.qcap.cac.service.AttenceSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -30,7 +30,7 @@ public class AttenceController {
      *
      *
      * @MethodName: listAttence
-     * @Parameters: [attenceSearchParam] 
+     * @Parameters: [attenceSearchDto]
      * @ReturnType: java.lang.Object
      *
      * @author huangxiang
@@ -38,9 +38,9 @@ public class AttenceController {
      */
     @ResponseBody
     @RequestMapping(value = "/listAttence", method = RequestMethod.POST)
-    public Object listAttence(@Valid AttenceSearchParam attenceSearchParam){
+    public Object listAttence(@Valid AttenceSearchDto attenceSearchDto){
         new PageFactory<Map<String, Object>>().defaultPage();
-        List<Map<String, Object>> list = this.attenceSrv.listAttence(attenceSearchParam);
+        List<Map<String, Object>> list = this.attenceSrv.listAttence(attenceSearchDto);
         PageInfo pageInfo = new PageInfo(list);
         Page pageList = (Page) list;
         return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), pageList);

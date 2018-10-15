@@ -3,7 +3,7 @@ package com.qcap.cac.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
+import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.IWarehouseStockService;
 import com.qcap.core.common.CoreConstant;
@@ -37,11 +37,11 @@ public class WarehouseGoodsConfigController {
      */
     @ResponseBody
     @RequestMapping(value = "/goodsConfigList", method = RequestMethod.POST)
-    public PageResParams goodsConfigList(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+    public PageResParams goodsConfigList(WarehouseEntryDto warehouseEntryDto) {
 
         new PageFactory<TbWarehouseStock>().defaultPage();
 
-        List<TbWarehouseStock> list =  this.warehouseStockService.getGoodsConfigList(warehouseEntrySearchParam);
+        List<TbWarehouseStock> list =  this.warehouseStockService.getGoodsConfigList(warehouseEntryDto);
 
         Page pageList = (Page) list;
         PageInfo pageInfo = new PageInfo(list);

@@ -1,13 +1,10 @@
 package com.qcap.cac.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
-import com.qcap.cac.dto.WarehouseReqSearchParam;
+import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
-import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.IWarehouseReqDetailService;
 import com.qcap.cac.service.IWarehouseRequService;
 import com.qcap.cac.tools.UUIDUtils;
@@ -21,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,15 +40,15 @@ public class WarehouseReqGoodsController {
     private IWarehouseRequService warehouseRequService;
 
     /**
-     * 领用查询
+     * 领用查询（已出库）
      */
     @ResponseBody
     @RequestMapping(value = "/requestedList", method = RequestMethod.POST)
-    public PageResParams getRequestedGoodsList(WarehouseReqSearchParam warehouseReqSearchParam) {
+    public PageResParams getRequestedGoodsList(WarehouseReqDto warehouseReqDto) {
 
         new PageFactory<Map<String, Object>>().defaultPage();
 
-        List<Map> list =  this.warehouseReqDetailService.getRequestedList(warehouseReqSearchParam);
+        List<Map> list =  this.warehouseReqDetailService.getRequestedList(warehouseReqDto);
         PageInfo pageInfo = new PageInfo(list);
 
         return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
@@ -58,36 +56,35 @@ public class WarehouseReqGoodsController {
 
 
     /**
-     * 查询主表领用申请
+     * 领用申请（查询主表）
      */
     @ResponseBody
     @RequestMapping(value = "/requlist", method = RequestMethod.POST)
-    public PageResParams getReqList(WarehouseReqSearchParam warehouseReqSearchParam) {
+    public PageResParams getReqList(WarehouseReqDto warehouseReqDto) {
 
         new PageFactory<Map<String, Object>>().defaultPage();
 
-        QueryWrapper<TbWarehouseRequ> wrapper = new QueryWrapper<>();
-        List<TbWarehouseRequ> list =  this.warehouseRequService.list(wrapper);
+
+        List<Map<String,String>> list =  this.warehouseRequService.getRequList(warehouseReqDto);
         PageInfo pageInfo = new PageInfo(list);
 
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", pageInfo.getTotal(), list);
     }
 
 
     /**
-     * 查询领用申请明细
+     * 领用申请（根据领用单查询明细）
      */
     @ResponseBody
     @RequestMapping(value = "/reqDetailList", method = RequestMethod.POST)
-    public PageResParams getReqDetailList(WarehouseReqSearchParam warehouseReqSearchParam) {
+    public PageResParams getReqDetailList(String warehouseRequId) {
 
         new PageFactory<Map<String, Object>>().defaultPage();
 
-        QueryWrapper<TbWarehouseReqdetail> wrapper = new QueryWrapper<>();
-        List<TbWarehouseReqdetail> list =  this.warehouseReqDetailService.list(wrapper);
+        List<Map<String,Object>> list =  this.warehouseReqDetailService.getReqDetailList(warehouseRequId);
         PageInfo pageInfo = new PageInfo(list);
 
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", pageInfo.getTotal(), list);
     }
 
 
@@ -103,6 +100,7 @@ public class WarehouseReqGoodsController {
        }
 
        warehouseRequ.setWarehouseRequId(UUIDUtils.getUUID());
+       warehouseRequ.setRequBatchNo(UUIDUtils.getBatchNo());
        warehouseRequ.setRequStatus("INIT");
        warehouseRequ.setCreateEmp("SYS");
        this.warehouseRequService.save(warehouseRequ);
@@ -141,13 +139,14 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/addDetail", method = RequestMethod.POST)
     public Object addReqDetail(TbWarehouseReqdetail warehouseReqdetail) {
-
         if(null == warehouseReqdetail){
             ResParams.newInstance(CoreConstant.FAIL_CODE,"领用明细参数为空",null);
         }
 
-        this.warehouseReqDetailService.save(warehouseReqdetail);
-        return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.ADD_SUCCESS,null);
+        Map<String,String> map = new HashMap<>();
+        String warehouseRequId = this.warehouseReqDetailService.insertReqDetail(warehouseReqdetail);
+        map.put("warehouseRequId",warehouseRequId);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.ADD_SUCCESS,map);
     }
 
 

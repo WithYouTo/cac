@@ -1,6 +1,6 @@
 package com.qcap.cac.dao;
 
-import com.qcap.cac.dto.EquipRepairSearchParam;
+import com.qcap.cac.dto.EquipRepairSearchDto;
 import com.qcap.cac.entity.TbEquipRepair;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 public interface EquipRepairMapper {
     int insert(TbEquipRepair record);
 
-    List<Map<String,Object>> listEquipRepair(EquipRepairSearchParam equipRepairSearchParam);
+    List<Map<String,Object>> listEquipRepair(EquipRepairSearchDto equipRepairSearchDto);
 
     void updateEquipRepair(String equipRepairId);
 }

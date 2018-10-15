@@ -3,14 +3,17 @@ package com.qcap.cac.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseEntryMapper;
+import com.qcap.cac.dao.WarehousePositionMapper;
 import com.qcap.cac.dao.WarehouseStockMapper;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
+import com.qcap.cac.dao.WarehouseStorageMapper;
+import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseEntry;
+import com.qcap.cac.entity.TbWarehousePosition;
 import com.qcap.cac.entity.TbWarehouseStock;
+import com.qcap.cac.entity.TbWarehouseStorage;
 import com.qcap.cac.poiEntity.EntryPoiEntity;
 import com.qcap.cac.service.IWarehouseEntryService;
 import com.qcap.cac.tools.ToolUtil;
@@ -42,9 +45,15 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
     @Resource
     private WarehouseStockMapper warehouseStockMapper;
 
+    @Resource
+    private WarehousePositionMapper warehousePositionMapper;
+
+    @Resource
+    private WarehouseStorageMapper warehouseStorageMapper;
+
     @Override
-    public List<Map> getEntryList(WarehouseEntrySearchParam warehouseEntrySearchParam) {
-        List<Map> list = warehouseEntryMapper.getWarehouseEntryList(warehouseEntrySearchParam);
+    public List<Map> getEntryList(WarehouseEntryDto warehouseEntryDto) {
+        List<Map> list = warehouseEntryMapper.getWarehouseEntryList(warehouseEntryDto);
         return list;
     }
 
@@ -149,6 +158,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             BeanUtil.copyProperties(item,stock);
             //库存主键
             String  stockId = UUIDUtils.getUUID();
+            String storeroomId = "";
             //判断物品编码是否在库存表中存在
             QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
             wrapper.eq("GOODS_NO",buyNo).eq("SUPPLIER_NAME",supplierName);
@@ -161,11 +171,12 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 warehouseStockMapper.updateById(warehouseStock);
                 //库存主键
                 stockId = warehouseStock.getWarehouseStockId();
+                storeroomId = warehouseStock.getStoreroomId();
             }else{
                 //新增库存表
                 stock.setWarehouseStockId(stockId);
                 stock.setStoreroom(storeRoom);
-                String storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
+                storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
                 stock.setStoreroomId(storeroomId);
                 stock.setGoodsType(buyType);
                 stock.setGoodsNo(buyNo);
@@ -183,6 +194,29 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 stock.setCreateEmp("SYS");
                 stock.setCreateDate(new Date());
                 this.warehouseStockMapper.insert(stock);
+            }
+
+            //新增库位-库存关联表
+            QueryWrapper<TbWarehousePosition> pWrapper = new QueryWrapper<>();
+            pWrapper.eq("INSTRUCTION","SYSTEM-CONFIG-EXCEL")
+                    .eq("STOREROOM_ID",storeroomId)
+                    .groupBy("INSTRUCTION");
+            TbWarehousePosition warehousePosition = this.warehousePositionMapper.selectOne(pWrapper);
+
+            String positionId = warehousePosition.getWarehousePositionId();
+            TbWarehouseStorage storage = new TbWarehouseStorage();
+            storage.setWarehouseStorageId(UUIDUtils.getUUID());
+            storage.setWarehousePositionId(positionId);
+            storage.setWarehouseStockId(stockId);
+
+            //库位-物品关联是否已经存在
+            QueryWrapper<TbWarehouseStorage> sWrapper = new QueryWrapper<>();
+            sWrapper.eq("WAREHOUSE_POSITION_ID",positionId)
+                    .eq("WAREHOUSE_STOCK_ID",stockId);
+            if(warehouseStorageMapper.selectCount(sWrapper) == 0){
+                storage.setCreateDate(new Date());
+                storage.setCreateEmp("SYS");
+                this.warehouseStorageMapper.insert(storage);
             }
 
             entry.setWarehouseEntryId(UUIDUtils.getUUID());

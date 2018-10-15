@@ -1,7 +1,7 @@
 package com.qcap.cac.service.impl;
 
 import com.qcap.cac.dao.AttenceMapper;
-import com.qcap.cac.dto.AttenceSearchParam;
+import com.qcap.cac.dto.AttenceSearchDto;
 import com.qcap.cac.service.AttenceSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class AttenceSrvImpl implements AttenceSrv {
     private AttenceMapper attenceMapper;
 
     @Override
-    public List<Map<String, Object>> listAttence(AttenceSearchParam attenceSearchParam) {
-        return this.attenceMapper.listAttence(attenceSearchParam);
+    public List<Map<String, Object>> listAttence(AttenceSearchDto attenceSearchDto) {
+        return this.attenceMapper.listAttence(attenceSearchDto);
     }
 }

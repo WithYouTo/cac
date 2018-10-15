@@ -1,11 +1,11 @@
 package com.qcap.cac.dto;
 
-public class EquipRepairSearchParam {
+public class EquipPlanSearchDto {
 
     private String equipType;
     private String equipName;
-    private String repairTime;
-    private String status;
+    private String equipModel;
+    private String latestMaintTime;
 
     public String getEquipType() {
         return equipType;
@@ -23,29 +23,29 @@ public class EquipRepairSearchParam {
         this.equipName = equipName;
     }
 
-    public String getRepairTime() {
-        return repairTime;
+    public String getEquipModel() {
+        return equipModel;
     }
 
-    public void setRepairTime(String repairTime) {
-        this.repairTime = repairTime;
+    public void setEquipModel(String equipModel) {
+        this.equipModel = equipModel;
     }
 
-    public String getStatus() {
-        return status;
+    public String getLatestMaintTime() {
+        return latestMaintTime;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setLatestMaintTime(String latestMaintTime) {
+        this.latestMaintTime = latestMaintTime;
     }
 
     @Override
     public String toString() {
-        return "EquipRepairSearchParam{" +
+        return "EquipPlanSearchDto{" +
                 "equipType='" + equipType + '\'' +
                 ", equipName='" + equipName + '\'' +
-                ", repairTime='" + repairTime + '\'' +
-                ", status='" + status + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", latestMaintTime='" + latestMaintTime + '\'' +
                 '}';
     }
 }

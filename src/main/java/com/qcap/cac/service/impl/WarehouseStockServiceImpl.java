@@ -7,21 +7,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseEntryMapper;
 import com.qcap.cac.dao.WarehouseStockLogMapper;
 import com.qcap.cac.dao.WarehouseStockMapper;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
-import com.qcap.cac.entity.TbWarehouseEntry;
+import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.entity.TbWarehouseStockLog;
-import com.qcap.cac.poiEntity.EntryPoiEntity;
-import com.qcap.cac.service.IWarehouseEntryService;
 import com.qcap.cac.service.IWarehouseStockService;
 import com.qcap.cac.tools.UUIDUtils;
-import com.qcap.core.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,10 +42,10 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
 
 
     @Override
-    public List<Map> getWarehouseStockList(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+    public List<Map> getWarehouseStockList(WarehouseEntryDto warehouseEntryDto) {
         List<Map> list = new ArrayList<>();
-        if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getStoreroomId())){
-            list = this.warehouseStockMapper.getWarehouseStockList(warehouseEntrySearchParam);
+        if(StringUtils.isNotEmpty(warehouseEntryDto.getStoreroomId())){
+            list = this.warehouseStockMapper.getWarehouseStockList(warehouseEntryDto);
         }
         return list;
     }
@@ -65,30 +60,30 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
     }
 
     @Override
-    public List<TbWarehouseStock> getGoodsConfigList(WarehouseEntrySearchParam warehouseEntrySearchParam) {
+    public List<TbWarehouseStock> getGoodsConfigList(WarehouseEntryDto warehouseEntryDto) {
 
-        if(StringUtils.isEmpty(warehouseEntrySearchParam.getStoreroomId())){
+        if(StringUtils.isEmpty(warehouseEntryDto.getStoreroomId())){
             return new ArrayList<>();
         }
 
         //组装参数
         QueryWrapper<TbWarehouseStock> queryWrapper = new QueryWrapper<TbWarehouseStock>()
-                .eq("STOREROOM_ID", warehouseEntrySearchParam.getStoreroomId());
+                .eq("STOREROOM_ID", warehouseEntryDto.getStoreroomId());
 
-         if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getGoodsNo())) {
-             queryWrapper.like("GOODS_NO", "%" + warehouseEntrySearchParam.getGoodsNo() + "%");
+         if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsNo())) {
+             queryWrapper.like("GOODS_NO", "%" + warehouseEntryDto.getGoodsNo() + "%");
          }
 
-        if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getGoodsName())) {
-            queryWrapper.like("GOODS_NAME", "%" + warehouseEntrySearchParam.getGoodsName() + "%");
+        if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsName())) {
+            queryWrapper.like("GOODS_NAME", "%" + warehouseEntryDto.getGoodsName() + "%");
         }
 
-        if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getSupplierName())) {
-            queryWrapper.like("SUPPLIER_NAME", "%" + warehouseEntrySearchParam.getSupplierName() + "%");
+        if(StringUtils.isNotEmpty(warehouseEntryDto.getSupplierName())) {
+            queryWrapper.like("SUPPLIER_NAME", "%" + warehouseEntryDto.getSupplierName() + "%");
         }
 
-        if(StringUtils.isNotEmpty(warehouseEntrySearchParam.getGoodsNo())) {
-            queryWrapper.like("GOODS_NO", "%" + warehouseEntrySearchParam.getGoodsNo() + "%");
+        if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsNo())) {
+            queryWrapper.like("GOODS_NO", "%" + warehouseEntryDto.getGoodsNo() + "%");
         }
 
         queryWrapper.groupBy("GOODS_NO").groupBy("SUPPLIER_NAME");

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.WarehouseRequMapper">
+
+    <!--查詢领用申请主单-->
+    <select id="getRequGoodsList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseReqDto">
+        select
+        WAREHOUSE_REQU_ID,
+        STOREROOM_ID,
+        STOREROOM,
+        REQU_BATCH_NO,
+        REQU_PERSON,
+        REQU_MOBILE,
+        REQU_NAME,
+        DATE_FORMAT(REQU_TIME,'%Y-%m-%d') requTime,
+        REQU_REMARK,
+        REQU_STATUS
+        from tb_warehouse_requ a
+        where 1 = 1
+        <if test="storeroomId!=null and storeroomId!=''">
+            and a.STOREROOM_ID = #{storeroomId}
+        </if>
+        <if test="requMobile!=null and requMobile!=''">
+            and a.REQU_MOBILE like concat('%',#{requMobile},'%')
+        </if>
+        <if test="requName!=null and requName!=''">
+            and a.REQU_NAME like concat('%',#{requName},'%')
+        </if>
+        <if test="requStatus!=null and requStatus!=''">
+            and a.REQU_STATUS = #{requStatus}
+        </if>
+        <if test="requBatchNo!=null and requBatchNo!=''">
+            and a.REQU_BATCH_NO like  concat('%',#{requBatchNo},'%')
+        </if>
+        <if test="startDate!=null and startDate!=''">
+            and DATE(a.REQU_TIME) &gt;= #{startDate}
+        </if>
+        <if test="endDate!=null and endDate!=''">
+            and DATE(a.REQU_TIME) &lt;= #{endDate}
+        </if>
+        ORDER BY  a.REQU_TIME desc
+    </select>
+
+
+</mapper>

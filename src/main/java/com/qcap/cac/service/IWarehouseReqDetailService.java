@@ -2,7 +2,7 @@ package com.qcap.cac.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcap.cac.dto.WarehouseReqSearchParam;
+import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 
 import java.util.List;
@@ -19,6 +19,15 @@ import java.util.Map;
 public interface IWarehouseReqDetailService extends IService<TbWarehouseReqdetail> {
 
 
-    List<Map> getRequestedList(WarehouseReqSearchParam warehouseReqSearchParam);
+    List<Map> getRequestedList(WarehouseReqDto warehouseReqDto);
+
+    List<Map<String,Object>>  getReqDetailList(String warehouseRequId);
+
+    /**
+     * 返回warehouseRequId
+     * @param warehouseReqdetail
+     * @return
+     */
+    String insertReqDetail(TbWarehouseReqdetail warehouseReqdetail);
 
 }

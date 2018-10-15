@@ -3,7 +3,7 @@
 <mapper namespace="com.qcap.cac.dao.WarehouseStockMapper">
 
     <!--查詢库存信息-->
-    <select id="getWarehouseStockList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntrySearchParam">
+    <select id="getWarehouseStockList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntryDto">
         select
         a.WAREHOUSE_STOCK_ID,
         a.STOREROOM_ID,
@@ -39,7 +39,7 @@
         a.GOODS_NAME,
         CONCAT(IFNULL(c.BUILDING_NAME,''),IFNULL(c.ROOM_NAME,''),IFNULL(c.RANGE_SHELF,'')) rangeShelf,
         a.GOODS_NUM,
-        (SELECT MIN_UNIT from tb_warehouse_entry e where e.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID LIMIT 1)
+        (SELECT MIN_UNIT from tb_warehouse_entry e where e.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID LIMIT 1) minUnit
         FROM tb_warehouse_stock a
         LEFT JOIN tb_warehouse_storage b
         on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
