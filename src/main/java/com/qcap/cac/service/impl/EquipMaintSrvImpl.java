@@ -50,17 +50,18 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
     public void insertEquipMaint(EquipMaintInsertParam equipMaintInsertParam) {
         String maintType=equipMaintInsertParam.getMaintType();
         TbEquipMaint equipMaint = new TbEquipMaint();
-
         TbEquipPlan equipPlan = new TbEquipPlan();
 
         //mybatis-plus封装查询条件，根据设备编号获取设备信息
         QueryWrapper<TbEquip> equip = new QueryWrapper();
         equip.eq("equip_No",equipMaintInsertParam.getEquipNo());
         TbEquip equipInfo=this.equipMapper.selectOne(equip);
+
         //1、重组维保记录对象
         BeanUtils.copyProperties(equipInfo,equipMaint);
         BeanUtils.copyProperties(equipInfo,equipPlan);
         equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
+
         //若维保类型是配件，继续查询配件信息
         if((CommonConstant.MAINT_TYPE_PARTS).equals(maintType)){
             //mybatis-plus封装查询条件，根据设备编号获取设备信息
@@ -80,6 +81,18 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
         updateEquipPlanTime(equipMaintInsertParam.getMaintTime(),equipPlan);
     }
 
+    /**
+     *
+     * @Description: 更新最近维保时间和下次维保时间
+     *
+     *
+     * @MethodName: updateEquipPlanTime
+     * @Parameters: [maintTime, equipPlan]
+     * @ReturnType: void
+     *
+     * @author huangxiang
+     * @date 2018/10/14 17:07
+     */
     private void updateEquipPlanTime(String maintTime,TbEquipPlan equipPlan) {
         Date time = DateUtil.parseDate(maintTime);
         equipPlan.setLatestMaintDate(time);
