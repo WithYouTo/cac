@@ -29,13 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dao.EventTaskMapper;
+import com.qcap.cac.dao.EventTaskRestMapper;
 import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.EventTaskRestDto;
 import com.qcap.cac.entity.TbFlightInfo;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.exception.BaseException;
-import com.qcap.cac.service.EventTaskSrv;
+import com.qcap.cac.service.EventTaskRestSrv;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
@@ -48,10 +48,10 @@ import com.qcap.core.utils.DateUtil;
  */
 @Service
 @Transactional
-public class EventTaskSrvImpl implements EventTaskSrv {
+public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 	
 	@Resource
-	private EventTaskMapper eventTaskMapper;
+	private EventTaskRestMapper eventTaskMapper;
 	
 	@Resource
 	private TempTaskMapper tempTaskMapper;

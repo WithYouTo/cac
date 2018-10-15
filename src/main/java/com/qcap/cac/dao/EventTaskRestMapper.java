@@ -9,7 +9,7 @@ import com.qcap.cac.dto.EventTaskRestDto;
 import com.qcap.cac.entity.TbFlightInfo;
 
 @Repository
-public interface EventTaskMapper {
+public interface EventTaskRestMapper {
 	
 	void insertFlightInfo(TbFlightInfo flightInfo);
 	

@@ -14,7 +14,7 @@ package com.qcap.cac.service;
 import com.qcap.cac.dto.EventTaskRestDto;
 
 
-public interface EventTaskSrv {
+public interface EventTaskRestSrv {
 	
 	void geneEventTask(EventTaskRestDto eventTaskDto);
 }

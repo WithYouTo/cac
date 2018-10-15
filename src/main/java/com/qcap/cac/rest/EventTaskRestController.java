@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.EventTaskRestDto;
-import com.qcap.cac.service.EventTaskSrv;
+import com.qcap.cac.service.EventTaskRestSrv;
 import com.qcap.cac.tools.CommonTools;
 
 import io.swagger.annotations.Api;
@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiOperation;
 public class EventTaskRestController {
 	
 	@Resource
-	private EventTaskSrv eventTaskSrvImpl;
+	private EventTaskRestSrv eventTaskSrvImpl;
 	
 	@ResponseBody
 	@RequestMapping(value="genEventTask",method=RequestMethod.POST)
