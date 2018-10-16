@@ -147,6 +147,24 @@
 	    	<artifactId>jpush-client</artifactId>
 	    	<version>3.3.7</version>
 		</dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.tobato/fastdfs-client -->
+        <dependency>
+            <groupId>com.github.tobato</groupId>
+            <artifactId>fastdfs-client</artifactId>
+            <version>1.26.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>4.1.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.3.13.RELEASE</version>
+        </dependency>
+
     </dependencies>
     <!-- poi 版本冲突解决 -->
     <dependencyManagement>

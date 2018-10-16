@@ -1,12 +1,17 @@
 package com.qcap;
 
+import com.github.tobato.fastdfs.FdfsClientConfig;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.EnableMBeanExport;
+import org.springframework.context.annotation.Import;
+import org.springframework.jmx.support.RegistrationPolicy;
 
 /**
  * 物华信息demoCenter
@@ -15,6 +20,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * @date 2018/6/4 15:11
  * @version 1.0
  */
+@Import(FdfsClientConfig.class)
+@EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableCaching
 @SpringBootApplication

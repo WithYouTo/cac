@@ -15,5 +15,7 @@ import java.util.Map;
 @Repository
 public interface EquipMapper extends BaseMapper<TbEquip>{
 
-    List<Map<String,Object>> listEquip(IPage<Map<String, Object>> page, @Param("")@Valid EquipSearchDto equipSearchDto);
+    List<Map<String,Object>> listEquip(IPage<Map<String, Object>> page, @Param("obj")@Valid EquipSearchDto equipSearchDto);
+
+    int getMaxEquipNumByEquipType(String equipType);
 }

@@ -18,4 +18,6 @@ public interface CommonMapper extends BaseMapper<TbManager> {
 	List<Map<String, Object>> getAreaNameByAreaCode(String areaCode);
 
 	List<Map<String, Object>> getStandardNameByStandardCode(String standardCode);
+
+    List<Map<String,String>> getEquipTypeList();
 }

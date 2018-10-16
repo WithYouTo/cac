@@ -11,4 +11,6 @@ public interface CommonSrv {
 	String getAreaNameByAreaCode(String areaCode);
 
 	String getStandardNameByStandardCode(String standardCode);
+
+    List<Map<String,String>> getEquipTypeList();
 }

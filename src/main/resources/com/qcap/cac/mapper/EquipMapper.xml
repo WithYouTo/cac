@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.EquipMapper">
+
+    <select id="listEquip" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipInsertDto">
+        select
+        EQUIP_ID equipId,
+        PROJECT_CODE projectCode,
+        EQUIP_NO equipNo,
+        EQUIP_CODE_URL equipCodeUrl,
+        EQUIP_NAME equipName,
+        EQUIP_TYPE equipType,
+        EQUIP_MODEL equipModel,
+        RESPONSE_NO responseNo,
+        RESPONSE_NAME responseName,
+        MANUFACT manufact,
+        AGENCE_NO agenceNo,
+        AGENCE_NAME agenceName,
+        RELATE_NAME relateName,
+        RELATE_MOBILE relateMobile,
+        DATE_FORMAT(BUY_TIME,'%Y-%m-%d %H:%i:%S') buyTime,
+        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d %H:%i:%S') startUseTime,
+        ATTENTION attention,
+        EQUIP_STATE equipState
+        from TB_EQUIP
+        ORDER BY CREATE_DATE
+    </select>
+
+    <select id="getMaxEquipNumByEquipType" parameterType="String" resultType="int">
+        SELECT
+        count(EQUIP_ID)+1 num
+        FROM TB_EQUIP
+        WHERE EQUIP_TYPE = #{equipType}
+    </select>
+</mapper>

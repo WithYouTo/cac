@@ -47,4 +47,9 @@ public class CommonSrvImpl implements CommonSrv {
 		}
 		return null;
 	}
+
+    @Override
+    public List<Map<String, String>> getEquipTypeList() {
+        return this.commonMapper.getEquipTypeList();
+    }
 }

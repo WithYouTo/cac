@@ -5,6 +5,15 @@ import java.util.Map;
 
 public class CommonConstant {
 
+    //设备状态
+    public final static String EQUIP_STATUS_NORMAL = "NORMAL";
+    public final static String EQUIP_STATUS_ABORT= "ABORT";
+    public static Map<String,String> EQUIP_STATUS = new LinkedHashMap<String,String>();
+    static {
+        EQUIP_STATUS.put("NORMAL","正常");
+        EQUIP_STATUS.put("ABORT","损坏");
+    }
+
     //设备充电状态
     public final static String EQUIP_CHARGE_STATUS_INCHARGE = "INCHARGE";
     public final static String EQUIP_CHARGE_STATUS_CHARGED = "CHARGED";
