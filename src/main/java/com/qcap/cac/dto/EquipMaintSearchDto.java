@@ -1,6 +1,6 @@
 package com.qcap.cac.dto;
 
-public class EquipMaintSearchParam {
+public class EquipMaintSearchDto {
 
     private String maintType;
     private String equipName;
@@ -32,7 +32,7 @@ public class EquipMaintSearchParam {
 
     @Override
     public String toString() {
-        return "EquipMaintSearchParam{" +
+        return "EquipMaintSearchDto{" +
                 "maintType='" + maintType + '\'' +
                 ", equipName='" + equipName + '\'' +
                 ", partsName='" + partsName + '\'' +

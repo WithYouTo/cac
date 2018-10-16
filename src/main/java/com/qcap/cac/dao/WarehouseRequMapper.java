@@ -1,8 +1,11 @@
 package com.qcap.cac.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcap.cac.entity.TbWarehouseReqdetail;
+import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseRequ;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -16,5 +19,6 @@ import com.qcap.cac.entity.TbWarehouseRequ;
 public interface WarehouseRequMapper extends BaseMapper<TbWarehouseRequ> {
 
 
+    List<Map<String,String>> getRequGoodsList(WarehouseReqDto warehouseReqDto);
 
 }

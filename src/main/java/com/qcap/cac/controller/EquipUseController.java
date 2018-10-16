@@ -4,7 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dto.EquipUseSearchParam;
+import com.qcap.cac.dto.EquipUseSearchDto;
 import com.qcap.cac.service.EquipUseSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -32,7 +32,7 @@ public class EquipUseController{
      *
      *
      * @MethodName: listEquipUse
-     * @Parameters: [equipUseSearchParam]
+     * @Parameters: [equipUseSearchDto]
      * @ReturnType: java.lang.Object
      *
      * @author huangxiang
@@ -40,10 +40,10 @@ public class EquipUseController{
      */
     @ResponseBody
     @RequestMapping(value = "/listEquipUse", method = RequestMethod.POST)
-    public Object listEquipUse(@Valid EquipUseSearchParam equipUseSearchParam){
+    public Object listEquipUse(@Valid EquipUseSearchDto equipUseSearchDto){
         new PageFactory<Map<String, Object>>().defaultPage();
 
-        List<Map<String, Object>> list = this.equipUseSrv.listEquipUse(equipUseSearchParam);
+        List<Map<String, Object>> list = this.equipUseSrv.listEquipUse(equipUseSearchDto);
         PageInfo pageInfo = new PageInfo(list);
         for(Map<String, Object> map:list){
             String status = map.get("status").toString();

@@ -1,8 +1,7 @@
 package com.qcap.cac.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dao.EquipChargeMapper;
-import com.qcap.cac.dto.EquipChargeSearchParam;
+import com.qcap.cac.dto.EquipChargeSearchDto;
 import com.qcap.cac.service.EquipChargeSrv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,8 @@ public class EquipChargeSrvImpl implements EquipChargeSrv {
     private EquipChargeMapper equipChargeMapper;
 
     @Override
-    public List<Map<String, Object>> listEquipCharge(EquipChargeSearchParam equipChargeSearchParam) {
-        return this.equipChargeMapper.listEquipCharge(equipChargeSearchParam);
+    public List<Map<String, Object>> listEquipCharge(EquipChargeSearchDto equipChargeSearchDto) {
+        return this.equipChargeMapper.listEquipCharge(equipChargeSearchDto);
     }
 
     @Override

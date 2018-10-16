@@ -5,7 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dto.EquipRepairSearchParam;
+import com.qcap.cac.dto.EquipRepairSearchDto;
 import com.qcap.cac.service.EquipRepairSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -34,7 +34,7 @@ public class EquipRepairController{
      *
      *
      * @MethodName: listEquipRepair
-     * @Parameters: [equipRepairSearchParam]
+     * @Parameters: [equipRepairSearchDto]
      * @ReturnType: java.lang.Object
      *
      * @author huangxiang
@@ -42,10 +42,10 @@ public class EquipRepairController{
      */
     @ResponseBody
     @RequestMapping(value = "/listEquipRepair", method = RequestMethod.POST)
-    public Object listEquipRepair(IPage<Map<String, Object>> page,@Valid EquipRepairSearchParam equipRepairSearchParam){
+    public Object listEquipRepair(IPage<Map<String, Object>> page,@Valid EquipRepairSearchDto equipRepairSearchDto){
         new PageFactory<Map<String, Object>>().defaultPage();
 
-        List<Map<String, Object>> list = this.equipRepairSrv.listEquipRepair(equipRepairSearchParam);
+        List<Map<String, Object>> list = this.equipRepairSrv.listEquipRepair(equipRepairSearchDto);
         PageInfo pageInfo = new PageInfo(list);
         for(Map<String, Object> map:list){
             String status = map.get("status").toString();

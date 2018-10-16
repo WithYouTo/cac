@@ -1,6 +1,6 @@
 package com.qcap.cac.service;
 
-import com.qcap.cac.dto.AttenceSearchParam;
+import com.qcap.cac.dto.AttenceSearchDto;
 
 import java.util.List;
 import java.util.Map;
@@ -19,11 +19,11 @@ public interface AttenceSrv {
      *
      *
      * @MethodName: listAttence
-     * @Parameters: [attenceSearchParam]
+     * @Parameters: [attenceSearchDto]
      * @ReturnType: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      *
      * @author huangxiang
      * @date 2018/10/11 20:26
      */
-    List<Map<String, Object>> listAttence(AttenceSearchParam attenceSearchParam);
+    List<Map<String, Object>> listAttence(AttenceSearchDto attenceSearchDto);
 }

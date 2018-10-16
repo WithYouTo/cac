@@ -3,9 +3,7 @@ package com.qcap.cac.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
-import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dto.EquipChargeSearchParam;
-import com.qcap.cac.dto.EquipPlanSearchParam;
+import com.qcap.cac.dto.EquipPlanSearchDto;
 import com.qcap.cac.service.EquipPlanSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -28,10 +26,10 @@ public class EquipPlanController {
 
     @ResponseBody
     @RequestMapping(value = "/listEquipPlan", method = RequestMethod.POST)
-    public Object listEquipPlan(@Valid EquipPlanSearchParam equipPlanSearchParam){
+    public Object listEquipPlan(@Valid EquipPlanSearchDto equipPlanSearchDto){
         new PageFactory<Map<String, Object>>().defaultPage();
 
-        List<Map<String, Object>> list = this.equipPlanSrv.listEquipPlan(equipPlanSearchParam);
+        List<Map<String, Object>> list = this.equipPlanSrv.listEquipPlan(equipPlanSearchDto);
         PageInfo pageInfo = new PageInfo(list);
         Page pageList = (Page) list;
 

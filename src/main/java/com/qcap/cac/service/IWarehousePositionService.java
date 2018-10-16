@@ -2,13 +2,8 @@ package com.qcap.cac.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.entity.TbWarehousePosition;
-import com.qcap.cac.entity.TbWarehouseStock;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>

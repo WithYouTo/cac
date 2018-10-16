@@ -22,6 +22,7 @@ import com.qcap.cac.dto.TempTaskDto;
 import com.qcap.cac.dto.TempTaskSearchParam;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.core.common.CoreConstant;
+import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
@@ -36,15 +37,16 @@ public class TempTaskController {
 	@ResponseBody
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public Object listTask(@Valid TempTaskSearchParam paramDto) {
-		List<Map> list = tempTaskSrv.listTask(paramDto);
-		PageInfo pageInfo = new PageInfo<>(list);
+		new PageFactory<>().defaultPage();
+		List<Map<String,Object>> list = tempTaskSrv.listTask(paramDto);
+		PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(list);
 		return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
 	}
 
 	@ResponseBody
 	@RequestMapping("/selectStandard")
 	public Object selectStandardItem() {
-		List<Map> list = this.tempTaskSrv.selectStandardItem();
+		List<Map<String,Object>> list = this.tempTaskSrv.selectStandardItem();
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询标准成功", list);
 	}
 
@@ -72,10 +74,10 @@ public class TempTaskController {
 	@ResponseBody
 	@RequestMapping(value = "/selectTaskStatus", method = RequestMethod.POST)
 	public Object selectTaskStatus() {
-		List<Map> list = new ArrayList<>();
+		List<Map<String,Object>> list = new ArrayList<>();
 		Set<Entry<String, String>> entrys = CommonConstant.TASK_STATUS.entrySet();
 		for (Entry<String, String> en : entrys) {
-			Map map = new HashMap<>();
+			Map<String,Object> map = new HashMap<>();
 			map.put("key", en.getKey());
 			map.put("value", en.getValue());
 			if (!CommonConstant.TASK_STATUS_CANCLE.equals(en.getKey())) {
@@ -89,7 +91,7 @@ public class TempTaskController {
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public Object deleteTask(@RequestParam String taskCode) {
-		Map map = this.tempTaskSrv.deleteTempTask(taskCode);
+		Map<String,Object> map = this.tempTaskSrv.deleteTempTask(taskCode);
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", map);
 
 	}
@@ -97,10 +99,10 @@ public class TempTaskController {
 	@ResponseBody
 	@RequestMapping(value = "/selectShift", method = RequestMethod.POST)
 	public Object selectShiftType() {
-		List<Map> list = new ArrayList<>();
+		List<Map<String,Object>> list = new ArrayList<>();
 		Set<Entry<String, String>> entrys = CommonConstant.SHIFT.entrySet();
 		for (Entry<String, String> en : entrys) {
-			Map map = new HashMap<>();
+			Map<String,Object> map = new HashMap<>();
 			map.put("key", en.getKey());
 			map.put("value", en.getValue());
 			list.add(map);

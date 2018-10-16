@@ -2,10 +2,8 @@ package com.qcap.cac.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcap.cac.dto.WarehouseEntrySearchParam;
-import com.qcap.cac.entity.TbWarehouseEntry;
+import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
-import com.qcap.cac.poiEntity.EntryPoiEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -20,11 +18,12 @@ import java.util.Map;
  */
 public interface IWarehouseStockService extends IService<TbWarehouseStock> {
 
-    List<Map> getWarehouseStockList(WarehouseEntrySearchParam warehouseEntrySearchParam);
+    List<Map> getWarehouseStockList(WarehouseEntryDto warehouseEntryDto);
 
     List<Map> getPositionList(String warehouseStockId);
 
+    List<TbWarehouseStock> getGoodsConfigList(WarehouseEntryDto warehouseEntryDto);
 
-    List<TbWarehouseStock> getGoodsConfigList(WarehouseEntrySearchParam warehouseEntrySearchParam);
 
+    Integer updateGoodsNum(TbWarehouseStock warehouseStock);
 }

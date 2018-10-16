@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qcap.cac.dao.CleaningStandardMapper" >
+
+  <select id="list" parameterType="com.qcap.cac.dto.CleaningStandardDto" resultType="Map" >
+    select 
+    	STANDARD_ID standardId, 
+    	STANDARD_CODE standardCode, 
+    	STANDARD_NAME standardName, 
+    	STANDARD_STEP standardStep, 
+    	EQUITMET_TYPE equitmetType, 
+    	CLEAN_TOOLS cleanTools, 
+    	STANDARD_REQUIREMENT standardRequirement, 
+    	MARK_SCALE markScale, 
+    	CHECK_FLAG checkFlag, 
+    	UPLOAD_PIC_FLAG uploadPicFlag, 
+    	REMARK1 remark1, 
+    	REMARK2 remark2, 
+    	REMARK3 remark3, 
+    	CREATE_EMP createEmp, 
+    	CREATE_DATE createDate, 
+    	UPDATE_DATE updateDate, 
+    	UPDATE_EMP updateEmp, 
+    	VERSION version
+    from tb_area_standard
+    where 1=1
+	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardName)">
+		AND STANDARD_NAME LIKE CONCAT('%',#{standardName},'%')
+	</if>
+	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkFlag)">
+		AND CHECK_FLAG=#{checkFlag}
+	</if>
+	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(uploadPicFlag)">
+		AND UPLOAD_PIC_FLAG=#{uploadPicFlag}
+	</if>
+	ORDER BY CREATE_DATE DESC
+  </select>
+  
+  
+  <insert id="add" parameterType="com.qcap.cac.entity.TbAreaStandard" >
+    insert into tb_area_standard (STANDARD_ID, STANDARD_CODE, STANDARD_NAME, 
+      STANDARD_STEP, EQUITMET_TYPE, CLEAN_TOOLS, 
+      STANDARD_REQUIREMENT, MARK_SCALE, CHECK_FLAG, 
+      UPLOAD_PIC_FLAG, REMARK1, REMARK2, 
+      REMARK3, CREATE_EMP, CREATE_DATE, 
+      UPDATE_DATE, UPDATE_EMP, VERSION
+      )
+    values (#{standardId}, #{standardCode}, #{standardName}, 
+      #{standardStep}, #{equitmetType}, #{cleanTools}, 
+      #{standardRequirement}, #{markScale}, #{checkFlag}, 
+      #{uploadPicFlag}, #{remark1}, #{remark2}, 
+      #{remark3}, #{createEmp}, #{createDate}, 
+      #{updateDate}, #{updateEmp}, #{version}
+      )
+  </insert>
+  
+  
+  <update id="edit" parameterType="com.qcap.cac.entity.TbAreaStandard" >
+    update tb_area_standard
+    <set >
+      <if test="standardName != null" >
+        STANDARD_NAME = #{standardName},
+      </if>
+      <if test="standardStep != null" >
+        STANDARD_STEP = #{standardStep},
+      </if>
+      <if test="equitmetType != null" >
+        EQUITMET_TYPE = #{equitmetType},
+      </if>
+      <if test="cleanTools != null" >
+        CLEAN_TOOLS = #{cleanTools},
+      </if>
+      <if test="standardRequirement != null" >
+        STANDARD_REQUIREMENT = #{standardRequirement},
+      </if>
+      <if test="markScale != null" >
+        MARK_SCALE = #{markScale},
+      </if>
+      <if test="checkFlag != null" >
+        CHECK_FLAG = #{checkFlag},
+      </if>
+      <if test="uploadPicFlag != null" >
+        UPLOAD_PIC_FLAG = #{uploadPicFlag},
+      </if>
+      <if test="remark1 != null" >
+        REMARK1 = #{remark1},
+      </if>
+      <if test="remark2 != null" >
+        REMARK2 = #{remark2},
+      </if>
+      <if test="remark3 != null" >
+        REMARK3 = #{remark3},
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP = #{createEmp},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate},
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP = #{updateEmp},
+      </if>
+    </set>
+    where STANDARD_CODE = #{standardCode}
+  </update>
+ 
+  <select id="selectStandardCode" resultType="String" >
+    select  
+    	STANDARD_CODE standardCode
+    from tb_area_standard
+	ORDER BY standardCode DESC
+	LIMIT 1
+  </select>
+  
+  <select id="selectStandardName" parameterType="String" resultType="int" >
+    select  
+    	COUNT(1)
+    from tb_area_standard
+	WHERE STANDARD_NAME = #{standaedName}
+  </select>
+  
+   <select id="delete" parameterType="String"  >
+    delete from tb_area_standard
+    where STANDARD_CODE = #{standardCode}
+  </select>
+  
+</mapper>

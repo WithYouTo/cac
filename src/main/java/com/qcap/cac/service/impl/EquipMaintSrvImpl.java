@@ -1,14 +1,13 @@
 package com.qcap.cac.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.EquipMaintMapper;
 import com.qcap.cac.dao.EquipMapper;
 import com.qcap.cac.dao.EquipPartsMapper;
 import com.qcap.cac.dao.EquipPlanMapper;
-import com.qcap.cac.dto.EquipMaintInsertParam;
-import com.qcap.cac.dto.EquipMaintSearchParam;
+import com.qcap.cac.dto.EquipMaintInsertDto;
+import com.qcap.cac.dto.EquipMaintSearchDto;
 import com.qcap.cac.entity.TbEquip;
 import com.qcap.cac.entity.TbEquipMaint;
 import com.qcap.cac.entity.TbEquipParts;
@@ -42,30 +41,31 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
     private EquipPlanMapper equipPlanMapper;
 
     @Override
-    public List<Map<String, Object>> listEquipMaint(EquipMaintSearchParam equipMaintSearchParam) {
-        return this.equipMaintMapper.listEquipMaint(equipMaintSearchParam);
+    public List<Map<String, Object>> listEquipMaint(EquipMaintSearchDto equipMaintSearchDto) {
+        return this.equipMaintMapper.listEquipMaint(equipMaintSearchDto);
     }
 
     @Override
-    public void insertEquipMaint(EquipMaintInsertParam equipMaintInsertParam) {
-        String maintType=equipMaintInsertParam.getMaintType();
+    public void insertEquipMaint(EquipMaintInsertDto equipMaintInsertDto) {
+        String maintType= equipMaintInsertDto.getMaintType();
         TbEquipMaint equipMaint = new TbEquipMaint();
-
         TbEquipPlan equipPlan = new TbEquipPlan();
 
         //mybatis-plus封装查询条件，根据设备编号获取设备信息
         QueryWrapper<TbEquip> equip = new QueryWrapper();
-        equip.eq("equip_No",equipMaintInsertParam.getEquipNo());
+        equip.eq("equip_No", equipMaintInsertDto.getEquipNo());
         TbEquip equipInfo=this.equipMapper.selectOne(equip);
+
         //1、重组维保记录对象
         BeanUtils.copyProperties(equipInfo,equipMaint);
         BeanUtils.copyProperties(equipInfo,equipPlan);
         equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
+
         //若维保类型是配件，继续查询配件信息
         if((CommonConstant.MAINT_TYPE_PARTS).equals(maintType)){
             //mybatis-plus封装查询条件，根据设备编号获取设备信息
             QueryWrapper<TbEquipParts> parts = new QueryWrapper();
-            parts.eq("PARTS_NO",equipMaintInsertParam.getPartsNo());
+            parts.eq("PARTS_NO", equipMaintInsertDto.getPartsNo());
             TbEquipParts equipParts = this.equipPartsMapper.selectOne(parts);
 
             BeanUtils.copyProperties(equipParts,equipMaint);
@@ -77,13 +77,25 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
         this.equipMaintMapper.insert(equipMaint);
 
         //3、更新维保计划
-        updateEquipPlanTime(equipMaintInsertParam.getMaintTime(),equipPlan);
+        updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan);
     }
 
+    /**
+     *
+     * @Description: 更新最近维保时间和下次维保时间
+     *
+     *
+     * @MethodName: updateEquipPlanTime
+     * @Parameters: [maintTime, equipPlan]
+     * @ReturnType: void
+     *
+     * @author huangxiang
+     * @date 2018/10/14 17:07
+     */
     private void updateEquipPlanTime(String maintTime,TbEquipPlan equipPlan) {
         Date time = DateUtil.parseDate(maintTime);
-        equipPlan.setLatestMaintDate(time);
-        equipPlan.setNextMaintDate(getNewPlanDate(time,equipPlan.getMaintCycle()));
+//        equipPlan.setLatestMaintDate(time);
+//        equipPlan.setNextMaintDate(getNewPlanDate(time,equipPlan.getMaintCycle()));
         this.equipPlanMapper.updateEquipPlan(equipPlan);
     }
 

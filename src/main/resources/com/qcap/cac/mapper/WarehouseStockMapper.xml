@@ -3,7 +3,7 @@
 <mapper namespace="com.qcap.cac.dao.WarehouseStockMapper">
 
     <!--查詢库存信息-->
-    <select id="getWarehouseStockList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntrySearchParam">
+    <select id="getWarehouseStockList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntryDto">
         select
         a.WAREHOUSE_STOCK_ID,
         a.STOREROOM_ID,
@@ -12,12 +12,10 @@
         a.GOODS_NAME,
         a.SUPPLIER_NAME,
         sum(a.GOODS_NUM) goodsNum,
-        b.MIN_UNIT,
+        (SELECT MIN_UNIT from tb_warehouse_entry b WHERE b.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID and b.ENTRY_UNIT = a.ENTRY_UNIT LIMIT 1) minUnit,
         a.GOODS_TYPE,
         a.REMARK
         from tb_warehouse_stock a
-        LEFT JOIN tb_warehouse_entry b
-        on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
         where 1 = 1 AND a.DELETE_FLAG = 'N'
         <if test="storeroomId!=null and storeroomId!=''">
             and a.STOREROOM_ID = #{storeroomId}
@@ -39,9 +37,9 @@
     <select id="getPositionList" parameterType="String" resultType="Map">
         SELECT
         a.GOODS_NAME,
-        CONCAT(IFNULL(c.BULIDING_NAME,''),IFNULL(c.ROOM_NAME,''),IFNULL(c.RANGE_SHELF,'')) rangeShelf,
+        CONCAT(IFNULL(c.BUILDING_NAME,''),IFNULL(c.ROOM_NAME,''),IFNULL(c.RANGE_SHELF,'')) rangeShelf,
         a.GOODS_NUM,
-        (SELECT MIN_UNIT from tb_warehouse_entry e where e.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID LIMIT 1)
+        (SELECT MIN_UNIT from tb_warehouse_entry e where e.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID LIMIT 1) minUnit
         FROM tb_warehouse_stock a
         LEFT JOIN tb_warehouse_storage b
         on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID

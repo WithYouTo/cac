@@ -3,7 +3,7 @@
 <mapper namespace="com.qcap.cac.dao.WarehouseEntryMapper">
 
     <!--查詢入庫列表-->
-    <select id="getWarehouseEntryList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntrySearchParam">
+    <select id="getWarehouseEntryList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntryDto">
         select
         WAREHOUSE_ENTRY_ID,
         a.STOREROOM_ID,

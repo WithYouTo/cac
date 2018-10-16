@@ -28,6 +28,9 @@
 		m.CHECK_FLAG  AS  checkFlag,
 		m.UPLOAD_PIC_FLAG  AS  uploadPicFlag,
 		m.TASK_ADVICE  AS  taskAdvice,
+		m.TASK_FINISH_DESC  AS  taskFinishDesc,
+		m.DISQUALIFIED_REASON  AS  disqualifiedReason,
+		m.LINE_NO  AS  lineNo,
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,
 		m.REMARK3  AS  remark3,
@@ -61,6 +64,7 @@
       COMPLETE_TIME, START_TIME, END_TIME, 
       TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
       CHECK_FLAG, TASK_ADVICE, REMARK1, 
+      TASK_FINISH_DESC, DISQUALIFIED_REASON, LINE_NO,
       REMARK2, REMARK3, CREATE_EMP, 
       CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
       VERSION,UPLOAD_PIC_FLAG)
@@ -71,7 +75,8 @@
       #{employeeCode}, #{employeeName}, #{employeeTel}, 
       #{completeTime}, #{startTime}, #{endTime}, 
       #{taskStatus}, #{checkStatus}, #{taskScore}, 
-      #{checkFlag}, #{taskAdvice}, #{remark1}, 
+      #{checkFlag}, #{taskAdvice}, #{remark1},
+      #{taskFinishDesc}, #{disqualifiedReason}, #{lineNo}, 
       #{remark2}, #{remark3}, #{createEmp}, 
       #{createDate}, #{updateDate}, #{updateEmp}, 
       #{version},#{uploadPicFlag})
@@ -86,6 +91,7 @@
       COMPLETE_TIME, START_TIME, END_TIME, 
       TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
       CHECK_FLAG, TASK_ADVICE, REMARK1, 
+      TASK_FINISH_DESC, DISQUALIFIED_REASON, LINE_NO,
       REMARK2, REMARK3, CREATE_EMP, 
       CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
       VERSION,UPLOAD_PIC_FLAG)
@@ -99,6 +105,7 @@
       #{item.completeTime}, #{item.startTime}, #{item.endTime}, 
       #{item.taskStatus}, #{item.checkStatus}, #{item.taskScore}, 
       #{item.checkFlag}, #{item.taskAdvice}, #{item.remark1}, 
+      #{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.lineNo},
       #{item.remark2}, #{item.remark3}, #{item.createEmp}, 
       #{item.createDate}, #{item.updateDate}, #{item.updateEmp}, 
       #{item.version},#{item.uploadPicFlag})

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.EquipChargeMapper">
 
-    <select id="listEquipCharge" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipChargeSearchParam">
+    <select id="listEquipCharge" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipChargeSearchDto">
         select
         EQUIP_CHARGE_ID equipChargeId,
         EQUIP_ID equipId,

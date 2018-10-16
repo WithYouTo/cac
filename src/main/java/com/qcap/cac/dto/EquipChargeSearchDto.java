@@ -1,6 +1,6 @@
 package com.qcap.cac.dto;
 
-public class EquipChargeSearchParam {
+public class EquipChargeSearchDto {
 
     private String area;
     private String equipNo;
@@ -41,7 +41,7 @@ public class EquipChargeSearchParam {
 
     @Override
     public String toString() {
-        return "EquipChargeSearchParam{" +
+        return "EquipChargeSearchDto{" +
                 "area='" + area + '\'' +
                 ", equipNo='" + equipNo + '\'' +
                 ", startChargeTime='" + startChargeTime + '\'' +

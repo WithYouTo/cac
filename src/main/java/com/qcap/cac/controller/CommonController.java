@@ -146,4 +146,23 @@ public class CommonController {
         List<Map<String,String>> list = this.commonSrv.getPartsNameByEquipNo(equipNo);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
     }
+
+
+    /**
+     *
+     * @Description: 获取领用状态
+     *
+     *
+     * @MethodName: initWarehouseRequStatusSelect
+     * @Parameters: []
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/13 12:20
+     */
+    @ResponseBody
+    @RequestMapping(value = "/initWarehouseRequStatusSelect", method = RequestMethod.POST)
+    public Object initWarehouseRequStatusSelect(){
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, CommonConstant.WAREHOUSE_REQ_STATUS);
+    }
 }

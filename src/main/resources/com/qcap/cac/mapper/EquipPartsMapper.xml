@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.EquipPartsMapper">
+
+    <select id="listPartsByEquipId" resultType="java.util.Map" parameterType="String">
+        SELECT
+        PARTS_ID partsId,
+        EQUIP_ID equipId,
+        PARTS_NO partsNo,
+        PARTS_NAME partsName,
+        PARTS_MODEL partsModel,
+        PARTS_AGENCE partsAgence,
+        MAINT_CYCLE maintCycle,
+        LATEST_MAINT_TIME latestMaintTime,
+        NEXT_MAINT_TIME nextMaintTime,
+        RELATE_PERSON relatePerson,
+        RELATE_MOBILE relateMobile
+        FROM tb_equip_parts
+        WHERE EQUIP_ID = #{equipId}
+        ORDER BY CREATE_DATE
+    </select>
+
+</mapper>

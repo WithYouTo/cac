@@ -28,6 +28,9 @@
 		m.CHECK_FLAG  AS  checkFlag,
 		m.UPLOAD_PIC_FLAG  AS  uploadPicFlag,
 		m.TASK_ADVICE  AS  taskAdvice,
+		m.TASK_FINISH_DESC  AS  taskFinishDesc,
+		m.DISQUALIFIED_REASON  AS  disqualifiedReason,
+		m.LINE_NO  AS  lineNo,
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,
 		m.REMARK3  AS  remark3,
@@ -98,6 +101,33 @@
 	SELECT POSITION_CODE AS code,POSITION_NAME AS text 
 	FROM tb_area_position 
 	ORDER BY POSITION_CODE 
+	</select>
+	
+	<select id="selectStandardInfo" parameterType="String" resultType="Map">
+	SELECT 
+	m.STANDARD_ID  AS  standardId,
+	m.STANDARD_CODE  AS  standardCode,
+	m.STANDARD_NAME  AS  standardName,
+	m.STANDARD_STEP  AS  standardStep,
+	m.EQUITMET_TYPE  AS  equitmetType,
+	m.CLEAN_TOOLS  AS  cleanTools,
+	m.STANDARD_REQUIREMENT  AS  standardRequirement,
+	m.MARK_SCALE  AS  markScale,
+	m.CHECK_FLAG  AS  checkFlag,
+	m.UPLOAD_PIC_FLAG  AS  uploadPicFlag
+	FROM tb_area_standard m
+	WHERE STANDARD_CODE =#{standardCode}
+	</select>
+	
+	<select id="selectFileInfo" parameterType="String" resultType="Map">
+	SELECT 
+	m.FILE_ID  AS  fileId,
+	m.GROUP_ID  AS  groupId,
+	m.FILE_NAME  AS  fileName,
+	m.FILE_TYPE  AS  fileType,
+	m.STORE_URL  AS  storeUrl,
+	m.DOWNLOAD_URL  AS  downloadUrl
+	FROM tb_sys_file m where GROUP_ID =#{groupId}
 	</select>
 	
 <!-- 	<select id="selectEmployee" resultType="Map">

@@ -35,13 +35,13 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 	private TempTaskMapper tempTaskMapper;
 
 	@Override
-	public List<Map> listTask(TempTaskSearchParam paramDto) {
+	public List<Map<String,Object>> listTask(TempTaskSearchParam paramDto) {
 		// TODO Auto-generated method stub
 		return tempTaskMapper.listTask(paramDto);
 	}
 
 	@Override
-	public Map deleteTempTask(String taskCode) {
+	public Map<String,Object> deleteTempTask(String taskCode) {
 		// TODO Auto-generated method stub
 		Map<String, Object> map = new HashMap<>();
 		String taskStatus = this.tempTaskMapper.selectTaskStatus(taskCode);
@@ -71,7 +71,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 	}
 
 	@Override
-	public List<Map> selectStandardItem() {
+	public List<Map<String,Object>> selectStandardItem() {
 		// TODO Auto-generated method stub
 		String standardCode = null;
 		return this.tempTaskMapper.selectStandardItem(standardCode);
@@ -101,8 +101,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 
 	@Override
 	public Map<String, Object> insertTempTask(TempTaskDto taskDto) {
+		
 		Map<String, Object> map = new HashMap<>();
-		// TODO Auto-generated method stub
 		String areaCode = taskDto.getAreaCode();
 		String areaName = taskDto.getAreaName();
 		String standardCode = taskDto.getStandardCode();
@@ -113,7 +113,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String positionCode;
 		String positionName;
 		// 查询标准详细信息
-		List<Map> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
+		List<Map<String,Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
 		if (standardList == null || standardList.isEmpty()) {
 			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
 			map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
@@ -122,7 +122,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
 		String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
 		// 查询岗位
-		Map positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
+		Map<String,Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
 		if (positionMap != null && !positionMap.isEmpty()) {
 			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
 			positionName = ToolUtil.toStr(positionMap.get("positionName"));
@@ -185,7 +185,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		param.put("positionCode", positionCode);
 		param.put(queryDay, queryDay);
 		// 查询当班人员
-		List<Map> list = this.tempTaskMapper.selectWorkingEmployee(param);
+		List<Map<String,Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
 		if (ToolUtil.isEmpty(list)) {
 			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
 			map.put(CommonConstant.BACK_MESSAGE, "未查询到当班人员");
@@ -194,7 +194,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		List<String> employeeCodeList = new ArrayList<>();
 		List<String> employeeNameList = new ArrayList<>();
 		List<String> employeeTelList = new ArrayList<>();
-		for (Map m : list) {
+		for (Map<String,Object> m : list) {
 			employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
 			employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
 			employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
@@ -250,7 +250,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		}
 
 		// 查询标准详细信息
-		List<Map> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
+		List<Map<String,Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
 		if (standardList == null || standardList.isEmpty()) {
 			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
 			map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
@@ -259,7 +259,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
 		String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
 		// 查询岗位
-		Map positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
+		Map<String,Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
 		if (positionMap != null && !positionMap.isEmpty()) {
 			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
 			positionName = ToolUtil.toStr(positionMap.get("positionName"));
@@ -314,11 +314,11 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		param.put("positionCode", positionCode);
 		param.put(queryDay, queryDay);
 		// 查询当班人员
-		List<Map> list = this.tempTaskMapper.selectWorkingEmployee(param);
+		List<Map<String,Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
 		List<String> employeeCodeList = new ArrayList<>();
 		List<String> employeeNameList = new ArrayList<>();
 		List<String> employeeTelList = new ArrayList<>();
-		for (Map m : list) {
+		for (Map<String,Object> m : list) {
 			employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
 			employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
 			employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));

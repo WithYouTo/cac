@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.AppTaskRestMapper">
+
+	<select id="queryTaskItem01" parameterType="com.qcap.cac.dto.AppTaskRestDto" resultType="Map">
+	select COUNT(1) taskNum,CASE WHEN TASK_STATUS ='FINISH' THEN 'finishItem' 
+	WHEN TASK_STATUS ='WAIT' THEN 'waitingItem' 
+	WHEN TASK_STATUS ='WORKING' THEN 'workingItem' END AS taskItem
+	FROM tb_task 
+	WHERE TASK_STATUS !='CANCLE' 
+	AND DATE(START_TIME)=#{startTime} 
+	GROUP BY  TASK_STATUS
+	UNION
+	select COUNT(1), 'tempItem' 
+	FROM tb_task 
+	WHERE TASK_STATUS !='CANCLE' 
+	AND TASK_CODE LIKE 'T%' 
+	AND DATE(START_TIME)=#{startTime}
+	UNION
+	select COUNT(1), 'disqualifiedItem' 
+	FROM tb_task 
+	WHERE TASK_STATUS !='CANCLE' 
+	AND TASK_CODE LIKE 'DQ%' 
+	AND DATE(START_TIME)=#{startTime}
+	</select>
+	
+	<select id="queryTaskItem02" parameterType="String" resultType="Map">
+	SELECT COUNT(1) taskNum,'toCheckItem' AS 'taskItem' 
+	FROM tb_task 
+	WHERE TASK_STATUS ='FINISH' 
+	AND CHECK_STATUS='TOCHECK'  
+	AND DATE(START_TIME)=#{startTime}
+	UNION
+	SELECT COUNT(1) taskNum,'checkedItem' AS 'taskItem' 
+	FROM tb_task 
+	WHERE TASK_STATUS ='FINISH' 
+	AND CHECK_STATUS !='TOCHECK' 
+	AND DATE(START_TIME)=#{startTime}
+	</select>
+	
+	<select id="queryTaskIntro" parameterType="com.qcap.cac.dto.AppTaskRestDto" resultType="Map">
+	SELECT STANDARD_NAME AS standardName,TASK_CODE AS taskCode,
+	CASE WHEN TASK_TYPE='TEMP' THEN '临时'
+	WHEN TASK_TYPE='REGULAR' THEN '周期'
+	WHEN TASK_TYPE='EVENT' THEN '事件'
+	WHEN TASK_TYPE='SPECIAL' THEN '专项'
+	END  AS taskType,
+	CONCAT(DATE_FORMAT(START_TIME,'%H:%i'),'-',DATE_FORMAT(END_TIME,'%H:%i')) AS cleanTime,
+	SPEC AS spec,TASK_SCORE AS taskScore, CHECK_FLAG AS checkFlag
+	FROM tb_task WHERE FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
+	AND TASK_STATUS =#{taskStatus}
+	</select>
+	
+	
+	
+</mapper>

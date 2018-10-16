@@ -1,6 +1,6 @@
 package com.qcap.cac.dto;
 
-public class EquipMaintInsertParam {
+public class EquipMaintInsertDto {
 
     private String maintType;
     private String equipName;
@@ -68,7 +68,7 @@ public class EquipMaintInsertParam {
 
     @Override
     public String toString() {
-        return "EquipMaintInsertParam{" +
+        return "EquipMaintInsertDto{" +
                 "maintType='" + maintType + '\'' +
                 ", equipName='" + equipName + '\'' +
                 ", equipNo='" + equipNo + '\'' +

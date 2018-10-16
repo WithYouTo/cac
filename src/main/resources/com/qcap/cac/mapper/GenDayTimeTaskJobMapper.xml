@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.GenDayTimeTaskJobMapper">
+
+	<select id="selectShift" parameterType="String" resultType="Map">
+	SELECT DESC1_ AS startTime,DESC2_ AS endTime 
+	FROM tbpubcode01 
+	WHERE CONFIG_CODE_= 'SHIFT_TYPE' 
+	AND DESC_ =#{shift}
+	</select>
+	
+	<select id="selectPlan" parameterType="Map" resultType="Map">
+		SELECT 
+		PLAN_ID AS planId,AREA_CODE AS areaCode,
+		STANDARD_CODE AS standardCode,
+		START_TIME AS startTime,END_TIME AS endTime 
+		FROM tb_plan 
+		WHERE PLAN_TIME_TYPE = 'DAY' 
+		AND START_TIME &gt;= #{startTime}
+		AND END_TIME &lt; #{endTime}
+		UNION
+		SELECT 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME 
+		FROM tb_plan 
+		WHERE PLAN_TIME_TYPE = 'WEEK' 
+		AND WEEK= #{week} 
+		AND START_TIME &gt;= #{startTime}
+		AND END_TIME &lt; #{endTime}
+		UNION
+		SELECT 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME 
+		FROM tb_plan 
+		WHERE PLAN_TIME_TYPE = 'MONTH'  
+		AND DAY = #{day} 
+		AND START_TIME &gt;= #{startTime}
+		AND END_TIME &lt; #{endTime}
+		UNION
+		SELECT 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME 
+		FROM tb_plan 
+		WHERE PLAN_TIME_TYPE = 'YEAR' 
+		AND MONTH = #{month} 
+		AND DAY = #{day} 
+		AND START_TIME &gt;= #{startTime}
+		AND END_TIME &lt; #{endTime}
+	</select>
+	
+	<select id="selectPositionInfoByAreaCode" parameterType="String" resultType="Map">
+	SELECT POSITION_CODE positionCode,POSITION_NAME positionName from tb_area_position 
+	WHERE FIND_IN_SET(#{areaCode},AREA_CODE)
+	</select>
+	
+	<select id="selectStandardInfo" parameterType="String" resultType="Map">
+	SELECT 
+	m.STANDARD_ID  AS  standardId,
+	m.STANDARD_CODE  AS  standardCode,
+	m.STANDARD_NAME  AS  standardName,
+	m.STANDARD_STEP  AS  standardStep,
+	m.EQUITMET_TYPE  AS  equitmetType,
+	m.CLEAN_TOOLS  AS  cleanTools,
+	m.STANDARD_REQUIREMENT  AS  standardRequirement,
+	m.MARK_SCALE  AS  markScale,
+	m.CHECK_FLAG  AS  checkFlag,
+	m.UPLOAD_PIC_FLAG  AS  uploadPicFlag
+	FROM tb_area_standard m
+	WHERE STANDARD_CODE =#{standardCode}
+	</select>
+	
+		<sql id="selectWorkIngItem">
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day1)">
+		AND DAY_1 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day2)">
+		AND DAY_2 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day3)">
+		AND DAY_3 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day4)">
+		AND DAY_4 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day5)">
+		AND DAY_5 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day6)">
+		AND DAY_6 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day7)">
+		AND DAY_7 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day8)">
+		AND DAY_8 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day9)">
+		AND DAY_9 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day10)">
+		AND DAY_10 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day11)">
+		AND DAY_11 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day12)">
+		AND DAY_12 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day13)">
+		AND DAY_13 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day14)">
+		AND DAY_14 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day15)">
+		AND DAY_15 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day16)">
+		AND DAY_16 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day17)">
+		AND DAY_17 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day18)">
+		AND DAY_18 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day19)">
+		AND DAY_19 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day20)">
+		AND DAY_20 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day21)">
+		AND DAY_21 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day22)">
+		AND DAY_22 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day23)">
+		AND DAY_23 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day24)">
+		AND DAY_24 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day25)">
+		AND DAY_25 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day26)">
+		AND DAY_26 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day27)">
+		AND DAY_27 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day28)">
+		AND DAY_28 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day29)">
+		AND DAY_29 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day30)">
+		AND DAY_30 ='√'
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(day31)">
+		AND DAY_31 ='√'
+		</if>
+	</sql>
+	
+	<select id="selectWorkingEmployee" parameterType="Map" resultType="Map">
+	SELECT EMPLOYEE_CODE employeeCode,EMPLOYEE_NAME employeeName,EMPLOYEE_TEL employeeTel 
+	FROM tb_task_arrangement 
+	WHERE SHIFT =#{shift} 
+	AND MONTH=#{month} 
+	AND POSITION_CODE=#{positionCode} 
+	<include refid="selectWorkIngItem"/>
+	</select>
+	
+</mapper>

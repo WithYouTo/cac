@@ -2,9 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.WarehouseReqDetailMapper">
 
-    <!--查詢领用信息-->
-    <select id="getRequestedGoodsList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseReqSearchParam">
+    <!--查詢已领用信息-->
+    <select id="getRequestedGoodsList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseReqDto">
         select
+        STOREROOM_ID,
+        STOREROOM,
         WAREHOUSE_REQDETAIL_ID,
         a.WAREHOUSE_REQU_ID,
         a.WAREHOUSE_STOCK_ID,
@@ -26,7 +28,7 @@
             and c.STOREROOM_ID = #{storeroomId}
         </if>
         <if test="requLocName!=null and requLocName!=''">
-            and a.REQU_LOC_NAME like concat('%','#{requLocName}','%')
+            and a.REQU_LOC_NAME like concat('%',#{requLocName},'%')
         </if>
         <if test="goodsNo!=null and goodsNo!=''">
             and c.GOODS_NO like concat('%',#{goodsNo},'%')
@@ -46,82 +48,33 @@
         ORDER BY  b.REQU_TIME desc
     </select>
 
-    <!--查询物品存放的货位信息-->
-    <select id="getPositionList" parameterType="String" resultType="Map">
-        SELECT
-        a.GOODS_NAME,
-        CONCAT(IFNULL(c.BULIDING_NAME,''),IFNULL(c.ROOM_NAME,''),IFNULL(c.RANGE_SHELF,'')) rangeShelf,
-        a.GOODS_NUM,
-        (SELECT MIN_UNIT from tb_warehouse_entry e where e.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID LIMIT 1)
-        FROM tb_warehouse_stock a
-        LEFT JOIN tb_warehouse_storage b
-        on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
-        LEFT JOIN tb_warehouse_position c
-        on b.WAREHOUSE_POSITION_ID = c.WAREHOUSE_POSITION_ID
-        WHERE a.WAREHOUSE_STOCK_ID = #{warehouseStockId}
+    <!--查询领用明细-->
+    <select id="getReqDetailList" parameterType="String" resultType="Map">
+        select
+        a.WAREHOUSE_REQU_ID,
+        WAREHOUSE_REQDETAIL_ID,
+        STOREROOM_ID,
+        STOREROOM,
+        REQU_BATCH_NO,
+        REQU_PERSON,
+        REQU_MOBILE,
+        REQU_NAME,
+        REQU_TIME,
+        a.REQU_STATUS,
+        (SELECT GOODS_NO FROM tb_warehouse_stock b WHERE b.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID) goodsNo,
+        (SELECT GOODS_NAME FROM tb_warehouse_stock b WHERE b.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID) goodsName,
+        REQU_LOC,
+        REQU_LOC_NAME,
+        APPLY_NUM,
+        REAL_NUM,
+        MIN_UNIT,
+        a.REQU_REMARK
+        from tb_warehouse_reqdetail a
+        LEFT JOIN tb_warehouse_requ b
+        on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
+        where  a.WAREHOUSE_REQU_ID = #{warehouseRequId}
+        order by a.CREATE_DATE ASC
     </select>
-
-    <update id="updateById" parameterType="com.qcap.cac.entity.TbWarehouseStock">
-        update tb_warehouse_stock
-        <set >
-            <if test="storeroomId != null" >
-                STOREROOM_ID = #{storeroomId,jdbcType=VARCHAR},
-            </if>
-            <if test="storeroom != null" >
-                STOREROOM = #{storeroom,jdbcType=VARCHAR},
-            </if>
-            <if test="goodsType != null" >
-                GOODS_TYPE = #{goodsType,jdbcType=VARCHAR},
-            </if>
-            <if test="goodsNo != null" >
-                GOODS_NO = #{goodsNo,jdbcType=VARCHAR},
-            </if>
-            <if test="goodsName != null" >
-                GOODS_NAME = #{goodsName,jdbcType=VARCHAR},
-            </if>
-            <if test="limitStore != null" >
-                LIMIT_STORE = #{limitStore,jdbcType=INTEGER},
-            </if>
-            <if test="buyType != null" >
-                BUY_TYPE = #{buyType,jdbcType=VARCHAR},
-            </if>
-            <if test="buyNo != null" >
-                BUY_NO = #{buyNo,jdbcType=VARCHAR},
-            </if>
-            <if test="buyNum != null" >
-                BUY_NUM = #{buyNum,jdbcType=VARCHAR},
-            </if>
-            <if test="entryUnit != null" >
-                ENTRY_UNIT = #{entryUnit,jdbcType=CHAR},
-            </if>
-            <if test="supplierNo != null" >
-                SUPPLIER_NO = #{supplierNo,jdbcType=VARCHAR},
-            </if>
-            <if test="supplierName != null" >
-                SUPPLIER_NAME = #{supplierName,jdbcType=VARCHAR},
-            </if>
-            <if test="goodsNum != null" >
-                GOODS_NUM = #{goodsNum,jdbcType=VARCHAR},
-            </if>
-            <if test="stockInstrution != null" >
-                STOCK_INSTRUTION = #{stockInstrution,jdbcType=VARCHAR},
-            </if>
-            <if test="remark != null" >
-                REMARK = #{remark,jdbcType=VARCHAR},
-            </if>
-            <if test="deleteFlag != null" >
-                DELETE_FLAG = #{deleteFlag,jdbcType=VARCHAR},
-            </if>
-            <if test="updateEmp != null" >
-                UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
-            </if>
-            <if test="updateDate != null" >
-                UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
-            </if>
-            VERSION = VERSION + 1
-        </set>
-        where WAREHOUSE_STOCK_ID = #{warehouseStockId,jdbcType=VARCHAR}
-    </update>
 
 
 

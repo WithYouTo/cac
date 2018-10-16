@@ -11,10 +11,10 @@
  */
 package com.qcap.cac.service;
 
-import java.util.Map;
+import com.qcap.cac.dto.EventTaskRestDto;
 
 
-public interface EventTaskSrv {
+public interface EventTaskRestSrv {
 	
-	Map geneEventTask(Map<String, String>map);
+	void geneEventTask(EventTaskRestDto eventTaskDto);
 }

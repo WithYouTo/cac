@@ -1,6 +1,6 @@
 package com.qcap.cac.dto;
 
-public class WarehouseEntrySearchParam {
+public class WarehouseEntryDto {
 
     private String storeroomId;
     private String entryBatchNo;
