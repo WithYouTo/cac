@@ -1,12 +1,10 @@
 package com.qcap.cac.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dto.EquipChargeSearchParam;
+import com.qcap.cac.dto.EquipChargeSearchDto;
 import com.qcap.cac.service.EquipChargeSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -31,7 +29,7 @@ public class EquipChargeController {
      *
      *
      * @MethodName: listEquipCharge
-     * @Parameters: [equipChargeSearchParam]
+     * @Parameters: [equipChargeSearchDto]
      * @ReturnType: java.lang.Object
      *
      * @author huangxiang
@@ -39,9 +37,9 @@ public class EquipChargeController {
      */
     @ResponseBody
     @RequestMapping(value = "/listEquipCharge", method = RequestMethod.POST)
-    public Object listEquipCharge(@Valid EquipChargeSearchParam equipChargeSearchParam){
+    public Object listEquipCharge(@Valid EquipChargeSearchDto equipChargeSearchDto){
         new PageFactory<Map<String, Object>>().defaultPage();
-        List<Map<String, Object>> list = this.equipChargeSrv.listEquipCharge(equipChargeSearchParam);
+        List<Map<String, Object>> list = this.equipChargeSrv.listEquipCharge(equipChargeSearchDto);
         PageInfo pageInfo = new PageInfo(list);
         for(Map<String, Object> map:list){
             String status = map.get("status").toString();
