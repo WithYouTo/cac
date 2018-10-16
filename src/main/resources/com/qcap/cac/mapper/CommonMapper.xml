@@ -23,6 +23,24 @@
             <if test="equipNo != null and equipNo != ''">EQUIP_NO=#{equipNo}</if>　　　　　
         </where>
     </select>
+    
+    <select id="getAreaNameByAreaCode" parameterType="String" resultType="java.util.Map">
+        SELECT
+        	AREA_CODE areaCode,
+        	AREA_NAME areaName
+        FROM
+        	tb_area
+        WHERE AREA_CODE = #{areaCode}
+    </select>
+    
+    <select id="getStandardNameByStandardCode" parameterType="String" resultType="java.util.Map">
+        SELECT
+        	STANDARD_CODE standardCode,
+        	STANDARD_NAME standardName
+        FROM
+        	tb_area_standard
+        WHERE STANDARD_CODE = #{standardCode}
+    </select>
 
 
 </mapper>
