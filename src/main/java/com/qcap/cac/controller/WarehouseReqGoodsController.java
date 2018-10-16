@@ -94,12 +94,10 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Object addRequ(TbWarehouseRequ warehouseRequ) {
-
        if(null == warehouseRequ){
            ResParams.newInstance(CoreConstant.FAIL_CODE,"领用单参数为空",null);
        }
 
-       warehouseRequ.setWarehouseRequId(UUIDUtils.getUUID());
        warehouseRequ.setRequBatchNo(UUIDUtils.getBatchNo());
        warehouseRequ.setRequStatus("INIT");
        warehouseRequ.setCreateEmp("SYS");
@@ -114,9 +112,25 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Object updateReq(TbWarehouseRequ warehouseRequ) {
+        try {
+            this.warehouseRequService.updateById(warehouseRequ);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
+        }
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.EDIT_SUCCESS,null);
+    }
 
-       this.warehouseRequService.updateById(warehouseRequ);
-
+    /**
+     * 提交领用单
+     */
+    @ResponseBody
+    @RequestMapping(value = "/commit", method = RequestMethod.POST)
+    public Object commitRequ(TbWarehouseRequ warehouseRequ) {
+        try {
+            this.warehouseRequService.commitRequ(warehouseRequ);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
+        }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.EDIT_SUCCESS,null);
     }
 
@@ -126,9 +140,11 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Object deleteReq(String warehouseRequId) {
-
-        this.warehouseRequService.removeById(warehouseRequId);
-
+        try {
+            this.warehouseRequService.delete(warehouseRequId);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
+        }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.DELETE_SUCCESS,null);
     }
 

@@ -98,7 +98,7 @@ public class WarehousePositionController {
             return ResParams.newInstance(CoreConstant.FAIL_CODE, "库位信息为空", position);
         }
         Integer exist = this.warehousePositionService.selectExistPosition(position);
-        if(exist > 0){
+        if(exist > 1){
             return ResParams.newInstance(CoreConstant.FAIL_CODE, "库位已经存在", position);
         }
         this.warehousePositionService.updatePosition(position);
