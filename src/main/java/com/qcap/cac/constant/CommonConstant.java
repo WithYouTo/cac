@@ -134,5 +134,11 @@ public class CommonConstant {
         WAREHOUSE_REQ_STATUS.put("COMMIT","已提交");
         WAREHOUSE_REQ_STATUS.put("RECEIVE","已领用");
     }
+    
+    //周期性计划时间类型
+    public final static String PLAN_TIME_TYPE_DAY = "DAY";
+    public final static String PLAN_TIME_TYPE_WEEK = "WEEK";
+    public final static String PLAN_TIME_TYPE_MONTH = "MONTH";
+    public final static String PLAN_TIME_TYPE_YEAR = "YEAR";
 
 }

@@ -209,6 +209,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeCode(employeeCode);
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
+		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
 		this.tempTaskMapper.insertTempTask(task);
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
