@@ -42,5 +42,15 @@
         WHERE STANDARD_CODE = #{standardCode}
     </select>
 
+    <select id="getEquipTypeList" resultType="java.util.Map">
+        SELECT
+        DESC_ id,
+        DESC1_ text
+        FROM
+        tbpubcode01
+        WHERE
+        CONFIG_CODE_ = 'EQUIP_TYPE'
+    </select>
+
 
 </mapper>

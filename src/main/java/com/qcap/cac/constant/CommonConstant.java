@@ -5,6 +5,15 @@ import java.util.Map;
 
 public class CommonConstant {
 
+    //设备状态
+    public final static String EQUIP_STATUS_NORMAL = "NORMAL";
+    public final static String EQUIP_STATUS_ABORT= "ABORT";
+    public static Map<String,String> EQUIP_STATUS = new LinkedHashMap<String,String>();
+    static {
+        EQUIP_STATUS.put("NORMAL","正常");
+        EQUIP_STATUS.put("ABORT","损坏");
+    }
+
     //设备充电状态
     public final static String EQUIP_CHARGE_STATUS_INCHARGE = "INCHARGE";
     public final static String EQUIP_CHARGE_STATUS_CHARGED = "CHARGED";
@@ -134,5 +143,11 @@ public class CommonConstant {
         WAREHOUSE_REQ_STATUS.put("COMMIT","已提交");
         WAREHOUSE_REQ_STATUS.put("RECEIVE","已领用");
     }
+    
+    //周期性计划时间类型
+    public final static String PLAN_TIME_TYPE_DAY = "DAY";
+    public final static String PLAN_TIME_TYPE_WEEK = "WEEK";
+    public final static String PLAN_TIME_TYPE_MONTH = "MONTH";
+    public final static String PLAN_TIME_TYPE_YEAR = "YEAR";
 
 }

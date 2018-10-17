@@ -12,9 +12,15 @@ public class CommonCodeConstant {
 
 	public static final String SUCCESS_QUERY_DESC = "查询成功";
 
+	public static final String SUCCESS_UPLOAD_DESC = "上传成功";
+
 	public static final Integer PARAM_EMPTY_CODE = 4000;
 
 	public static final Integer SYS_EXCEPTION_CODE = 9999;
+
 	public static final String SYS_EXCEPTION_MSG = "服务器君开小差了,请稍后呼叫服务器君";
+
+	public static final String SYS_EQUIP_TYPE_PREFIX = "10103108";
+
 
 }
