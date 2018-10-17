@@ -156,5 +156,14 @@ public class CommonConstant {
 		PLAN_TIME_TYPE.put("MONTH", "每月");
 		PLAN_TIME_TYPE.put("YEAR", "每年");
 	}
+	
+    //删除标识
+    public final static String DELETE_FLAG_DELETE="DELETE";
+    public final static String DELETE_FLAG_NORMAL="NORMAL";
+	public static Map<String, String> DELETE_FLAG = new LinkedHashMap<String, String>();
+	static {
+		DELETE_FLAG.put("DELETE", "删除");
+		DELETE_FLAG.put("NORMAL", "正常");
+	}
 
 }
