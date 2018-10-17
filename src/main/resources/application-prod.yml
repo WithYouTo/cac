@@ -1,5 +1,5 @@
 server:
-  port: 8062
+  port: 8060
   servlet:  
     context-path: /cac
 spring:
