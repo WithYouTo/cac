@@ -39,6 +39,25 @@ public class CommonController {
     @Resource
     private FastDFSClientWrapper dfsClient;
 
+
+    /**
+     *
+     * @Description: 获取设备状态下拉框
+     *
+     *
+     * @MethodName: initEquipStatus
+     * @Parameters: []
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 20:33
+     */
+    @ResponseBody
+    @RequestMapping(value = "/initEquipStatus", method = RequestMethod.POST)
+    public Object initEquipStatus(){
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, CommonConstant.EQUIP_STATUS);
+    }
+
     /**
      *
      * @Description: 获取设备充电状态下拉框
@@ -109,7 +128,6 @@ public class CommonController {
     @ResponseBody
     @RequestMapping(value = "/initEquipTypeSelect", method = RequestMethod.POST)
     public Object initEquipTypeSelect(){
-        //todo 获取设备类型下拉框
         List<Map<String,String>> equipTypeList = this.commonSrv.getEquipTypeList();
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, equipTypeList);
     }

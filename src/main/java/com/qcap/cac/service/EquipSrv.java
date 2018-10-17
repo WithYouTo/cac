@@ -23,4 +23,12 @@ public interface EquipSrv {
     void deletePartsByPartsId(String partsId);
 
     void deletePartsByEquipId(String equipId);
+
+    void updateEquip(@Valid EquipInsertDto equipInsertDto);
+
+    void updatePartsAndMaintTime(@Valid PartsInsertDto partsInsertDto);
+
+    void insertPartsAndMaintTime(@Valid PartsInsertDto partsInsertDto);
+
+    void deleteEquipByEquipId(String equipId);
 }

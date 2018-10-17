@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -41,7 +42,7 @@ public class TbEquipPlan implements Serializable {
     /**
      * 启用日期
      */
-    private LocalDate startUseDate;
+    private Date startUseTime;
     /**
      * 生命周期
      */
@@ -58,6 +59,11 @@ public class TbEquipPlan implements Serializable {
      * 配件名称
      */
     private String partsName;
+
+    /**
+     * 配件型号
+     */
+    private String partsModel;
     /**
      * 维保周期
      */
@@ -65,11 +71,11 @@ public class TbEquipPlan implements Serializable {
     /**
      * 最近维保时间
      */
-    private LocalDate latestMaintDate;
+    private Date latestMaintTime;
     /**
      * 下次维保时间
      */
-    private LocalDate nextMaintDate;
+    private Date nextMaintTime;
     /**
      * 备注
      */
@@ -81,7 +87,7 @@ public class TbEquipPlan implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
     /**
      * 修改人
      */
@@ -89,11 +95,11 @@ public class TbEquipPlan implements Serializable {
     /**
      * 修改时间
      */
-    private LocalDateTime updateDate;
+    private Date updateDate;
     /**
      * 版本
      */
-    private String version;
+    private Integer version;
 
 
     public String getPlanId() {
@@ -136,12 +142,36 @@ public class TbEquipPlan implements Serializable {
         this.equipModel = equipModel;
     }
 
-    public LocalDate getStartUseDate() {
-        return startUseDate;
+    public Date getStartUseTime() {
+        return startUseTime;
     }
 
-    public void setStartUseDate(LocalDate startUseDate) {
-        this.startUseDate = startUseDate;
+    public void setStartUseTime(Date startUseTime) {
+        this.startUseTime = startUseTime;
+    }
+
+    public String getPartsModel() {
+        return partsModel;
+    }
+
+    public void setPartsModel(String partsModel) {
+        this.partsModel = partsModel;
+    }
+
+    public Date getLatestMaintTime() {
+        return latestMaintTime;
+    }
+
+    public void setLatestMaintTime(Date latestMaintTime) {
+        this.latestMaintTime = latestMaintTime;
+    }
+
+    public Date getNextMaintTime() {
+        return nextMaintTime;
+    }
+
+    public void setNextMaintTime(Date nextMaintTime) {
+        this.nextMaintTime = nextMaintTime;
     }
 
     public String getLifeCycle() {
@@ -184,20 +214,12 @@ public class TbEquipPlan implements Serializable {
         this.maintCycle = maintCycle;
     }
 
-    public LocalDate getLatestMaintDate() {
-        return latestMaintDate;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public void setLatestMaintDate(LocalDate latestMaintDate) {
-        this.latestMaintDate = latestMaintDate;
-    }
-
-    public LocalDate getNextMaintDate() {
-        return nextMaintDate;
-    }
-
-    public void setNextMaintDate(LocalDate nextMaintDate) {
-        this.nextMaintDate = nextMaintDate;
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public String getRemark() {
@@ -216,14 +238,6 @@ public class TbEquipPlan implements Serializable {
         this.createEmp = createEmp;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
     public String getUpdateEmp() {
         return updateEmp;
     }
@@ -232,44 +246,45 @@ public class TbEquipPlan implements Serializable {
         this.updateEmp = updateEmp;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public String getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
     @Override
     public String toString() {
         return "TbEquipPlan{" +
-        ", planId=" + planId +
-        ", equipId=" + equipId +
-        ", equipName=" + equipName +
-        ", equipType=" + equipType +
-        ", equipModel=" + equipModel +
-        ", startUseDate=" + startUseDate +
-        ", lifeCycle=" + lifeCycle +
-        ", partsId=" + partsId +
-        ", partsNo=" + partsNo +
-        ", partsName=" + partsName +
-        ", maintCycle=" + maintCycle +
-        ", latestMaintDate=" + latestMaintDate +
-        ", nextMaintDate=" + nextMaintDate +
-        ", remark=" + remark +
-        ", createEmp=" + createEmp +
-        ", createDate=" + createDate +
-        ", updateEmp=" + updateEmp +
-        ", updateDate=" + updateDate +
-        ", version=" + version +
-        "}";
+                "planId='" + planId + '\'' +
+                ", equipId='" + equipId + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipType='" + equipType + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", startUseTime=" + startUseTime +
+                ", lifeCycle='" + lifeCycle + '\'' +
+                ", partsId='" + partsId + '\'' +
+                ", partsNo='" + partsNo + '\'' +
+                ", partsName='" + partsName + '\'' +
+                ", partsModel='" + partsModel + '\'' +
+                ", maintCycle='" + maintCycle + '\'' +
+                ", latestMaintTime=" + latestMaintTime +
+                ", nextMaintTime=" + nextMaintTime +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
     }
 }

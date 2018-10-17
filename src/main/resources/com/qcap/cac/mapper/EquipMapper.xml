@@ -2,7 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.EquipMapper">
 
-    <select id="listEquip" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipInsertDto">
+    <select id="listEquip" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipSearchDto">
+        select
+        EQUIP_ID equipId,
+        PROJECT_CODE projectCode,
+        EQUIP_NO equipNo,
+        EQUIP_CODE_URL equipCodeUrl,
+        EQUIP_NAME equipName,
+        EQUIP_USE equipUse,
+        LIFE_CYCLE lifeCycle,
+        WARRANTY warranty,
+        DAILY_MAINT dailyMaint,
+        MAINT_CYCLE maintCycle,
+        MANUFACT manufact,
+        EQUIP_TYPE equipType,
+        EQUIP_MODEL equipModel,
+        BASE_REQUIRE baseRequire,
+        RESPONSE_NO responseNo,
+        RESPONSE_NAME responseName,
+        AGENCE_NO agenceNo,
+        AGENCE_NAME agenceName,
+        RELATE_NAME relateName,
+        RELATE_MOBILE relateMobile,
+        STOP_PLACE stopPlace,
+        STORE_AREA storeArea,
+        CHARGE_PLACE chargePlace,
+        CHARGE_AREA chargeArea,
+        DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
+        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+        ATTENTION attention,
+        EQUIP_STATE equipState
+        from TB_EQUIP
+        WHERE
+        DEL_FLAG = 'NORMAL'
+        <if test="obj.equipName != null and obj.equipName != ''">
+          AND EQUIP_NAME = #{obj.equipName}
+        </if>
+        <if test="obj.equipState != null and obj.equipState != ''">
+          AND EQUIP_STATE = #{obj.equipState}
+        </if>
+        <if test="obj.equipType != null and obj.equipType != ''">
+          AND EQUIP_TYPE = #{obj.equipType}
+        </if>
+        ORDER BY CREATE_DATE
+    </select>
+
+    <select id="selectEquipByEquipId"  resultType="com.qcap.cac.entity.TbEquip" parameterType="com.qcap.cac.dto.EquipInsertDto">
         select
         EQUIP_ID equipId,
         PROJECT_CODE projectCode,
@@ -18,12 +63,15 @@
         AGENCE_NAME agenceName,
         RELATE_NAME relateName,
         RELATE_MOBILE relateMobile,
-        DATE_FORMAT(BUY_TIME,'%Y-%m-%d %H:%i:%S') buyTime,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d %H:%i:%S') startUseTime,
+        DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
+        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
         ATTENTION attention,
         EQUIP_STATE equipState
-        from TB_EQUIP
-        ORDER BY CREATE_DATE
+        FROM TB_EQUIP
+        WHERE
+        DEL_FLAG = 'NORMAL'
+        AND
+        EQUIP_ID = #{equipId}
     </select>
 
     <select id="getMaxEquipNumByEquipType" parameterType="String" resultType="int">
@@ -32,4 +80,88 @@
         FROM TB_EQUIP
         WHERE EQUIP_TYPE = #{equipType}
     </select>
+
+    <update id="updateEquip" parameterType="com.qcap.cac.entity.TbEquip">
+        update tb_equip
+        set
+        <if test="equipName != null and equipName != ''">
+            EQUIP_NAME = #{equipName},
+        </if>
+        <if test="equipModel != null and equipModel != ''">
+            EQUIP_MODEL = #{equipModel},
+        </if>
+        <if test="responseNo != null and responseNo != ''">
+            RESPONSE_NO = #{responseNo},
+        </if>
+        <if test="responseName != null and responseName != ''">
+            RESPONSE_NAME = #{responseName},
+        </if>
+        <if test="equipUse != null and equipUse != ''">
+            EQUIP_USE = #{equipUse},
+        </if>
+        <if test="stopPlace != null and stopPlace != ''">
+            STOP_PLACE = #{stopPlace},
+        </if>
+        <if test="storeArea != null and storeArea != ''">
+            STORE_AREA = #{storeArea},
+        </if>
+        <if test="chargePlace != null and chargePlace != ''">
+            CHARGE_PLACE = #{chargePlace},
+        </if>
+        <if test="chargeArea != null and chargeArea != ''">
+            CHARGE_AREA = #{chargeArea},
+        </if>
+        <if test="manufact != null and manufact != ''">
+            MANUFACT = #{manufact},
+        </if>
+        <if test="agenceNo != null and agenceNo != ''">
+            AGENCE_NO = #{agenceNo},
+        </if>
+        <if test="agenceName != null and agenceName != ''">
+            AGENCE_NAME = #{agenceName},
+        </if>
+        <if test="relateName != null and relateName != ''">
+            RELATE_NAME = #{relateName},
+        </if>
+        <if test="relateMobile != null and relateMobile != ''">
+            RELATE_MOBILE = #{relateMobile},
+        </if>
+        <if test="lifeCycle != null and lifeCycle != ''">
+            LIFE_CYCLE = #{lifeCycle},
+        </if>
+        <if test="dailyMaint != null and dailyMaint != ''">
+            DAILY_MAINT = #{dailyMaint},
+        </if>
+        <if test="maintCycle != null and maintCycle != ''">
+            MAINT_CYCLE = #{maintCycle},
+        </if>
+        <if test="warranty != null and warranty != ''">
+            WARRANTY = #{warranty},
+        </if>
+        <if test="baseRequire != null and baseRequire != ''">
+            BASE_REQUIRE = #{baseRequire},
+        </if>
+        <if test="attention != null and attention != ''">
+            ATTENTION = #{attention},
+        </if>
+        <if test="imgUrl != null and imgUrl != ''">
+            IMG_URL = #{imgUrl},
+        </if>
+        <if test="fileUrl != null and fileUrl != ''">
+            FILE_URL = #{fileUrl},
+        </if>
+        CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+        where EQUIP_ID = #{equipId}
+    </update>
+
+    <update id="deleteEquipByEquipId">
+        UPDATE  tb_equip
+        SET
+        DEL_FLAG = 'DEL'
+        WHERE
+        EQUIP_ID = #{equipId}
+    </update>
 </mapper>

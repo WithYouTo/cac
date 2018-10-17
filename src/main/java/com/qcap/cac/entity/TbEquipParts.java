@@ -52,13 +52,17 @@ public class TbEquipParts implements Serializable {
      */
     private String maintCycle;
     /**
+     * 开始使用时间
+     */
+    private Date startUseTime;
+    /**
      * 最近维保时间
      */
-    private LocalDate latestMaintTime;
+    private Date latestMaintTime;
     /**
      * 下次维保时间
      */
-    private LocalDate nextMaintTime;
+    private Date nextMaintTime;
     /**
      * 联系人
      */
@@ -156,19 +160,19 @@ public class TbEquipParts implements Serializable {
         this.maintCycle = maintCycle;
     }
 
-    public LocalDate getLatestMaintTime() {
+    public Date getLatestMaintTime() {
         return latestMaintTime;
     }
 
-    public void setLatestMaintTime(LocalDate latestMaintTime) {
+    public void setLatestMaintTime(Date latestMaintTime) {
         this.latestMaintTime = latestMaintTime;
     }
 
-    public LocalDate getNextMaintTime() {
+    public Date getNextMaintTime() {
         return nextMaintTime;
     }
 
-    public void setNextMaintTime(LocalDate nextMaintTime) {
+    public void setNextMaintTime(Date nextMaintTime) {
         this.nextMaintTime = nextMaintTime;
     }
 
@@ -236,6 +240,14 @@ public class TbEquipParts implements Serializable {
         this.version = version;
     }
 
+    public Date getStartUseTime() {
+        return startUseTime;
+    }
+
+    public void setStartUseTime(Date startUseTime) {
+        this.startUseTime = startUseTime;
+    }
+
     @Override
     public String toString() {
         return "TbEquipParts{" +
@@ -247,6 +259,7 @@ public class TbEquipParts implements Serializable {
                 ", partsModel='" + partsModel + '\'' +
                 ", partsAgence='" + partsAgence + '\'' +
                 ", maintCycle='" + maintCycle + '\'' +
+                ", startUseTime=" + startUseTime +
                 ", latestMaintTime=" + latestMaintTime +
                 ", nextMaintTime=" + nextMaintTime +
                 ", relatePerson='" + relatePerson + '\'' +

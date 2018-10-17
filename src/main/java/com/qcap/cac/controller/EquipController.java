@@ -27,36 +27,81 @@ public class EquipController {
     private EquipSrv equipSrv;
 
 
+    /**
+     *
+     * @Description: 获取设备列表
+     *
+     *
+     * @MethodName: listEquip
+     * @Parameters: [page, equipSearchDto]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 13:38
+     */
     @ResponseBody
     @RequestMapping(value = "/listEquip", method = RequestMethod.POST)
     public Object listEquip(IPage<Map<String, Object>> page, @Valid EquipSearchDto equipSearchDto){
-        //todo 获取设备列表
         this.equipSrv.listEquip(page, equipSearchDto);
         return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(), page.getRecords());
 
     }
 
+    /**
+     *
+     * @Description: 根据设备Id获取所属配件列表
+     *
+     *
+     * @MethodName: listPartsByEquipId
+     * @Parameters: [page, equipId]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 13:39
+     */
     @ResponseBody
     @RequestMapping(value = "/listPartsByEquipId", method = RequestMethod.POST)
     public Object listPartsByEquipId(IPage<Map<String, Object>> page, String equipId){
-        //todo 根据设备Id获取所属配件列表
         this.equipSrv.listPartsByEquipId(page, equipId);
         return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(), page.getRecords());
     }
 
+    /**
+     *
+     * @Description: 新增设备
+     *
+     *
+     * @MethodName: insertEquip
+     * @Parameters: [equipInsertDto]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 13:39
+     */
     @ResponseBody
     @RequestMapping(value = "/insertEquip", method = RequestMethod.POST)
     public Object insertEquip(@Valid EquipInsertDto equipInsertDto){
-        //todo 新增设备
         try {
             this.equipSrv.insertEquip(equipInsertDto);
         } catch (Exception e) {
-            e.printStackTrace();
+            this.equipSrv.deletePartsByEquipId(equipInsertDto.getEquipId());
         }
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, "");
 
     }
 
+    /**
+     *
+     * @Description: 新增配件
+     *
+     *
+     * @MethodName: insertParts
+     * @Parameters: [partsInsertParam]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 13:39
+     */
     @ResponseBody
     @RequestMapping(value = "/insertParts", method = RequestMethod.POST)
     public Object insertParts(@Valid PartsInsertDto partsInsertParam){
@@ -65,15 +110,101 @@ public class EquipController {
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, result);
     }
 
-
+    /**
+     *
+     * @Description: 修改设备页面新增配件信息
+     *
+     *
+     * @MethodName: insertPartsInEditPage
+     * @Parameters: [partsInsertDto]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 15:23
+     */
     @ResponseBody
-    @RequestMapping(value = "/updateParts", method = RequestMethod.POST)
-    public Object updateParts(@Valid PartsInsertDto partsInsertParam){
-        // 修改配件
-        this.equipSrv.updateParts(partsInsertParam);
+    @RequestMapping(value = "/insertPartsInEditPage", method = RequestMethod.POST)
+    public Object insertPartsInEditPage(@Valid PartsInsertDto partsInsertDto){
+        // 修改设备
+        this.equipSrv.insertPartsAndMaintTime(partsInsertDto);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
     }
 
+    /**
+     *
+     * @Description: 修改配件
+     *
+     *
+     * @MethodName: updateParts
+     * @Parameters: [partsInsertParam]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 13:39
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateParts", method = RequestMethod.POST)
+    public Object updateParts(@Valid PartsInsertDto partsInsertDto){
+        // 修改配件
+        this.equipSrv.updateParts(partsInsertDto);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
+    }
+
+
+    /**
+     *
+     * @Description: 修改设备
+     *
+     *
+     * @MethodName: updateEquip
+     * @Parameters: [partsInsertParam]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 13:41
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateEquip", method = RequestMethod.POST)
+    public Object updateEquip(@Valid EquipInsertDto equipInsertDto){
+        // 修改设备
+        this.equipSrv.updateEquip(equipInsertDto);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
+    }
+
+
+
+    /**
+     *
+     * @Description: 修改设备页面修改配件信息
+     *
+     *
+     * @MethodName: updatePartsInEditPage
+     * @Parameters: [partsInsertDto]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 15:18
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updatePartsInEditPage", method = RequestMethod.POST)
+    public Object updatePartsInEditPage(@Valid PartsInsertDto partsInsertDto){
+        // 修改设备
+        this.equipSrv.updatePartsAndMaintTime(partsInsertDto);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
+    }
+
+    /**
+     *
+     * @Description: 通过配件Id删除配件
+     *
+     *
+     * @MethodName: deletePartsByPartsId
+     * @Parameters: [partsId]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 13:39
+     */
     @ResponseBody
     @RequestMapping(value = "/deletePartsByPartsId", method = RequestMethod.POST)
     public Object deletePartsByPartsId(String partsId){
@@ -81,10 +212,41 @@ public class EquipController {
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
     }
 
+    /**
+     *
+     * @Description: 通过设备Id删除设备
+     *
+     *
+     * @MethodName: deletePartsByEquipId
+     * @Parameters: [equipId]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 13:40
+     */
     @ResponseBody
     @RequestMapping(value = "/deletePartsByEquipId", method = RequestMethod.POST)
     public Object deletePartsByEquipId(String equipId){
         this.equipSrv.deletePartsByEquipId(equipId);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
+    }
+
+    /**
+     *
+     * @Description: 根据设备ID逻辑删除设备信息
+     *
+     *
+     * @MethodName: deleteEquipByEquipId
+     * @Parameters: [equipId]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/17 19:47
+     */
+    @ResponseBody
+    @RequestMapping(value = "/deleteEquipByEquipId", method = RequestMethod.POST)
+    public Object deleteEquipByEquipId(String equipId){
+        this.equipSrv.deleteEquipByEquipId(equipId);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
     }
 }
