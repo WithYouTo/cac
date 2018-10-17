@@ -4,12 +4,15 @@ import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.core.model.ResParams;
+import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +33,11 @@ import java.util.Map;
 public class CommonController {
 
 
-    @Autowired
+    @Resource
     private CommonSrv commonSrv;
+
+    @Resource
+    private FastDFSClientWrapper dfsClient;
 
     /**
      *
@@ -104,7 +110,8 @@ public class CommonController {
     @RequestMapping(value = "/initEquipTypeSelect", method = RequestMethod.POST)
     public Object initEquipTypeSelect(){
         //todo 获取设备类型下拉框
-        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, CommonConstant.EQUIP_REPAIR_STATUS);
+        List<Map<String,String>> equipTypeList = this.commonSrv.getEquipTypeList();
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, equipTypeList);
     }
 
 
@@ -164,5 +171,26 @@ public class CommonController {
     @RequestMapping(value = "/initWarehouseRequStatusSelect", method = RequestMethod.POST)
     public Object initWarehouseRequStatusSelect(){
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, CommonConstant.WAREHOUSE_REQ_STATUS);
+    }
+
+
+
+    /**
+     *
+     * @Description: 上传文件
+     *
+     *
+     * @MethodName: upload
+     * @Parameters: [file]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/16 19:08
+     */
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public Object upload(MultipartFile file) throws Exception {
+        String path = dfsClient.uploadFile(file);
+//        System.out.println(path);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPLOAD_DESC, path);
     }
 }

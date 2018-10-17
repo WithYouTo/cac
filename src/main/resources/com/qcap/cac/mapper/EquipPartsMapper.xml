@@ -20,4 +20,23 @@
         ORDER BY CREATE_DATE
     </select>
 
+    <update id="updatePartsByPartsId" parameterType="com.qcap.cac.dto.PartsInsertDto">
+        UPDATE tb_equip_parts
+        SET
+        PARTS_NAME = #{partsName},
+        PARTS_MODEL = #{partsModel},
+        PARTS_AGENCE = #{partsAgence},
+        MAINT_CYCLE = #{maintCycle},
+        RELATE_PERSON = #{relatePerson},
+        RELATE_MOBILE = #{relateMobile}
+        WHERE PARTS_ID = #{partsId}
+    </update>
+
+    <delete id="deletePartsByPartsId" parameterType="String">
+        delete from tb_equip_parts WHERE PARTS_ID = #{partsId}
+    </delete>
+
+    <delete id="deletePartsByEquipId" parameterType="String">
+        delete from tb_equip_parts WHERE EQUIP_ID = #{equipId}
+    </delete>
 </mapper>

@@ -10,6 +10,8 @@
         WAREHOUSE_REQDETAIL_ID,
         a.WAREHOUSE_REQU_ID,
         a.WAREHOUSE_STOCK_ID,
+        a.GOODS_NO  goodsNo,
+        a.GOODS_NAME goodsName,
         REQU_LOC,
         REQU_LOC_NAME,
         APPLY_NUM,
@@ -21,20 +23,18 @@
         from tb_warehouse_reqdetail a
         LEFT JOIN tb_warehouse_requ b
         on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
-        LEFT JOIN tb_warehouse_stock c
-        on a.WAREHOUSE_STOCK_ID = c.WAREHOUSE_STOCK_ID
         where a.REQU_STATUS = 'RECEIVE'
         <if test="storeroomId!=null and storeroomId!=''">
-            and c.STOREROOM_ID = #{storeroomId}
+            and b.STOREROOM_ID = #{storeroomId}
         </if>
         <if test="requLocName!=null and requLocName!=''">
             and a.REQU_LOC_NAME like concat('%',#{requLocName},'%')
         </if>
         <if test="goodsNo!=null and goodsNo!=''">
-            and c.GOODS_NO like concat('%',#{goodsNo},'%')
+            and a.GOODS_NO like concat('%',#{goodsNo},'%')
         </if>
         <if test="goodsName!=null and goodsName!=''">
-            and c.GOODS_NAME like  concat('%',#{goodsName},'%')
+            and a.GOODS_NAME like  concat('%',#{goodsName},'%')
         </if>
         <if test="requName!=null and requName!=''">
             and b.REQU_NAME like  concat('%',#{requName},'%')
@@ -59,10 +59,10 @@
         REQU_PERSON,
         REQU_MOBILE,
         REQU_NAME,
-        REQU_TIME,
+        DATE_FORMAT(REQU_TIME,'%Y-%m-%d') requTime,
         a.REQU_STATUS,
-        (SELECT GOODS_NO FROM tb_warehouse_stock b WHERE b.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID) goodsNo,
-        (SELECT GOODS_NAME FROM tb_warehouse_stock b WHERE b.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID) goodsName,
+        a.GOODS_NO  goodsNo,
+        a.GOODS_NAME goodsName,
         REQU_LOC,
         REQU_LOC_NAME,
         APPLY_NUM,
@@ -75,6 +75,21 @@
         where  a.WAREHOUSE_REQU_ID = #{warehouseRequId}
         order by a.CREATE_DATE ASC
     </select>
+
+
+    <update id="updateReqDetailStatus" parameterType="com.qcap.cac.entity.TbWarehouseRequ">
+        update
+        tb_warehouse_reqdetail
+        set REQU_STATUS = #{requStatus}
+        where WAREHOUSE_REQU_ID = #{warehouseRequId}
+    </update>
+
+
+    <update id="deleteReqDetailStatus" parameterType="com.qcap.cac.entity.TbWarehouseRequ">
+        delete from
+        tb_warehouse_reqdetail
+        where WAREHOUSE_REQU_ID = #{warehouseRequId}  and REQU_STATUS = #{requStatus}
+    </update>
 
 
 

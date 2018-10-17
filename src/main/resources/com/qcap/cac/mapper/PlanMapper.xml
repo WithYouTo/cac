@@ -30,11 +30,65 @@
 			<if test="areaCode != null and areaCode != ''">
 				AND AREA_CODE = #{areaCode}
 			</if>
-			<if test="planTimeType != null and planTimeType != ''">
-				AND PLAN_TIME_TYPE = #{planTimeType}
+			<if test="standardCode != null and standardCode != ''">
+				AND STANDARD_CODE = #{standardCode}
 			</if>
 		</where>
 	</select>
+	
+	<select id="selectPlanById" parameterType="String" resultType="com.qcap.cac.entity.TbPlan">
+		SELECT
+			PLAN_ID planId,
+			AREA_CODE areaCode,
+			STANDARD_CODE standardCode,
+			PLAN_TIME_TYPE planTimeType,
+			MONTH month,
+			DAY day,
+			WEEK week,
+			START_TIME startTime,
+			END_TIME endTime,
+			PREV_TASK_DONE_DATE prevTaskDoneDate,
+			REMARK1 remark1,
+			REMARK2 remark2,
+			REMARK3 remark3,
+			CREATE_EMP createEmp,
+			CREATE_DATE createDate,
+			UPDATE_EMP updateEmp,
+			UPDATE_DATE updateDate,
+			VERSION version
+		FROM
+			tb_plan T
+		WHERE 
+			PLAN_ID = #{planId}
+	</select>
+	
+	<update id="updatePlan" parameterType="com.qcap.cac.entity.TbPlan">
+		UPDATE tb_plan SET
+			PLAN_ID  = #{planId},
+			AREA_CODE = #{areaCode},
+			STANDARD_CODE = #{standardCode},
+			PLAN_TIME_TYPE = #{planTimeType},
+			MONTH = #{month},
+			DAY = #{day},
+			WEEK = #{week},
+			START_TIME = #{startTime},
+			END_TIME = #{endTime},
+			PREV_TASK_DONE_DATE = #{prevTaskDoneDate},
+			REMARK1 = #{remark1},
+			REMARK2 = #{remark2},
+			REMARK3 = #{remark3},
+			UPDATE_EMP = #{updateEmp},
+			UPDATE_DATE = #{updateDate},
+			VERSION = VERSION + 1
+		WHERE 
+			PLAN_ID = #{planId}
+	</update>
+	
+	<delete id="deletePlanById" parameterType="String">
+		DELETE FROM tb_plan
+		WHERE 
+			PLAN_ID = #{planId}
+	</delete>
 	
   
 </mapper>

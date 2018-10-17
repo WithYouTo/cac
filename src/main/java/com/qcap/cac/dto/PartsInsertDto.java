@@ -3,6 +3,7 @@ package com.qcap.cac.dto;
 public class PartsInsertDto {
 
     private String equipId;
+    private String partsId;
     private String partsName;
     private String partsModel;
     private String partsAgence;
@@ -16,6 +17,14 @@ public class PartsInsertDto {
 
     public void setEquipId(String equipId) {
         this.equipId = equipId;
+    }
+
+    public String getPartsId() {
+        return partsId;
+    }
+
+    public void setPartsId(String partsId) {
+        this.partsId = partsId;
     }
 
     public String getPartsName() {

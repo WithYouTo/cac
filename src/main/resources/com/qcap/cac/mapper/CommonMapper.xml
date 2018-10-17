@@ -42,5 +42,47 @@
         WHERE STANDARD_CODE = #{standardCode}
     </select>
 
+    <select id="getEquipTypeList" resultType="java.util.Map">
+        SELECT
+        DESC_ id,
+        DESC1_ text
+        FROM
+        tbpubcode01
+        WHERE
+        CONFIG_CODE_ = 'EQUIP_TYPE'
+    </select>
+    
+    <select id="getAreaTypeByAreaCode" parameterType="String" resultType="java.util.Map">
+        SELECT
+        	AREA_CODE areaCode,
+        	AREA_TYPE areaType
+        FROM
+        	tb_area
+        WHERE AREA_CODE = #{areaCode}
+    </select>
+    
+    <select id="selectAreaItem" resultType="Map">
+		SELECT 
+			m.AREA_CODE id,
+			m.AREA_NAME name,
+			m.SUPER_AREA_CODE pId,
+			m.AREA_TYPE areaType,
+			n.AREA_NAME pName 
+		FROM 
+			tb_area m 
+		LEFT JOIN 
+			tb_area n
+		ON 
+			m.SUPER_AREA_CODE = n.AREA_CODE
+	</select>
+	
+	<select id="selectStandardNameList" resultType="Map">
+		SELECT 
+			STANDARD_CODE id,
+			STANDARD_NAME text
+		FROM 
+			tb_area_standard 
+	</select>
+
 
 </mapper>

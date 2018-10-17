@@ -13,4 +13,10 @@ import java.util.Map;
 @Repository
 public interface EquipPartsMapper extends BaseMapper<TbEquipParts>{
     List<Map<String,Object>> listPartsByEquipId(IPage<Map<String, Object>> page, @Param("equipId") String equipId);
+
+    void updatePartsByPartsId(TbEquipParts parts);
+
+    void deletePartsByPartsId(@Param("partsId")String partsId);
+
+    void deletePartsByEquipId(@Param("equipId")String equipId);
 }

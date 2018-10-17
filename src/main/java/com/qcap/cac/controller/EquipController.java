@@ -8,6 +8,7 @@ import com.qcap.cac.dto.PartsInsertDto;
 import com.qcap.cac.service.EquipSrv;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
+import org.apache.ibatis.ognl.ObjectElementsAccessor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,16 +48,43 @@ public class EquipController {
     @RequestMapping(value = "/insertEquip", method = RequestMethod.POST)
     public Object insertEquip(@Valid EquipInsertDto equipInsertDto){
         //todo 新增设备
-        Map<String,String> result = this.equipSrv.insertEquip(equipInsertDto);
-        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, result);
+        try {
+            this.equipSrv.insertEquip(equipInsertDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, "");
 
     }
 
     @ResponseBody
     @RequestMapping(value = "/insertParts", method = RequestMethod.POST)
-    public Object insertParts(@Valid PartsInsertDto equipInsertParam){
+    public Object insertParts(@Valid PartsInsertDto partsInsertParam){
         // 新增配件
-        Map<String,String> result = this.equipSrv.insertParts(equipInsertParam);
-        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, result);
+        Map<String,String> result = this.equipSrv.insertParts(partsInsertParam);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, result);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/updateParts", method = RequestMethod.POST)
+    public Object updateParts(@Valid PartsInsertDto partsInsertParam){
+        // 修改配件
+        this.equipSrv.updateParts(partsInsertParam);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/deletePartsByPartsId", method = RequestMethod.POST)
+    public Object deletePartsByPartsId(String partsId){
+        this.equipSrv.deletePartsByPartsId(partsId);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/deletePartsByEquipId", method = RequestMethod.POST)
+    public Object deletePartsByEquipId(String equipId){
+        this.equipSrv.deletePartsByEquipId(equipId);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
     }
 }

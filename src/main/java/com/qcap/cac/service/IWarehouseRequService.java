@@ -21,4 +21,8 @@ public interface IWarehouseRequService extends IService<TbWarehouseRequ> {
 
     List<Map<String,String>> getRequList(WarehouseReqDto warehouseReqDto);
 
+    Integer commitRequ(TbWarehouseRequ warehouseRequ);
+
+    Integer delete(String warehouseRequId);
+
 }
