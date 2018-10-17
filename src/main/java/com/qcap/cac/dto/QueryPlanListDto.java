@@ -11,8 +11,8 @@ public class QueryPlanListDto {
 	private String areaCode;
 
 	// @NotBlank(message = "planTimeType不能为空")
-	@ApiModelProperty(value = "时间类型")
-	private String planTimeType;
+	@ApiModelProperty(value = "活动内容")
+	private String standardCode;
 
 	public String getAreaCode() {
 		return areaCode;
@@ -22,17 +22,17 @@ public class QueryPlanListDto {
 		this.areaCode = areaCode;
 	}
 
-	public String getPlanTimeType() {
-		return planTimeType;
+	public String getStandardCode() {
+		return standardCode;
 	}
 
-	public void setPlanTimeType(String planTimeType) {
-		this.planTimeType = planTimeType;
+	public void setStandardCode(String standardCode) {
+		this.standardCode = standardCode;
 	}
 
 	@Override
 	public String toString() {
-		return "QueryPlanListDto [areaCode=" + areaCode + ", planTimeType=" + planTimeType + "]";
+		return "QueryPlanListDto [areaCode=" + areaCode + ", standardCode=" + standardCode + "]";
 	}
 
 }

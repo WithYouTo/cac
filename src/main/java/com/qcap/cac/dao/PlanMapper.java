@@ -13,4 +13,10 @@ import com.qcap.cac.entity.TbPlan;
 public interface PlanMapper extends BaseMapper<TbPlan> {
 
 	List<Map<String, Object>> selectPlanByPage(QueryPlanListDto queryPlanListDto);
+
+	TbPlan selectPlanById(String planId);
+
+	int updatePlan(TbPlan plan);
+
+	int deletePlanById(String planId);
 }

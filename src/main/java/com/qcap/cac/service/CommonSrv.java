@@ -3,6 +3,8 @@ package com.qcap.cac.service;
 import java.util.List;
 import java.util.Map;
 
+import com.qcap.core.model.ZTreeNode;
+
 public interface CommonSrv {
 	List<Map<String, String>> getEquipNameByEquipType(String equipType);
 
@@ -12,5 +14,11 @@ public interface CommonSrv {
 
 	String getStandardNameByStandardCode(String standardCode);
 
-    List<Map<String,String>> getEquipTypeList();
+	List<Map<String, String>> getEquipTypeList();
+
+	String getAreaTypeByAreaCode(String areaCode);
+
+	List<ZTreeNode> selectAreaItem();
+
+	List<Map<String, String>> selectStandardNameList();
 }
