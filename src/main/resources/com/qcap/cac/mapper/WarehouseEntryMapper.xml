@@ -17,7 +17,7 @@
         a.ENTRY_NUM,
         a.ENTRY_UNIT,
         SUM_NUM,
-        MIN_UNIT,
+        a.MIN_UNIT,
         DATE_FORMAT(a.ENTRY_TIME,'%Y-%m-%d') entryTime,
         b.REMARK
         from tb_warehouse_entry a

@@ -1,11 +1,14 @@
 package com.qcap.cac.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.util.Date;
 
 public class TbArea {
     /**
     *   主键
      */
+    @TableId("AREA_ID")
     private String areaId;
 
     /**
@@ -106,12 +109,12 @@ public class TbArea {
     /**
     *   新增时间
      */
-    private Date createDate;
+    private String createDate;
 
     /**
     *   修改时间
      */
-    private Date updateDate;
+    private String updateDate;
 
     /**
     *   修改人
@@ -611,7 +614,7 @@ public class TbArea {
      *
      * @mbggenerated Tue Oct 09 15:30:51 CST 2018
      */
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
@@ -623,7 +626,7 @@ public class TbArea {
      *
      * @mbggenerated Tue Oct 09 15:30:51 CST 2018
      */
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
@@ -635,7 +638,7 @@ public class TbArea {
      *
      * @mbggenerated Tue Oct 09 15:30:51 CST 2018
      */
-    public Date getUpdateDate() {
+    public String getUpdateDate() {
         return updateDate;
     }
 
@@ -647,7 +650,7 @@ public class TbArea {
      *
      * @mbggenerated Tue Oct 09 15:30:51 CST 2018
      */
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
     }
 

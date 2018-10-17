@@ -1,7 +1,9 @@
 package com.qcap.cac.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,10 +51,10 @@ public class WarehouseReqGoodsController {
 
         new PageFactory<Map<String, Object>>().defaultPage();
 
-        List<Map> list =  this.warehouseReqDetailService.getRequestedList(warehouseReqDto);
+        List<Map<String, Object>> list =  this.warehouseReqDetailService.getRequestedList(warehouseReqDto);
         PageInfo pageInfo = new PageInfo(list);
 
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
     }
 
 

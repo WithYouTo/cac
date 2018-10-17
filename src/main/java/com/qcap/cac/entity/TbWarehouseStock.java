@@ -74,6 +74,11 @@ public class TbWarehouseStock {
     private Integer goodsNum;
 
     /**
+     *   库存单位
+     */
+    private String minUnit;
+
+    /**
      *   库存说明
      */
     private String stockInstrution;
@@ -112,6 +117,14 @@ public class TbWarehouseStock {
      *   版本
      */
     private Integer version;
+
+    public String getMinUnit() {
+        return minUnit;
+    }
+
+    public void setMinUnit(String minUnit) {
+        this.minUnit = minUnit;
+    }
 
     public String getWarehouseStockId() {
         return warehouseStockId;

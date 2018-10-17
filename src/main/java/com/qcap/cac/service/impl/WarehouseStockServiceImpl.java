@@ -5,9 +5,11 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseEntryMapper;
+import com.qcap.cac.dao.WarehousePurchaseMapper;
 import com.qcap.cac.dao.WarehouseStockLogMapper;
 import com.qcap.cac.dao.WarehouseStockMapper;
 import com.qcap.cac.dto.WarehouseEntryDto;
+import com.qcap.cac.entity.TbWarehousePurchase;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.entity.TbWarehouseStockLog;
 import com.qcap.cac.service.IWarehouseStockService;
@@ -39,6 +41,9 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
 
     @Resource
     private WarehouseStockLogMapper warehouseStockLogMapper;
+
+    @Resource
+    private WarehousePurchaseMapper warehousePurchaseMapper;
 
 
     @Override
@@ -113,5 +118,25 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
         log.setLogOperation(opera);
         warehouseStockLogMapper.insert(log);
         return 1;
+    }
+
+
+    /**
+     * 低于警戒线，生成请购单
+     */
+    public void  generatePurchaseOrder(String date){
+        //查询数据库中低于警戒线中的记录
+        List<TbWarehouseStock> list = this.warehouseStockMapper.getLeastStockNumList();
+        for(TbWarehouseStock item : list){
+            //新增请购单
+            TbWarehousePurchase purchaseuse = new TbWarehousePurchase();
+            BeanUtil.copyProperties(item,purchaseuse);
+            purchaseuse.setWarehousePurchaseId(UUIDUtils.getUUID());
+            purchaseuse.setBuyType(item.getGoodsType());
+            purchaseuse.setBuyNo(item.getBuyNo());
+            purchaseuse.setBuyTime(date);
+            this.warehousePurchaseMapper.insert(purchaseuse);
+        }
+
     }
 }

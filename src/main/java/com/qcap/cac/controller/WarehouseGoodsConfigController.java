@@ -1,6 +1,7 @@
 package com.qcap.cac.controller;
 
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.dto.WarehouseEntryDto;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,5 +64,18 @@ public class WarehouseGoodsConfigController {
         this.warehouseStockService.updateById(warehouseStock);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "修改警戒线成功", null);
     }
+
+
+    /**
+     * 生成请购单
+     */
+    @ResponseBody
+    @RequestMapping(value = "/generatePurchaseOrder", method = RequestMethod.POST)
+    public Object generatePurchaseOrder() {
+        String date = DateUtil.format(new Date(),"yyyy-MM-dd");
+        this.warehouseStockService.generatePurchaseOrder(date);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "生成请购单成功", null);
+    }
+
 
 }

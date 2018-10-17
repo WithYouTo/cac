@@ -206,6 +206,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 stock.setSupplierNo(supplierName);
                 stock.setSupplierName(supplierName);
                 stock.setGoodsNum(ToolUtil.toInt(sumNum));
+                stock.setMinUnit(minUnit);
                 stock.setStockInstrution("EXCEL导入");
                 stock.setDeleteFlag("N");
                 stock.setCreateEmp("SYS");

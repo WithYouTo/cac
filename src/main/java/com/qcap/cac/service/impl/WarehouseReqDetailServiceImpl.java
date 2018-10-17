@@ -1,6 +1,7 @@
 package com.qcap.cac.service.impl;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseReqDetailMapper;
 import com.qcap.cac.dto.WarehouseReqDto;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +33,11 @@ public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetai
 
 
     @Override
-    public List<Map> getRequestedList(WarehouseReqDto warehouseReqDto) {
+    public List<Map<String, Object>> getRequestedList(WarehouseReqDto warehouseReqDto) {
         if(StringUtils.isEmpty(warehouseReqDto.getStoreroomId())){
             return new ArrayList<>();
         }
-        List<Map> list = this.warehouseReqDetailMapper.getRequestedGoodsList(warehouseReqDto);
+        List<Map<String, Object>> list = this.warehouseReqDetailMapper.getRequestedGoodsList(warehouseReqDto);
         return list;
     }
 

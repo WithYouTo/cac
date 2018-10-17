@@ -24,6 +24,8 @@ public interface IWarehouseStockService extends IService<TbWarehouseStock> {
 
     List<TbWarehouseStock> getGoodsConfigList(WarehouseEntryDto warehouseEntryDto);
 
-
     Integer updateGoodsNum(TbWarehouseStock warehouseStock);
+
+    void generatePurchaseOrder(String date);
+
 }

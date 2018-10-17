@@ -111,5 +111,27 @@
     </update>
 
 
+    <select id="getLeastStockNumList" resultType="com.qcap.cac.entity.TbWarehouseStock">
+        select
+        WAREHOUSE_STOCK_ID,
+        STOREROOM_ID,
+        STOREROOM,
+        GOODS_TYPE,
+        GOODS_NO,
+        GOODS_NAME,
+        LIMIT_STORE,
+        BUY_TYPE,
+        BUY_NO,
+        BUY_NUM,
+        ENTRY_UNIT,
+        SUPPLIER_NO,
+        SUPPLIER_NAME,
+        GOODS_NUM,
+        STOCK_INSTRUTION,
+        REMARK
+        from tb_warehouse_stock
+        where GOODS_NUM &lt; LIMIT_STORE
+    </select>
+
 
 </mapper>

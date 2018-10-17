@@ -1,0 +1,26 @@
+package com.qcap.cac.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcap.cac.entity.TbArea;
+
+import java.util.List;
+import java.util.Map;
+
+public interface AreaSrv extends IService<TbArea> {
+
+    /**
+     * 加载区域树
+     * @return
+     */
+    List<Map> initTree();
+
+
+    /**
+     * 根据areaCode查询管辖区域
+     * @param areaCode
+     * @return
+     */
+    List<Map> getAreaList(String areaCode);
+
+
+}

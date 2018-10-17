@@ -19,6 +19,7 @@
         MIN_UNIT,
         a.REQU_STATUS,
         a.REQU_REMARK,
+        DATE_FORMAT(b.REQU_TIME,'%Y-%m-%d') requTime,
         b.REQU_NAME
         from tb_warehouse_reqdetail a
         LEFT JOIN tb_warehouse_requ b
