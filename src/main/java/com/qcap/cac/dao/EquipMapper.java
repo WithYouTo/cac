@@ -17,5 +17,11 @@ public interface EquipMapper extends BaseMapper<TbEquip>{
 
     List<Map<String,Object>> listEquip(IPage<Map<String, Object>> page, @Param("obj")@Valid EquipSearchDto equipSearchDto);
 
-    int getMaxEquipNumByEquipType(String equipType);
+    int getMaxEquipNumByEquipType(@Param("equipType") String equipType);
+
+    TbEquip selectEquipByEquipId(String equipId);
+
+    void updateEquip(TbEquip equip);
+
+    void deleteEquipByEquipId(@Param("equipId")String equipId);
 }

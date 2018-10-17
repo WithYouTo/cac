@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dao.EquipPlanMapper;
 import com.qcap.cac.dto.EquipPlanSearchDto;
 import com.qcap.cac.service.EquipPlanSrv;
@@ -18,12 +19,16 @@ public class EquipPlanSrvImpl implements EquipPlanSrv {
     private EquipPlanMapper equipPlanMapper;
 
     @Override
-    public List<Map<String, Object>> listEquipPlan(EquipPlanSearchDto equipPlanSearchDto) {
-        return this.equipPlanMapper.listEquipPlan(equipPlanSearchDto);
+    public void listEquipPlan(IPage<Map<String, Object>> page,EquipPlanSearchDto equipPlanSearchDto) {
+        List<Map<String, Object>> list = this.equipPlanMapper.listEquipPlan(page,equipPlanSearchDto);
+        page.setRecords(list);
+
     }
 
+
     @Override
-    public List<Map<String, Object>> listPartsPlanByEquipId(String equipId) {
-        return this.equipPlanMapper.listPartsPlanByEquipId(equipId);
+    public void listPartsPlanByEquipId(IPage<Map<String, Object>> page,String equipId) {
+        List<Map<String, Object>> list =  this.equipPlanMapper.listPartsPlanByEquipId(page,equipId);
+        page.setRecords(list);
     }
 }

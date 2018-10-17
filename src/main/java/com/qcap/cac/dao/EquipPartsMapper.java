@@ -19,4 +19,10 @@ public interface EquipPartsMapper extends BaseMapper<TbEquipParts>{
     void deletePartsByPartsId(@Param("partsId")String partsId);
 
     void deletePartsByEquipId(@Param("equipId")String equipId);
+
+    List<TbEquipParts> listPartsEntityByEquipId(String equipId);
+
+    void updatePartsNoAndNextMaintTimeByPartsId(TbEquipParts part);
+
+    int getMaxPartsNumByEquipId(String equipId);
 }

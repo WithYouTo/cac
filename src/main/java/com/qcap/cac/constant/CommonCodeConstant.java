@@ -22,8 +22,11 @@ public class CommonCodeConstant {
 
 	public static final String SYS_EQUIP_TYPE_PREFIX = "10103108";
 
+
 	// 未找对应记录
 	public static final int ERROR_CODE_40401 = 40401;
 	public static final String ERROR_CODE_40401_MSG = "未找对应记录";
+
+	public static final Integer SYS_START_PARTS_NO = 0;
 
 }
