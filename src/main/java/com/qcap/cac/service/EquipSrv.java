@@ -14,7 +14,13 @@ public interface EquipSrv {
 
     void listPartsByEquipId(IPage<Map<String, Object>> page, String equipId);
 
-    Map<String,String> insertEquip(@Valid EquipInsertDto equipInsertDto);
+    void insertEquip(@Valid EquipInsertDto equipInsertDto) throws Exception;
 
     void listEquip(IPage<Map<String, Object>> page, @Valid EquipSearchDto equipSearchDto);
+
+    Map<String,String> updateParts(@Valid PartsInsertDto partsInsertParam);
+
+    void deletePartsByPartsId(String partsId);
+
+    void deletePartsByEquipId(String equipId);
 }

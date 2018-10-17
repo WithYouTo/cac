@@ -74,3 +74,13 @@ mybatis:
     page-parameter: page
     size-parameter: size
 EVENT_TASK_MIN_INTERVAL: 30
+
+#fastdfs配置
+fdfs:
+  soTimeout: 1500
+  connectTimeout: 600
+  thumbImage:
+    width: 150
+    height: 150
+  trackerList:
+    - 10.10.0.11:22122

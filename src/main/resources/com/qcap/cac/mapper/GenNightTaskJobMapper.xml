@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.GenNightTaskJobMapper">
+
+	<select id="selectNightPlan" parameterType="Map" resultType="Map">
+		SELECT 
+		PLAN_ID AS planId,AREA_CODE AS areaCode,
+		STANDARD_CODE AS standardCode,START_TIME AS startTime,
+		END_TIME AS endTime,PLAN_TIME_TYPE AS planTimeType 
+		FROM tb_plan 
+		WHERE PLAN_TIME_TYPE = 'DAY' 
+		AND START_TIME &gt;= #{startTime} OR START_TIME &lt; #{endTime}
+		UNION
+		SELECT 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
+		FROM tb_plan 
+		WHERE PLAN_TIME_TYPE = 'WEEK' 
+		AND( WEEK= #{week}  AND START_TIME &gt;= #{startTime}) OR ( WEEK= #{weekAdd} AND START_TIME &lt; #{endTime})
+		UNION
+		SELECT 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
+		FROM tb_plan 
+		WHERE PLAN_TIME_TYPE = 'MONTH'  
+		AND( DAY= #{day}  AND START_TIME &gt;= #{startTime}) OR ( DAY= #{dayAdd} AND START_TIME &lt; #{endTime})
+		UNION
+		SELECT 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
+		FROM tb_plan 
+		WHERE PLAN_TIME_TYPE = 'YEAR' 
+		AND(MONTH =#{monthNo} AND DAY= #{day}  AND START_TIME &gt;= #{startTime}) OR (MONTH =#{monthNoAdd} AND  DAY= #{dayAdd} AND START_TIME &lt; #{endTime})
+	</select>
+	
+
+	
+</mapper>

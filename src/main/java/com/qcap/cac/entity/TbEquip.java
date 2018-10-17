@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -141,11 +142,11 @@ public class TbEquip implements Serializable {
     /**
      * 最近维保时间
      */
-    private LocalDate latestMaintTime;
+    private Date latestMaintTime;
     /**
      * 下次维保时间
      */
-    private LocalDate nextMaintTime;
+    private Date nextMaintTime;
     /**
      * 保修期
      */
@@ -153,15 +154,15 @@ public class TbEquip implements Serializable {
     /**
      * 购买日期
      */
-    private LocalDateTime buyTime;
+    private Date buyTime;
     /**
      * 启用日期
      */
-    private LocalDateTime startUseTime;
+    private Date startUseTime;
     /**
      * 报废日期
      */
-    private LocalDateTime scrapTime;
+    private Date scrapTime;
     /**
      * 报废原因
      */
@@ -197,7 +198,7 @@ public class TbEquip implements Serializable {
     /**
      * 新增时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
     /**
      * 修改人
      */
@@ -205,7 +206,7 @@ public class TbEquip implements Serializable {
     /**
      * 修改时间
      */
-    private LocalDateTime updateDate;
+    private Date updateDate;
     /**
      * 版本
      */
@@ -452,19 +453,19 @@ public class TbEquip implements Serializable {
         this.maintCycle = maintCycle;
     }
 
-    public LocalDate getLatestMaintTime() {
+    public Date getLatestMaintTime() {
         return latestMaintTime;
     }
 
-    public void setLatestMaintTime(LocalDate latestMaintTime) {
+    public void setLatestMaintTime(Date latestMaintTime) {
         this.latestMaintTime = latestMaintTime;
     }
 
-    public LocalDate getNextMaintTime() {
+    public Date getNextMaintTime() {
         return nextMaintTime;
     }
 
-    public void setNextMaintTime(LocalDate nextMaintTime) {
+    public void setNextMaintTime(Date nextMaintTime) {
         this.nextMaintTime = nextMaintTime;
     }
 
@@ -476,27 +477,27 @@ public class TbEquip implements Serializable {
         this.warranty = warranty;
     }
 
-    public LocalDateTime getBuyTime() {
+    public Date getBuyTime() {
         return buyTime;
     }
 
-    public void setBuyTime(LocalDateTime buyTime) {
+    public void setBuyTime(Date buyTime) {
         this.buyTime = buyTime;
     }
 
-    public LocalDateTime getStartUseTime() {
+    public Date getStartUseTime() {
         return startUseTime;
     }
 
-    public void setStartUseTime(LocalDateTime startUseTime) {
+    public void setStartUseTime(Date startUseTime) {
         this.startUseTime = startUseTime;
     }
 
-    public LocalDateTime getScrapTime() {
+    public Date getScrapTime() {
         return scrapTime;
     }
 
-    public void setScrapTime(LocalDateTime scrapTime) {
+    public void setScrapTime(Date scrapTime) {
         this.scrapTime = scrapTime;
     }
 
@@ -564,14 +565,6 @@ public class TbEquip implements Serializable {
         this.createEmp = createEmp;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
     public String getUpdateEmp() {
         return updateEmp;
     }
@@ -580,11 +573,19 @@ public class TbEquip implements Serializable {
         this.updateEmp = updateEmp;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -599,54 +600,54 @@ public class TbEquip implements Serializable {
     @Override
     public String toString() {
         return "TbEquip{" +
-        ", equipId=" + equipId +
-        ", projectCode=" + projectCode +
-        ", equipNo=" + equipNo +
-        ", equipCodeUrl=" + equipCodeUrl +
-        ", equipName=" + equipName +
-        ", equipType=" + equipType +
-        ", equipFullName=" + equipFullName +
-        ", equipModel=" + equipModel +
-        ", equipParams=" + equipParams +
-        ", responseNo=" + responseNo +
-        ", responseName=" + responseName +
-        ", buliding=" + buliding +
-        ", floor=" + floor +
-        ", area=" + area +
-        ", room=" + room +
-        ", roomArea=" + roomArea +
-        ", equipUse=" + equipUse +
-        ", useArea=" + useArea +
-        ", stopPlace=" + stopPlace +
-        ", storeArea=" + storeArea +
-        ", chargePlace=" + chargePlace +
-        ", chargeArea=" + chargeArea +
-        ", manufact=" + manufact +
-        ", agenceNo=" + agenceNo +
-        ", agenceName=" + agenceName +
-        ", relateName=" + relateName +
-        ", relateMobile=" + relateMobile +
-        ", lifeCycle=" + lifeCycle +
-        ", dailyMaint=" + dailyMaint +
-        ", maintCycle=" + maintCycle +
-        ", latestMaintTime=" + latestMaintTime +
-        ", nextMaintTime=" + nextMaintTime +
-        ", warranty=" + warranty +
-        ", buyTime=" + buyTime +
-        ", startUseTime=" + startUseTime +
-        ", scrapTime=" + scrapTime +
-        ", scrapReason=" + scrapReason +
-        ", baseRequire=" + baseRequire +
-        ", attention=" + attention +
-        ", imgUrl=" + imgUrl +
-        ", fileUrl=" + fileUrl +
-        ", equipState=" + equipState +
-        ", remark=" + remark +
-        ", createEmp=" + createEmp +
-        ", createDate=" + createDate +
-        ", updateEmp=" + updateEmp +
-        ", updateDate=" + updateDate +
-        ", version=" + version +
-        "}";
+                "equipId='" + equipId + '\'' +
+                ", projectCode='" + projectCode + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", equipCodeUrl='" + equipCodeUrl + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipType='" + equipType + '\'' +
+                ", equipFullName='" + equipFullName + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", equipParams='" + equipParams + '\'' +
+                ", responseNo='" + responseNo + '\'' +
+                ", responseName='" + responseName + '\'' +
+                ", buliding='" + buliding + '\'' +
+                ", floor='" + floor + '\'' +
+                ", area='" + area + '\'' +
+                ", room='" + room + '\'' +
+                ", roomArea='" + roomArea + '\'' +
+                ", equipUse='" + equipUse + '\'' +
+                ", useArea='" + useArea + '\'' +
+                ", stopPlace='" + stopPlace + '\'' +
+                ", storeArea='" + storeArea + '\'' +
+                ", chargePlace='" + chargePlace + '\'' +
+                ", chargeArea='" + chargeArea + '\'' +
+                ", manufact='" + manufact + '\'' +
+                ", agenceNo='" + agenceNo + '\'' +
+                ", agenceName='" + agenceName + '\'' +
+                ", relateName='" + relateName + '\'' +
+                ", relateMobile='" + relateMobile + '\'' +
+                ", lifeCycle='" + lifeCycle + '\'' +
+                ", dailyMaint='" + dailyMaint + '\'' +
+                ", maintCycle='" + maintCycle + '\'' +
+                ", latestMaintTime=" + latestMaintTime +
+                ", nextMaintTime=" + nextMaintTime +
+                ", warranty='" + warranty + '\'' +
+                ", buyTime=" + buyTime +
+                ", startUseTime=" + startUseTime +
+                ", scrapTime=" + scrapTime +
+                ", scrapReason='" + scrapReason + '\'' +
+                ", baseRequire='" + baseRequire + '\'' +
+                ", attention='" + attention + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", fileUrl='" + fileUrl + '\'' +
+                ", equipState='" + equipState + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
     }
 }

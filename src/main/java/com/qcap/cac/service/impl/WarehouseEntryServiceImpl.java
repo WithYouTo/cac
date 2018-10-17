@@ -19,6 +19,7 @@ import com.qcap.cac.service.IWarehouseEntryService;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -150,6 +151,22 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 throw new RuntimeException("第" + (i + 1) + "行的采购单位不能为空！");
             }
 
+            String storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
+            if(StringUtils.isEmpty(storeroomId)){
+                throw new RuntimeException("第" + (i + 1) + "行储藏室在区域中不存在！");
+            }
+
+            //系统默认库位是否存在
+            QueryWrapper<TbWarehousePosition> pWrapper = new QueryWrapper<>();
+            pWrapper.eq("INSTRUCTION","SYSTEM-CONFIG-EXCEL")
+                    .eq("STOREROOM_ID",storeroomId)
+                    .groupBy("INSTRUCTION");
+            TbWarehousePosition warehousePosition = this.warehousePositionMapper.selectOne(pWrapper);
+            if(null == warehousePosition){
+                throw new RuntimeException("系统默认库位不存在！");
+            }
+
+
             //入库表
             TbWarehouseEntry entry = new TbWarehouseEntry();
             //库存表
@@ -158,11 +175,13 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             BeanUtil.copyProperties(item,stock);
             //库存主键
             String  stockId = UUIDUtils.getUUID();
-            String storeroomId = "";
             //判断物品编码是否在库存表中存在
             QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
-            wrapper.eq("GOODS_NO",buyNo).eq("SUPPLIER_NAME",supplierName);
-            Integer existGoods = warehouseStockMapper.selectCount(wrapper);
+             wrapper.eq("GOODS_NO",buyNo)
+                    .eq("SUPPLIER_NAME",supplierName)
+                    .eq("STOREROOM_ID",storeroomId);
+
+             //存在，直接更新库存数量
             if( warehouseStockMapper.selectCount(wrapper) > 0){
                 TbWarehouseStock warehouseStock = warehouseStockMapper.selectOne(wrapper);
                 BigDecimal oldNum = new BigDecimal(warehouseStock.getGoodsNum());
@@ -171,12 +190,10 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 warehouseStockMapper.updateById(warehouseStock);
                 //库存主键
                 stockId = warehouseStock.getWarehouseStockId();
-                storeroomId = warehouseStock.getStoreroomId();
             }else{
                 //新增库存表
                 stock.setWarehouseStockId(stockId);
                 stock.setStoreroom(storeRoom);
-                storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
                 stock.setStoreroomId(storeroomId);
                 stock.setGoodsType(buyType);
                 stock.setGoodsNo(buyNo);
@@ -187,7 +204,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 stock.setBuyNum(ToolUtil.toInt(buyNum));
                 stock.setEntryUnit(entryUnit);
                 stock.setSupplierNo(supplierName);
-                stock.setSupplierNo(supplierName);
+                stock.setSupplierName(supplierName);
                 stock.setGoodsNum(ToolUtil.toInt(sumNum));
                 stock.setStockInstrution("EXCEL导入");
                 stock.setDeleteFlag("N");
@@ -196,24 +213,19 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 this.warehouseStockMapper.insert(stock);
             }
 
-            //新增库位-库存关联表
-            QueryWrapper<TbWarehousePosition> pWrapper = new QueryWrapper<>();
-            pWrapper.eq("INSTRUCTION","SYSTEM-CONFIG-EXCEL")
-                    .eq("STOREROOM_ID",storeroomId)
-                    .groupBy("INSTRUCTION");
-            TbWarehousePosition warehousePosition = this.warehousePositionMapper.selectOne(pWrapper);
 
+            //库位-物品关联表
             String positionId = warehousePosition.getWarehousePositionId();
-            TbWarehouseStorage storage = new TbWarehouseStorage();
-            storage.setWarehouseStorageId(UUIDUtils.getUUID());
-            storage.setWarehousePositionId(positionId);
-            storage.setWarehouseStockId(stockId);
-
             //库位-物品关联是否已经存在
             QueryWrapper<TbWarehouseStorage> sWrapper = new QueryWrapper<>();
             sWrapper.eq("WAREHOUSE_POSITION_ID",positionId)
                     .eq("WAREHOUSE_STOCK_ID",stockId);
+
             if(warehouseStorageMapper.selectCount(sWrapper) == 0){
+                TbWarehouseStorage storage = new TbWarehouseStorage();
+                storage.setWarehouseStorageId(UUIDUtils.getUUID());
+                storage.setWarehousePositionId(positionId);
+                storage.setWarehouseStockId(stockId);
                 storage.setCreateDate(new Date());
                 storage.setCreateEmp("SYS");
                 this.warehouseStorageMapper.insert(storage);
@@ -221,8 +233,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
 
             entry.setWarehouseEntryId(UUIDUtils.getUUID());
             entry.setStoreroom(storeRoom);
-            String storeRoomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
-            entry.setStoreroomId(storeRoomId);
+            entry.setStoreroomId(storeroomId);
             entry.setEntryBatchNo(batchNo);
             entry.setWarehouseStockId(stockId);
             entry.setEntryNum(ToolUtil.toInt((entryNum)));
@@ -238,5 +249,8 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
         }
         return count;
     }
+
+
+
 
 }
