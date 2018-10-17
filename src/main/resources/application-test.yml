@@ -45,12 +45,41 @@ spring:
         max-active: 8
         max-wait: -1ms
     timeout: 5000ms
+mybatis-plus:
+  type-aliases-package: com.qcap.*.model, com.qcap.*.entity
+  mapper-locations: classpath:/com/qcap/*/mapper/*.xml
+  global-config:
+    db-config:
+      id-type: uuid
+      field-strategy: not_null
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      capital-mode: false
+      column-underline: true
+  configuration:
+    cache-enabled:  false
+    jdbc-type-for-null: 'null'
+    map-underscore-to-camel-case: true
 logging:
-  config: classpath:logback-dev.xml
+  config: classpath:logback-test.xml
 
-# DIY
 rest:
   restfulSign: /rest
   coreOpen: true
   swaggerEnable: true
+mybatis:
+  mapper-refresh: true
+  iPage:
+    page-parameter: page
+    size-parameter: size
 EVENT_TASK_MIN_INTERVAL: 30
+
+#fastdfs配置
+fdfs:
+  soTimeout: 1500
+  connectTimeout: 600
+  thumbImage:
+    width: 150
+    height: 150
+  trackerList:
+    - 10.10.0.11:22122

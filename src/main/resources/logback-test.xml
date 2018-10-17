@@ -9,7 +9,7 @@
   <property name="log_dir" value="/logs/" />
   <!-- 日志最大的历史 30天 -->
   <property name="maxHistory" value="7"/>
-  <property name="projectName" value="whxx-auth"/>
+  <property name="projectName" value="cac"/>
 
 <!--
   <contextName>AppStore</contextName>
