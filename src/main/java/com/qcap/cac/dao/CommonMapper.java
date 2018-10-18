@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.qcap.cac.entity.TbSysFile;
 import com.qcap.core.entity.TbManager;
 
 @Repository
@@ -27,4 +28,6 @@ public interface CommonMapper extends BaseMapper<TbManager> {
 	List<Map<String, Object>> selectAreaItem();
 
 	List<Map<String, String>> selectStandardNameList();
+	
+	void insertSysFile(TbSysFile sysFile);
 }

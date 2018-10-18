@@ -5,13 +5,14 @@ import java.util.Map;
 
 import com.qcap.cac.dto.TempTaskDto;
 import com.qcap.cac.dto.TempTaskSearchParam;
+import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
 
 public interface TempTaskSrv {
 
 	List<Map<String,Object>> listTask(TempTaskSearchParam paramDto);
 
-	Map<String,Object> deleteTempTask(String taskCode);
+	ResParams deleteTempTask(String taskCode);
 
 	List<Map<String,Object>> selectStandardItem();
 

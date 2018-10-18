@@ -81,6 +81,18 @@
 		FROM 
 			tb_area_standard 
 	</select>
-
+	
+	  <insert id="insertSysFile" parameterType="com.qcap.cac.entity.TbSysFile">
+	    insert into tb_sys_file (FILE_ID, GROUP_ID, FILE_NAME, 
+	      FILE_TYPE, STORE_URL, DOWNLOAD_URL, 
+	      REMARK1, REMARK2, REMARK3, 
+	      CREATE_EMP, CREATE_DATE, UPDATE_DATE, 
+	      UPDATE_EMP, VERSION)
+	    values (#{fileId}, #{groupId}, #{fileName}, 
+	      #{fileType}, #{storeUrl}, #{downloadUrl}, 
+	      #{remark1}, #{remark2}, #{remark3}, 
+	      #{createEmp}, #{createDate}, #{updateDate}, 
+	      #{updateEmp}, #{version})
+     </insert>
 
 </mapper>

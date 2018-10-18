@@ -91,8 +91,7 @@ public class TempTaskController {
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public Object deleteTask(@RequestParam String taskCode) {
-		Map<String,Object> map = this.tempTaskSrv.deleteTempTask(taskCode);
-		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", map);
+		return this.tempTaskSrv.deleteTempTask(taskCode);
 
 	}
 

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.qcap.cac.dao.CommonMapper;
+import com.qcap.cac.entity.TbSysFile;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.core.model.ZTreeNode;
 
@@ -92,5 +93,11 @@ public class CommonSrvImpl implements CommonSrv {
 	@Override
 	public List<Map<String, String>> selectStandardNameList() {
 		return this.commonMapper.selectStandardNameList();
+	}
+
+	@Override
+	public void insertSysFile(TbSysFile sysFile) {
+		// TODO Auto-generated method stub
+		this.commonMapper.insertSysFile(sysFile);
 	}
 }

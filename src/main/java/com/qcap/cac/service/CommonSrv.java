@@ -3,6 +3,7 @@ package com.qcap.cac.service;
 import java.util.List;
 import java.util.Map;
 
+import com.qcap.cac.entity.TbSysFile;
 import com.qcap.core.model.ZTreeNode;
 
 public interface CommonSrv {
@@ -21,4 +22,6 @@ public interface CommonSrv {
 	List<ZTreeNode> selectAreaItem();
 
 	List<Map<String, String>> selectStandardNameList();
+	
+	void insertSysFile(TbSysFile sysFile);
 }

@@ -74,6 +74,7 @@ mybatis:
     page-parameter: page
     size-parameter: size
 EVENT_TASK_MIN_INTERVAL: 30
+FILE_DORMAIN: TEST_FILE_ADDRESS
 
 #fastdfs配置
 fdfs:

@@ -13,26 +13,46 @@ import java.util.Objects;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.TempTaskDto;
 import com.qcap.cac.dto.TempTaskSearchParam;
+import com.qcap.cac.entity.TbSysFile;
 import com.qcap.cac.entity.TbTask;
+import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.TempTaskSrv;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.utils.DateUtil;
+import com.qcap.core.utils.RedisUtil;
+
+import cn.hutool.core.util.StrUtil;
 
 @Service
 @Transactional
 public class TempTaskSrvImpl implements TempTaskSrv {
+	
+	@Value("${FILE_DORMAIN}")
+	private String fileDomain;
 
 	@Resource
 	private TempTaskMapper tempTaskMapper;
+	
+	@Autowired
+	private RedisUtil redisUtil;
+	
+	@Resource
+	private CommonSrv commonSrvImpl;
 
 	@Override
 	public List<Map<String,Object>> listTask(TempTaskSearchParam paramDto) {
@@ -41,31 +61,21 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 	}
 
 	@Override
-	public Map<String,Object> deleteTempTask(String taskCode) {
-		// TODO Auto-generated method stub
-		Map<String, Object> map = new HashMap<>();
+	public ResParams deleteTempTask(String taskCode) {
+		
 		String taskStatus = this.tempTaskMapper.selectTaskStatus(taskCode);
 		if (CommonConstant.TASK_STATUS_WAIT.equals(taskStatus)) {
 			this.tempTaskMapper.deleteTempTask(taskCode);
-
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该任务已成功取消");
-			return map;
+			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "该任务已成功取消");
 		}
 		if (CommonConstant.TASK_STATUS_WORKING.equals(taskStatus)) {
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该任务正在进行中，不允许取消");
-			return map;
+			return ResParams.newInstance(CommonCodeConstant.SYS_EXCEPTION_CODE, "该任务正在进行中，不允许取消");
 		}
 		if (CommonConstant.TASK_STATUS_FINISH.equals(taskStatus)) {
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该任务已完成，不允许取消");
-			return map;
+			return ResParams.newInstance(CommonCodeConstant.SYS_EXCEPTION_CODE, "该任务已完成，不允许取消");
 		}
 		if (CommonConstant.TASK_STATUS_CANCLE.equals(taskStatus)) {
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该任务已取消");
-			return map;
+			return ResParams.newInstance(CommonCodeConstant.SYS_EXCEPTION_CODE, "该任务已取消");
 		}
 		return null;
 	}
@@ -105,22 +115,22 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		Map<String, Object> map = new HashMap<>();
 		String areaCode = taskDto.getAreaCode();
 		String areaName = taskDto.getAreaName();
-		String standardCode = taskDto.getStandardCode();
-		String standardName = taskDto.getStandardName();
+//		String standardCode = taskDto.getStandardCode();
+//		String standardName = taskDto.getStandardName();
 		String startTime = taskDto.getStartTime();
 		String endTime = taskDto.getEndTime();
 		String spec = taskDto.getSpec();
 		String positionCode;
 		String positionName;
 		// 查询标准详细信息
-		List<Map<String,Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
-		if (standardList == null || standardList.isEmpty()) {
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
-			return map;
-		}
-		String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
-		String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
+//		List<Map<String,Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
+//		if (standardList == null || standardList.isEmpty()) {
+//			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+//			map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
+//			return map;
+//		}
+//		String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
+//		String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
 		// 查询岗位
 		Map<String,Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
 		if (positionMap != null && !positionMap.isEmpty()) {
@@ -135,7 +145,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		// 查询班次
 		String queryTime = startTime.substring(11);
 		Map<String, String> shiftMap = this.tempTaskMapper.selectShiftByTime(queryTime);
-		if (shiftMap == null || shiftMap.isEmpty()) {
+		if (MapUtils.isEmpty(shiftMap)) {
 			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
 			map.put(CommonConstant.BACK_MESSAGE, "根据计划时间未查询到班次，请先设置班次");
 			return map;
@@ -143,17 +153,18 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String shift = shiftMap.get("shift");
 
 		Date now = new Date();
+		String taskCode = CommonConstant.TASK_PREFIX_T + DateUtil.dateTimeToStringForLineNo(now);
 		TbTask task = new TbTask();
 		task.setTaskId(UUIDUtils.getUUID());
-		task.setTaskCode(CommonConstant.TASK_PREFIX_T + DateUtil.dateTimeToStringForLineNo(now));
+		task.setTaskCode(taskCode);
 		// task.setPlanId(planId);
 		task.setTaskType(CommonConstant.TASK_TYPE_TEMP);
 		task.setPositionCode(positionCode);
 		task.setPositionName(positionName);
 		task.setAreaCode(areaCode);
 		task.setAreaName(areaName);
-		task.setStandardCode(standardCode);
-		task.setStandardName(standardName);
+//		task.setStandardCode(standardCode);
+//		task.setStandardName(standardName);
 		task.setShift(shift);
 		task.setSpec(spec);
 		// task.setCompleteTime(completeTime);
@@ -162,8 +173,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
 		task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
 		// task.setTaskScore(taskScore);
-		task.setCheckFlag(checkFlag);
-		task.setUploadPicFlag(uploadPicFlag);
+//		task.setCheckFlag(checkFlag);
+//		task.setUploadPicFlag(uploadPicFlag);
 		// task.setTaskAdvice(taskAdvice);
 		task.setCreateDate(now);
 		/**
@@ -211,6 +222,9 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeTel(employeeTel);
 		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
 		this.tempTaskMapper.insertTempTask(task);
+		
+		//新增文件到系统文件表
+		insertFile(taskDto.getFileUrl(), taskCode);
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
 		map.put(CommonConstant.BACK_MESSAGE, "新增临时任务成功");
@@ -224,8 +238,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String taskCode = taskDto.getTaskCode();
 		String areaCode = taskDto.getAreaCode();
 		String areaName = taskDto.getAreaName();
-		String standardCode = taskDto.getStandardCode();
-		String standardName = taskDto.getStandardName();
+//		String standardCode = taskDto.getStandardCode();
+//		String standardName = taskDto.getStandardName();
 		String startTime = taskDto.getStartTime();
 		String endTime = taskDto.getEndTime();
 		String spec = taskDto.getSpec();
@@ -251,14 +265,14 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		}
 
 		// 查询标准详细信息
-		List<Map<String,Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
-		if (standardList == null || standardList.isEmpty()) {
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
-			return map;
-		}
-		String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
-		String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
+//		List<Map<String,Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
+//		if (standardList == null || standardList.isEmpty()) {
+//			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+//			map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
+//			return map;
+//		}
+//		String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
+//		String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
 		// 查询岗位
 		Map<String,Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
 		if (positionMap != null && !positionMap.isEmpty()) {
@@ -287,14 +301,14 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setPositionName(positionName);
 		task.setAreaCode(areaCode);
 		task.setAreaName(areaName);
-		task.setStandardCode(standardCode);
-		task.setStandardName(standardName);
+//		task.setStandardCode(standardCode);
+//		task.setStandardName(standardName);
 		task.setShift(shift);
 		task.setSpec(spec);
 		task.setStartTime(DateUtil.stringToDateTime(startTime));
 		task.setEndTime(DateUtil.stringToDateTime(endTime));
-		task.setCheckFlag(checkFlag);
-		task.setUploadPicFlag(uploadPicFlag);
+//		task.setCheckFlag(checkFlag);
+//		task.setUploadPicFlag(uploadPicFlag);
 		// task.setTaskAdvice(taskAdvice);
 		task.setUpdateDate(now);
 		/**
@@ -335,10 +349,34 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
 		this.tempTaskMapper.updateTempTask(task);
+		
+		//新增文件到系统文件表
+		insertFile(taskDto.getFileUrl(), taskCode);
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
-		map.put(CommonConstant.BACK_MESSAGE, "修改临时任务成功");
+		map.put(CommonConstant.BACK_MESSAGE, "临时任务修改成功");
 		return map;
+	}
+	
+	private void insertFile(String fileUrl ,String taskCode) {
+		//新增系统文件到数据库
+		String urlPrefix = RedisTools.getCommonConfig(redisUtil, "SYSTEM", fileDomain);
+		String [] fileurls = fileUrl.split(",");
+		
+		for(String url :fileurls) {
+			
+			TbSysFile sysFile = new TbSysFile();
+			sysFile.setFileId(UUIDUtils.getUUID());
+			sysFile.setDownloadUrl(urlPrefix + url);
+			sysFile.setFileName(url.substring(url.lastIndexOf(StrUtil.SLASH) + 1));
+			sysFile.setFileType(url.substring(url.lastIndexOf(StrUtil.DOT) + 1));
+			sysFile.setGroupId(taskCode);
+			sysFile.setCreateDate(new Date());
+			sysFile.setCreateEmp("SYS");
+			sysFile.setVersion(0);
+			
+			commonSrvImpl.insertSysFile(sysFile);
+		}
 	}
 
 }

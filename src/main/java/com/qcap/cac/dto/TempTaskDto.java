@@ -3,14 +3,29 @@ package com.qcap.cac.dto;
 public class TempTaskDto {
 	
 	private String taskCode;
+	
 	private String areaCode;
+	
 	private String areaName;
+	
 	private String standardCode;
+	
 	private String standardName;
+	
 	private String startTime;
+	
 	private String endTime;
+	
 	private String spec;
 	
+	private String fileUrl;
+	
+	public String getFileUrl() {
+		return fileUrl;
+	}
+	public void setFileUrl(String fileUrl) {
+		this.fileUrl = fileUrl;
+	}
 	public String getTaskCode() {
 		return taskCode;
 	}
