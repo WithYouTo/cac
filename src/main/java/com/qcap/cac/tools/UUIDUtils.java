@@ -25,12 +25,12 @@ public class UUIDUtils {
 
 
     /**
-     * 区域编码生成规则
-     * P + YYYYMMDDHHMMSS
+     * 岗位编码生成规则
+     * GW + 5位随机数
      * @return
      */
-    public  static String  getAreaCode(String prefix){
-        String areaCode = "10103108" + DateUtil.formatDate(new Date(),"yyMMddHHmmss");
-        return areaCode;
+    public  static String  getPositionCode(){
+        String positionCode = "GW" + ToolUtil.getRandomString(5);
+        return positionCode;
     }
 }

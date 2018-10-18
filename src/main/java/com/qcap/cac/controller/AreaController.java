@@ -88,10 +88,11 @@ public class AreaController {
     @ResponseBody
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public ResParams insertArea(@Valid  TbArea area) {
-        area.setAreaId(UUIDUtils.getUUID());
-        area.setAreaCode(UUIDUtils.getAreaCode("1"));
-        area.setCreateEmp("SYS");
-        this.areaSrv.save(area);
+        try {
+            area = this.areaSrv.insertArea(area);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
+        }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, area);
     }
 

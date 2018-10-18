@@ -1,11 +1,14 @@
 package com.qcap.cac.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.util.Date;
 
 public class TbAreaPosition {
     /**
     *   主键
      */
+    @TableId("POSITION_ID")
     private String positionId;
 
     /**

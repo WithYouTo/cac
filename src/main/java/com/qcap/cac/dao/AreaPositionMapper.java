@@ -1,9 +1,8 @@
 package com.qcap.cac.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbArea;
-import com.qcap.cac.entity.TbWarehouseStock;
+import com.qcap.cac.entity.TbAreaPosition;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,14 +18,11 @@ import java.util.Map;
  * @author stylefeng
  * @since 2018-10-09
  */
-public interface AreaMapper extends BaseMapper<TbArea> {
+public interface AreaPositionMapper extends BaseMapper<TbAreaPosition> {
 
     List<Map> selectAreaList(@Param("areaCode") String areaCode);
 
     List<Map> initTree();
-
-    @Select("select IFNULL(MAX(SUBSTRING(AREA_CODE, - 3)),99) + 1 from tb_area t WHERE `LEVEL` = #{level} ")
-    Integer selectMaxNum(Integer level);
 
 
 }
