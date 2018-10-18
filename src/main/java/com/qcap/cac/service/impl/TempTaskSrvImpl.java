@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,35 +33,34 @@ import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.utils.DateUtil;
-import com.qcap.core.utils.RedisUtil;
 
 import cn.hutool.core.util.StrUtil;
 
 @Service
 @Transactional
 public class TempTaskSrvImpl implements TempTaskSrv {
-	
+
 	@Value("${FILE_DORMAIN}")
 	private String fileDomain;
 
 	@Resource
 	private TempTaskMapper tempTaskMapper;
-	
-	@Autowired
-	private RedisUtil redisUtil;
-	
+
+	// @Autowired
+	// private RedisUtil redisUtil;
+
 	@Resource
 	private CommonSrv commonSrvImpl;
 
 	@Override
-	public List<Map<String,Object>> listTask(TempTaskSearchParam paramDto) {
+	public List<Map<String, Object>> listTask(TempTaskSearchParam paramDto) {
 		// TODO Auto-generated method stub
 		return tempTaskMapper.listTask(paramDto);
 	}
 
 	@Override
 	public ResParams deleteTempTask(String taskCode) {
-		
+
 		String taskStatus = this.tempTaskMapper.selectTaskStatus(taskCode);
 		if (CommonConstant.TASK_STATUS_WAIT.equals(taskStatus)) {
 			this.tempTaskMapper.deleteTempTask(taskCode);
@@ -81,7 +79,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 	}
 
 	@Override
-	public List<Map<String,Object>> selectStandardItem() {
+	public List<Map<String, Object>> selectStandardItem() {
 		// TODO Auto-generated method stub
 		String standardCode = null;
 		return this.tempTaskMapper.selectStandardItem(standardCode);
@@ -111,28 +109,31 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 
 	@Override
 	public Map<String, Object> insertTempTask(TempTaskDto taskDto) {
-		
+
 		Map<String, Object> map = new HashMap<>();
 		String areaCode = taskDto.getAreaCode();
 		String areaName = taskDto.getAreaName();
-//		String standardCode = taskDto.getStandardCode();
-//		String standardName = taskDto.getStandardName();
+		// String standardCode = taskDto.getStandardCode();
+		// String standardName = taskDto.getStandardName();
 		String startTime = taskDto.getStartTime();
 		String endTime = taskDto.getEndTime();
 		String spec = taskDto.getSpec();
 		String positionCode;
 		String positionName;
 		// 查询标准详细信息
-//		List<Map<String,Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
-//		if (standardList == null || standardList.isEmpty()) {
-//			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-//			map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
-//			return map;
-//		}
-//		String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
-//		String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
+		// List<Map<String,Object>> standardList =
+		// this.tempTaskMapper.selectStandardItem(standardCode);
+		// if (standardList == null || standardList.isEmpty()) {
+		// map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+		// map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
+		// return map;
+		// }
+		// String uploadPicFlag =
+		// ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
+		// String checkFlag =
+		// ToolUtil.toStr(standardList.get(0).get("checkFlag"));
 		// 查询岗位
-		Map<String,Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
 		if (positionMap != null && !positionMap.isEmpty()) {
 			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
 			positionName = ToolUtil.toStr(positionMap.get("positionName"));
@@ -163,8 +164,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setPositionName(positionName);
 		task.setAreaCode(areaCode);
 		task.setAreaName(areaName);
-//		task.setStandardCode(standardCode);
-//		task.setStandardName(standardName);
+		// task.setStandardCode(standardCode);
+		// task.setStandardName(standardName);
 		task.setShift(shift);
 		task.setSpec(spec);
 		// task.setCompleteTime(completeTime);
@@ -173,8 +174,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
 		task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
 		// task.setTaskScore(taskScore);
-//		task.setCheckFlag(checkFlag);
-//		task.setUploadPicFlag(uploadPicFlag);
+		// task.setCheckFlag(checkFlag);
+		// task.setUploadPicFlag(uploadPicFlag);
 		// task.setTaskAdvice(taskAdvice);
 		task.setCreateDate(now);
 		/**
@@ -196,7 +197,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		param.put("positionCode", positionCode);
 		param.put(queryDay, queryDay);
 		// 查询当班人员
-		List<Map<String,Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
+		List<Map<String, Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
 		if (ToolUtil.isEmpty(list)) {
 			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
 			map.put(CommonConstant.BACK_MESSAGE, "未查询到当班人员");
@@ -205,7 +206,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		List<String> employeeCodeList = new ArrayList<>();
 		List<String> employeeNameList = new ArrayList<>();
 		List<String> employeeTelList = new ArrayList<>();
-		for (Map<String,Object> m : list) {
+		for (Map<String, Object> m : list) {
 			employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
 			employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
 			employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
@@ -222,8 +223,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeTel(employeeTel);
 		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
 		this.tempTaskMapper.insertTempTask(task);
-		
-		//新增文件到系统文件表
+
+		// 新增文件到系统文件表
 		insertFile(taskDto.getFileUrl(), taskCode);
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
@@ -238,8 +239,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String taskCode = taskDto.getTaskCode();
 		String areaCode = taskDto.getAreaCode();
 		String areaName = taskDto.getAreaName();
-//		String standardCode = taskDto.getStandardCode();
-//		String standardName = taskDto.getStandardName();
+		// String standardCode = taskDto.getStandardCode();
+		// String standardName = taskDto.getStandardName();
 		String startTime = taskDto.getStartTime();
 		String endTime = taskDto.getEndTime();
 		String spec = taskDto.getSpec();
@@ -265,16 +266,19 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		}
 
 		// 查询标准详细信息
-//		List<Map<String,Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
-//		if (standardList == null || standardList.isEmpty()) {
-//			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-//			map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
-//			return map;
-//		}
-//		String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
-//		String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
+		// List<Map<String,Object>> standardList =
+		// this.tempTaskMapper.selectStandardItem(standardCode);
+		// if (standardList == null || standardList.isEmpty()) {
+		// map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+		// map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
+		// return map;
+		// }
+		// String uploadPicFlag =
+		// ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
+		// String checkFlag =
+		// ToolUtil.toStr(standardList.get(0).get("checkFlag"));
 		// 查询岗位
-		Map<String,Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
 		if (positionMap != null && !positionMap.isEmpty()) {
 			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
 			positionName = ToolUtil.toStr(positionMap.get("positionName"));
@@ -301,14 +305,14 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setPositionName(positionName);
 		task.setAreaCode(areaCode);
 		task.setAreaName(areaName);
-//		task.setStandardCode(standardCode);
-//		task.setStandardName(standardName);
+		// task.setStandardCode(standardCode);
+		// task.setStandardName(standardName);
 		task.setShift(shift);
 		task.setSpec(spec);
 		task.setStartTime(DateUtil.stringToDateTime(startTime));
 		task.setEndTime(DateUtil.stringToDateTime(endTime));
-//		task.setCheckFlag(checkFlag);
-//		task.setUploadPicFlag(uploadPicFlag);
+		// task.setCheckFlag(checkFlag);
+		// task.setUploadPicFlag(uploadPicFlag);
 		// task.setTaskAdvice(taskAdvice);
 		task.setUpdateDate(now);
 		/**
@@ -329,11 +333,11 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		param.put("positionCode", positionCode);
 		param.put(queryDay, queryDay);
 		// 查询当班人员
-		List<Map<String,Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
+		List<Map<String, Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
 		List<String> employeeCodeList = new ArrayList<>();
 		List<String> employeeNameList = new ArrayList<>();
 		List<String> employeeTelList = new ArrayList<>();
-		for (Map<String,Object> m : list) {
+		for (Map<String, Object> m : list) {
 			employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
 			employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
 			employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
@@ -349,22 +353,22 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
 		this.tempTaskMapper.updateTempTask(task);
-		
-		//新增文件到系统文件表
+
+		// 新增文件到系统文件表
 		insertFile(taskDto.getFileUrl(), taskCode);
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
 		map.put(CommonConstant.BACK_MESSAGE, "临时任务修改成功");
 		return map;
 	}
-	
-	private void insertFile(String fileUrl ,String taskCode) {
-		//新增系统文件到数据库
-		String urlPrefix = RedisTools.getCommonConfig(redisUtil, "SYSTEM", fileDomain);
-		String [] fileurls = fileUrl.split(",");
-		
-		for(String url :fileurls) {
-			
+
+	private void insertFile(String fileUrl, String taskCode) {
+		// 新增系统文件到数据库
+		String urlPrefix = RedisTools.getCommonConfig("SYSTEM", fileDomain);
+		String[] fileurls = fileUrl.split(",");
+
+		for (String url : fileurls) {
+
 			TbSysFile sysFile = new TbSysFile();
 			sysFile.setFileId(UUIDUtils.getUUID());
 			sysFile.setDownloadUrl(urlPrefix + url);
@@ -374,7 +378,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			sysFile.setCreateDate(new Date());
 			sysFile.setCreateEmp("SYS");
 			sysFile.setVersion(0);
-			
+
 			commonSrvImpl.insertSysFile(sysFile);
 		}
 	}
