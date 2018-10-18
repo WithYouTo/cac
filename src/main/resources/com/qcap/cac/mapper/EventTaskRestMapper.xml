@@ -31,4 +31,11 @@
 		AND EVENT_TYPE=#{eventType}   
 		AND  GUARANTEE_TYPE =#{guaranteeType}
   </select>
+  
+  <select id="selectAdvanceTime" parameterType="String" resultType="String">
+  SELECT DESC1_ AS advanceTime 
+  FROM tbpubcode01 
+  WHERE CONFIG_CODE_ ='EVENT_BASIC_CONF' 
+  AND DESC_ =#{eventBasicType}
+  </select>
 </mapper>

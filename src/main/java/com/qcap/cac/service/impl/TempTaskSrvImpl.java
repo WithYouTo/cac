@@ -69,13 +69,13 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "该任务已成功取消");
 		}
 		if (CommonConstant.TASK_STATUS_WORKING.equals(taskStatus)) {
-			return ResParams.newInstance(CommonCodeConstant.SYS_EXCEPTION_CODE, "该任务正在进行中，不允许取消");
+			return ResParams.newInstance(CommonCodeConstant.ERROR_CODE_40402, "该任务正在进行中，不允许取消");
 		}
 		if (CommonConstant.TASK_STATUS_FINISH.equals(taskStatus)) {
-			return ResParams.newInstance(CommonCodeConstant.SYS_EXCEPTION_CODE, "该任务已完成，不允许取消");
+			return ResParams.newInstance(CommonCodeConstant.ERROR_CODE_40402, "该任务已完成，不允许取消");
 		}
 		if (CommonConstant.TASK_STATUS_CANCLE.equals(taskStatus)) {
-			return ResParams.newInstance(CommonCodeConstant.SYS_EXCEPTION_CODE, "该任务已取消");
+			return ResParams.newInstance(CommonCodeConstant.ERROR_CODE_40402, "该任务已取消");
 		}
 		return null;
 	}

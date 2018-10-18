@@ -28,5 +28,8 @@ public class CommonCodeConstant {
 	public static final String ERROR_CODE_40401_MSG = "未找对应记录";
 
 	public static final Integer SYS_START_PARTS_NO = 0;
+	
+	//不允许进行该操作
+	public static final int ERROR_CODE_40402 = 40402; 
 
 }
