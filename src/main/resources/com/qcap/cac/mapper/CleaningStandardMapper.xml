@@ -2,26 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qcap.cac.dao.CleaningStandardMapper" >
 
-  <select id="list" parameterType="com.qcap.cac.dto.CleaningStandardDto" resultType="Map" >
-    select 
-    	STANDARD_ID standardId, 
-    	STANDARD_CODE standardCode, 
-    	STANDARD_NAME standardName, 
-    	STANDARD_STEP standardStep, 
-    	EQUITMET_TYPE equitmetType, 
-    	CLEAN_TOOLS cleanTools, 
-    	STANDARD_REQUIREMENT standardRequirement, 
-    	MARK_SCALE markScale, 
-    	CHECK_FLAG checkFlag, 
-    	UPLOAD_PIC_FLAG uploadPicFlag, 
-    	REMARK1 remark1, 
-    	REMARK2 remark2, 
-    	REMARK3 remark3, 
-    	CREATE_EMP createEmp, 
-    	CREATE_DATE createDate, 
-    	UPDATE_DATE updateDate, 
-    	UPDATE_EMP updateEmp, 
-    	VERSION version
+	
+  <select id="listTbAreaStandard" parameterType="com.qcap.cac.dto.CleaningStandardDto" resultType="Map" >
+  	select
+	    STANDARD_ID standardId, 
+	    STANDARD_CODE standardCode, 
+	    STANDARD_NAME standardName, 
+	    MARK_SCALE markScale,
+	    CHECK_FLAG checkFlag, 
+	    UPLOAD_PIC_FLAG uploadPicFlag, 
+	    REMARK1 remark1, 
+	    REMARK2 remark2,
+	    REMARK3 remark3, 
+	    CREATE_EMP createEmp, 
+	    CREATE_DATE createDate, 
+	    UPDATE_DATE updateDate, 
+	    UPDATE_EMP updateEmp, 
+	    VERSION version
     from tb_area_standard
     where 1=1
 	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardName)">
@@ -33,45 +30,68 @@
 	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(uploadPicFlag)">
 		AND UPLOAD_PIC_FLAG=#{uploadPicFlag}
 	</if>
-	ORDER BY CREATE_DATE DESC
+	ORDER BY standardCode
   </select>
   
+  <select id="listTbAreaStandardDetail" parameterType="java.lang.String" resultType="Map">
+    select 
+	    STANDARD_DETAIL_ID standardDetailId, 
+	    STANDARD_CODE standardCode, 
+	    MATERIAL material , 
+	    STANDARD_STEP standardStep, 
+	    EQUITMET_TYPE equitmetType, 
+	    CLEAN_TOOLS cleanTools, 
+	    STANDARD_REQUIREMENT standardRequirement, 
+	    IMG_URL imgUrl, 
+	    FILE_URL fileUrl, 
+	    REMARK1 remark1, 
+	    REMARK2 remark2, 
+	    REMARK3 remark3, 
+	    CREATE_EMP createEmp, 
+	    CREATE_DATE createDate, 
+	    UPDATE_DATE updateDate, 
+	    UPDATE_EMP updateEmp, 
+	    VERSION version
+    from tb_area_standard_detail
+    where STANDARD_CODE = #{standardCode}
+  </select>
   
-  <insert id="add" parameterType="com.qcap.cac.entity.TbAreaStandard" >
-    insert into tb_area_standard (STANDARD_ID, STANDARD_CODE, STANDARD_NAME, 
-      STANDARD_STEP, EQUITMET_TYPE, CLEAN_TOOLS, 
-      STANDARD_REQUIREMENT, MARK_SCALE, CHECK_FLAG, 
-      UPLOAD_PIC_FLAG, REMARK1, REMARK2, 
-      REMARK3, CREATE_EMP, CREATE_DATE, 
-      UPDATE_DATE, UPDATE_EMP, VERSION
-      )
+  <insert id="addTbAreaStandard" parameterType="com.qcap.cac.entity.TbAreaStandard" >
+    insert into tb_area_standard 
+     (STANDARD_ID, STANDARD_CODE, STANDARD_NAME, 
+      MARK_SCALE, CHECK_FLAG, UPLOAD_PIC_FLAG, 
+      REMARK1, REMARK2, REMARK3, 
+      CREATE_EMP, CREATE_DATE, UPDATE_DATE, 
+      UPDATE_EMP, VERSION)
     values (#{standardId}, #{standardCode}, #{standardName}, 
-      #{standardStep}, #{equitmetType}, #{cleanTools}, 
-      #{standardRequirement}, #{markScale}, #{checkFlag}, 
-      #{uploadPicFlag}, #{remark1}, #{remark2}, 
-      #{remark3}, #{createEmp}, #{createDate}, 
-      #{updateDate}, #{updateEmp}, #{version}
+      #{markScale}, #{checkFlag}, #{uploadPicFlag}, 
+      #{remark1}, #{remark2}, #{remark3}, 
+      #{createEmp}, #{createDate}, #{updateDate}, 
+      #{updateEmp}, #{version}
       )
   </insert>
   
+  <insert id="addTbAreaStandardDetail" parameterType="com.qcap.cac.entity.TbAreaStandardDetail">
+    insert into tb_area_standard_detail (STANDARD_DETAIL_ID, STANDARD_CODE, MATERIAL, 
+      STANDARD_STEP, EQUITMET_TYPE, CLEAN_TOOLS, 
+      STANDARD_REQUIREMENT, IMG_URL, FILE_URL, 
+      REMARK1, REMARK2, REMARK3, 
+      CREATE_EMP, CREATE_DATE, UPDATE_DATE, 
+      UPDATE_EMP, VERSION)
+    values (#{standardDetailId}, #{standardCode}, #{material}, 
+      #{standardStep}, #{equitmetType}, #{cleanTools}, 
+      #{standardRequirement}, #{imgUrl}, #{fileUrl}, 
+      #{remark1}, #{remark2}, #{remark3}, 
+      #{createEmp}, #{createDate}, #{updateDate}, 
+      #{updateEmp}, #{version})
+  </insert>
   
-  <update id="edit" parameterType="com.qcap.cac.entity.TbAreaStandard" >
+  
+  <update id="editTbAreaStandard" parameterType="com.qcap.cac.entity.TbAreaStandard" >
     update tb_area_standard
     <set >
       <if test="standardName != null" >
         STANDARD_NAME = #{standardName},
-      </if>
-      <if test="standardStep != null" >
-        STANDARD_STEP = #{standardStep},
-      </if>
-      <if test="equitmetType != null" >
-        EQUITMET_TYPE = #{equitmetType},
-      </if>
-      <if test="cleanTools != null" >
-        CLEAN_TOOLS = #{cleanTools},
-      </if>
-      <if test="standardRequirement != null" >
-        STANDARD_REQUIREMENT = #{standardRequirement},
       </if>
       <if test="markScale != null" >
         MARK_SCALE = #{markScale},
@@ -103,10 +123,15 @@
       <if test="updateEmp != null" >
         UPDATE_EMP = #{updateEmp},
       </if>
+      <if test="version != null" >
+        VERSION = #{version},
+      </if>
     </set>
     where STANDARD_CODE = #{standardCode}
   </update>
  
+ 
+ 	
   <select id="selectStandardCode" resultType="String" >
     select  
     	STANDARD_CODE standardCode
@@ -122,9 +147,78 @@
 	WHERE STANDARD_NAME = #{standaedName}
   </select>
   
-   <select id="delete" parameterType="String"  >
+  
+  <select id="selectTask" parameterType="String" resultType="int" >
+    select  
+    	COUNT(1)
+    from tb_task
+	WHERE STANDARD_NAME = #{standaedName}
+  </select>
+  
+   <select id="deleteStandard" parameterType="String"  >
     delete from tb_area_standard
     where STANDARD_CODE = #{standardCode}
   </select>
+  
+  <update id="editStandardDetail" parameterType="com.qcap.cac.entity.TbAreaStandardDetail">
+    update tb_area_standard_detail
+    <set>
+      <if test="standardCode != null">
+        STANDARD_CODE = #{standardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="material != null">
+        MATERIAL = #{material,jdbcType=VARCHAR},
+      </if>
+      <if test="standardStep != null">
+        STANDARD_STEP = #{standardStep,jdbcType=VARCHAR},
+      </if>
+      <if test="equitmetType != null">
+        EQUITMET_TYPE = #{equitmetType,jdbcType=VARCHAR},
+      </if>
+      <if test="cleanTools != null">
+        CLEAN_TOOLS = #{cleanTools,jdbcType=VARCHAR},
+      </if>
+      <if test="standardRequirement != null">
+        STANDARD_REQUIREMENT = #{standardRequirement,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        IMG_URL = #{imgUrl,jdbcType=CHAR},
+      </if>
+      <if test="fileUrl != null">
+        FILE_URL = #{fileUrl,jdbcType=CHAR},
+      </if>
+      <if test="remark1 != null">
+        REMARK1 = #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null">
+        REMARK3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+      <if test="createEmp != null">
+        CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateEmp != null">
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        VERSION = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where STANDARD_DETAIL_ID = #{standardDetailId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <delete id="deleteStandardDetail" parameterType="java.lang.String">
+    delete from tb_area_standard_detail
+    where STANDARD_DETAIL_ID = #{standardDetailId,jdbcType=VARCHAR}
+  </delete>
   
 </mapper>

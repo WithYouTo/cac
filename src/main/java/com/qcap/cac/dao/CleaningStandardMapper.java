@@ -17,6 +17,7 @@ import javax.validation.Valid;
 
 import com.qcap.cac.dto.CleaningStandardDto;
 import com.qcap.cac.entity.TbAreaStandard;
+import com.qcap.cac.entity.TbAreaStandardDetail;
 
 /** 
  *
@@ -33,33 +34,25 @@ public interface CleaningStandardMapper {
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map<String, Object>> list(@Valid CleaningStandardDto cleaningStandardDto);
+	List<Map<String, Object>> listTbAreaStandard(@Valid CleaningStandardDto cleaningStandardDto);
+
 
 	/** 
 	 *
-	 * @Title: add 
-	 * @param cleaningStandardDto
-	 * @return
-	 * @return: Integer
-	 */
-	Integer add(@Valid CleaningStandardDto cleaningStandardDto);
-
-	/** 
-	 *
-	 * @Title: edit 
-	 * @param cleaningStandardDto
-	 * @return
-	 * @return: Integer
-	 */
-	Integer edit(@Valid CleaningStandardDto cleaningStandardDto);
-
-	/** 
-	 *
-	 * @Title: add 
+	 * @Title: addTbAreaStandard 
 	 * @param tbAreaStandard
 	 * @return: void
 	 */
-	void add(TbAreaStandard tbAreaStandard);
+	void addTbAreaStandard(TbAreaStandard tbAreaStandard);
+	
+	
+	/** 
+	 *
+	 * @Title: addTbAreaStandardDetail 
+	 * @param TbAreaStandardDetail
+	 * @return: void
+	 */
+	void addTbAreaStandardDetail(TbAreaStandardDetail tbAreaStandardDetail);
 
 	/** 
 	 *
@@ -67,7 +60,7 @@ public interface CleaningStandardMapper {
 	 * @param tbAreaStandard
 	 * @return: void
 	 */
-	void edit(TbAreaStandard tbAreaStandard);
+	void editTbAreaStandard(TbAreaStandard tbAreaStandard);
 
 	/** 
 	 *
@@ -92,7 +85,45 @@ public interface CleaningStandardMapper {
 	 * @param standardCode
 	 * @return: void
 	 */
-	void delete(String standardCode);
+	void deleteStandard(String standardCode);
+
+	/** 
+	 *
+	 * @Title: selectTask 
+	 * @param standardName
+	 * @return
+	 * @return: int
+	 */
+	int selectTask(String standardName);
+
+	/** 
+	 *
+	 * @Title: listTbAreaStandardDetail 
+	 * @param standardCode
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> listTbAreaStandardDetail(String standardCode);
+
+
+	/** 
+	 *
+	 * @Title: editStandardDetail 
+	 * @param tbAreaStandardDetail
+	 * @return: void
+	 */
+	void editStandardDetail(TbAreaStandardDetail tbAreaStandardDetail);
+
+
+	/** 
+	 *
+	 * @Title: deleteStandardDetail 
+	 * @param standardDetailId
+	 * @return: void
+	 */
+	void deleteStandardDetail(String standardDetailId);
+
+
 
 	
 

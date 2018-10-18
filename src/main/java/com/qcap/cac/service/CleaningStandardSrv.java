@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.qcap.cac.dto.CleaningStandardDetailDto;
 import com.qcap.cac.dto.CleaningStandardDto;
 
 /** 
@@ -32,16 +33,17 @@ public interface CleaningStandardSrv {
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map<String, Object>> list(@Valid CleaningStandardDto cleaningStandardDto);
+	List<Map<String, Object>> listTbAreaStandard(@Valid CleaningStandardDto cleaningStandardDto);
 
 	/** 
 	 *
 	 * @Title: add 
-	 * @param cleaningStandardDto
+	 * @param cleaningStandardAddDto
+	 * @param list 
 	 * @return
 	 * @return: Object
 	 */
-	Object add(@Valid CleaningStandardDto cleaningStandardDto);
+	Object add(@Valid CleaningStandardDto cleaningStandardDto, String list);
 
 	/** 
 	 *
@@ -60,6 +62,42 @@ public interface CleaningStandardSrv {
 	 * @return: Object
 	 */
 	Object deleteStandard(@Valid String standardCode);
+
+	/** 
+	 *
+	 * @Title: listTbAreaStandardDetail 
+	 * @param standardCode
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> listTbAreaStandardDetail( String standardCode);
+
+	/** 
+	 *
+	 * @Title: editStandardDetail 
+	 * @param cleaningStandardDetailDto
+	 * @return
+	 * @return: Object
+	 */
+	Object editStandardDetail(@Valid CleaningStandardDetailDto cleaningStandardDetailDto);
+
+	/** 
+	 *
+	 * @Title: deleteStandardDetail 
+	 * @param standardDetailId
+	 * @return
+	 * @return: Object
+	 */
+	Object deleteStandardDetail(String standardDetailId);
+
+	/** 
+	 *
+	 * @Title: addStandardDetail 
+	 * @param cleaningStandardDetailDto
+	 * @return
+	 * @return: Object
+	 */
+	Object addStandardDetail(@Valid CleaningStandardDetailDto cleaningStandardDetailDto);
 
 
 }

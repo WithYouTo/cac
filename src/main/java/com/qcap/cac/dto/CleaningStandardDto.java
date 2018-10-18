@@ -19,24 +19,8 @@ package com.qcap.cac.dto;
 public class CleaningStandardDto {
 	
 	private String standardCode;
-	
-    public String getStandardCode() {
-		return standardCode;
-	}
 
-	public void setStandardCode(String standardCode) {
-		this.standardCode = standardCode;
-	}
-
-	private String standardName;
-
-    private String standardStep;
-
-    private String equitmetType;
-
-    private String cleanTools;
-
-    private String standardRequirement;
+    private String standardName;
 
     private String markScale;
 
@@ -50,44 +34,20 @@ public class CleaningStandardDto {
 
     private String remark3;
 
+	public String getStandardCode() {
+		return standardCode;
+	}
+
+	public void setStandardCode(String standardCode) {
+		this.standardCode = standardCode;
+	}
+
 	public String getStandardName() {
 		return standardName;
 	}
 
 	public void setStandardName(String standardName) {
 		this.standardName = standardName;
-	}
-
-	public String getStandardStep() {
-		return standardStep;
-	}
-
-	public void setStandardStep(String standardStep) {
-		this.standardStep = standardStep;
-	}
-
-	public String getEquitmetType() {
-		return equitmetType;
-	}
-
-	public void setEquitmetType(String equitmetType) {
-		this.equitmetType = equitmetType;
-	}
-
-	public String getCleanTools() {
-		return cleanTools;
-	}
-
-	public void setCleanTools(String cleanTools) {
-		this.cleanTools = cleanTools;
-	}
-
-	public String getStandardRequirement() {
-		return standardRequirement;
-	}
-
-	public void setStandardRequirement(String standardRequirement) {
-		this.standardRequirement = standardRequirement;
 	}
 
 	public String getMarkScale() {
@@ -140,13 +100,11 @@ public class CleaningStandardDto {
 
 	@Override
 	public String toString() {
-		return "CleaningStandardDto [standardCode=" + standardCode + ", standardName=" + standardName
-				+ ", standardStep=" + standardStep + ", equitmetType=" + equitmetType + ", cleanTools=" + cleanTools
-				+ ", standardRequirement=" + standardRequirement + ", markScale=" + markScale + ", checkFlag="
-				+ checkFlag + ", uploadPicFlag=" + uploadPicFlag + ", remark1=" + remark1 + ", remark2=" + remark2
-				+ ", remark3=" + remark3 + "]";
+		return "CleaningStandardDto [standardCode=" + standardCode + ", standardName=" + standardName + ", markScale="
+				+ markScale + ", checkFlag=" + checkFlag + ", uploadPicFlag=" + uploadPicFlag + ", remark1=" + remark1
+				+ ", remark2=" + remark2 + ", remark3=" + remark3 + "]";
 	}
 
-
+    
     
 }
