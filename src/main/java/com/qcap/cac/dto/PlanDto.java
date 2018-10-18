@@ -39,6 +39,9 @@ public class PlanDto {
 	@ApiModelProperty(value = "结束时间")
 	private String planEndTime;
 
+	@ApiModelProperty(value = "备注")
+	private String remark1;
+
 	public String getPlanId() {
 		return planId;
 	}
@@ -127,12 +130,20 @@ public class PlanDto {
 		this.planEndTime = planEndTime;
 	}
 
+	public String getRemark1() {
+		return remark1;
+	}
+
+	public void setRemark1(String remark1) {
+		this.remark1 = remark1;
+	}
+
 	@Override
 	public String toString() {
 		return "PlanDto [planId=" + planId + ", areaCode=" + areaCode + ", areaName=" + areaName + ", areaType="
 				+ areaType + ", standardCode=" + standardCode + ", planTimeType=" + planTimeType + ", month=" + month
 				+ ", day=" + day + ", week=" + week + ", planStartTime=" + planStartTime + ", planEndTime="
-				+ planEndTime + "]";
+				+ planEndTime + ", remark1=" + remark1 + "]";
 	}
 
 }

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.PlanEventMapper">
+
+	<select id="selectPlanEventByPage" parameterType="com.qcap.cac.dto.QueryPlanEventListDto" resultType="java.util.Map">
+		SELECT
+			PLAN_EVENT_ID planEventId,
+			AREA_CODE areaCode,
+			(SELECT A.AREA_NAME FROM tb_area A WHERE A.AREA_CODE = T.AREA_CODE) areaName,
+			STANDARD_CODE standardCode,
+			(SELECT A.STANDARD_NAME FROM tb_area_standard A WHERE A.STANDARD_CODE = T.STANDARD_CODE) standardName,
+			EVENT_TYPE eventType,
+			GUARANTEE_TYPE guaranteeType,
+			REMARK1 remark1,
+			REMARK2 remark2,
+			REMARK3 remark3,
+			CREATE_EMP createEmp,
+			CREATE_DATE createDate,
+			UPDATE_EMP updateEmp,
+			UPDATE_DATE updateDate,
+			VERSION version
+		FROM
+			tb_plan_event T
+		<where>
+			<if test="areaCode != null and areaCode != ''">
+				AND AREA_CODE = #{areaCode}
+			</if>
+			<if test="standardCode != null and standardCode != ''">
+				AND STANDARD_CODE = #{standardCode}
+			</if>
+			<if test="eventType != null and eventType != ''">
+				AND EVENT_TYPE = #{eventType}
+			</if>
+			<if test="guaranteeType != null and guaranteeType != ''">
+				AND GUARANTEE_TYPE = #{guaranteeType}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectPlanEventById" parameterType="String" resultType="com.qcap.cac.entity.TbPlanEvent">
+		SELECT
+			PLAN_EVENT_ID planEventId,
+			AREA_CODE areaCode,
+			STANDARD_CODE standardCode,
+			EVENT_TYPE eventType,
+			GUARANTEE_TYPE guaranteeType,
+			REMARK1 remark1,
+			REMARK2 remark2,
+			REMARK3 remark3,
+			CREATE_EMP createEmp,
+			CREATE_DATE createDate,
+			UPDATE_EMP updateEmp,
+			UPDATE_DATE updateDate,
+			VERSION version
+		FROM
+			tb_plan_event T
+		WHERE 
+			PLAN_EVENT_ID = #{planEventId}
+	</select>
+	
+	<update id="updatePlanEvent" parameterType="com.qcap.cac.entity.TbPlanEvent">
+		UPDATE tb_plan_event SET
+			PLAN_EVENT_ID  = #{planEventId},
+			AREA_CODE = #{areaCode},
+			STANDARD_CODE = #{standardCode},
+			EVENT_TYPE = #{eventType},
+			GUARANTEE_TYPE = #{guaranteeType},
+			REMARK1 = #{remark1},
+			REMARK2 = #{remark2},
+			REMARK3 = #{remark3},
+			UPDATE_EMP = #{updateEmp},
+			UPDATE_DATE = #{updateDate},
+			VERSION = VERSION + 1
+		WHERE 
+			PLAN_EVENT_ID = #{planEventId}
+	</update>
+	
+	<delete id="deletePlanEventById" parameterType="String">
+		DELETE FROM tb_plan_event
+		WHERE 
+			PLAN_EVENT_ID = #{planEventId}
+	</delete>
+	
+  
+</mapper>

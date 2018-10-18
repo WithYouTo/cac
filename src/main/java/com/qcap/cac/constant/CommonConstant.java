@@ -156,14 +156,32 @@ public class CommonConstant {
 		PLAN_TIME_TYPE.put("MONTH", "每月");
 		PLAN_TIME_TYPE.put("YEAR", "每年");
 	}
-	
-    //删除标识
-    public final static String DELETE_FLAG_DELETE="DELETE";
-    public final static String DELETE_FLAG_NORMAL="NORMAL";
+
+	// 删除标识
+	public final static String DELETE_FLAG_DELETE = "DELETE";
+	public final static String DELETE_FLAG_NORMAL = "NORMAL";
 	public static Map<String, String> DELETE_FLAG = new LinkedHashMap<String, String>();
 	static {
 		DELETE_FLAG.put("DELETE", "删除");
 		DELETE_FLAG.put("NORMAL", "正常");
+	}
+
+	// 事件类型
+	public final static String EVENT_TYPE_ARRIVE = "ARRIVE";
+	public final static String EVENT_TYPE_LEAVE = "LEAVE";
+	public static Map<String, String> EVENT_TYPE = new LinkedHashMap<String, String>();
+	static {
+		EVENT_TYPE.put("ARRIVE", "到达");
+		EVENT_TYPE.put("LEAVE", "离港");
+	}
+
+	// 事件类型
+	public final static String GUARANTEE_TYPE_NORMAL = "NORMAL";
+	public final static String GUARANTEE_TYPE_IMPORTANT = "IMPORTANT";
+	public static Map<String, String> GUARANTEE_TYPE = new LinkedHashMap<String, String>();
+	static {
+		GUARANTEE_TYPE.put("NORMAL", "一般");
+		GUARANTEE_TYPE.put("IMPORTANT", "重要");
 	}
 
 }
