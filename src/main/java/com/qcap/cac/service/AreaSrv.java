@@ -23,4 +23,12 @@ public interface AreaSrv extends IService<TbArea> {
     List<Map> getAreaList(String areaCode);
 
 
+    /**
+     * 新增区域
+     * @param area
+     * @return
+     */
+    TbArea insertArea(TbArea area);
+
+
 }

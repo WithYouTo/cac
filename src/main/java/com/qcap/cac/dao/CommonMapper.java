@@ -28,6 +28,8 @@ public interface CommonMapper extends BaseMapper<TbManager> {
 	List<Map<String, Object>> selectAreaItem();
 
 	List<Map<String, String>> selectStandardNameList();
-	
+
 	void insertSysFile(TbSysFile sysFile);
+
+    List<Map<String,String>> getListByCode(@Param("code") String code);
 }

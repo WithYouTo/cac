@@ -29,4 +29,38 @@
                     else 'false' END) AS checked
         FROM tb_org r
     </select>
+
+    <select id="getOrgTreeListByManagerId" resultType="com.qcap.core.model.ZTreeNode">
+        SELECT r.code                    id,
+        r.parent_code             pid,
+        r.name,
+        (CASE
+        WHEN (r.parent_code = 0 OR r.parent_code IS NULL) THEN 'true'
+        ELSE 'false' END) AS open,
+        (CASE
+        WHEN exists(select 'X' from tb_manager_org where manager_id = #{managerId}
+        and org_id = r.id) then 'true'
+        else 'false' END) AS checked
+        FROM tb_org r
+    </select>
+
+    <select id="selectOrgByOrgCode" resultType="com.qcap.core.entity.TbOrg">
+        SELECT
+        id id,
+        code code,
+        parent_code parentCode,
+        fullcodes fullCodes,
+        num num,
+        parent_num parentNum,
+        name name,
+        fullnames fullnames,
+        is_open isOpen,
+        seq seq
+        FROM
+        tb_org
+        WHERE 1=1
+        <if test="org.code!=null and org.code!=''">
+           AND parent_code = #{org.code}
+        </if>
+    </select>
 </mapper>

@@ -100,4 +100,9 @@ public class CommonSrvImpl implements CommonSrv {
 		// TODO Auto-generated method stub
 		this.commonMapper.insertSysFile(sysFile);
 	}
+
+	@Override
+	public List<Map<String, String>> getListByCode(String str) {
+		return this.commonMapper.getListByCode(str);
+	}
 }

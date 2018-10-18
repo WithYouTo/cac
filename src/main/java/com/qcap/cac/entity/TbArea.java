@@ -109,12 +109,12 @@ public class TbArea {
     /**
     *   新增时间
      */
-    private String createDate;
+    private Date createDate;
 
     /**
     *   修改时间
      */
-    private String updateDate;
+    private Date updateDate;
 
     /**
     *   修改人
@@ -614,7 +614,7 @@ public class TbArea {
      *
      * @mbggenerated Tue Oct 09 15:30:51 CST 2018
      */
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
@@ -626,7 +626,7 @@ public class TbArea {
      *
      * @mbggenerated Tue Oct 09 15:30:51 CST 2018
      */
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
@@ -638,7 +638,7 @@ public class TbArea {
      *
      * @mbggenerated Tue Oct 09 15:30:51 CST 2018
      */
-    public String getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
@@ -650,7 +650,7 @@ public class TbArea {
      *
      * @mbggenerated Tue Oct 09 15:30:51 CST 2018
      */
-    public void setUpdateDate(String updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 

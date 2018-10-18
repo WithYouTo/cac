@@ -3,14 +3,15 @@
 <mapper namespace="com.qcap.cac.dao.AreaMapper">
 
 
-	<!--查询区域树列表-->
+	<!--查询区域列表-->
 	<select id="selectAreaList" resultType="Map" parameterType="String">
-		SELECT
+		<!--SELECT
 		AREA_ID,
 		AREA_CODE,
 		AREA_NAME,
 		AREA_TYPE,
 		SUPER_AREA_CODE pAreaCode,
+		(select AREA_NAME from tb_area a where a.AREA_CODE = b.SUPER_AREA_CODE) pAreaName,
 		LEVEL,
 		SEQ_NO,
 		FINAL_FLAG,
@@ -24,12 +25,36 @@
 		PERIMETER,
 		REMARK1
 		FROM tb_area
-		WHERE 1 = 1
+		WHERE 1 = 1-->
+		SELECT
+		t.AREA_ID,
+		t.AREA_CODE,
+		t.AREA_NAME areaName,
+		t.AREA_TYPE,
+		t.SUPER_AREA_CODE pAreaCode,
+		b.AREA_NAME pAreaName,
+		t.BUILDING_PURPOSE,
+		t.REMARK1
+		FROM
+		(SELECT
+		AREA_ID,
+		AREA_CODE,
+		AREA_NAME,
+		AREA_TYPE,
+		SUPER_AREA_CODE,
+		BUILDING_PURPOSE,
+		SEQ_NO,
+		REMARK1
+		FROM tb_area where  1 = 1
 		<if test="areaCode!=null and areaCode!=''">
 			and (AREA_CODE = #{areaCode}
 			OR SUPER_AREA_CODE = #{areaCode})
 		</if>
-		order by AREA_CODE,SEQ_NO
+		) t
+		LEFT JOIN tb_area b
+		on t.SUPER_AREA_CODE = b.AREA_CODE
+		GROUP BY t.AREA_ID
+		ORDER BY t.AREA_CODE,t.SEQ_NO
 	</select>
 
 

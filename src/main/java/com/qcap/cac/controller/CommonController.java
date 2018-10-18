@@ -192,6 +192,29 @@ public class CommonController {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value = "/initCardType", method = RequestMethod.POST)
+    public Object initCardType(){
+        List<Map<String,String>> list = this.commonSrv.getListByCode(CommonCodeConstant.INIT_CARD_TYPE_SELECT);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/initGender", method = RequestMethod.POST)
+    public Object initGender(){
+        List<Map<String,String>> list = this.commonSrv.getListByCode(CommonCodeConstant.INIT_GENDER_SELECT);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/initMarriageSit", method = RequestMethod.POST)
+    public Object initMarriageSit(){
+        List<Map<String,String>> list = this.commonSrv.getListByCode(CommonCodeConstant.INIT_MARRIAGE_SIT_SELECT);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
+
+    }
 
     /**
      *

@@ -118,4 +118,8 @@ public class CoreConstant {
 
 	public static final String EXCEL_IMPORT_ERROR_MSG = "数据有误，请重新导入";
 
+	//系统默认密码
+	public static final String SYS_DEFAULT_PASSWORD = "123456";
+
+
 }

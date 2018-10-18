@@ -53,7 +53,7 @@ public class TbRoleServiceImpl implements ITbRoleService {
 	@Transactional(rollbackFor = Exception.class)
 	public void insertRole(TbRole tbRole) throws Exception {
 		// 判断是否存在该编号
-		TbRole role = tbRoleMapper.selectOne(new QueryWrapper<TbRole>().lambda().eq(TbRole::getName, tbRole.getName()));
+		TbRole role = tbRoleMapper.selectOne(new QueryWrapper<TbRole>().eq("name", tbRole.getName()));
 		if (role != null) {
 			throw new Exception("该角色名称重复！");
 		}
@@ -81,7 +81,7 @@ public class TbRoleServiceImpl implements ITbRoleService {
 		TbRole role = tbRoleMapper.selectById(roleId);
 		// 删除该角色所有的权限
 		List<String> roleMenuIds = tbRoleMenuMapper
-				.selectList(new QueryWrapper<TbRoleMenu>().lambda().eq(TbRoleMenu::getRoleNum, role.getNum())).stream()
+				.selectList(new QueryWrapper<TbRoleMenu>().eq("role_num", role.getNum())).stream()
 				.map(TbRoleMenu::getId).collect(Collectors.toList());
 		if (!roleMenuIds.isEmpty()) {
 
@@ -89,8 +89,8 @@ public class TbRoleServiceImpl implements ITbRoleService {
 		}
 		// 删除与该角色关联的用户
 		List<String> managerRoleIds = tbManagerRoleMapper
-				.selectList(new QueryWrapper<TbManagerRole>().lambda().eq(TbManagerRole::getRoleId, role.getNum()))
-				.stream().map(TbManagerRole::getRoleId).collect(Collectors.toList());
+				.selectList(new QueryWrapper<TbManagerRole>().eq("role_id", role.getNum())).stream()
+				.map(TbManagerRole::getRoleId).collect(Collectors.toList());
 		if (!managerRoleIds.isEmpty()) {
 			tbManagerRoleMapper.deleteBatchIds(managerRoleIds);
 		}
@@ -102,7 +102,7 @@ public class TbRoleServiceImpl implements ITbRoleService {
 	public void assignMenuForRole(String roleId, String menuIds) {
 		TbRole role = tbRoleMapper.selectById(roleId);
 		// 删除该角色所有的权限
-		tbRoleMenuMapper.delete(new UpdateWrapper<TbRoleMenu>().lambda().eq(TbRoleMenu::getRoleNum, role.getNum()));
+		tbRoleMenuMapper.delete(new UpdateWrapper<TbRoleMenu>().eq("role_num", role.getNum()));
 		// 为角色配置新菜单
 		Arrays.stream(menuIds.split(",")).filter(StringUtils::isNotEmpty).forEach(e -> {
 			TbRoleMenu roleMenu = new TbRoleMenu();

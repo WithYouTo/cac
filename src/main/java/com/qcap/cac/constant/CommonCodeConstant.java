@@ -32,4 +32,13 @@ public class CommonCodeConstant {
 	//不允许进行该操作
 	public static final int ERROR_CODE_40402 = 40402; 
 
+
+	//通用代码档查询字段
+	public static final String INIT_GENDER_SELECT = "GENDER";
+
+	public static final String INIT_CARD_TYPE_SELECT = "CARD_TYPE";
+
+	public static final String INIT_MARRIAGE_SIT_SELECT = "MARRIAGE_SIT";
+
+
 }

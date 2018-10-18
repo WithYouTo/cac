@@ -2,6 +2,7 @@ package com.qcap.core.dao;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -32,4 +33,6 @@ public interface TbOrgMapper extends BaseMapper<TbOrg> {
 
 	@Select("select max(t.code) from tb_org t where t.parent_code=#{parentCode}")
 	String getMaxCodeByParentCode(String parentCode);
+
+    List<TbOrg> selectOrgByOrgCode(IPage<TbOrg> page,@Param("org") TbOrg org);
 }
