@@ -29,4 +29,13 @@ public class CommonCodeConstant {
 
 	public static final Integer SYS_START_PARTS_NO = 0;
 
+
+	//通用代码档查询字段
+	public static final String INIT_GENDER_SELECT = "GENDER";
+
+	public static final String INIT_CARD_TYPE_SELECT = "CARD_TYPE";
+
+	public static final String INIT_MARRIAGE_SIT_SELECT = "MARRIAGE_SIT";
+
+
 }

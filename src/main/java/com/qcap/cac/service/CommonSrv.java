@@ -22,6 +22,8 @@ public interface CommonSrv {
 	List<ZTreeNode> selectAreaItem();
 
 	List<Map<String, String>> selectStandardNameList();
-	
+
 	void insertSysFile(TbSysFile sysFile);
+
+    List<Map<String,String>> getListByCode(String initCardTypeSelect);
 }

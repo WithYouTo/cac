@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.qcap.core.entity.UserInsertDto;
 import com.qcap.core.entity.TbManager;
 
 /**
@@ -25,10 +26,10 @@ public interface ITbManagerService {
 	/**
 	 * 添加用户
 	 *
-	 * @param manager
-	 *            参数对象
-	 */
-	void insertItem(TbManager manager) throws Exception;
+     * @param manager
+     *            参数对象
+     */
+	void insertItem(UserInsertDto manager) throws Exception;
 
 	/**
 	 * 添加用户

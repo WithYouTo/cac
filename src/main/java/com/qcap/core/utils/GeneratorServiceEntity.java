@@ -32,7 +32,7 @@ public class GeneratorServiceEntity {
 
 	public static void main(String[] args) {
 		String[] list = {"tb_equip","tb_equip_charge","tb_equip_maint","tb_equip_plan","tb_equip_repair","tb_equip_use","TB_EQUIP_PARTS"};//静态初始化的简化版
-		generateByTables(true, "com.qcap.cac.entity", "tb_equip");
+		generateByTables(true, "com.qcap.cac.entity", "tb_user_info");
 	}
 
 }

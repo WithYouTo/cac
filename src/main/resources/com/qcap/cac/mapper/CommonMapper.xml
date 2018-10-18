@@ -81,7 +81,7 @@
 		FROM 
 			tb_area_standard 
 	</select>
-	
+
 	  <insert id="insertSysFile" parameterType="com.qcap.cac.entity.TbSysFile">
 	    insert into tb_sys_file (FILE_ID, GROUP_ID, FILE_NAME, 
 	      FILE_TYPE, STORE_URL, DOWNLOAD_URL, 
@@ -94,5 +94,15 @@
 	      #{createEmp}, #{createDate}, #{updateDate}, 
 	      #{updateEmp}, #{version})
      </insert>
+
+    <select id="getListByCode" parameterType="String"  resultType="Map">
+        SELECT
+        DESC_ id,
+        DESC1_ text
+        FROM
+        tbpubcode01
+        WHERE
+        CONFIG_CODE_ = #{code}
+    </select>
 
 </mapper>

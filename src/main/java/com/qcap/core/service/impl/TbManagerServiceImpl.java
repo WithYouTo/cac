@@ -1,14 +1,14 @@
 package com.qcap.core.service.impl;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.qcap.core.dao.*;
+import com.qcap.core.entity.*;
+import com.qcap.core.common.CoreConstant;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +16,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.core.common.ManagerStatus;
-import com.qcap.core.dao.TbManagerMapper;
-import com.qcap.core.dao.TbManagerOrgMapper;
-import com.qcap.core.dao.TbManagerRoleMapper;
-import com.qcap.core.dao.TbOrgMapper;
-import com.qcap.core.dao.TbRoleMapper;
-import com.qcap.core.entity.TbManager;
-import com.qcap.core.entity.TbManagerOrg;
-import com.qcap.core.entity.TbManagerRole;
-import com.qcap.core.entity.TbOrg;
-import com.qcap.core.entity.TbRole;
 import com.qcap.core.exception.BizExceptionEnum;
 import com.qcap.core.exception.BussinessException;
 import com.qcap.core.log.LogManager;
@@ -57,6 +47,8 @@ public class TbManagerServiceImpl implements ITbManagerService {
 	@Resource
 	private TbOrgMapper tbOrgMapper;
 
+	@Resource
+	private TbUserInfoMapper tbUserInfoMapper;
 	@Resource
 	private JwtTokenUtil jwtTokenUtil;
 
@@ -112,17 +104,34 @@ public class TbManagerServiceImpl implements ITbManagerService {
 	}
 
 	@Override
-	public void insertItem(TbManager manager) throws Exception {
+	public void insertItem(UserInsertDto userInsertDto) throws Exception {
+		TbManager manager = new TbManager();
+		manager.setMail(userInsertDto.getEmail());
+		manager.setPhone(userInsertDto.getMobile());
+		manager.setAccount(userInsertDto.getWorkNo());
+		manager.setName(userInsertDto.getUserName());
+
+		TbUserInfo userInfo = new TbUserInfo();
+		BeanUtils.copyProperties(userInsertDto,userInfo);
+
 		TbManager tbManager = tbManagerMapper
-				.selectOne(new QueryWrapper<TbManager>().lambda().eq(TbManager::getAccount, manager.getAccount()));
+				.selectOne(new QueryWrapper<TbManager>().eq("account", manager.getAccount()));
 		if (tbManager != null) {
 			throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
 		}
 		// 完善信息
 		manager.setSalt(Md5Util.getSalt());
-		manager.setPassword(Md5Util.encrypt(manager.getPassword(), manager.getSalt()));
+		manager.setPassword(Md5Util.encrypt(CoreConstant.SYS_DEFAULT_PASSWORD, manager.getSalt()));
 		manager.setStatus(ManagerStatus.OK.getCode());
+
+		//todo 通用方法，待修改
+		userInfo.setCreateTime(new Date());
+		userInfo.setUpdateTime(new Date());
+		userInfo.setCreateEmp("sys");
+		userInfo.setUpdateEmp("sys");
+
 		tbManagerMapper.insert(manager);
+		this.tbUserInfoMapper.insert(userInfo);
 	}
 
 	@Override

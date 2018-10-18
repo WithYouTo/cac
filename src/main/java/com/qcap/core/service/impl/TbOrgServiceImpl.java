@@ -45,15 +45,16 @@ public class TbOrgServiceImpl implements ITbOrgService {
 
 	@Override
 	public void getOrgList(IPage<TbOrg> page, TbOrg org) {
-		QueryWrapper<TbOrg> wrapper = new QueryWrapper<>();
-		wrapper.eq("status", "1");
-		if (StringUtils.isNotEmpty(org.getName())) {
-			wrapper.lambda().like(TbOrg::getName, org.getName() + "%");
-		}
-		if (StringUtils.isNotEmpty(org.getCode())) {
-			wrapper.lambda().eq(TbOrg::getCode, org.getCode());
-		}
-		tbOrgMapper.selectPage(page, wrapper);
+//		QueryWrapper<TbOrg> wrapper = new QueryWrapper<>();
+//		wrapper.eq("status", "1");
+//		if (StringUtils.isNotEmpty(org.getName())) {
+//			wrapper.lambda().like(TbOrg::getName, org.getName() + "%");
+//		}
+//		if (StringUtils.isNotEmpty(org.getCode())) {
+//			wrapper.lambda().eq(TbOrg::getCode, org.getCode());
+//		}
+		List<TbOrg> orgList = tbOrgMapper.selectOrgByOrgCode(page, org);
+		page.setRecords(orgList);
 	}
 
 	@Override

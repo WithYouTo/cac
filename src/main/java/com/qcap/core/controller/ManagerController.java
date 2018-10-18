@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import com.qcap.core.entity.UserInsertDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,19 +35,19 @@ public class ManagerController {
 	/**
 	 * 添加用户
 	 *
-	 * @param manager
+	 * @param userInsertDto
 	 *            参数对象
 	 * @param result
 	 *            校验结果对象
 	 * @return response封装
 	 */
 	@PostMapping("/add")
-	public ResParams add(@Valid TbManager manager, BindingResult result) {
-		if (result.hasErrors()) {
-			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-		}
+	public ResParams add(@Valid UserInsertDto userInsertDto, BindingResult result) {
+//		if (result.hasErrors()) {
+//			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+//		}
 		try {
-			managerService.insertItem(manager);
+			managerService.insertItem(userInsertDto);
 			return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.ADD_SUCCESS, null);
 		} catch (Exception e) {
 			e.printStackTrace();
