@@ -103,8 +103,8 @@ public class PlanController {
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
 	}
 
-	@RequestMapping(value = "/selectStandardNameList", method = RequestMethod.POST)
-	public ResParams selectStandardNameList() throws Exception {
+	@RequestMapping(value = "/selectStandardCodeList", method = RequestMethod.POST)
+	public ResParams selectStandardCodeList() throws Exception {
 		List<Map<String, String>> list = this.commonSrv.selectStandardNameList();
 
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
