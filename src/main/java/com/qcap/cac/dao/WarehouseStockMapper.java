@@ -3,7 +3,7 @@ package com.qcap.cac.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
-import org.apache.ibatis.annotations.Select;
+import com.qcap.cac.poiEntity.PurchasePoiEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public interface WarehouseStockMapper extends BaseMapper<TbWarehouseStock> {
 
     List<TbWarehouseStock> getGoodsConfigList(WarehouseEntryDto warehouseEntryDto);
 
-    List<TbWarehouseStock> getLeastStockNumList();
+    List<PurchasePoiEntity> getLeastStockNumList();
 
 
 }

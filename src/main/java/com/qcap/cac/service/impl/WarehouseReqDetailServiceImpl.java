@@ -1,18 +1,16 @@
 package com.qcap.cac.service.impl;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseReqDetailMapper;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
-import com.qcap.cac.service.IWarehouseReqDetailService;
+import com.qcap.cac.service.WarehouseReqDetailService;
 import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +24,7 @@ import java.util.Map;
  * @since 2018-10-09
  */
 @Service
-public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetailMapper, TbWarehouseReqdetail> implements IWarehouseReqDetailService {
+public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetailMapper, TbWarehouseReqdetail> implements WarehouseReqDetailService {
 
     @Resource
     private WarehouseReqDetailMapper warehouseReqDetailMapper;

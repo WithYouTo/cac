@@ -15,11 +15,10 @@ import com.qcap.cac.entity.TbWarehousePosition;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.entity.TbWarehouseStorage;
 import com.qcap.cac.poiEntity.EntryPoiEntity;
-import com.qcap.cac.service.IWarehouseEntryService;
+import com.qcap.cac.service.WarehouseEntryService;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +37,7 @@ import java.util.Map;
  * @since 2018-10-09
  */
 @Service
-public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper, TbWarehouseEntry> implements IWarehouseEntryService {
+public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper, TbWarehouseEntry> implements WarehouseEntryService {
 
     @Resource
     private WarehouseEntryMapper warehouseEntryMapper;

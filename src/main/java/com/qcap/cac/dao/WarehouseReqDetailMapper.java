@@ -1,7 +1,6 @@
 package com.qcap.cac.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;

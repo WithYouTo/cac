@@ -111,8 +111,8 @@
     </update>
 
 
-    <select id="getLeastStockNumList" resultType="com.qcap.cac.entity.TbWarehouseStock">
-        select
+    <select id="getLeastStockNumList" resultType="com.qcap.cac.poiEntity.PurchasePoiEntity">
+       <!-- select
         WAREHOUSE_STOCK_ID,
         STOREROOM_ID,
         STOREROOM,
@@ -130,7 +130,21 @@
         STOCK_INSTRUTION,
         REMARK
         from tb_warehouse_stock
-        where GOODS_NUM &lt; LIMIT_STORE
+        where GOODS_NUM &lt; LIMIT_STORE-->
+        SELECT @ROWNO := @ROWNO + 1 AS seqNo,
+        T.*
+        FROM (SELECT r.BUY_NO,
+        r.BUY_TYPE,
+        r.GOODS_TYPE,
+        r.GOODS_NAME,
+        r.SUPPLIER_NAME,
+        r.BUY_NUM,
+        r.ENTRY_UNIT
+        FROM
+        tb_warehouse_stock r where r.GOODS_NUM &lt; r.LIMIT_STORE
+        ORDER BY BUY_NO ASC) T,
+        (SELECT @ROWNO := 0) T3
+        ORDER BY seqNo
     </select>
 
 

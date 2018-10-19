@@ -6,15 +6,12 @@ import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.WarehouseReqDetailMapper;
 import com.qcap.cac.dao.WarehouseRequMapper;
 import com.qcap.cac.dto.WarehouseReqDto;
-import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
-import com.qcap.cac.service.IWarehouseRequService;
-import com.qcap.core.common.CoreConstant;
+import com.qcap.cac.service.WarehouseRequService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +25,7 @@ import java.util.Map;
  * @since 2018-10-09
  */
 @Service
-public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, TbWarehouseRequ> implements IWarehouseRequService {
+public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, TbWarehouseRequ> implements WarehouseRequService {
 
     @Resource
     private WarehouseRequMapper warehouseRequMapper;

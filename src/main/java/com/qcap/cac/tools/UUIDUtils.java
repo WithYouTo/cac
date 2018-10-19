@@ -30,7 +30,7 @@ public class UUIDUtils {
      * @return
      */
     public  static String  getPositionCode(){
-        String positionCode = "GW" + ToolUtil.getRandomString(5);
+        String positionCode = "GW" + ToolUtil.getRandomInt(5);
         return positionCode;
     }
 }

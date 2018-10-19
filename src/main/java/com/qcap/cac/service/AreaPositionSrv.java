@@ -2,7 +2,6 @@ package com.qcap.cac.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcap.cac.dto.AreaPositionDto;
-import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.entity.TbAreaPosition;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public interface AreaPositionSrv extends IService<TbAreaPosition> {
      * @param areaPosition
      * @return
      */
-    Integer insertAreaPosition(TbAreaPosition areaPosition);
+    Integer insertAreaPosition(TbAreaPosition areaPosition) throws Exception;
 
     /**
      * 修改岗位

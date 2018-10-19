@@ -8,9 +8,8 @@ import com.qcap.cac.dao.WarehouseStorageMapper;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.entity.TbWarehousePosition;
 import com.qcap.cac.entity.TbWarehouseStorage;
-import com.qcap.cac.service.IWarehousePositionService;
+import com.qcap.cac.service.WarehousePositionService;
 import com.qcap.cac.tools.UUIDUtils;
-import com.qcap.core.common.CoreConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,7 @@ import java.util.Date;
  * @since 2018-10-09
  */
 @Service
-public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionMapper, TbWarehousePosition> implements IWarehousePositionService {
+public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionMapper, TbWarehousePosition> implements WarehousePositionService {
 
     @Resource
     private WarehousePositionMapper warehousePositionMapper;

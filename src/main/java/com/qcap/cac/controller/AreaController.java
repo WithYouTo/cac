@@ -1,17 +1,10 @@
 package com.qcap.cac.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
-import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbArea;
-import com.qcap.cac.entity.TbWarehouseReqdetail;
-import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.service.AreaSrv;
-import com.qcap.cac.service.IWarehouseReqDetailService;
-import com.qcap.cac.service.IWarehouseRequService;
-import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -23,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

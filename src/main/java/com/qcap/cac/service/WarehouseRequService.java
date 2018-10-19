@@ -16,7 +16,7 @@ import java.util.Map;
  * @author stylefeng
  * @since 2018-10-09
  */
-public interface IWarehouseRequService extends IService<TbWarehouseRequ> {
+public interface WarehouseRequService extends IService<TbWarehouseRequ> {
 
 
     List<Map<String,String>> getRequList(WarehouseReqDto warehouseReqDto);

@@ -13,7 +13,7 @@ import com.qcap.cac.entity.TbWarehousePosition;
  * @author stylefeng
  * @since 2018-10-09
  */
-public interface IWarehousePositionService extends IService<TbWarehousePosition> {
+public interface WarehousePositionService extends IService<TbWarehousePosition> {
 
     /**
      * 新增库位

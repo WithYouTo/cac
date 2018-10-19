@@ -5,7 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.poiEntity.EntryPoiEntity;
-import com.qcap.cac.service.IWarehouseEntryService;
+import com.qcap.cac.service.WarehouseEntryService;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -36,7 +36,7 @@ public class WarehouseEntryController {
 
 
     @Autowired
-    private IWarehouseEntryService warehouseEntryService;
+    private WarehouseEntryService warehouseEntryService;
 
 
     /**

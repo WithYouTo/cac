@@ -12,8 +12,10 @@ import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehousePurchase;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.entity.TbWarehouseStockLog;
-import com.qcap.cac.service.IWarehouseStockService;
+import com.qcap.cac.poiEntity.PurchasePoiEntity;
+import com.qcap.cac.service.WarehouseStockService;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.poi.PoiUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ import java.util.Map;
  * @since 2018-10-09
  */
 @Service
-public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper, TbWarehouseStock> implements IWarehouseStockService {
+public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper, TbWarehouseStock> implements WarehouseStockService {
 
     @Resource
     private WarehouseEntryMapper warehouseEntryMapper;
@@ -76,19 +78,19 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
                 .eq("STOREROOM_ID", warehouseEntryDto.getStoreroomId());
 
          if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsNo())) {
-             queryWrapper.like("GOODS_NO", "%" + warehouseEntryDto.getGoodsNo() + "%");
+             queryWrapper.like("GOODS_NO", warehouseEntryDto.getGoodsNo());
          }
 
         if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsName())) {
-            queryWrapper.like("GOODS_NAME", "%" + warehouseEntryDto.getGoodsName() + "%");
+            queryWrapper.like("GOODS_NAME", warehouseEntryDto.getGoodsName());
         }
 
         if(StringUtils.isNotEmpty(warehouseEntryDto.getSupplierName())) {
-            queryWrapper.like("SUPPLIER_NAME", "%" + warehouseEntryDto.getSupplierName() + "%");
+            queryWrapper.like("SUPPLIER_NAME",  warehouseEntryDto.getSupplierName());
         }
 
         if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsNo())) {
-            queryWrapper.like("GOODS_NO", "%" + warehouseEntryDto.getGoodsNo() + "%");
+            queryWrapper.like("GOODS_NO",  warehouseEntryDto.getGoodsNo());
         }
 
         queryWrapper.groupBy("GOODS_NO").groupBy("SUPPLIER_NAME");
@@ -124,19 +126,20 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
     /**
      * 低于警戒线，生成请购单
      */
-    public void  generatePurchaseOrder(String date){
+    public List<PurchasePoiEntity>  generatePurchaseOrder(String date){
         //查询数据库中低于警戒线中的记录
-        List<TbWarehouseStock> list = this.warehouseStockMapper.getLeastStockNumList();
-        for(TbWarehouseStock item : list){
-            //新增请购单
-            TbWarehousePurchase purchaseuse = new TbWarehousePurchase();
-            BeanUtil.copyProperties(item,purchaseuse);
-            purchaseuse.setWarehousePurchaseId(UUIDUtils.getUUID());
-            purchaseuse.setBuyType(item.getGoodsType());
-            purchaseuse.setBuyNo(item.getBuyNo());
-            purchaseuse.setBuyTime(date);
-            this.warehousePurchaseMapper.insert(purchaseuse);
-        }
+        return this.warehouseStockMapper.getLeastStockNumList();
+//        for(TbWarehouseStock item : list){
+//            //新增请购单
+//            TbWarehousePurchase purchaseuse = new TbWarehousePurchase();
+//            BeanUtil.copyProperties(item,purchaseuse);
+//            purchaseuse.setWarehousePurchaseId(UUIDUtils.getUUID());
+//            purchaseuse.setBuyType(item.getGoodsType());
+//            purchaseuse.setBuyNo(item.getBuyNo());
+//            purchaseuse.setBuyTime(date);
+//            this.warehousePurchaseMapper.insert(purchaseuse);
+//        }
+
 
     }
 }

@@ -1,14 +1,13 @@
 package com.qcap.cac.controller;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
-import com.qcap.cac.service.IWarehouseReqDetailService;
-import com.qcap.cac.service.IWarehouseRequService;
+import com.qcap.cac.service.WarehouseReqDetailService;
+import com.qcap.cac.service.WarehouseRequService;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +35,10 @@ public class WarehouseReqGoodsController {
 
 
     @Autowired
-    private IWarehouseReqDetailService warehouseReqDetailService;
+    private WarehouseReqDetailService warehouseReqDetailService;
 
     @Autowired
-    private IWarehouseRequService warehouseRequService;
+    private WarehouseRequService warehouseRequService;
 
     /**
      * 领用查询（已出库）

@@ -7,7 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.entity.TbWarehousePosition;
-import com.qcap.cac.service.IWarehousePositionService;
+import com.qcap.cac.service.WarehousePositionService;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -35,7 +35,7 @@ public class WarehousePositionController {
 
 
     @Autowired
-    private IWarehousePositionService warehousePositionService;
+    private WarehousePositionService warehousePositionService;
 
 
     /**

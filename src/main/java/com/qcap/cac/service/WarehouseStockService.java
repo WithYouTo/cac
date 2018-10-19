@@ -4,6 +4,7 @@ package com.qcap.cac.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
+import com.qcap.cac.poiEntity.PurchasePoiEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @author stylefeng
  * @since 2018-10-09
  */
-public interface IWarehouseStockService extends IService<TbWarehouseStock> {
+public interface WarehouseStockService extends IService<TbWarehouseStock> {
 
     List<Map> getWarehouseStockList(WarehouseEntryDto warehouseEntryDto);
 
@@ -26,6 +27,6 @@ public interface IWarehouseStockService extends IService<TbWarehouseStock> {
 
     Integer updateGoodsNum(TbWarehouseStock warehouseStock);
 
-    void generatePurchaseOrder(String date);
+    List<PurchasePoiEntity>  generatePurchaseOrder(String date);
 
 }

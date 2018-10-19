@@ -4,7 +4,7 @@ package com.qcap.cac.controller;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
-import com.qcap.cac.service.IWarehouseStockService;
+import com.qcap.cac.service.WarehouseStockService;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -30,7 +30,7 @@ public class WarehouseStockController {
 
 
     @Autowired
-    private IWarehouseStockService warehouseStockService;
+    private WarehouseStockService warehouseStockService;
 
 
     /**

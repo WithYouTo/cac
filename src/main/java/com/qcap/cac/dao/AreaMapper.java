@@ -1,9 +1,7 @@
 package com.qcap.cac.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbArea;
-import com.qcap.cac.entity.TbWarehouseStock;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
