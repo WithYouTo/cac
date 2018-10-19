@@ -68,7 +68,7 @@ public class TbMenuServiceImpl implements ITbMenuService {
 			wrapper.eq("level", menu.getLevel());
 		}
 		if (StringUtils.isNotEmpty(menu.getCode())) {
-			wrapper.eq("code", menu.getCode());
+			wrapper.eq("parent_code", menu.getCode());
 		}
 		wrapper.orderByAsc("level", "seq");
 		return tbMenuMapper.selectPage(page, wrapper);

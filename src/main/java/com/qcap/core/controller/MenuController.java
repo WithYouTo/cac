@@ -1,9 +1,14 @@
 package com.qcap.core.controller;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -38,12 +43,33 @@ public class MenuController {
 
 	/**
 	 * 获取菜单列表
+	 * 
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
 	 */
 	@BussinessLog("查询菜单")
 	@PostMapping("/list")
-	public PageResParams list(TbMenu menu, IPage<TbMenu> page) {
+	public PageResParams list(TbMenu menu, IPage<TbMenu> page) throws Exception {
 		tbMenuService.getMenuList(menu, page);
-		return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", page.getTotal(), page.getRecords());
+		List<TbMenu> ls = page.getRecords();
+		List<Map<String, String>> lsRecord = new ArrayList<>();
+		if (CollectionUtils.isNotEmpty(ls)) {
+			for (TbMenu menuTemp : ls) {
+				Map<String, String> map = BeanUtils.describe(menuTemp);
+				String isMenu = map.get("isMenu");
+				if ("1".equals(isMenu)) {
+					map.put("isMenuName", "PC菜单");
+				} else if ("2".equals(isMenu)) {
+					map.put("isMenuName", "APP菜单");
+				} else {
+					map.put("isMenuName", "");
+				}
+
+				lsRecord.add(map);
+			}
+		}
+		return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", page.getTotal(), lsRecord);
 	}
 
 	/**
