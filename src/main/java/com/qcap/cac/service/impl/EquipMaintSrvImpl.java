@@ -13,12 +13,15 @@ import com.qcap.cac.entity.TbEquipMaint;
 import com.qcap.cac.entity.TbEquipParts;
 import com.qcap.cac.entity.TbEquipPlan;
 import com.qcap.cac.service.EquipMaintSrv;
+import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +49,9 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
     }
 
     @Override
-    public void insertEquipMaint(EquipMaintInsertDto equipMaintInsertDto) {
+    public void insertEquipMaint(EquipMaintInsertDto equipMaintInsertDto) throws Exception {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
         String maintType= equipMaintInsertDto.getMaintType();
         TbEquipMaint equipMaint = new TbEquipMaint();
         TbEquipPlan equipPlan = new TbEquipPlan();
@@ -56,28 +61,35 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
         equip.eq("equip_No", equipMaintInsertDto.getEquipNo());
         TbEquip equipInfo=this.equipMapper.selectOne(equip);
 
-        //1、重组维保记录对象
-        BeanUtils.copyProperties(equipInfo,equipMaint);
-        BeanUtils.copyProperties(equipInfo,equipPlan);
-        equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
+        if(equipInfo != null){
+            //1、重组维保记录对象
+            BeanUtils.copyProperties(equipInfo,equipMaint);
+            BeanUtils.copyProperties(equipInfo,equipPlan);
+            equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
+            Date time = format.parse(equipMaintInsertDto.getMaintTime());
 
-        //若维保类型是配件，继续查询配件信息
-        if((CommonConstant.MAINT_TYPE_PARTS).equals(maintType)){
-            //mybatis-plus封装查询条件，根据设备编号获取设备信息
-            QueryWrapper<TbEquipParts> parts = new QueryWrapper();
-            parts.eq("PARTS_NO", equipMaintInsertDto.getPartsNo());
-            TbEquipParts equipParts = this.equipPartsMapper.selectOne(parts);
+            equipMaint.setMaintTime(time);
+            equipMaint.setEquipCycle(equipInfo.getMaintCycle());
 
-            BeanUtils.copyProperties(equipParts,equipMaint);
-            BeanUtils.copyProperties(equipParts,equipPlan);
-            equipMaint.setEquipType(CommonConstant.MAINT_TYPE_PARTS);
+            //若维保类型是配件，继续查询配件信息
+            if((CommonConstant.MAINT_TYPE_PARTS).equals(maintType)){
+                //mybatis-plus封装查询条件，根据设备编号获取设备信息
+                QueryWrapper<TbEquipParts> parts = new QueryWrapper();
+                parts.eq("PARTS_NO", equipMaintInsertDto.getPartsNo());
+                TbEquipParts equipParts = this.equipPartsMapper.selectOne(parts);
+
+                BeanUtils.copyProperties(equipParts,equipMaint);
+                BeanUtils.copyProperties(equipParts,equipPlan);
+                equipMaint.setEquipType(CommonConstant.MAINT_TYPE_PARTS);
+            }
+
+            //2、新增一条维保记录
+            equipMaint.setEquipMaintId(UUIDUtils.getUUID());
+            this.equipMaintMapper.insert(equipMaint);
+
+            //3、更新维保计划
+            updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan);
         }
-
-        //2、新增一条维保记录
-        this.equipMaintMapper.insert(equipMaint);
-
-        //3、更新维保计划
-        updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan);
     }
 
     /**
@@ -94,6 +106,9 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
      */
     private void updateEquipPlanTime(String maintTime,TbEquipPlan equipPlan) {
         Date time = DateUtil.parseDate(maintTime);
+        Date nextTime = getNewPlanDate(time,equipPlan.getMaintCycle());
+        equipPlan.setNextMaintTime(nextTime);
+        equipPlan.setLatestMaintTime(time);
 //        equipPlan.setLatestMaintDate(time);
 //        equipPlan.setNextMaintDate(getNewPlanDate(time,equipPlan.getMaintCycle()));
         this.equipPlanMapper.updateEquipPlan(equipPlan);
