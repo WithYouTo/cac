@@ -36,6 +36,7 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
     @Override
     public Integer insertPosition(TbWarehousePosition tbWarehousePosition) {
         tbWarehousePosition.setWarehousePositionId(UUIDUtils.getUUID());
+        tbWarehousePosition.setDeleteFlag("N");
         tbWarehousePosition.setCreateDate(new Date());
         tbWarehousePosition.setCreateEmp("SYS");
         return this.warehousePositionMapper.insert(tbWarehousePosition);

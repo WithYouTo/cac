@@ -142,7 +142,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             if(StringUtils.isEmpty(buyNum)){
                 throw new RuntimeException("第" + (i + 1) + "行的采购数量不能为空！");
             }
-            if(!ToolUtil.isNumeric(sumNum)){
+            if(!ToolUtil.isNumeric(buyNum)){
                 throw new RuntimeException("第" + (i + 1) + "行的采购数量的格式不正确！");
             }
             String buyUnit = item.getMinUnit();

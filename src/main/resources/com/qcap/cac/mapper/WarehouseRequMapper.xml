@@ -38,7 +38,7 @@
         <if test="endDate!=null and endDate!=''">
             and DATE(a.REQU_TIME) &lt;= #{endDate}
         </if>
-        ORDER BY  a.REQU_TIME desc
+        ORDER BY a.CREATE_DATE desc
     </select>
 
 

@@ -74,7 +74,7 @@
         LEFT JOIN tb_warehouse_requ b
         on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
         where  a.WAREHOUSE_REQU_ID = #{warehouseRequId}
-        order by a.CREATE_DATE ASC
+        order by a.CREATE_DATE DESC
     </select>
 
 
