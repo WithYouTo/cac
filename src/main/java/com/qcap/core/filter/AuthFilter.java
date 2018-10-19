@@ -14,16 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.common.RestConstant;
 import com.qcap.core.common.RestParams;
 import com.qcap.core.properties.RestProperties;
-import com.qcap.core.utils.AppUtils;
-import com.qcap.core.utils.RedisUtil;
 import com.qcap.core.utils.RenderUtil;
 import com.qcap.core.utils.jwt.JwtProperties;
 import com.qcap.core.utils.jwt.JwtTokenUtil;
 
-import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -43,9 +41,6 @@ public class AuthFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private RestProperties restProperties;
-
-	@Autowired
-	private RedisUtil redisUtil;
 
 	private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
@@ -139,8 +134,9 @@ public class AuthFilter extends OncePerRequestFilter {
 	}
 
 	private List<String> getNoCheckUrl() throws Exception {
-		String key = AppUtils.getApplicationName() + StrUtil.COLON + "SYSTEM" + StrUtil.COLON + "CAC_NO_CHECK_URL";
-		String value = redisUtil.get(key);
+		// String key = AppUtils.getApplicationName() + StrUtil.COLON + "SYSTEM"
+		// + StrUtil.COLON + "CAC_NO_CHECK_URL";
+		String value = RedisTools.getCommonConfig("CAC_NO_CHECK_URL");
 		if (StringUtils.isNotBlank(value)) {
 			String[] urlArray = value.split(";");
 			return Arrays.asList(urlArray);
