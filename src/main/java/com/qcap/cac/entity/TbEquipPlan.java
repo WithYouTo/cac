@@ -28,6 +28,10 @@ public class TbEquipPlan implements Serializable {
      */
     private String equipId;
     /**
+     * 设备编号
+     */
+    private String equipNo;
+    /**
      * 设备名称
      */
     private String equipName;
@@ -101,6 +105,13 @@ public class TbEquipPlan implements Serializable {
      */
     private Integer version;
 
+    public String getEquipNo() {
+        return equipNo;
+    }
+
+    public void setEquipNo(String equipNo) {
+        this.equipNo = equipNo;
+    }
 
     public String getPlanId() {
         return planId;
@@ -267,6 +278,7 @@ public class TbEquipPlan implements Serializable {
         return "TbEquipPlan{" +
                 "planId='" + planId + '\'' +
                 ", equipId='" + equipId + '\'' +
+                ", equipNo='" + equipNo + '\'' +
                 ", equipName='" + equipName + '\'' +
                 ", equipType='" + equipType + '\'' +
                 ", equipModel='" + equipModel + '\'' +
