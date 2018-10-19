@@ -8,6 +8,7 @@
         PROJECT_CODE projectCode,
         EQUIP_NO equipNo,
         EQUIP_CODE_URL equipCodeUrl,
+        IMG_URL imgUrl,
         EQUIP_NAME equipName,
         EQUIP_USE equipUse,
         LIFE_CYCLE lifeCycle,

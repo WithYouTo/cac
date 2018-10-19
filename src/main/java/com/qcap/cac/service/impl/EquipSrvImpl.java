@@ -20,6 +20,7 @@ import com.qcap.cac.service.EquipSrv;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.BeanUtils;
@@ -34,6 +35,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.io.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -89,7 +91,7 @@ public class EquipSrvImpl implements EquipSrv {
     }
 
     @Override
-    public void insertEquip(@Valid EquipInsertDto equipInsertDto) throws Exception {
+    public void insertEquip(@Valid EquipInsertDto equipInsertDto){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         //1、新建设备对象将入参转为设备对象
@@ -99,32 +101,37 @@ public class EquipSrvImpl implements EquipSrv {
         if(StringUtils.isEmpty(equip.getEquipId())){
             equip.setEquipId(UUIDUtils.getUUID());
         }
-        //2、根据传入的设备类型生成设备编号
-        String equipType = equip.getEquipType();
-        String equipNo = getEquipNoByEquipType(equipType);
-        //3、通过设备编码生成二维码，上传到文件服务器，并返回路径
-        String url = getQrCodeUrlByEquipNo(equipNo);
-        //4、通过维保周期和启用时间生成下次维保时间
-        Date startUseTime = format.parse(equipInsertDto.getStartUseTime());
-        Date buyTime = format.parse(equipInsertDto.getBuyTime());
-        Date nextPlanTime = getNewPlanDate(startUseTime,equip.getMaintCycle());
 
-        equip.setStartUseTime(startUseTime);
-        equip.setBuyTime(buyTime);
-        equip.setNextMaintTime(nextPlanTime);
-        equip.setEquipCodeUrl(url);
-        equip.setEquipNo(equipNo);
-        equip.setEquipState(CommonConstant.EQUIP_STATUS_NORMAL);
-        //todo 通用方法，待修改
-        equip.setCreateDate(new Date());
-        equip.setUpdateDate(new Date());
-        equip.setCreateEmp("sys");
-        equip.setUpdateEmp("sys");
-        this.equipMapper.insert(equip);
-        // 5、根据设备信息生成设备维保计划
-        insertMaintPlan(equip);
-        // 6、更新配件信息，并生成维保计划
-        updatePartsInfo(equip);
+        try {
+            //2、根据传入的设备类型生成设备编号
+            String equipType = equip.getEquipType();
+            String equipNo = getEquipNoByEquipType(equipType);
+            //3、通过设备编码生成二维码，上传到文件服务器，并返回路径
+            String url = getQrCodeUrlByEquipNo(equipNo);
+            //4、通过维保周期和启用时间生成下次维保时间
+            Date startUseTime = format.parse(equipInsertDto.getStartUseTime());
+            Date buyTime = format.parse(equipInsertDto.getBuyTime());
+            Date nextPlanTime = getNewPlanDate(startUseTime, equip.getMaintCycle());
+
+            equip.setStartUseTime(startUseTime);
+            equip.setBuyTime(buyTime);
+            equip.setNextMaintTime(nextPlanTime);
+            equip.setEquipCodeUrl(url);
+            equip.setEquipNo(equipNo);
+            equip.setEquipState(CommonConstant.EQUIP_STATUS_NORMAL);
+            //todo 通用方法，待修改
+            equip.setCreateDate(new Date());
+            equip.setUpdateDate(new Date());
+            equip.setCreateEmp("sys");
+            equip.setUpdateEmp("sys");
+            this.equipMapper.insert(equip);
+            // 5、根据设备信息生成设备维保计划
+            insertMaintPlan(equip);
+            // 6、更新配件信息，并生成维保计划
+            updatePartsInfo(equip);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -239,6 +246,8 @@ public class EquipSrvImpl implements EquipSrv {
             String equipState = map.get("equipState").toString();
             CommonConstant.EQUIP_STATUS.get(equipState);
             map.put("statusName", CommonConstant.EQUIP_STATUS.get(equipState));
+            String imgUrl =  Objects.toString(map.get("imgUrl"));
+            map.put("imgUrl",RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX")+imgUrl);
         }
         page.setRecords(list);
     }

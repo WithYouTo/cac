@@ -1,6 +1,7 @@
 package com.qcap.core.service.impl;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -107,7 +108,7 @@ public class TbManagerServiceImpl implements ITbManagerService {
 	}
 
 	@Override
-	public void insertItem(UserInsertDto userInsertDto) throws Exception {
+	public void insertItem(UserInsertDto userInsertDto){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 		TbManager manager = new TbManager();
@@ -117,41 +118,45 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		manager.setAccount(userInsertDto.getWorkNo());
 		manager.setName(userInsertDto.getUserName());
 
-		TbUserInfo userInfo = new TbUserInfo();
-		BeanUtils.copyProperties(userInsertDto,userInfo);
+		try {
+			TbUserInfo userInfo = new TbUserInfo();
+			BeanUtils.copyProperties(userInsertDto, userInfo);
 
-		TbManager tbManager = tbManagerMapper
-				.selectOne(new QueryWrapper<TbManager>().eq("account", manager.getAccount()));
-		if (tbManager != null) {
-			throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
-		}
-		// 完善信息
-		manager.setSalt(Md5Util.getSalt());
-		manager.setPassword(Md5Util.encrypt(CoreConstant.SYS_DEFAULT_PASSWORD, manager.getSalt()));
-		manager.setStatus(ManagerStatus.OK.getCode());
+			TbManager tbManager = tbManagerMapper
+					.selectOne(new QueryWrapper<TbManager>().eq("account", manager.getAccount()));
+			if (tbManager != null) {
+				throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
+			}
+			// 完善信息
+			manager.setSalt(Md5Util.getSalt());
+			manager.setPassword(Md5Util.encrypt(CoreConstant.SYS_DEFAULT_PASSWORD, manager.getSalt()));
+			manager.setStatus(ManagerStatus.OK.getCode());
 
 
-		Date birth = format.parse(userInsertDto.getBirth());
-		Date workDate = format.parse(userInsertDto.getWorkDate());
+			Date birth = format.parse(userInsertDto.getBirth());
+			Date workDate = format.parse(userInsertDto.getWorkDate());
 
-		userInfo.setUserInfoId(UUIDUtils.getUUID());
-		userInfo.setUserId(manager.getId());
-		userInfo.setBirth(birth);
-		userInfo.setWorkDate(workDate);
+			userInfo.setUserInfoId(UUIDUtils.getUUID());
+			userInfo.setUserId(manager.getId());
+			userInfo.setBirth(birth);
+			userInfo.setWorkDate(workDate);
 
-		//todo 通用方法，待修改
-		userInfo.setCreateDate(new Date());
-		userInfo.setUpdateDate(new Date());
-		userInfo.setCreateEmp("sys");
-		userInfo.setUpdateEmp("sys");
+			//todo 通用方法，待修改
+			userInfo.setCreateDate(new Date());
+			userInfo.setUpdateDate(new Date());
+			userInfo.setCreateEmp("sys");
+			userInfo.setUpdateEmp("sys");
 //		userInfo.setVersion("0");
-		tbManagerMapper.insert(manager);
-		this.tbUserInfoMapper.insert(userInfo);
+			tbManagerMapper.insert(manager);
+			this.tbUserInfoMapper.insert(userInfo);
+		}catch(ParseException e){
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void updateItem(UserInsertDto userInsertDto)  throws Exception  {
+	public void updateItem(UserInsertDto userInsertDto) {
 
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -161,22 +166,26 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		manager.setPhone(userInsertDto.getMobile());
 		manager.setName(userInsertDto.getUserName());
 
-		TbUserInfo userInfo = new TbUserInfo();
-		BeanUtils.copyProperties(userInsertDto,userInfo);
+		try {
+			TbUserInfo userInfo = new TbUserInfo();
+			BeanUtils.copyProperties(userInsertDto,userInfo);
 
-		Date birth = format.parse(userInsertDto.getBirth());
-		Date workDate = format.parse(userInsertDto.getWorkDate());
+			Date birth = format.parse(userInsertDto.getBirth());
+			Date workDate = format.parse(userInsertDto.getWorkDate());
 
 
-		userInfo.setBirth(birth);
-		userInfo.setWorkDate(workDate);
-		userInfo.setCreateDate(new Date());
-		userInfo.setUpdateDate(new Date());
-		userInfo.setCreateEmp("sys");
-		userInfo.setUpdateEmp("sys");
+			userInfo.setBirth(birth);
+			userInfo.setWorkDate(workDate);
+			userInfo.setCreateDate(new Date());
+			userInfo.setUpdateDate(new Date());
+			userInfo.setCreateEmp("sys");
+			userInfo.setUpdateEmp("sys");
 
-		tbManagerMapper.updateById(manager);
-		this.tbUserInfoMapper.updateById(userInfo);
+			tbManagerMapper.updateById(manager);
+			this.tbUserInfoMapper.updateById(userInfo);
+		}catch(ParseException e){
+			throw new RuntimeException();
+		}
 	}
 
 	@Override

@@ -43,12 +43,9 @@ public class EquipMaintController {
     @ResponseBody
     @RequestMapping(value = "/insertEquipMaint", method = RequestMethod.POST)
     public Object insertEquipMaint(@Valid EquipMaintInsertDto equipMaintInsertDto){
-        try {
-            this.equipMaintSrv.insertEquipMaint(equipMaintInsertDto);
-            return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, null);
-        } catch (Exception e) {
-            return ResParams.newInstance(CommonCodeConstant.SYS_EXCEPTION_CODE, CommonCodeConstant.SYS_EXCEPTION_MSG, null);
-        }
+        this.equipMaintSrv.insertEquipMaint(equipMaintInsertDto);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, null);
+
     }
 
     @ResponseBody

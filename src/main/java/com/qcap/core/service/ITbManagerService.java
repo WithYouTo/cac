@@ -29,7 +29,7 @@ public interface ITbManagerService {
      * @param manager
      *            参数对象
      */
-	void insertItem(UserInsertDto manager) throws Exception;
+	void insertItem(UserInsertDto manager);
 
 	/**
 	 * 添加用户
@@ -37,7 +37,7 @@ public interface ITbManagerService {
      * @param manager
      *            参数对象
      */
-	void updateItem(UserInsertDto manager) throws Exception;
+	void updateItem(UserInsertDto manager);
 
 	/**
 	 * 根据Id逻辑删除用户

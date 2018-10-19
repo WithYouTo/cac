@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,46 +50,51 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
     }
 
     @Override
-    public void insertEquipMaint(EquipMaintInsertDto equipMaintInsertDto) throws Exception {
+    public void insertEquipMaint(EquipMaintInsertDto equipMaintInsertDto){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         String maintType= equipMaintInsertDto.getMaintType();
         TbEquipMaint equipMaint = new TbEquipMaint();
         TbEquipPlan equipPlan = new TbEquipPlan();
+        try {
+            //mybatis-plus封装查询条件，根据设备编号获取设备信息
+            QueryWrapper<TbEquip> equip = new QueryWrapper();
+            equip.eq("equip_No", equipMaintInsertDto.getEquipNo());
+            TbEquip equipInfo=this.equipMapper.selectOne(equip);
 
-        //mybatis-plus封装查询条件，根据设备编号获取设备信息
-        QueryWrapper<TbEquip> equip = new QueryWrapper();
-        equip.eq("equip_No", equipMaintInsertDto.getEquipNo());
-        TbEquip equipInfo=this.equipMapper.selectOne(equip);
+            if(equipInfo != null){
+                //1、重组维保记录对象
+                BeanUtils.copyProperties(equipInfo,equipMaint);
+                BeanUtils.copyProperties(equipInfo,equipPlan);
+                equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
+                Date time = format.parse(equipMaintInsertDto.getMaintTime());
 
-        if(equipInfo != null){
-            //1、重组维保记录对象
-            BeanUtils.copyProperties(equipInfo,equipMaint);
-            BeanUtils.copyProperties(equipInfo,equipPlan);
-            equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
-            Date time = format.parse(equipMaintInsertDto.getMaintTime());
 
-            equipMaint.setMaintTime(time);
-            equipMaint.setEquipCycle(equipInfo.getMaintCycle());
+                equipMaint.setMaintTime(time);
+                equipMaint.setEquipCycle(equipInfo.getMaintCycle());
 
-            //若维保类型是配件，继续查询配件信息
-            if((CommonConstant.MAINT_TYPE_PARTS).equals(maintType)){
-                //mybatis-plus封装查询条件，根据设备编号获取设备信息
-                QueryWrapper<TbEquipParts> parts = new QueryWrapper();
-                parts.eq("PARTS_NO", equipMaintInsertDto.getPartsNo());
-                TbEquipParts equipParts = this.equipPartsMapper.selectOne(parts);
+                //若维保类型是配件，继续查询配件信息
+                if((CommonConstant.MAINT_TYPE_PARTS).equals(maintType)){
+                    //mybatis-plus封装查询条件，根据设备编号获取设备信息
+                    QueryWrapper<TbEquipParts> parts = new QueryWrapper();
+                    parts.eq("PARTS_NO", equipMaintInsertDto.getPartsNo());
+                    TbEquipParts equipParts = this.equipPartsMapper.selectOne(parts);
 
-                BeanUtils.copyProperties(equipParts,equipMaint);
-                BeanUtils.copyProperties(equipParts,equipPlan);
-                equipMaint.setEquipType(CommonConstant.MAINT_TYPE_PARTS);
+                    BeanUtils.copyProperties(equipParts,equipMaint);
+                    BeanUtils.copyProperties(equipParts,equipPlan);
+                    equipMaint.setEquipType(CommonConstant.MAINT_TYPE_PARTS);
+                }
+
+                //2、新增一条维保记录
+                equipMaint.setEquipMaintId(UUIDUtils.getUUID());
+                this.equipMaintMapper.insert(equipMaint);
+
+                //3、更新维保计划
+                updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan);
             }
-
-            //2、新增一条维保记录
-            equipMaint.setEquipMaintId(UUIDUtils.getUUID());
-            this.equipMaintMapper.insert(equipMaint);
-
-            //3、更新维保计划
-            updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan);
+        } catch (ParseException e) {
+//                e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 

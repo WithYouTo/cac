@@ -46,13 +46,10 @@ public class ManagerController {
 //		if (result.hasErrors()) {
 //			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 //		}
-		try {
-			managerService.insertItem(userInsertDto);
-			return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.ADD_SUCCESS, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResParams.newInstance(CoreConstant.SUCCESS_CODE, e.getMessage(), null);
-		}
+
+		managerService.insertItem(userInsertDto);
+		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.ADD_SUCCESS, null);
+
 	}
 
 	@PostMapping("/list")

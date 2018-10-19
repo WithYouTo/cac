@@ -81,11 +81,8 @@ public class EquipController {
     @ResponseBody
     @RequestMapping(value = "/insertEquip", method = RequestMethod.POST)
     public Object insertEquip(@Valid EquipInsertDto equipInsertDto){
-        try {
-            this.equipSrv.insertEquip(equipInsertDto);
-        } catch (Exception e) {
-            this.equipSrv.deletePartsByEquipId(equipInsertDto.getEquipId());
-        }
+        this.equipSrv.insertEquip(equipInsertDto);
+
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, "");
 
     }
