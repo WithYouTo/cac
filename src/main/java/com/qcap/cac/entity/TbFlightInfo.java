@@ -1,9 +1,17 @@
 package com.qcap.cac.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TbFlightInfo {
+public class TbFlightInfo implements Serializable {
     /**
+	 * @fieldName: serialVersionUID
+	 * @fieldType: long
+	 * @Description: TODO
+	 */
+	private static final long serialVersionUID = 492680713001416620L;
+
+	/**
     *   主键
      */
     private String flightInfoId;

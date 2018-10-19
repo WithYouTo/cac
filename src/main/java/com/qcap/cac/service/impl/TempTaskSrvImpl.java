@@ -364,7 +364,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 
 	private void insertFile(String fileUrl, String taskCode) {
 		// 新增系统文件到数据库
-		String urlPrefix = RedisTools.getCommonConfig("SYSTEM", fileDomain);
+		String urlPrefix = RedisTools.getCommonConfig(fileDomain);
 		String[] fileurls = fileUrl.split(",");
 
 		for (String url : fileurls) {

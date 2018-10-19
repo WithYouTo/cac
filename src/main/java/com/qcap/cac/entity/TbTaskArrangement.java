@@ -1,9 +1,17 @@
 package com.qcap.cac.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TbTaskArrangement {
+public class TbTaskArrangement implements Serializable {
     /**
+	 * @fieldName: serialVersionUID
+	 * @fieldType: long
+	 * @Description: TODO
+	 */
+	private static final long serialVersionUID = -6316486697074649415L;
+
+	/**
     *   主键
      */
     private String arrangementId;

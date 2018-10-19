@@ -1,9 +1,17 @@
 package com.qcap.cac.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TbSysFile {
+public class TbSysFile implements Serializable {
     /**
+	 * @fieldName: serialVersionUID
+	 * @fieldType: long
+	 * @Description: TODO
+	 */
+	private static final long serialVersionUID = 7732309782359796864L;
+
+	/**
     *   主键
      */
     private String fileId;

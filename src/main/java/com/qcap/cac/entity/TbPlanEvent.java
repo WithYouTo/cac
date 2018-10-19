@@ -1,9 +1,17 @@
 package com.qcap.cac.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TbPlanEvent {
+public class TbPlanEvent implements Serializable {
     /**
+	 * @fieldName: serialVersionUID
+	 * @fieldType: long
+	 * @Description: TODO
+	 */
+	private static final long serialVersionUID = -778783694990952579L;
+
+	/**
     *   主键
      */
     private String planEventId;

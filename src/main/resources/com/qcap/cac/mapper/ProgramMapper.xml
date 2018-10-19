@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.ProgramMapper">
+
+	<select id="selectProgram" parameterType="com.qcap.cac.dto.ProgramSearchDto" resultType="Map">
+		SELECT
+		m.PROGRAM_ID  AS  programId,
+		m.PROGRAM_CODE  AS  programCode,
+		m.PROGRAM_NAME  AS  programName,
+		m.COVERED_AREA  AS  coveredArea,
+		m.PROGRAM_STATUS  AS  programStatus,
+		m.PROGRAM_ADDRESS  AS  programAddress,
+		m.ACCEPT_MODE  AS  acceptMode,
+		m.MANAGEMENT_AREA  AS  managementArea,
+		m.BUILDING_STRUCTURE  AS  buildingStructure,
+		m.CONTRACT_MONEY  AS  contractMoney,
+		m.CONTRACT_DURATION  AS  contractDuration,
+		m.PROMISED_NUM  AS  promisedNum,
+		m.MIN_NUM  AS  minNum,
+		m.REAL_NUM  AS  realNum,
+		m.OFFICE_ROOM_NUM  AS  officeRoomNum,
+		m.MEETING_ROOM_NUM  AS  meetingRoomNum,
+		m.WASHROOM_NUM  AS  washroomNum,
+		m.BABY_CARE_ROOM_NUM  AS  babyCareRoomNum,
+		m.SMOKING_ROOM_NUM  AS  smokingRoomNum,
+		m.DRINKING_FOUNTAIN_NUM  AS  drinkingFountainNum,
+		m.ELEVATOR_NUM  AS  elevatorNum,
+		m.UPDOWN_ESCALATOR_NUM  AS  updownEscalatorNum,
+		m.PARALLEL_ESCALATOR_NUM  AS  parallelEscalatorNum,
+		m.LOUNGE_BRIDGE_NUM  AS  loungeBridgeNum,
+		m.ENTRANCE_NUM  AS  entranceNum,
+		m.CHECK_STANDARD  AS  checkStandard,
+		m.CONTRACT_RESTRAIN  AS  contractRestrain,
+		m.CONTRACT_FILE  AS  contractFile,
+		m.ARCHITECTURAL_PIC  AS  architecturalPic,
+		m.REMARK  AS  remark,
+		DATE_FORMAT(m.START_TIME,'%Y-%m-%d')  AS  startTime,
+		DATE_FORMAT(m.END_TIME,'%Y-%m-%d')  AS  endTime,
+		DATE_FORMAT(m.EFFECT_DATE,'%Y-%m-%d')  AS  effectDate,
+		m.AREA_CODE  AS  areaCode
+		FROM tb_program m
+		WHERE 1=1
+	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programName)">
+        AND PROGRAM_NAME = #{programName}
+      </if>
+	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaCode)">
+        AND AREA_CODE = #{areaCode}
+      </if>
+	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTime)">
+         AND START_TIME = #{startTime}
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTime)">
+        AND END_TIME = #{endTime}
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(effectDate)">
+        AND EFFECT_DATE = #{effectDate}
+      </if>
+	</select>
+	
+	  <insert id="insertProgram" parameterType="com.qcap.cac.entity.TbProgram" >
+    insert into tb_program (PROGRAM_ID, PROGRAM_CODE, PROGRAM_NAME, 
+      COVERED_AREA, PROGRAM_STATUS, PROGRAM_ADDRESS, 
+      ACCEPT_MODE, MANAGEMENT_AREA, BUILDING_STRUCTURE, 
+      CONTRACT_MONEY, CONTRACT_DURATION, PROMISED_NUM, 
+      MIN_NUM, REAL_NUM, OFFICE_ROOM_NUM, 
+      MEETING_ROOM_NUM, WASHROOM_NUM, BABY_CARE_ROOM_NUM, 
+      SMOKING_ROOM_NUM, DRINKING_FOUNTAIN_NUM, ELEVATOR_NUM, 
+      UPDOWN_ESCALATOR_NUM, PARALLEL_ESCALATOR_NUM, 
+      LOUNGE_BRIDGE_NUM, ENTRANCE_NUM, CHECK_STANDARD, 
+      CONTRACT_RESTRAIN, CONTRACT_FILE, ARCHITECTURAL_PIC, 
+      REMARK, START_TIME, END_TIME, 
+      EFFECT_DATE, AREA_CODE, REMARK1, 
+      REMARK2, REMARK3, CREATE_EMP, 
+      CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
+      VERSION)
+    values (#{programId}, #{programCode}, #{programName}, 
+      #{coveredArea}, #{programStatus}, #{programAddress}, 
+      #{acceptMode}, #{managementArea}, #{buildingStructure}, 
+      #{contractMoney}, #{contractDuration}, #{promisedNum}, 
+      #{minNum}, #{realNum}, #{officeRoomNum}, 
+      #{meetingRoomNum}, #{washroomNum}, #{babyCareRoomNum}, 
+      #{smokingRoomNum}, #{drinkingFountainNum}, #{elevatorNum}, 
+      #{updownEscalatorNum}, #{parallelEscalatorNum}, 
+      #{loungeBridgeNum}, #{entranceNum}, #{checkStandard}, 
+      #{contractRestrain}, #{contractFile}, #{architecturalPic}, 
+      #{remark}, #{startTime}, #{endTime}, 
+      #{effectDate}, #{areaCode}, #{remark1}, 
+      #{remark2}, #{remark3}, #{createEmp}, 
+      #{createDate}, #{updateDate}, #{updateEmp}, 
+      #{version})
+  </insert>
+  
+  <update id="updateProgramByKey" parameterType="com.qcap.cac.entity.TbProgram" >
+    update tb_program
+    <set >
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programCode)">
+        PROGRAM_CODE = #{programCode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programName)">
+        PROGRAM_NAME = #{programName},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(coveredArea)">
+        COVERED_AREA = #{coveredArea},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programStatus)">
+        PROGRAM_STATUS = #{programStatus},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programAddress)">
+        PROGRAM_ADDRESS = #{programAddress},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(acceptMode)">
+        ACCEPT_MODE = #{acceptMode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(managementArea)">
+        MANAGEMENT_AREA = #{managementArea},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(buildingStructure)">
+        BUILDING_STRUCTURE = #{buildingStructure},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(contractMoney)">
+        CONTRACT_MONEY = #{contractMoney},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(contractDuration)">
+        CONTRACT_DURATION = #{contractDuration},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(promisedNum)">
+        PROMISED_NUM = #{promisedNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(minNum)">
+        MIN_NUM = #{minNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(realNum)">
+        REAL_NUM = #{realNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(officeRoomNum)">
+        OFFICE_ROOM_NUM = #{officeRoomNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(meetingRoomNum)">
+        MEETING_ROOM_NUM = #{meetingRoomNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(washroomNum)">
+        WASHROOM_NUM = #{washroomNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(babyCareRoomNum)">
+        BABY_CARE_ROOM_NUM = #{babyCareRoomNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(smokingRoomNum)">
+        SMOKING_ROOM_NUM = #{smokingRoomNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(drinkingFountainNum)">
+        DRINKING_FOUNTAIN_NUM = #{drinkingFountainNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(elevatorNum)">
+        ELEVATOR_NUM = #{elevatorNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(updownEscalatorNum)">
+        UPDOWN_ESCALATOR_NUM = #{updownEscalatorNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(parallelEscalatorNum)">
+        PARALLEL_ESCALATOR_NUM = #{parallelEscalatorNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(loungeBridgeNum)">
+        LOUNGE_BRIDGE_NUM = #{loungeBridgeNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(entranceNum)">
+        ENTRANCE_NUM = #{entranceNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkStandard)">
+        CHECK_STANDARD = #{checkStandard},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(contractRestrain)">
+        CONTRACT_RESTRAIN = #{contractRestrain},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(contractFile)">
+        CONTRACT_FILE = #{contractFile},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(architecturalPic)">
+        ARCHITECTURAL_PIC = #{architecturalPic},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark)">
+        REMARK = #{remark},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTime)">
+        START_TIME = #{startTime},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTime)">
+        END_TIME = #{endTime},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(effectDate)">
+        EFFECT_DATE = #{effectDate},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaCode)">
+        AREA_CODE = #{areaCode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark1)">
+        REMARK1 = #{remark1},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark2)">
+        REMARK2 = #{remark2},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark3)">
+        REMARK3 = #{remark3},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(createEmp)">
+        CREATE_EMP = #{createEmp},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(createDate)">
+        CREATE_DATE = #{createDate},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(updateDate)">
+        UPDATE_DATE = #{updateDate},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(updateEmp)">
+        UPDATE_EMP = #{updateEmp},
+      </if>
+      VERSION = VERSION +1
+    </set>
+    where PROGRAM_ID = #{programId}
+  </update>
+  
+    <delete id="deleteProgramByKey" parameterType="java.lang.String" >
+    delete from tb_program
+    where PROGRAM_ID = #{programId}
+  </delete>
+	
+</mapper>
