@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
@@ -192,15 +193,13 @@ public class TbMenuServiceImpl implements ITbMenuService {
 	 */
 	private void deleteMenuRecursive(TbMenu parent) {
 		String code = parent.getCode();
-		List<TbMenu> menus = tbMenuMapper.selectList(new QueryWrapper<TbMenu>().eq("parent_code", code));
-		if (menus.isEmpty()) {
-			// 删除角色菜单表
-			tbRoleMenuMapper.delete(new UpdateWrapper<TbRoleMenu>().lambda().eq(TbRoleMenu::getMenuCode, code));
-			tbMenuMapper.deleteById(parent.getId());
-
-		} else {
-			menus.parallelStream().forEach(this::deleteMenuRecursive);
+		List<TbMenu> menusList = tbMenuMapper.selectList(new QueryWrapper<TbMenu>().eq("parent_code", code));
+		if (CollectionUtils.isNotEmpty(menusList)) {
+			menusList.stream().forEach(this::deleteMenuRecursive);
 		}
+		// 删除角色菜单表
+		tbRoleMenuMapper.delete(new UpdateWrapper<TbRoleMenu>().eq("menu_code", code));
+		tbMenuMapper.deleteById(parent.getId());
 	}
 
 	private void updateMenuRecursive(List<TbMenu> source, String oldParentCode, TbMenu newParent) {
