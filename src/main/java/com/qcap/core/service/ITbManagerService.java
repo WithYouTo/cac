@@ -34,10 +34,10 @@ public interface ITbManagerService {
 	/**
 	 * 添加用户
 	 *
-	 * @param manager
-	 *            参数对象
-	 */
-	void updateItem(TbManager manager);
+     * @param manager
+     *            参数对象
+     */
+	void updateItem(UserInsertDto manager) throws Exception;
 
 	/**
 	 * 根据Id逻辑删除用户

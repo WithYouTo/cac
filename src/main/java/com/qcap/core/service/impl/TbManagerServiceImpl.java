@@ -1,10 +1,13 @@
 package com.qcap.core.service.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.dao.*;
 import com.qcap.core.entity.*;
 import com.qcap.core.common.CoreConstant;
@@ -105,7 +108,10 @@ public class TbManagerServiceImpl implements ITbManagerService {
 
 	@Override
 	public void insertItem(UserInsertDto userInsertDto) throws Exception {
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
 		TbManager manager = new TbManager();
+		manager.setId(UUIDUtils.getUUID());
 		manager.setMail(userInsertDto.getEmail());
 		manager.setPhone(userInsertDto.getMobile());
 		manager.setAccount(userInsertDto.getWorkNo());
@@ -124,24 +130,53 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		manager.setPassword(Md5Util.encrypt(CoreConstant.SYS_DEFAULT_PASSWORD, manager.getSalt()));
 		manager.setStatus(ManagerStatus.OK.getCode());
 
+
+		Date birth = format.parse(userInsertDto.getBirth());
+		Date workDate = format.parse(userInsertDto.getWorkDate());
+
+		userInfo.setUserInfoId(UUIDUtils.getUUID());
+		userInfo.setUserId(manager.getId());
+		userInfo.setBirth(birth);
+		userInfo.setWorkDate(workDate);
+
 		//todo 通用方法，待修改
-		userInfo.setCreateTime(new Date());
-		userInfo.setUpdateTime(new Date());
+		userInfo.setCreateDate(new Date());
+		userInfo.setUpdateDate(new Date());
 		userInfo.setCreateEmp("sys");
 		userInfo.setUpdateEmp("sys");
-
+//		userInfo.setVersion("0");
 		tbManagerMapper.insert(manager);
 		this.tbUserInfoMapper.insert(userInfo);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void updateItem(TbManager manager) {
-		TbManager old = tbManagerMapper.selectById(manager.getId());
-		old.setName(manager.getName());
-		old.setMail(manager.getMail());
-		old.setPhone(manager.getPhone());
-		tbManagerMapper.updateById(old);
+	public void updateItem(UserInsertDto userInsertDto)  throws Exception  {
+
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+		TbManager manager = new TbManager();
+		manager.setId(userInsertDto.getUserId());
+		manager.setMail(userInsertDto.getEmail());
+		manager.setPhone(userInsertDto.getMobile());
+		manager.setName(userInsertDto.getUserName());
+
+		TbUserInfo userInfo = new TbUserInfo();
+		BeanUtils.copyProperties(userInsertDto,userInfo);
+
+		Date birth = format.parse(userInsertDto.getBirth());
+		Date workDate = format.parse(userInsertDto.getWorkDate());
+
+
+		userInfo.setBirth(birth);
+		userInfo.setWorkDate(workDate);
+		userInfo.setCreateDate(new Date());
+		userInfo.setUpdateDate(new Date());
+		userInfo.setCreateEmp("sys");
+		userInfo.setUpdateEmp("sys");
+
+		tbManagerMapper.updateById(manager);
+		this.tbUserInfoMapper.updateById(userInfo);
 	}
 
 	@Override

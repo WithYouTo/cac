@@ -94,6 +94,19 @@
         PLAN_ID = #{planId}
     </update>
 
+    <update id="updateEquipPlan"  parameterType="com.qcap.cac.entity.TbEquipPlan">
+        UPDATE TB_EQUIP_PLAN
+        SET
+        NEXT_MAINT_TIME = #{nextMaintTime},
+        LATEST_MAINT_TIME = #{latestMaintTime},
+        CREATE_EMP = #{createEmp},
+        CREATE_DATE = #{createDate},
+        UPDATE_EMP = #{updateEmp},
+        UPDATE_DATE = #{updateDate}
+        WHERE
+        PLAN_ID = #{planId}
+    </update>
+
     <update id="deletePlanByEquipId">
         UPDATE TB_EQUIP_PLAN
         SET

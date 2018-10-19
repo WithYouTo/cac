@@ -17,6 +17,7 @@ import com.qcap.cac.entity.TbEquip;
 import com.qcap.cac.entity.TbEquipParts;
 import com.qcap.cac.entity.TbEquipPlan;
 import com.qcap.cac.service.EquipSrv;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -307,7 +308,9 @@ public class EquipSrvImpl implements EquipSrv {
      */
     private String getQrCodeUrlByEquipNo(String equipNo) throws Exception{
         //todo 设定图片暂存路径
-        File directory = new File("D:\\qrCode.jpg");
+        String dir = RedisTools.getCommonConfig("CAC_AREA_SAVE_PATH");
+
+        File directory = new File(dir);
 
         File file = QrCodeUtil.generate(equipNo, 300, 300, directory);
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -364,6 +367,7 @@ public class EquipSrvImpl implements EquipSrv {
             //通过设备编号设置配件编号
             StringBuffer partsNo = new StringBuffer();
             String str = String.format("%04d", count);
+
             partsNo.append(equipNo).append(str);
             part.setPartsNo(partsNo.toString());
             part.setStartUseTime(equip.getStartUseTime());

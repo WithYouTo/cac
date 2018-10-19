@@ -1,5 +1,6 @@
 package com.qcap.core.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class TbUserInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId("USER_INFO_ID")
     private String userInfoId;
     private String userId;
     private String userName;
@@ -49,10 +51,10 @@ public class TbUserInfo implements Serializable {
     private String emerPerson;
     private String remark;
     private String createEmp;
-    private Date createTime;
+    private Date createDate;
     private String updateEmp;
-    private Date updateTime;
-    private String version;
+    private Date updateDate;
+    private Integer version;
 
 
     public String getUserInfoId() {
@@ -309,67 +311,67 @@ public class TbUserInfo implements Serializable {
         this.workDate = workDate;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
-    public String getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
     @Override
     public String toString() {
         return "TbUserInfo{" +
-        ", userInfoId=" + userInfoId +
-        ", userId=" + userId +
-        ", userName=" + userName +
-        ", workNo=" + workNo +
-        ", flower=" + flower +
-        ", winterClo=" + winterClo +
-        ", summerClo=" + summerClo +
-        ", workNoCard=" + workNoCard +
-        ", tape=" + tape +
-        ", goodCapKey=" + goodCapKey +
-        ", livingKey=" + livingKey +
-        ", enterNo=" + enterNo +
-        ", passNo=" + passNo +
-        ", doorOpen=" + doorOpen +
-        ", equipUse=" + equipUse +
-        ", passArea=" + passArea +
-        ", evaluate=" + evaluate +
-        ", cardType=" + cardType +
-        ", cardNo=" + cardNo +
-        ", gender=" + gender +
-        ", birth=" + birth +
-        ", marriageSit=" + marriageSit +
-        ", workDate=" + workDate +
-        ", mobile=" + mobile +
-        ", email=" + email +
-        ", address=" + address +
-        ", emerMobile=" + emerMobile +
-        ", emerPerson=" + emerPerson +
-        ", remark=" + remark +
-        ", createEmp=" + createEmp +
-        ", createTime=" + createTime +
-        ", updateEmp=" + updateEmp +
-        ", updateTime=" + updateTime +
-        ", version=" + version +
-        "}";
+                "userInfoId='" + userInfoId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", workNo='" + workNo + '\'' +
+                ", flower='" + flower + '\'' +
+                ", winterClo='" + winterClo + '\'' +
+                ", summerClo='" + summerClo + '\'' +
+                ", workNoCard='" + workNoCard + '\'' +
+                ", tape='" + tape + '\'' +
+                ", goodCapKey='" + goodCapKey + '\'' +
+                ", livingKey='" + livingKey + '\'' +
+                ", enterNo='" + enterNo + '\'' +
+                ", passNo='" + passNo + '\'' +
+                ", doorOpen='" + doorOpen + '\'' +
+                ", equipUse='" + equipUse + '\'' +
+                ", passArea='" + passArea + '\'' +
+                ", evaluate='" + evaluate + '\'' +
+                ", cardType='" + cardType + '\'' +
+                ", cardNo='" + cardNo + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birth=" + birth +
+                ", marriageSit='" + marriageSit + '\'' +
+                ", workDate=" + workDate +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", emerMobile='" + emerMobile + '\'' +
+                ", emerPerson='" + emerPerson + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
     }
 }

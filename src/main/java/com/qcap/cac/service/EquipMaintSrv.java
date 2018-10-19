@@ -9,5 +9,5 @@ import java.util.Map;
 public interface EquipMaintSrv {
     List<Map<String,Object>> listEquipMaint(EquipMaintSearchDto equipMaintSearchDto);
 
-    void insertEquipMaint(EquipMaintInsertDto equipMaintInsertDto);
+    void insertEquipMaint(EquipMaintInsertDto equipMaintInsertDto) throws Exception;
 }

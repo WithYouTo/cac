@@ -24,9 +24,9 @@ public class UserInsertDto {
     private String cardType;
     private String cardNo;
     private String gender;
-    private Date birth;
+    private String birth;
     private String marriageSit;
-    private Date workDate;
+    private String workDate;
     private String mobile;
     private String email;
     private String address;
@@ -193,12 +193,20 @@ public class UserInsertDto {
         this.gender = gender;
     }
 
-    public Date getBirth() {
+    public String getBirth() {
         return birth;
     }
 
-    public void setBirth(Date birth) {
+    public void setBirth(String birth) {
         this.birth = birth;
+    }
+
+    public String getWorkDate() {
+        return workDate;
+    }
+
+    public void setWorkDate(String workDate) {
+        this.workDate = workDate;
     }
 
     public String getMarriageSit() {
@@ -209,13 +217,6 @@ public class UserInsertDto {
         this.marriageSit = marriageSit;
     }
 
-    public Date getWorkDate() {
-        return workDate;
-    }
-
-    public void setWorkDate(Date workDate) {
-        this.workDate = workDate;
-    }
 
     public String getMobile() {
         return mobile;
@@ -280,9 +281,9 @@ public class UserInsertDto {
                 ", cardType='" + cardType + '\'' +
                 ", cardNo='" + cardNo + '\'' +
                 ", gender='" + gender + '\'' +
-                ", birth=" + birth +
+                ", birth='" + birth + '\'' +
                 ", marriageSit='" + marriageSit + '\'' +
-                ", workDate=" + workDate +
+                ", workDate='" + workDate + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +

@@ -9,6 +9,8 @@
         FROM
         tb_equip
         WHERE
+        DEL_FLAG = 'NORMAL'
+        AND
         EQUIP_TYPE = #{equipType}
     </select>
 

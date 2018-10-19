@@ -74,12 +74,17 @@ public class ManagerController {
 	 *
 	 */
 	@PostMapping("/edit")
-	public ResParams edit(@Valid TbManager manager, BindingResult result) {
+	public ResParams edit(@Valid UserInsertDto userInsertDto, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
-		managerService.updateItem(manager);
-		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.EDIT_SUCCESS, null);
+		try {
+			managerService.updateItem(userInsertDto);
+			return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.EDIT_SUCCESS, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResParams.newInstance(CoreConstant.SUCCESS_CODE, e.getMessage(), null);
+		}
 	}
 
 	/**

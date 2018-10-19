@@ -3,6 +3,7 @@ package com.qcap.cac.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -60,7 +61,7 @@ public class TbEquipMaint implements Serializable {
     /**
      * 维保时间
      */
-    private LocalDateTime maintTime;
+    private Date maintTime;
     /**
      * 维保记录
      */
@@ -84,7 +85,7 @@ public class TbEquipMaint implements Serializable {
     /**
      * 新增时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
     /**
      * 修改人
      */
@@ -92,7 +93,7 @@ public class TbEquipMaint implements Serializable {
     /**
      * 修改时间
      */
-    private LocalDateTime updateDate;
+    private Date updateDate;
     /**
      * 版本
      */
@@ -179,13 +180,6 @@ public class TbEquipMaint implements Serializable {
         this.equipCycle = equipCycle;
     }
 
-    public LocalDateTime getMaintTime() {
-        return maintTime;
-    }
-
-    public void setMaintTime(LocalDateTime maintTime) {
-        this.maintTime = maintTime;
-    }
 
     public String getMaintRecord() {
         return maintRecord;
@@ -227,14 +221,6 @@ public class TbEquipMaint implements Serializable {
         this.createEmp = createEmp;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
     public String getUpdateEmp() {
         return updateEmp;
     }
@@ -243,11 +229,19 @@ public class TbEquipMaint implements Serializable {
         this.updateEmp = updateEmp;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public void setMaintTime(Date maintTime) {
+        this.maintTime = maintTime;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 
