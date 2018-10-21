@@ -24,7 +24,7 @@ public class DemoController {
 	@RequestMapping(value = "/jpushTest", method = RequestMethod.POST)
 	@ApiOperation(value = "极光推送", notes = "极光推送", response = Map.class, httpMethod = "POST")
 	@ResponseBody
-	public Object jpushTest() throws Exception {
+	public Object jpushTest() {
 		String masterSecret1 = RedisTools.getCommonConfig("dev", "CAC_MASTER_SECRET_KEY");
 		String appKey1 = RedisTools.getCommonConfig("CAC_APP_KEY");
 

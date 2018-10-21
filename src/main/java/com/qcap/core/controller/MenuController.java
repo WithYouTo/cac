@@ -134,7 +134,7 @@ public class MenuController {
 	 * 获取角色列表
 	 */
 	@PostMapping("/menuTreeListByRoleId")
-	public ResParams menuTreeListByRoleId(@RequestParam String id) throws Exception {
+	public ResParams menuTreeListByRoleId(@RequestParam String id) {
 		List<ZTreeNode> list = tbMenuService.getMenuTreeListByRoleId(id);
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功！", list);
 	}

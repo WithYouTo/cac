@@ -8,12 +8,12 @@ import com.qcap.cac.dto.QueryPlanEventListDto;
 
 public interface PlanEventSrv {
 
-	public List<Map<String, Object>> queryPlanEventListByPage(QueryPlanEventListDto queryPlanEventListDto);
+	List<Map<String, Object>> queryPlanEventListByPage(QueryPlanEventListDto queryPlanEventListDto);
 
-	public void addPlanEvent(PlanEventDto planEventDto, String userId) throws Exception;
+	void addPlanEvent(PlanEventDto planEventDto, String userId) throws Exception;
 
-	public void editPlanEvent(PlanEventDto planEventDto, String userId) throws Exception;
+	void editPlanEvent(PlanEventDto planEventDto, String userId) throws Exception;
 
-	public void deletePlanEvent(PlanEventDto planEventDto) throws Exception;
+	void deletePlanEvent(PlanEventDto planEventDto) throws Exception;
 
 }

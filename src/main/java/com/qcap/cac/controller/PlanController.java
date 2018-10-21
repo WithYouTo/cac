@@ -49,7 +49,7 @@ public class PlanController {
 	private JwtProperties jwtProperties;
 
 	@RequestMapping(value = "/queryPlanListByPage", method = RequestMethod.POST)
-	public PageResParams queryPlanListByPage(@Valid QueryPlanListDto queryPlanListDto) throws Exception {
+	public PageResParams queryPlanListByPage(@Valid QueryPlanListDto queryPlanListDto) {
 		new PageFactory<Map<String, Object>>().defaultPage();
 		List<Map<String, Object>> list = this.planSrv.queryPlanListByPage(queryPlanListDto);
 		for (Map<String, Object> map : list) {
@@ -90,7 +90,7 @@ public class PlanController {
 	}
 
 	@RequestMapping(value = "/selectPlanTimeTypeList", method = RequestMethod.POST)
-	public ResParams selectPlanTimeTypeList() throws Exception {
+	public ResParams selectPlanTimeTypeList() {
 		Map<String, String> map = CommonConstant.PLAN_TIME_TYPE;
 		List<Map<String, String>> ls = new ArrayList<>();
 		for (String key : map.keySet()) {
@@ -104,7 +104,7 @@ public class PlanController {
 	}
 
 	@RequestMapping(value = "/selectStandardCodeList", method = RequestMethod.POST)
-	public ResParams selectStandardCodeList() throws Exception {
+	public ResParams selectStandardCodeList() {
 		List<Map<String, String>> list = this.commonSrv.selectStandardNameList();
 
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);

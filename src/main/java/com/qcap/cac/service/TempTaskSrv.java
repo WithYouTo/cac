@@ -21,4 +21,8 @@ public interface TempTaskSrv {
 	Map<String, Object> insertTempTask(TempTaskDto taskDto);
 
 	Map<String, Object> updateTempTask(TempTaskDto taskDto);
+	
+	List<Map<String, Object>> selectAllEmployee (String monthNo);
+
+	Map<String, Object> selectDefaultEmployee(String startTime, String areaCode);
 }

@@ -74,7 +74,7 @@ public class Md5Util {
 		if ((salt == null) || "".equals(salt)) {
 			return password;
 		} else {
-			return password + "{" + salt.toString() + "}";
+			return password + "{" + salt + "}";
 		}
 	}
 

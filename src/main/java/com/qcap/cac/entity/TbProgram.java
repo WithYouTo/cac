@@ -1,18 +1,10 @@
 package com.qcap.cac.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TbProgram implements Serializable {
+public class TbProgram {
     /**
-	 * @fieldName: serialVersionUID
-	 * @fieldType: long
-	 * @Description: TODO
-	 */
-	private static final long serialVersionUID = 697318076391703474L;
-
-	/**
     *   项目ID
      */
     private String programId;
@@ -183,6 +175,11 @@ public class TbProgram implements Serializable {
     private String areaCode;
 
     /**
+    *   区域名称
+     */
+    private String areaName;
+
+    /**
     *   备注1
      */
     private String remark1;
@@ -228,7 +225,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.PROGRAM_ID
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getProgramId() {
         return programId;
@@ -240,7 +237,7 @@ public class TbProgram implements Serializable {
      *
      * @param programId the value for tb_program.PROGRAM_ID
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setProgramId(String programId) {
         this.programId = programId == null ? null : programId.trim();
@@ -252,7 +249,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.PROGRAM_CODE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getProgramCode() {
         return programCode;
@@ -264,7 +261,7 @@ public class TbProgram implements Serializable {
      *
      * @param programCode the value for tb_program.PROGRAM_CODE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setProgramCode(String programCode) {
         this.programCode = programCode == null ? null : programCode.trim();
@@ -276,7 +273,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.PROGRAM_NAME
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getProgramName() {
         return programName;
@@ -288,7 +285,7 @@ public class TbProgram implements Serializable {
      *
      * @param programName the value for tb_program.PROGRAM_NAME
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setProgramName(String programName) {
         this.programName = programName == null ? null : programName.trim();
@@ -300,7 +297,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.COVERED_AREA
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public BigDecimal getCoveredArea() {
         return coveredArea;
@@ -312,7 +309,7 @@ public class TbProgram implements Serializable {
      *
      * @param coveredArea the value for tb_program.COVERED_AREA
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setCoveredArea(BigDecimal coveredArea) {
         this.coveredArea = coveredArea;
@@ -324,7 +321,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.PROGRAM_STATUS
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getProgramStatus() {
         return programStatus;
@@ -336,7 +333,7 @@ public class TbProgram implements Serializable {
      *
      * @param programStatus the value for tb_program.PROGRAM_STATUS
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setProgramStatus(String programStatus) {
         this.programStatus = programStatus == null ? null : programStatus.trim();
@@ -348,7 +345,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.PROGRAM_ADDRESS
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getProgramAddress() {
         return programAddress;
@@ -360,7 +357,7 @@ public class TbProgram implements Serializable {
      *
      * @param programAddress the value for tb_program.PROGRAM_ADDRESS
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setProgramAddress(String programAddress) {
         this.programAddress = programAddress == null ? null : programAddress.trim();
@@ -372,7 +369,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.ACCEPT_MODE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getAcceptMode() {
         return acceptMode;
@@ -384,7 +381,7 @@ public class TbProgram implements Serializable {
      *
      * @param acceptMode the value for tb_program.ACCEPT_MODE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setAcceptMode(String acceptMode) {
         this.acceptMode = acceptMode == null ? null : acceptMode.trim();
@@ -396,7 +393,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.MANAGEMENT_AREA
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public BigDecimal getManagementArea() {
         return managementArea;
@@ -408,7 +405,7 @@ public class TbProgram implements Serializable {
      *
      * @param managementArea the value for tb_program.MANAGEMENT_AREA
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setManagementArea(BigDecimal managementArea) {
         this.managementArea = managementArea;
@@ -420,7 +417,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.BUILDING_STRUCTURE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getBuildingStructure() {
         return buildingStructure;
@@ -432,7 +429,7 @@ public class TbProgram implements Serializable {
      *
      * @param buildingStructure the value for tb_program.BUILDING_STRUCTURE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setBuildingStructure(String buildingStructure) {
         this.buildingStructure = buildingStructure == null ? null : buildingStructure.trim();
@@ -444,7 +441,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.CONTRACT_MONEY
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public BigDecimal getContractMoney() {
         return contractMoney;
@@ -456,7 +453,7 @@ public class TbProgram implements Serializable {
      *
      * @param contractMoney the value for tb_program.CONTRACT_MONEY
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setContractMoney(BigDecimal contractMoney) {
         this.contractMoney = contractMoney;
@@ -468,7 +465,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.CONTRACT_DURATION
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getContractDuration() {
         return contractDuration;
@@ -480,7 +477,7 @@ public class TbProgram implements Serializable {
      *
      * @param contractDuration the value for tb_program.CONTRACT_DURATION
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setContractDuration(String contractDuration) {
         this.contractDuration = contractDuration == null ? null : contractDuration.trim();
@@ -492,7 +489,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.PROMISED_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getPromisedNum() {
         return promisedNum;
@@ -504,7 +501,7 @@ public class TbProgram implements Serializable {
      *
      * @param promisedNum the value for tb_program.PROMISED_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setPromisedNum(Integer promisedNum) {
         this.promisedNum = promisedNum;
@@ -516,7 +513,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.MIN_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getMinNum() {
         return minNum;
@@ -528,7 +525,7 @@ public class TbProgram implements Serializable {
      *
      * @param minNum the value for tb_program.MIN_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setMinNum(Integer minNum) {
         this.minNum = minNum;
@@ -540,7 +537,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.REAL_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getRealNum() {
         return realNum;
@@ -552,7 +549,7 @@ public class TbProgram implements Serializable {
      *
      * @param realNum the value for tb_program.REAL_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setRealNum(Integer realNum) {
         this.realNum = realNum;
@@ -564,7 +561,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.OFFICE_ROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getOfficeRoomNum() {
         return officeRoomNum;
@@ -576,7 +573,7 @@ public class TbProgram implements Serializable {
      *
      * @param officeRoomNum the value for tb_program.OFFICE_ROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setOfficeRoomNum(Integer officeRoomNum) {
         this.officeRoomNum = officeRoomNum;
@@ -588,7 +585,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.MEETING_ROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getMeetingRoomNum() {
         return meetingRoomNum;
@@ -600,7 +597,7 @@ public class TbProgram implements Serializable {
      *
      * @param meetingRoomNum the value for tb_program.MEETING_ROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setMeetingRoomNum(Integer meetingRoomNum) {
         this.meetingRoomNum = meetingRoomNum;
@@ -612,7 +609,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.WASHROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getWashroomNum() {
         return washroomNum;
@@ -624,7 +621,7 @@ public class TbProgram implements Serializable {
      *
      * @param washroomNum the value for tb_program.WASHROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setWashroomNum(Integer washroomNum) {
         this.washroomNum = washroomNum;
@@ -636,7 +633,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.BABY_CARE_ROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getBabyCareRoomNum() {
         return babyCareRoomNum;
@@ -648,7 +645,7 @@ public class TbProgram implements Serializable {
      *
      * @param babyCareRoomNum the value for tb_program.BABY_CARE_ROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setBabyCareRoomNum(Integer babyCareRoomNum) {
         this.babyCareRoomNum = babyCareRoomNum;
@@ -660,7 +657,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.SMOKING_ROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getSmokingRoomNum() {
         return smokingRoomNum;
@@ -672,7 +669,7 @@ public class TbProgram implements Serializable {
      *
      * @param smokingRoomNum the value for tb_program.SMOKING_ROOM_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setSmokingRoomNum(Integer smokingRoomNum) {
         this.smokingRoomNum = smokingRoomNum;
@@ -684,7 +681,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.DRINKING_FOUNTAIN_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getDrinkingFountainNum() {
         return drinkingFountainNum;
@@ -696,7 +693,7 @@ public class TbProgram implements Serializable {
      *
      * @param drinkingFountainNum the value for tb_program.DRINKING_FOUNTAIN_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setDrinkingFountainNum(Integer drinkingFountainNum) {
         this.drinkingFountainNum = drinkingFountainNum;
@@ -708,7 +705,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.ELEVATOR_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getElevatorNum() {
         return elevatorNum;
@@ -720,7 +717,7 @@ public class TbProgram implements Serializable {
      *
      * @param elevatorNum the value for tb_program.ELEVATOR_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setElevatorNum(Integer elevatorNum) {
         this.elevatorNum = elevatorNum;
@@ -732,7 +729,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.UPDOWN_ESCALATOR_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getUpdownEscalatorNum() {
         return updownEscalatorNum;
@@ -744,7 +741,7 @@ public class TbProgram implements Serializable {
      *
      * @param updownEscalatorNum the value for tb_program.UPDOWN_ESCALATOR_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setUpdownEscalatorNum(Integer updownEscalatorNum) {
         this.updownEscalatorNum = updownEscalatorNum;
@@ -756,7 +753,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.PARALLEL_ESCALATOR_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getParallelEscalatorNum() {
         return parallelEscalatorNum;
@@ -768,7 +765,7 @@ public class TbProgram implements Serializable {
      *
      * @param parallelEscalatorNum the value for tb_program.PARALLEL_ESCALATOR_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setParallelEscalatorNum(Integer parallelEscalatorNum) {
         this.parallelEscalatorNum = parallelEscalatorNum;
@@ -780,7 +777,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.LOUNGE_BRIDGE_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getLoungeBridgeNum() {
         return loungeBridgeNum;
@@ -792,7 +789,7 @@ public class TbProgram implements Serializable {
      *
      * @param loungeBridgeNum the value for tb_program.LOUNGE_BRIDGE_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setLoungeBridgeNum(Integer loungeBridgeNum) {
         this.loungeBridgeNum = loungeBridgeNum;
@@ -804,7 +801,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.ENTRANCE_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getEntranceNum() {
         return entranceNum;
@@ -816,7 +813,7 @@ public class TbProgram implements Serializable {
      *
      * @param entranceNum the value for tb_program.ENTRANCE_NUM
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setEntranceNum(Integer entranceNum) {
         this.entranceNum = entranceNum;
@@ -828,7 +825,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.CHECK_STANDARD
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getCheckStandard() {
         return checkStandard;
@@ -840,7 +837,7 @@ public class TbProgram implements Serializable {
      *
      * @param checkStandard the value for tb_program.CHECK_STANDARD
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setCheckStandard(String checkStandard) {
         this.checkStandard = checkStandard == null ? null : checkStandard.trim();
@@ -852,7 +849,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.CONTRACT_RESTRAIN
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getContractRestrain() {
         return contractRestrain;
@@ -864,7 +861,7 @@ public class TbProgram implements Serializable {
      *
      * @param contractRestrain the value for tb_program.CONTRACT_RESTRAIN
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setContractRestrain(String contractRestrain) {
         this.contractRestrain = contractRestrain == null ? null : contractRestrain.trim();
@@ -876,7 +873,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.CONTRACT_FILE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getContractFile() {
         return contractFile;
@@ -888,7 +885,7 @@ public class TbProgram implements Serializable {
      *
      * @param contractFile the value for tb_program.CONTRACT_FILE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setContractFile(String contractFile) {
         this.contractFile = contractFile == null ? null : contractFile.trim();
@@ -900,7 +897,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.ARCHITECTURAL_PIC
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getArchitecturalPic() {
         return architecturalPic;
@@ -912,7 +909,7 @@ public class TbProgram implements Serializable {
      *
      * @param architecturalPic the value for tb_program.ARCHITECTURAL_PIC
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setArchitecturalPic(String architecturalPic) {
         this.architecturalPic = architecturalPic == null ? null : architecturalPic.trim();
@@ -924,7 +921,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.REMARK
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getRemark() {
         return remark;
@@ -936,7 +933,7 @@ public class TbProgram implements Serializable {
      *
      * @param remark the value for tb_program.REMARK
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
@@ -948,7 +945,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.START_TIME
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Date getStartTime() {
         return startTime;
@@ -960,7 +957,7 @@ public class TbProgram implements Serializable {
      *
      * @param startTime the value for tb_program.START_TIME
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
@@ -972,7 +969,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.END_TIME
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Date getEndTime() {
         return endTime;
@@ -984,7 +981,7 @@ public class TbProgram implements Serializable {
      *
      * @param endTime the value for tb_program.END_TIME
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
@@ -996,7 +993,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.EFFECT_DATE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Date getEffectDate() {
         return effectDate;
@@ -1008,7 +1005,7 @@ public class TbProgram implements Serializable {
      *
      * @param effectDate the value for tb_program.EFFECT_DATE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setEffectDate(Date effectDate) {
         this.effectDate = effectDate;
@@ -1020,7 +1017,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.AREA_CODE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getAreaCode() {
         return areaCode;
@@ -1032,10 +1029,34 @@ public class TbProgram implements Serializable {
      *
      * @param areaCode the value for tb_program.AREA_CODE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setAreaCode(String areaCode) {
         this.areaCode = areaCode == null ? null : areaCode.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column tb_program.AREA_NAME
+     *
+     * @return the value of tb_program.AREA_NAME
+     *
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     */
+    public String getAreaName() {
+        return areaName;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column tb_program.AREA_NAME
+     *
+     * @param areaName the value for tb_program.AREA_NAME
+     *
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     */
+    public void setAreaName(String areaName) {
+        this.areaName = areaName == null ? null : areaName.trim();
     }
 
     /**
@@ -1044,7 +1065,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.REMARK1
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getRemark1() {
         return remark1;
@@ -1056,7 +1077,7 @@ public class TbProgram implements Serializable {
      *
      * @param remark1 the value for tb_program.REMARK1
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setRemark1(String remark1) {
         this.remark1 = remark1 == null ? null : remark1.trim();
@@ -1068,7 +1089,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.REMARK2
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getRemark2() {
         return remark2;
@@ -1080,7 +1101,7 @@ public class TbProgram implements Serializable {
      *
      * @param remark2 the value for tb_program.REMARK2
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setRemark2(String remark2) {
         this.remark2 = remark2 == null ? null : remark2.trim();
@@ -1092,7 +1113,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.REMARK3
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getRemark3() {
         return remark3;
@@ -1104,7 +1125,7 @@ public class TbProgram implements Serializable {
      *
      * @param remark3 the value for tb_program.REMARK3
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setRemark3(String remark3) {
         this.remark3 = remark3 == null ? null : remark3.trim();
@@ -1116,7 +1137,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.CREATE_EMP
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getCreateEmp() {
         return createEmp;
@@ -1128,7 +1149,7 @@ public class TbProgram implements Serializable {
      *
      * @param createEmp the value for tb_program.CREATE_EMP
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setCreateEmp(String createEmp) {
         this.createEmp = createEmp == null ? null : createEmp.trim();
@@ -1140,7 +1161,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.CREATE_DATE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Date getCreateDate() {
         return createDate;
@@ -1152,7 +1173,7 @@ public class TbProgram implements Serializable {
      *
      * @param createDate the value for tb_program.CREATE_DATE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
@@ -1164,7 +1185,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.UPDATE_DATE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Date getUpdateDate() {
         return updateDate;
@@ -1176,7 +1197,7 @@ public class TbProgram implements Serializable {
      *
      * @param updateDate the value for tb_program.UPDATE_DATE
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
@@ -1188,7 +1209,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.UPDATE_EMP
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public String getUpdateEmp() {
         return updateEmp;
@@ -1200,7 +1221,7 @@ public class TbProgram implements Serializable {
      *
      * @param updateEmp the value for tb_program.UPDATE_EMP
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setUpdateEmp(String updateEmp) {
         this.updateEmp = updateEmp == null ? null : updateEmp.trim();
@@ -1212,7 +1233,7 @@ public class TbProgram implements Serializable {
      *
      * @return the value of tb_program.VERSION
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public Integer getVersion() {
         return version;
@@ -1224,7 +1245,7 @@ public class TbProgram implements Serializable {
      *
      * @param version the value for tb_program.VERSION
      *
-     * @mbggenerated Fri Oct 19 09:56:39 CST 2018
+     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
      */
     public void setVersion(Integer version) {
         this.version = version;

@@ -191,7 +191,7 @@ public class MenuNode implements Comparable {
 			return null;
 		}
 		for (Iterator<MenuNode> iterator = nodeList.iterator(); iterator.hasNext();) {
-			MenuNode node = (MenuNode) iterator.next();
+			MenuNode node = iterator.next();
 			// 根据传入的某个父节点ID,遍历该父节点的所有子节点
 			if (node.getParentId() != 0 && parentId.equals(node.getParentId())) {
 				recursionFn(nodeList, node, parentId);
@@ -215,7 +215,7 @@ public class MenuNode implements Comparable {
 			}
 			Iterator<MenuNode> it = childList.iterator();
 			while (it.hasNext()) {
-				MenuNode n = (MenuNode) it.next();
+				MenuNode n = it.next();
 				recursionFn(nodeList, n, pId);
 			}
 		} else {
@@ -234,7 +234,7 @@ public class MenuNode implements Comparable {
 		List<MenuNode> nodeList = new ArrayList<MenuNode>();
 		Iterator<MenuNode> it = list.iterator();
 		while (it.hasNext()) {
-			MenuNode n = (MenuNode) it.next();
+			MenuNode n = it.next();
 			if (n.getParentId().equals(node.getId())) {
 				nodeList.add(n);
 			}

@@ -167,6 +167,16 @@ public class ProgramAddDto {
 	    *   区域编码
 	     */
 	    private String areaCode;
+	    
+	    private String areaName;
+	    
+		public String getAreaName() {
+			return areaName;
+		}
+
+		public void setAreaName(String areaName) {
+			this.areaName = areaName;
+		}
 
 		public String getProgramId() {
 			return programId;
@@ -455,8 +465,9 @@ public class ProgramAddDto {
 					+ checkStandard + ", contractRestrain=" + contractRestrain + ", contractFile=" + contractFile
 					+ ", architecturalPic=" + architecturalPic + ", remark=" + remark + ", startTimeStr=" + startTimeStr
 					+ ", endTimeStr=" + endTimeStr + ", effectDateStr=" + effectDateStr + ", areaCode=" + areaCode
-					+ "]";
+					+ ", areaName=" + areaName + "]";
 		}
+
 
 	    
 }

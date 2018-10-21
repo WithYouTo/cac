@@ -555,7 +555,7 @@ public class DateUtil {
 		return date;
 	}
 
-	public static String getStringNum(int n) throws Exception {
+	public static String getStringNum(int n) {
 		String result = "";
 		if (n >= 0 && n < 10) {
 			result = "00" + n;
@@ -567,7 +567,7 @@ public class DateUtil {
 		return result;
 	}
 
-	public static String getStringDateStr(String dateStr) throws Exception {
+	public static String getStringDateStr(String dateStr) {
 		String result = "";
 		if (null == dateStr || "".equals(dateStr)) {
 			return result;

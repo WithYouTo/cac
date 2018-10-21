@@ -49,7 +49,7 @@ public class PlanEventController {
 	private JwtProperties jwtProperties;
 
 	@RequestMapping(value = "/queryPlanEventListByPage", method = RequestMethod.POST)
-	public PageResParams queryPlanListByPage(@Valid QueryPlanEventListDto queryPlanEventListDto) throws Exception {
+	public PageResParams queryPlanListByPage(@Valid QueryPlanEventListDto queryPlanEventListDto) {
 		new PageFactory<Map<String, Object>>().defaultPage();
 		List<Map<String, Object>> list = this.planEventSrv.queryPlanEventListByPage(queryPlanEventListDto);
 		for (Map<String, Object> map : list) {
@@ -90,14 +90,14 @@ public class PlanEventController {
 	}
 
 	@RequestMapping(value = "/selectStandardCodeList", method = RequestMethod.POST)
-	public ResParams selectStandardCodeList() throws Exception {
+	public ResParams selectStandardCodeList() {
 		List<Map<String, String>> list = this.commonSrv.selectStandardNameList();
 
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
 
 	@RequestMapping(value = "/selectEventTypeList", method = RequestMethod.POST)
-	public ResParams selectEventTypeList() throws Exception {
+	public ResParams selectEventTypeList() {
 		List<Map<String, String>> ls = new ArrayList<>();
 		Map<String, String> map = CommonConstant.EVENT_TYPE;
 		for (String key : map.keySet()) {
@@ -111,7 +111,7 @@ public class PlanEventController {
 	}
 
 	@RequestMapping(value = "/selectGuaranteeTypeList", method = RequestMethod.POST)
-	public ResParams selectGuaranteeTypeList() throws Exception {
+	public ResParams selectGuaranteeTypeList() {
 		List<Map<String, String>> ls = new ArrayList<>();
 		Map<String, String> map = CommonConstant.GUARANTEE_TYPE;
 		for (String key : map.keySet()) {

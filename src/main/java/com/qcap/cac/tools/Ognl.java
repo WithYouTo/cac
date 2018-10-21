@@ -12,23 +12,18 @@ public class Ognl {
 			return true;
 
 		if ((o instanceof String)) {
-			if (((String) o).length() == 0)
-				return true;
+            return ((String) o).length() == 0;
 		} else if ((o instanceof Collection)) {
-			if (((Collection) o).isEmpty())
-				return true;
+            return ((Collection) o).isEmpty();
 		} else if (o.getClass().isArray()) {
-			if (Array.getLength(o) == 0)
-				return true;
+            return Array.getLength(o) == 0;
 		} else if ((o instanceof Map)) {
-			if (((Map) o).isEmpty())
-				return true;
+            return ((Map) o).isEmpty();
 		} else {
 			return false;
 		}
 
-		return false;
-	}
+    }
 
 	public static boolean isNotEmpty(Object o) {
 		return !isEmpty(o);
@@ -83,38 +78,26 @@ public class Ognl {
 			return false;
 		}
 
-		if (!"1".equals(str)) {
-			return false;
-		}
-		return true;
-	}
+        return "1".equals(str);
+    }
 
 	public static boolean equalToTwo(String str) {
 		if ((str == null) || (str.length() == 0)) {
 			return false;
 		}
 
-		if (!"2".equals(str)) {
-			return false;
-		}
-		return true;
-	}
+        return "2".equals(str);
+    }
 
 	public static boolean equalToSeven(String str) {
 		if ((str == null) || (str.length() == 0)) {
 			return false;
 		}
 
-		if (!"7".equals(str)) {
-			return false;
-		}
-		return true;
-	}
+        return "7".equals(str);
+    }
 
 	public static boolean notEqualToSeven(String str) {
-		if (!"7".equals(str)) {
-			return true;
-		}
-		return false;
-	}
+        return !"7".equals(str);
+    }
 }

@@ -121,7 +121,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer, EnvironmentAware {
 
 		@Override
 		public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
-				NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+				NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) {
 			String va1 = env.getProperty("mybatis.iPage.page-parameter", "page");
 			String va2 = env.getProperty("mybatis.iPage.page-size", "limit");
 			int pageNumber = NumberUtils.toInt(nativeWebRequest.getParameter(va1));

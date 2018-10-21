@@ -345,6 +345,7 @@
 	WHERE SHIFT =#{shift} 
 	AND MONTH=#{month} 
 	AND POSITION_CODE=#{positionCode} 
+	AND DELETE_FLAG ='NORMAL'
 	<include refid="selectWorkIngItem"/>
 	</select>
 	
@@ -355,5 +356,14 @@
 			AND (CASE WHEN DESC1_ < DESC2_ THEN ( DESC1_ <=#{startTime} AND DESC2_  >#{startTime})
 			ELSE (DESC1_ <=#{startTime} OR   DESC2_ >#{startTime})END)
 		]]>
+	</select>
+	
+	<select id="selectAllEmployee"  parameterType="String" resultType="Map">
+	SELECT DISTINCT EMPLOYEE_CODE employeeCode, 
+	CONCAT(EMPLOYEE_NAME,'-',EMPLOYEE_CODE) employeeName ,
+	EMPLOYEE_TEL employeeTel
+	FROM tb_task_arrangement 
+	WHERE MONTH =#{monthNo}
+	AND DELETE_FLAG ='NORMAL'
 	</select>
 </mapper>

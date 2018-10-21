@@ -67,8 +67,8 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		flightInfo.setFlightInfoId(UUIDUtils.getUUID());
 		flightInfo.setPlanningTakeoffTime(planningTakeoffDateTime);
 		flightInfo.setEstimatedTakeoffTime(estimatedTakeoffDateTime);
-		flightInfo.setCreateEmp(eventTaskDto.getLoginName());;
-		flightInfo.setCreateDate(new Date());
+		flightInfo.setCreateEmp(eventTaskDto.getLoginName());
+        flightInfo.setCreateDate(new Date());
 		flightInfo.setVersion(0);
 		this.eventTaskMapper.insertFlightInfo(flightInfo);
 		

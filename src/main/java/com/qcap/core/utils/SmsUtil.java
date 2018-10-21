@@ -22,7 +22,7 @@ public class SmsUtil {
 	 * @return java.util.Map<java.lang.String> , java.lang.String>
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, String> sms(String url) throws Exception {
+	public static Map<String, String> sms(String url) {
 		String getRequest = HttpUtil.doGet(url);
 		if (getRequest != null && !getRequest.isEmpty()) {
 			return JSONObject.parseObject(getRequest, Map.class);

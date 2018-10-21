@@ -85,7 +85,7 @@ public class HttpUtil {
 	/**
 	 * map转url请求参数字符串(无序)，value不能为空
 	 */
-	public final static String map2String(Map<String, Object> map) throws Exception {
+	public final static String map2String(Map<String, Object> map) {
 		List<String> list = new ArrayList<String>();
 		for (Entry<String, Object> entry : map.entrySet()) {
 			String key = entry.getKey();
@@ -101,7 +101,7 @@ public class HttpUtil {
 	/**
 	 * map转url请求参数字符串(有序)，value不能为空
 	 */
-	public final static String map2StringSort(Map<String, Object> map) throws Exception {
+	public final static String map2StringSort(Map<String, Object> map) {
 		List<String> keyList = new ArrayList<String>(map.keySet());
 		Collections.sort(keyList);
 		List<String> list = new ArrayList<String>();
@@ -118,7 +118,7 @@ public class HttpUtil {
 	/**
 	 * url参数字符串转map
 	 */
-	public final static Map str2map(String str) throws Exception {
+	public final static Map str2map(String str) {
 		String[] arr1 = str.split("&");
 		Map<String, String> map = new HashMap<String, String>();
 		String[] arr2;
@@ -132,7 +132,7 @@ public class HttpUtil {
 	/**
 	 * map转xml字符串(无序)，value不能为空
 	 */
-	public final static String map2Xml(Map<String, Object> map) throws Exception {
+	public final static String map2Xml(Map<String, Object> map) {
 		StringBuffer sb = new StringBuffer();
 		for (Entry<String, Object> entry : map.entrySet()) {
 			String key = entry.getKey();
@@ -150,7 +150,7 @@ public class HttpUtil {
 	/**
 	 * map转xml字符串(有序)，value不能为空
 	 */
-	public final static String map2XmlSort(Map<String, Object> map) throws Exception {
+	public final static String map2XmlSort(Map<String, Object> map) {
 		List<String> list = new ArrayList<String>(map.keySet());
 		Collections.sort(list);
 		StringBuffer sb = new StringBuffer();
@@ -212,7 +212,7 @@ public class HttpUtil {
 					tmp.append(src.substring(lastPos));
 					lastPos = src.length();
 				} else {
-					tmp.append(src.substring(lastPos, pos));
+					tmp.append(src, lastPos, pos);
 					lastPos = pos;
 				}
 			}

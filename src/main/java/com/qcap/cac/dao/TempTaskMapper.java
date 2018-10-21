@@ -126,4 +126,13 @@ public interface TempTaskMapper {
 	 * @return: Map<String,String>
 	 */
 	Map<String, String> selectShiftByTime(String startTime);
+	/**
+	 * 查询所有人员
+	 * @Title: selectAllEmployee 
+	 * @Description: TODO
+	 * @param monthNo
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> selectAllEmployee (@Param("monthNo") String monthNo);
 }

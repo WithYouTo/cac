@@ -56,7 +56,7 @@ public class PlanEventSrvImpl implements PlanEventSrv {
 	}
 
 	@Override
-	public void deletePlanEvent(PlanEventDto planEventDto) throws Exception {
+	public void deletePlanEvent(PlanEventDto planEventDto) {
 		planEventMapper.deletePlanEventById(planEventDto.getPlanEventId());
 	}
 }

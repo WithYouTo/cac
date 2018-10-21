@@ -236,33 +236,19 @@ public class ToolUtil {
             return true;
         }
         if (o instanceof String) {
-            if (o.toString().trim().equals("")) {
-                return true;
-            }
+            return o.toString().trim().equals("");
         } else if (o instanceof List) {
-            if (((List) o).size() == 0) {
-                return true;
-            }
+            return ((List) o).size() == 0;
         } else if (o instanceof Map) {
-            if (((Map) o).size() == 0) {
-                return true;
-            }
+            return ((Map) o).size() == 0;
         } else if (o instanceof Set) {
-            if (((Set) o).size() == 0) {
-                return true;
-            }
+            return ((Set) o).size() == 0;
         } else if (o instanceof Object[]) {
-            if (((Object[]) o).length == 0) {
-                return true;
-            }
+            return ((Object[]) o).length == 0;
         } else if (o instanceof int[]) {
-            if (((int[]) o).length == 0) {
-                return true;
-            }
+            return ((int[]) o).length == 0;
         } else if (o instanceof long[]) {
-            if (((long[]) o).length == 0) {
-                return true;
-            }
+            return ((long[]) o).length == 0;
         }
         return false;
     }
@@ -534,11 +520,7 @@ public class ToolUtil {
      */
     public static Boolean isWinOs() {
         String os = System.getProperty("os.name");
-        if (os.toLowerCase().startsWith("win")) {
-            return true;
-        } else {
-            return false;
-        }
+        return os.toLowerCase().startsWith("win");
     }
 
     /**

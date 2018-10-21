@@ -70,7 +70,7 @@ public class PlanSrvImpl implements PlanSrv {
 	}
 
 	@Override
-	public void deletePlan(PlanDto planDto) throws Exception {
+	public void deletePlan(PlanDto planDto) {
 		planMapper.deletePlanById(planDto.getPlanId());
 	}
 }

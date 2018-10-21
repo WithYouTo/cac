@@ -37,7 +37,8 @@
 		DATE_FORMAT(m.START_TIME,'%Y-%m-%d')  AS  startTime,
 		DATE_FORMAT(m.END_TIME,'%Y-%m-%d')  AS  endTime,
 		DATE_FORMAT(m.EFFECT_DATE,'%Y-%m-%d')  AS  effectDate,
-		m.AREA_CODE  AS  areaCode
+		m.AREA_CODE  AS  areaCode,
+		m.AREA_NAME  AS  areaName
 		FROM tb_program m
 		WHERE 1=1
 	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programName)">
@@ -69,7 +70,7 @@
       LOUNGE_BRIDGE_NUM, ENTRANCE_NUM, CHECK_STANDARD, 
       CONTRACT_RESTRAIN, CONTRACT_FILE, ARCHITECTURAL_PIC, 
       REMARK, START_TIME, END_TIME, 
-      EFFECT_DATE, AREA_CODE, REMARK1, 
+      EFFECT_DATE, AREA_CODE,AREA_NAME, REMARK1, 
       REMARK2, REMARK3, CREATE_EMP, 
       CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
       VERSION)
@@ -84,7 +85,7 @@
       #{loungeBridgeNum}, #{entranceNum}, #{checkStandard}, 
       #{contractRestrain}, #{contractFile}, #{architecturalPic}, 
       #{remark}, #{startTime}, #{endTime}, 
-      #{effectDate}, #{areaCode}, #{remark1}, 
+      #{effectDate}, #{areaCode},#{areaName}, #{remark1}, 
       #{remark2}, #{remark3}, #{createEmp}, 
       #{createDate}, #{updateDate}, #{updateEmp}, 
       #{version})
@@ -191,6 +192,9 @@
       </if>
       <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaCode)">
         AREA_CODE = #{areaCode},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaName)">
+        AREA_NAME = #{areaName},
       </if>
       <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark1)">
         REMARK1 = #{remark1},

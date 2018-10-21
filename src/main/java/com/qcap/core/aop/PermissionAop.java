@@ -35,7 +35,7 @@ public class PermissionAop {
 
 	@SuppressWarnings("unchecked")
 	@Around("cutPermission()")
-	public Object doPermission(ProceedingJoinPoint point) throws Throwable {
+	public Object doPermission(ProceedingJoinPoint point) {
 
 		return null;
 	}

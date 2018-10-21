@@ -172,8 +172,7 @@ public class RedisUtil {
 
 	public void set(String key, Object o) {
 		stringRedisTemplate.opsForValue().set(key, JSON.toJSONString(o));
-		;
-	}
+    }
 
 	public <T> T get(String key, Class<T> clazz) {
 		String jsonString = stringRedisTemplate.opsForValue().get(key);

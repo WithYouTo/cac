@@ -100,7 +100,7 @@ public class TbCommonConfigServiceImpl implements ITbCommonConfigService {
 	}
 
 	@Override
-	public void initialConfigCache() throws Exception {
+	public void initialConfigCache() {
 		Collection<TbCommonConfig> cols = tbCommonConfigMapper.selectList(new QueryWrapper<>());
 		for (TbCommonConfig tcc : cols) {
 			String key = tcc.getType() + StrUtil.COLON + tcc.getKeyName();

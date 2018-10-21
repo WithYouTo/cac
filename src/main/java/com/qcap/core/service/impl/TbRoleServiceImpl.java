@@ -68,7 +68,7 @@ public class TbRoleServiceImpl implements ITbRoleService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void updateRole(TbRole tbRole) throws Exception {
+	public void updateRole(TbRole tbRole) {
 		TbRole role = tbRoleMapper.selectById(tbRole.getId());
 		role.setName(tbRole.getName());
 		role.setRemark(tbRole.getRemark());

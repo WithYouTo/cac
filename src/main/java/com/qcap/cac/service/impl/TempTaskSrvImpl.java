@@ -17,6 +17,7 @@ import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
@@ -183,6 +184,57 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		 */
 		task.setCreateEmp("SYS_TODO");
 		task.setVersion(0);
+		
+		//处理任务执行人员
+		String employeeCode = "";
+		String employeeName = "";
+		String employeeTel = "";
+		if(StringUtils.isEmpty(taskDto.getEmployeeCode())) {
+
+		}else {
+			employeeCode = taskDto.getEmployeeCode();
+			employeeName = taskDto.getEmployeeName();
+			employeeTel = taskDto.getEmployeeTel();
+		}
+		
+		task.setEmployeeCode(employeeCode);
+		task.setEmployeeName(employeeName);
+		task.setEmployeeTel(employeeTel);
+		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
+		this.tempTaskMapper.insertTempTask(task);
+
+		// 新增文件到系统文件表
+		insertFile(taskDto.getFileUrl(), taskCode);
+
+		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
+		map.put(CommonConstant.BACK_MESSAGE, "新增临时任务成功");
+		return map;
+	}
+	
+	@Override
+	public  Map<String,Object> selectDefaultEmployee(String startTime,String areaCode) {
+		Map<String,Object> map = new HashMap<>();
+		String positionCode=null;
+		
+		// 查询岗位
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
+		if (positionMap != null && !positionMap.isEmpty()) {
+			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+		} else {
+			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
+			return map;
+		}
+
+		// 查询班次
+		String queryTime = startTime.substring(11);
+		Map<String, String> shiftMap = this.tempTaskMapper.selectShiftByTime(queryTime);
+		if (MapUtils.isEmpty(shiftMap)) {
+			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			map.put(CommonConstant.BACK_MESSAGE, "根据计划时间未查询到班次，请先设置班次");
+			return map;
+		}
+		String shift = shiftMap.get("shift");
 		// 处理日期
 		Date startDate = DateUtil.stringToDate(startTime);
 		Calendar calendar = Calendar.getInstance();
@@ -218,29 +270,21 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String employeeCode = String.join(",", employeeCodeList);
 		String employeeName = String.join(",", employeeNameList);
 		String employeeTel = String.join(",", employeeTelList);
-		task.setEmployeeCode(employeeCode);
-		task.setEmployeeName(employeeName);
-		task.setEmployeeTel(employeeTel);
-		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
-		this.tempTaskMapper.insertTempTask(task);
-
-		// 新增文件到系统文件表
-		insertFile(taskDto.getFileUrl(), taskCode);
-
+		
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
-		map.put(CommonConstant.BACK_MESSAGE, "新增临时任务成功");
+		map.put("employeeCode", employeeCode);
+		map.put("employeeName", employeeName);
+		map.put("employeeTel", employeeTel);
 		return map;
 	}
 
 	@Override
 	public Map<String, Object> updateTempTask(TempTaskDto taskDto) {
+		
 		Map<String, Object> map = new HashMap<>();
-		// TODO Auto-generated method stub
 		String taskCode = taskDto.getTaskCode();
 		String areaCode = taskDto.getAreaCode();
 		String areaName = taskDto.getAreaName();
-		// String standardCode = taskDto.getStandardCode();
-		// String standardName = taskDto.getStandardName();
 		String startTime = taskDto.getStartTime();
 		String endTime = taskDto.getEndTime();
 		String spec = taskDto.getSpec();
@@ -265,18 +309,6 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			return map;
 		}
 
-		// 查询标准详细信息
-		// List<Map<String,Object>> standardList =
-		// this.tempTaskMapper.selectStandardItem(standardCode);
-		// if (standardList == null || standardList.isEmpty()) {
-		// map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-		// map.put(CommonConstant.BACK_MESSAGE, "该标准不存在");
-		// return map;
-		// }
-		// String uploadPicFlag =
-		// ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
-		// String checkFlag =
-		// ToolUtil.toStr(standardList.get(0).get("checkFlag"));
 		// 查询岗位
 		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
 		if (positionMap != null && !positionMap.isEmpty()) {
@@ -319,36 +351,49 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		 * 登录没做，无法获取登录人 TODO
 		 */
 		task.setUpdateEmp("SYS_TODO");
-		// 处理日期
-		Date startDate = DateUtil.stringToDate(startTime);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(startDate);
-		int dayNum = calendar.get(Calendar.DAY_OF_MONTH);
-		String queryDay = "day" + dayNum;
-		String month = DateUtil.dateToMonth(startDate);
-		// 封装查询条件
-		Map<String, Object> param = new HashMap<>();
-		param.put("shift", shift);
-		param.put("month", month);
-		param.put("positionCode", positionCode);
-		param.put(queryDay, queryDay);
-		// 查询当班人员
-		List<Map<String, Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
-		List<String> employeeCodeList = new ArrayList<>();
-		List<String> employeeNameList = new ArrayList<>();
-		List<String> employeeTelList = new ArrayList<>();
-		for (Map<String, Object> m : list) {
-			employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
-			employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
-			employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
+		
+		//处理任务执行人员
+		String employeeCode = "";
+		String employeeName = "";
+		String employeeTel = "";
+		if(StringUtils.isEmpty(taskDto.getEmployeeCode())) {
+			// 处理日期
+			Date startDate = DateUtil.stringToDate(startTime);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(startDate);
+			int dayNum = calendar.get(Calendar.DAY_OF_MONTH);
+			String queryDay = "day" + dayNum;
+			String month = DateUtil.dateToMonth(startDate);
+			// 封装查询条件
+			Map<String, Object> param = new HashMap<>();
+			param.put("shift", shift);
+			param.put("month", month);
+			param.put("positionCode", positionCode);
+			param.put(queryDay, queryDay);
+			// 查询当班人员
+			List<Map<String, Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
+			List<String> employeeCodeList = new ArrayList<>();
+			List<String> employeeNameList = new ArrayList<>();
+			List<String> employeeTelList = new ArrayList<>();
+			for (Map<String, Object> m : list) {
+				employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
+				employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
+				employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
 
-			/**
-			 * 推送消息到该值班人员
-			 */
+				/**
+				 * 推送消息到该值班人员
+				 */
+			}
+			employeeCode = String.join(",", employeeCodeList);
+			employeeName = String.join(",", employeeNameList);
+			employeeTel = String.join(",", employeeTelList);
+		}else {
+			employeeCode = taskDto.getEmployeeCode();
+			employeeName = taskDto.getEmployeeName();
+			employeeTel = taskDto.getEmployeeTel();
 		}
-		String employeeCode = String.join(",", employeeCodeList);
-		String employeeName = String.join(",", employeeNameList);
-		String employeeTel = String.join(",", employeeTelList);
+		
+
 		task.setEmployeeCode(employeeCode);
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
@@ -381,6 +426,12 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 
 			commonSrvImpl.insertSysFile(sysFile);
 		}
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAllEmployee(String monthNo) {
+		// TODO Auto-generated method stub
+		return this.tempTaskMapper.selectAllEmployee(monthNo);
 	}
 
 }

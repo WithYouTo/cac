@@ -75,7 +75,7 @@ public class TbOrgServiceImpl implements ITbOrgService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void insertItem(TbOrg org) throws Exception {
+	public void insertItem(TbOrg org) {
 		int max = tbOrgMapper.selectMaxNum();
 		int maxNum = max == 0 ? 1000 : max + 1;
 		org.setNum(String.valueOf(maxNum));

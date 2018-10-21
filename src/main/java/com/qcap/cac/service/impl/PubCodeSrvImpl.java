@@ -55,8 +55,7 @@ public class PubCodeSrvImpl implements PubCodeSrv {
 	public void insertPubCode(Tbpubcode tbpubCode) {
 		// TODO Auto-generated method stub
 		tbpubCode.setTbpubcodeId(UUIDUtils.getUUID());
-		;
-		tbpubCode.setDelFlag("0");
+        tbpubCode.setDelFlag("0");
 		tbpubCode.setVersion(0);
 		pubCodeMapper.insertPubCode(tbpubCode);
 	}
@@ -65,8 +64,7 @@ public class PubCodeSrvImpl implements PubCodeSrv {
 	public void insertPubCode01(Tbpubcode01 tbpubCode01) {
 		// TODO Auto-generated method stub
 		tbpubCode01.setTbpubcode01Id(UUIDUtils.getUUID());
-		;
-		tbpubCode01.setVersion(0);
+        tbpubCode01.setVersion(0);
 		pubCodeMapper.insertPubCode01(tbpubCode01);
 	}
 
