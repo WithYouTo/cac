@@ -1,6 +1,7 @@
 package com.qcap.core.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -35,4 +36,5 @@ public interface TbMenuMapper extends BaseMapper<TbMenu> {
 
 	@Select("select max(t.seq) from tb_menu t where t.parent_code=#{parentCode}")
 	Integer selectMaxSeqByParentCode(@Param("parentCode") String parentCode);
+
 }

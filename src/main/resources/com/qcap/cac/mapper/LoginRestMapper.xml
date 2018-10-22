@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.AppTaskRestMapper">
+
+	<select id="selectManagerByWorkNo" parameterType="String" resultType="com.qcap.core.entity.TbManager">
+		SELECT
+		account account,
+		password password,
+		salt salt,
+		name name
+		FROM
+		tb_manager
+	</select>
+
+	<select id="getAppMenuByManagerId" resultType="java.util.Map">
+		SELECT DISTINCT
+		c.url url,
+		c.code code,
+		c.name name,
+		c.icon icon
+		FROM tb_manager_role a
+		left JOIN tb_role_menu b on a.role_id = b.role_num
+		left JOIN tb_menu c ON c.code = b.menu_code
+		WHERE c.is_menu = 0
+		AND a.manager_id = #{managerId}
+	</select>
+
+	<select id="getAppUserInfoByManagerCode" resultType="java.util.Map">
+		SELECT
+		USER_NAME employeeName,
+		HEAD_IMG_URL url
+		FROM tb_user_info
+		WHERE
+		WORK_NO = #{employeeCode}
+	</select>
+
+	<update id="updateManagerPwd"  parameterType="com.qcap.core.entity.TbManager">
+		UPDATE TB_MANAGER
+		SET
+		password = #{password},
+		salt = #{salt}
+		WHERE
+		id = #{id}
+	</update>
+
+</mapper>

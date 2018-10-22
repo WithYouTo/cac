@@ -67,6 +67,7 @@
     <update id="updatePartsNoAndNextMaintTimeByPartsId" parameterType="com.qcap.cac.entity.TbEquipParts">
         UPDATE tb_equip_parts
         SET
+        EQUIP_NO = #{equipNo},
         PARTS_NO = #{partsNo},
         START_USE_TIME = #{startUseTime},
         NEXT_MAINT_TIME = #{nextMaintTime}

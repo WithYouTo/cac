@@ -6,6 +6,7 @@ import com.qcap.cac.dto.EquipInsertDto;
 import com.qcap.cac.dto.EquipSearchDto;
 import com.qcap.cac.dto.PartsInsertDto;
 import com.qcap.cac.service.EquipSrv;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.apache.ibatis.ognl.ObjectElementsAccessor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -80,8 +82,9 @@ public class EquipController {
      */
     @ResponseBody
     @RequestMapping(value = "/insertEquip", method = RequestMethod.POST)
-    public Object insertEquip(@Valid EquipInsertDto equipInsertDto){
-        this.equipSrv.insertEquip(equipInsertDto);
+    public Object insertEquip(HttpServletRequest request, @Valid EquipInsertDto equipInsertDto){
+        String userName = RedisTools.getUserName(request);
+        this.equipSrv.insertEquip(equipInsertDto,userName);
 
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, "");
 

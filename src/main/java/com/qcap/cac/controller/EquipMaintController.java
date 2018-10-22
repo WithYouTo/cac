@@ -33,7 +33,11 @@ public class EquipMaintController {
     public Object listEquipMaint(@Valid EquipMaintSearchDto equipMaintSearchDto){
         new PageFactory<Map<String, Object>>().defaultPage();
         List<Map<String, Object>> list = this.equipMaintSrv.listEquipMaint(equipMaintSearchDto);
-
+        for(Map<String,Object> map:list){
+            String status = map.get("equipType").toString();
+            CommonConstant.MAINT_TYPE.get(status);
+            map.put("equipTypeName", CommonConstant.MAINT_TYPE.get(status));
+        }
         PageInfo pageInfo = new PageInfo(list);
         Page pageList = (Page) list;
         return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(),pageList);

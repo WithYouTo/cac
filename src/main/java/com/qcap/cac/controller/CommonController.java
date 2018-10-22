@@ -191,7 +191,18 @@ public class CommonController {
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, CommonConstant.WAREHOUSE_REQ_STATUS);
     }
 
-
+    /**
+     *
+     * @Description: 初始化证件类型下拉框
+     *
+     *
+     * @MethodName: initCardType
+     * @Parameters: []
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/22 15:11
+     */
     @ResponseBody
     @RequestMapping(value = "/initCardType", method = RequestMethod.POST)
     public Object initCardType(){
@@ -200,6 +211,18 @@ public class CommonController {
 
     }
 
+    /**
+     *
+     * @Description: 初始化性别下拉框
+     *
+     *
+     * @MethodName: initGender
+     * @Parameters: []
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/22 15:12
+     */
     @ResponseBody
     @RequestMapping(value = "/initGender", method = RequestMethod.POST)
     public Object initGender(){
@@ -208,6 +231,18 @@ public class CommonController {
 
     }
 
+    /**
+     *
+     * @Description: 初始化婚姻状况下拉框
+     *
+     *
+     * @MethodName: initMarriageSit
+     * @Parameters: []
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/22 15:12
+     */
     @ResponseBody
     @RequestMapping(value = "/initMarriageSit", method = RequestMethod.POST)
     public Object initMarriageSit(){

@@ -91,7 +91,7 @@ public class EquipSrvImpl implements EquipSrv {
     }
 
     @Override
-    public void insertEquip(@Valid EquipInsertDto equipInsertDto){
+    public void insertEquip(@Valid EquipInsertDto equipInsertDto,String userName){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         //1、新建设备对象将入参转为设备对象
@@ -122,8 +122,8 @@ public class EquipSrvImpl implements EquipSrv {
             //todo 通用方法，待修改
             equip.setCreateDate(new Date());
             equip.setUpdateDate(new Date());
-            equip.setCreateEmp("sys");
-            equip.setUpdateEmp("sys");
+            equip.setCreateEmp(userName);
+            equip.setUpdateEmp(userName);
             this.equipMapper.insert(equip);
             // 5、根据设备信息生成设备维保计划
             insertMaintPlan(equip);
@@ -380,6 +380,7 @@ public class EquipSrvImpl implements EquipSrv {
             partsNo.append(equipNo).append(str);
             part.setPartsNo(partsNo.toString());
             part.setStartUseTime(equip.getStartUseTime());
+            part.setEquipNo(equipNo);
             count++;
             this.equipPartsMapper.updatePartsNoAndNextMaintTimeByPartsId(part);
             insertMaintPlan(part);

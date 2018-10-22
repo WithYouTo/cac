@@ -8,7 +8,7 @@
         m.name,
         m.phone,
         m.mail,
-        m.create_time createTime,
+        DATE_FORMAT(m.create_time,'%Y-%m-%d %H:%i:%S') createTime,
         m.status,
         o.fullnames orgName,
         info.USER_ID userId,
@@ -50,5 +50,6 @@
         <if test="map.phone!=null and map.phone!=''">
             and m.phone like #{map.phone}
         </if>
+        ORDER BY info.WORK_NO
     </select>
 </mapper>
