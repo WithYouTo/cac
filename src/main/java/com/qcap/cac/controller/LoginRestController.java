@@ -37,6 +37,7 @@ public class LoginRestController {
     @Resource
     private FastDFSClientWrapper dfsClient;
 
+    //todo 免密登录
 
     /**
      *
@@ -52,6 +53,7 @@ public class LoginRestController {
      */
     @PostMapping("/login")
     public ResParams login(@RequestParam("employeeCode") String employeeCode, @RequestParam("password") String password) {
+        //todo 返回岗位信息和TbManager对象
         employeeCode = StringUtils.trimToEmpty(employeeCode);
         try {
             Map<String,Object> data = this.loginRestSrv.login(employeeCode, password);
@@ -60,6 +62,7 @@ public class LoginRestController {
             return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
         }
     }
+
 
 
     /**

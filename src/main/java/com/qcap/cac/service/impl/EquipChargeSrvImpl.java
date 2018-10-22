@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dao.EquipChargeMapper;
 import com.qcap.cac.dto.EquipChargeSearchDto;
 import com.qcap.cac.service.EquipChargeSrv;
@@ -18,8 +19,9 @@ public class EquipChargeSrvImpl implements EquipChargeSrv {
     private EquipChargeMapper equipChargeMapper;
 
     @Override
-    public List<Map<String, Object>> listEquipCharge(EquipChargeSearchDto equipChargeSearchDto) {
-        return this.equipChargeMapper.listEquipCharge(equipChargeSearchDto);
+    public void listEquipCharge(IPage<Map<String, Object>> page,EquipChargeSearchDto equipChargeSearchDto) {
+        List<Map<String, Object>> list =   this.equipChargeMapper.listEquipCharge(page,equipChargeSearchDto);
+        page.setRecords(list);
     }
 
     @Override

@@ -17,25 +17,26 @@
         STATUS status
         from TB_EQUIP_REPAIR
         where 1=1
-        <if test="equipType != null and equipType != ''">
-            and EQUIP_TYPE = #{equipType}
+        <if test="obj.equipType != null and obj.equipType != ''">
+            and EQUIP_TYPE = #{obj.equipType}
         </if>
-        <if test="equipName != null and equipName != ''">
-            and EQUIP_NAME = #{equipName}
+        <if test="obj.equipName != null and obj.equipName != ''">
+            and EQUIP_NAME = #{obj.equipName}
         </if>
-        <if test="repairTime != null and repairTime != ''">
-            and REPAIR_TIME &gt; #{repairTime}
+        <if test="obj.repairTime != null and obj.repairTime != ''">
+            and REPAIR_TIME &gt; #{obj.repairTime}
         </if>
-        <if test="status != null and status != ''">
-            and STATUS = #{status}
+        <if test="obj.status != null and obj.status != ''">
+            and STATUS = #{obj.status}
         </if>
         ORDER BY REPAIR_TIME
     </select>
 
-    <update id="updateEquipRepair" parameterType="String">
+    <update id="updateEquipRepair" parameterType="com.qcap.cac.entity.TbEquipRepair">
       update TB_EQUIP_REPAIR
       SET
-      STATUS = 'REPAIRED'
+      STATUS = 'REPAIRED',
+      UPDATE_EMP = #{updateEmp}
       WHERE
       EQUIP_REPAIR_ID = #{equipRepairId}
     </update>

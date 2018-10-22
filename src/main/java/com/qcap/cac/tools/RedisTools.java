@@ -1,6 +1,8 @@
 package com.qcap.cac.tools;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.qcap.core.common.SettingProperties;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.utils.AppUtils;
@@ -39,15 +41,17 @@ public class RedisTools {
 		return redisUtil.get(key);
 	}
 
-//	public static String getUserName(HttpServletRequest request) {
-//		RedisUtil redisUtil = SpringContextHolder.getBean(RedisUtil.class);
-//		JwtProperties jwtProperties = SpringContextHolder.getBean(JwtProperties.class);
-//		JwtTokenUtil jwtTokenUtil = SpringContextHolder.getBean(JwtTokenUtil.class);
-//
-//		String token = request.getHeader(jwtProperties.getTokenHeader());
-//		String userId = jwtTokenUtil.getUsernameFromToken(token);
-//		String mJson = AppUtils.getApplicationName() + StrUtil.COLON + "manager" + StrUtil.COLON + userId;
-//		TbManager manager = (TbManager) JSONObject.parse(mJson);
-//		return manager.getName();
-//	}
+	public static String getUserName(HttpServletRequest request) {
+		RedisUtil redisUtil = SpringContextHolder.getBean(RedisUtil.class);
+		JwtProperties jwtProperties = SpringContextHolder.getBean(JwtProperties.class);
+		JwtTokenUtil jwtTokenUtil = SpringContextHolder.getBean(JwtTokenUtil.class);
+
+		String token = request.getHeader(jwtProperties.getTokenHeader());
+		String userId = jwtTokenUtil.getUsernameFromToken(token);
+		String key = AppUtils.getApplicationName() + StrUtil.COLON + "manager" + StrUtil.COLON + userId;
+//		TbManager manager = (TbManager) JSONObject.parseObject().parse();
+		TbManager manager = JSON.parseObject(redisUtil.get(key), new TypeReference<TbManager>() {});
+
+		return manager.getName();
+	}
 }

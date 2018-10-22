@@ -6,6 +6,7 @@
         SELECT
         PLAN_ID planId,
         EQUIP_ID equipId,
+        EQUIP_NO equipNo,
         EQUIP_NAME equipName,
         EQUIP_TYPE equipType,
         EQUIP_MODEL equipModel,
@@ -24,8 +25,8 @@
         <if test="map.equipType != null and map.equipType != ''">
             and EQUIP_TYPE = #{map.equipType}
         </if>
-        <if test="map.equipName != null and map.equipName != ''">
-            and EQUIP_NAME = #{map.equipName}
+        <if test="map.equipNo != null and map.equipNo != ''">
+            and EQUIP_NO = #{map.equipNo}
         </if>
         <if test="map.equipModel != null and map.equipModel != ''">
             and EQUIP_MODEL = #{map.equipModel}

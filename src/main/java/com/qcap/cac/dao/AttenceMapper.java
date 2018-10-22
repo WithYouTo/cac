@@ -1,6 +1,8 @@
 package com.qcap.cac.dao;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dto.AttenceSearchDto;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,5 +29,5 @@ public interface AttenceMapper {
      * @author huangxiang
      * @date 2018/10/11 20:27
      */
-    List<Map<String,Object>> listAttence(AttenceSearchDto attenceSearchDto);
+    List<Map<String,Object>> listAttence(IPage<Map<String, Object>> page,@Param("obj")AttenceSearchDto attenceSearchDto);
 }

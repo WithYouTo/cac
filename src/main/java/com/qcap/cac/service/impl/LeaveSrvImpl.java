@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dao.LeaveMapper;
 import com.qcap.cac.dto.LeaveSearchDto;
 import com.qcap.cac.service.LeaveSrv;
@@ -18,7 +19,8 @@ public class LeaveSrvImpl implements LeaveSrv {
     private LeaveMapper leaveMapper;
 
     @Override
-    public List<Map<String, Object>> listLeave(LeaveSearchDto leaveSearchDto) {
-        return this.leaveMapper.listLeave(leaveSearchDto);
+    public void listLeave(IPage<Map<String, Object>> page, LeaveSearchDto leaveSearchDto) {
+        List<Map<String,Object>> list = this.leaveMapper.listLeave(page,leaveSearchDto);
+        page.setRecords(list);
     }
 }

@@ -1,5 +1,6 @@
 package com.qcap.cac.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
@@ -37,17 +38,16 @@ public class EquipChargeController {
      */
     @ResponseBody
     @RequestMapping(value = "/listEquipCharge", method = RequestMethod.POST)
-    public Object listEquipCharge(@Valid EquipChargeSearchDto equipChargeSearchDto){
-        new PageFactory<Map<String, Object>>().defaultPage();
-        List<Map<String, Object>> list = this.equipChargeSrv.listEquipCharge(equipChargeSearchDto);
-        PageInfo pageInfo = new PageInfo(list);
+    public Object listEquipCharge(IPage<Map<String, Object>> page, @Valid EquipChargeSearchDto equipChargeSearchDto){
+        this.equipChargeSrv.listEquipCharge(page,equipChargeSearchDto);
+        List<Map<String, Object>> list = page.getRecords();
+
         for(Map<String, Object> map:list){
             String status = map.get("status").toString();
             CommonConstant.EQUIP_CHARGE_STATUS.get(status);
             map.put("statusName", CommonConstant.EQUIP_CHARGE_STATUS.get(status));
         }
-        Page pageList = (Page) list;
-        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(),pageList);
+        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(),list);
     }
 
 

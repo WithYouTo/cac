@@ -19,14 +19,14 @@
         STATUS status
         from TB_EQUIP_USE
         where 1=1
-        <if test="equipNo != null and equipNo != ''">
-            and EQUIP_NO = #{equipNo}
+        <if test="obj.equipNo != null and obj.equipNo != ''">
+            and EQUIP_NO = #{obj.equipNo}
         </if>
-        <if test="startUseTime != null and startUseTime != ''">
-            and START_USE_TIME &gt; #{startUseTime}
+        <if test="obj.startUseTime != null and obj.startUseTime != ''">
+            and START_USE_TIME &gt; #{obj.startUseTime}
         </if>
-        <if test="status != null and status != ''">
-            and STATUS = #{status}
+        <if test="obj.status != null and obj.status != ''">
+            and STATUS = #{obj.status}
         </if>
         ORDER BY START_USE_TIME
     </select>

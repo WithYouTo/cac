@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dao.AttenceMapper;
 import com.qcap.cac.dto.AttenceSearchDto;
 import com.qcap.cac.service.AttenceSrv;
@@ -24,7 +25,8 @@ public class AttenceSrvImpl implements AttenceSrv {
     private AttenceMapper attenceMapper;
 
     @Override
-    public List<Map<String, Object>> listAttence(AttenceSearchDto attenceSearchDto) {
-        return this.attenceMapper.listAttence(attenceSearchDto);
+    public void listAttence(IPage<Map<String, Object>> page, AttenceSearchDto attenceSearchDto) {
+        List<Map<String,Object>> list = this.attenceMapper.listAttence(page,attenceSearchDto);
+        page.setRecords(list);
     }
 }

@@ -1,12 +1,12 @@
 package com.qcap.cac.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dto.EquipRepairSearchDto;
 
-import java.util.List;
 import java.util.Map;
 
 public interface EquipRepairSrv {
-    List<Map<String, Object>> listEquipRepair(EquipRepairSearchDto equipRepairSearchDto);
+    void listEquipRepair(IPage<Map<String, Object>> page, EquipRepairSearchDto equipRepairSearchDto);
 
-    void updateEquipRepair(String equipRepairId);
+    void updateEquipRepair(String repairId, String equipRepairId);
 }

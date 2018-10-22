@@ -16,14 +16,14 @@
         REMARK remark
         FROM TB_LEAVE
         WHERE 1=1
-        <if test="workNo != null and workNo != ''">
-            and WORK_NO = #{workNo}
+        <if test="obj.workNo != null and obj.workNo != ''">
+            and WORK_NO = #{obj.workNo}
         </if>
-        <if test="personName != null and personName != ''">
-            and PERSON_NAME = #{personName}
+        <if test="obj.personName != null and obj.personName != ''">
+            and PERSON_NAME = #{obj.personName}
         </if>
-        <if test="leaveStartTime != null and leaveStartTime != ''">
-            and LEAVE_START_TIME &gt; #{leaveStartTime}
+        <if test="obj.leaveStartTime != null and obj.leaveStartTime != ''">
+            and LEAVE_START_TIME &gt; #{obj.leaveStartTime}
         </if>
         ORDER BY LEAVE_START_TIME
     </select>

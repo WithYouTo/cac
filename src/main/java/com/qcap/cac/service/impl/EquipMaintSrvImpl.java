@@ -1,6 +1,7 @@
 package com.qcap.cac.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.EquipMaintMapper;
 import com.qcap.cac.dao.EquipMapper;
@@ -45,8 +46,9 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
     private EquipPlanMapper equipPlanMapper;
 
     @Override
-    public List<Map<String, Object>> listEquipMaint(EquipMaintSearchDto equipMaintSearchDto) {
-        return this.equipMaintMapper.listEquipMaint(equipMaintSearchDto);
+    public void listEquipMaint(IPage<Map<String, Object>> page, EquipMaintSearchDto equipMaintSearchDto) {
+        List<Map<String,Object>> list = this.equipMaintMapper.listEquipMaint(page,equipMaintSearchDto);
+        page.setRecords(list);
     }
 
     @Override

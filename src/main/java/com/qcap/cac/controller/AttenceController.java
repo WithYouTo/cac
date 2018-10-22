@@ -1,5 +1,6 @@
 package com.qcap.cac.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
@@ -38,11 +39,11 @@ public class AttenceController {
      */
     @ResponseBody
     @RequestMapping(value = "/listAttence", method = RequestMethod.POST)
-    public Object listAttence(@Valid AttenceSearchDto attenceSearchDto){
-        new PageFactory<Map<String, Object>>().defaultPage();
-        List<Map<String, Object>> list = this.attenceSrv.listAttence(attenceSearchDto);
-        PageInfo pageInfo = new PageInfo(list);
-        Page pageList = (Page) list;
-        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), pageList);
+    public Object listAttence(IPage<Map<String, Object>> page, @Valid AttenceSearchDto attenceSearchDto){
+//        new PageFactory<Map<String, Object>>().defaultPage();
+        this.attenceSrv.listAttence(page,attenceSearchDto);
+//        PageInfo pageInfo = new PageInfo(list);
+//        Page pageList = (Page) list;
+        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(), page.getRecords());
     }
 }

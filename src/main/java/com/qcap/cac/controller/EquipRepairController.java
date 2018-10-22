@@ -7,6 +7,7 @@ import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dto.EquipRepairSearchDto;
 import com.qcap.cac.service.EquipRepairSrv;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -43,18 +45,14 @@ public class EquipRepairController{
     @ResponseBody
     @RequestMapping(value = "/listEquipRepair", method = RequestMethod.POST)
     public Object listEquipRepair(IPage<Map<String, Object>> page,@Valid EquipRepairSearchDto equipRepairSearchDto){
-        new PageFactory<Map<String, Object>>().defaultPage();
-
-        List<Map<String, Object>> list = this.equipRepairSrv.listEquipRepair(equipRepairSearchDto);
-        PageInfo pageInfo = new PageInfo(list);
+        this.equipRepairSrv.listEquipRepair(page,equipRepairSearchDto);
+        List<Map<String, Object>> list = page.getRecords();
         for(Map<String, Object> map:list){
             String status = map.get("status").toString();
             CommonConstant.EQUIP_REPAIR_STATUS.get(status);
             map.put("statusName", CommonConstant.EQUIP_REPAIR_STATUS.get(status));
         }
-        Page pageList = (Page) list;
-
-        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), pageList);
+        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(), list);
     }
 
     /**
@@ -71,8 +69,9 @@ public class EquipRepairController{
      */
     @ResponseBody
     @RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
-    public Object updateEquipRepair(String equipRepairId){
-        this.equipRepairSrv.updateEquipRepair(equipRepairId);
+    public Object updateEquipRepair(HttpServletRequest request,String equipRepairId){
+        String userName = RedisTools.getUserName(request);
+        this.equipRepairSrv.updateEquipRepair(equipRepairId,userName);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
     }
 }

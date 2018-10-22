@@ -21,14 +21,14 @@
         REMARK remark
         from TB_EQUIP_MAINT
         where 1=1
-        <if test="maintType != null and maintType != ''">
-            and MAINT_TYPE = #{maintType}
+        <if test="obj.maintType != null and obj.maintType != ''">
+            and MAINT_TYPE = #{obj.maintType}
         </if>
-        <if test="equipName != null and equipName != ''">
-            and EQUIP_NAME = #{equipName}
+        <if test="obj.equipName != null and obj.equipName != ''">
+            and EQUIP_NAME = #{obj.equipName}
         </if>
-        <if test="partsName != null and partsName != ''">
-            and PARTS_NAME = #{partsName}
+        <if test="obj.partsName != null and obj.partsName != ''">
+            and PARTS_NAME = #{obj.partsName}
         </if>
         ORDER BY MAINT_TIME
     </select>

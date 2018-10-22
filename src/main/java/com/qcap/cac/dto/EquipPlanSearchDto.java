@@ -3,7 +3,7 @@ package com.qcap.cac.dto;
 public class EquipPlanSearchDto {
 
     private String equipType;
-    private String equipName;
+    private String equipNo;
     private String equipModel;
     private String latestMaintTime;
 
@@ -15,12 +15,12 @@ public class EquipPlanSearchDto {
         this.equipType = equipType;
     }
 
-    public String getEquipName() {
-        return equipName;
+    public String getEquipNo() {
+        return equipNo;
     }
 
-    public void setEquipName(String equipName) {
-        this.equipName = equipName;
+    public void setEquipNo(String equipNo) {
+        this.equipNo = equipNo;
     }
 
     public String getEquipModel() {
@@ -43,7 +43,7 @@ public class EquipPlanSearchDto {
     public String toString() {
         return "EquipPlanSearchDto{" +
                 "equipType='" + equipType + '\'' +
-                ", equipName='" + equipName + '\'' +
+                ", equipNo='" + equipNo + '\'' +
                 ", equipModel='" + equipModel + '\'' +
                 ", latestMaintTime='" + latestMaintTime + '\'' +
                 '}';

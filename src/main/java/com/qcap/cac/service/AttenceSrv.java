@@ -1,5 +1,6 @@
 package com.qcap.cac.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dto.AttenceSearchDto;
 
 import java.util.List;
@@ -25,5 +26,5 @@ public interface AttenceSrv {
      * @author huangxiang
      * @date 2018/10/11 20:26
      */
-    List<Map<String, Object>> listAttence(AttenceSearchDto attenceSearchDto);
+    void listAttence(IPage<Map<String, Object>> page, AttenceSearchDto attenceSearchDto);
 }

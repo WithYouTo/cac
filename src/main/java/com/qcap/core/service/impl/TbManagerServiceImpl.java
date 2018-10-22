@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.dao.*;
 import com.qcap.core.entity.*;
@@ -74,9 +75,13 @@ public class TbManagerServiceImpl implements ITbManagerService {
 				String managerId = tbManager.getId();
 				tbManager.setPassword("");
 				tbManager.setSalt("");
+				String str= JSONObject.toJSONString(tbManager);
+
 				// 存储token的过期时间和用户ID
-				redisUtil.set(AppUtils.getApplicationName() + ":manager:" + managerId, tbManager);
-				redisUtil.set(AppUtils.getApplicationName()+"managerName:" + managerId, tbManager.getName());
+//				redisUtil.set(AppUtils.getApplicationName() + ":manager:" + managerId, tbManager);
+				redisUtil.set(AppUtils.getApplicationName() + ":manager:" + managerId, str);
+
+//				redisUtil.set(AppUtils.getApplicationName()+"managerName:" + managerId, tbManager.getName());
 				LogManager.me().executeLog(LogTaskFactory.loginLog(tbManager.getAccount(), ip));
 				return jwtTokenUtil.doGenerateToken(managerId);
 			} else {

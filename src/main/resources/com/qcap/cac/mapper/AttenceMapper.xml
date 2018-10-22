@@ -14,14 +14,14 @@
         REMARK remark
         FROM TB_ATTENCE
         WHERE 1=1
-        <if test="workNo != null and workNo != ''">
-            and WORK_NO = #{workNo}
+        <if test="obj.workNo != null and obj.workNo != ''">
+            and WORK_NO = #{obj.workNo}
         </if>
-        <if test="personName != null and personName != ''">
-            and PERSON_NAME = #{personName}
+        <if test="obj.personName != null and obj.personName != ''">
+            and PERSON_NAME = #{obj.personName}
         </if>
-        <if test="attenceTime != null and attenceTime != ''">
-            and ATTENCE_TIME = #{attenceTime}
+        <if test="obj.attenceTime != null and obj.attenceTime != ''">
+            and ATTENCE_TIME = #{obj.attenceTime}
         </if>
         ORDER BY ATTENCE_TIME
     </select>
