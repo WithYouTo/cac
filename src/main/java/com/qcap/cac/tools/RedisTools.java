@@ -50,7 +50,8 @@ public class RedisTools {
 		String userId = jwtTokenUtil.getUsernameFromToken(token);
 		String key = AppUtils.getApplicationName() + StrUtil.COLON + "manager" + StrUtil.COLON + userId;
 //		TbManager manager = (TbManager) JSONObject.parseObject().parse();
-		TbManager manager = JSON.parseObject(redisUtil.get(key), new TypeReference<TbManager>() {});
+//		TbManager manager = JSON.parseObject(redisUtil.get(key), new TypeReference<TbManager>() {});
+		TbManager manager = JSON.parseObject(redisUtil.get(key), TbManager.class);
 
 		return manager.getName();
 	}
