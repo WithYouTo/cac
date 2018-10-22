@@ -1,6 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import cn.hutool.Hutool;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.tobato.fastdfs.domain.StorePath;
@@ -20,12 +19,10 @@ import com.qcap.cac.service.EquipSrv;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,11 +32,8 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.io.*;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static java.io.FileDescriptor.out;
 
 @Service
 @Transactional
@@ -91,7 +85,7 @@ public class EquipSrvImpl implements EquipSrv {
     }
 
     @Override
-    public void insertEquip(@Valid EquipInsertDto equipInsertDto,String userName){
+    public void insertEquip(@Valid EquipInsertDto equipInsertDto){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         //1、新建设备对象将入参转为设备对象
@@ -122,8 +116,8 @@ public class EquipSrvImpl implements EquipSrv {
             //todo 通用方法，待修改
             equip.setCreateDate(new Date());
             equip.setUpdateDate(new Date());
-            equip.setCreateEmp(userName);
-            equip.setUpdateEmp(userName);
+            equip.setCreateEmp("sys");
+            equip.setUpdateEmp("sys");
             this.equipMapper.insert(equip);
             // 5、根据设备信息生成设备维保计划
             insertMaintPlan(equip);

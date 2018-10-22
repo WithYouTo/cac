@@ -39,15 +39,15 @@ public class RedisTools {
 		return redisUtil.get(key);
 	}
 
-	public static String getUserName(HttpServletRequest request) {
-		RedisUtil redisUtil = SpringContextHolder.getBean(RedisUtil.class);
-		JwtProperties jwtProperties = SpringContextHolder.getBean(JwtProperties.class);
-		JwtTokenUtil jwtTokenUtil = SpringContextHolder.getBean(JwtTokenUtil.class);
-
-		String token = request.getHeader(jwtProperties.getTokenHeader());
-		String userId = jwtTokenUtil.getUsernameFromToken(token);
-		String mJson = AppUtils.getApplicationName() + StrUtil.COLON + "manager" + StrUtil.COLON + userId;
-		TbManager manager = (TbManager) JSONObject.parse(mJson);
-		return manager.getName();
-	}
+//	public static String getUserName(HttpServletRequest request) {
+//		RedisUtil redisUtil = SpringContextHolder.getBean(RedisUtil.class);
+//		JwtProperties jwtProperties = SpringContextHolder.getBean(JwtProperties.class);
+//		JwtTokenUtil jwtTokenUtil = SpringContextHolder.getBean(JwtTokenUtil.class);
+//
+//		String token = request.getHeader(jwtProperties.getTokenHeader());
+//		String userId = jwtTokenUtil.getUsernameFromToken(token);
+//		String mJson = AppUtils.getApplicationName() + StrUtil.COLON + "manager" + StrUtil.COLON + userId;
+//		TbManager manager = (TbManager) JSONObject.parse(mJson);
+//		return manager.getName();
+//	}
 }
