@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.GoodsApplyRestMapper">
+
+	<!--查询当前登录人的角色-->
+	<select id="queryLoginRole" parameterType="String" resultType="Integer">
+	 select a.num
+        from tb_role a
+                 left join tb_manager_role b on a.num = b.role_id
+                 left join tb_manager c on b.manager_id = c.id
+        where c.id = #{employeeId}
+	</select>
+
+
+	<!--查询主管对应的岗位-->
+	<select id="queryPositionIdByEmployeeId" parameterType="String" resultType="String">
+	/* select a.num
+        from tb_role a
+                 left join tb_manager_role b on a.num = b.role_id
+                 left join tb_manager c on b.manager_id = c.id
+        where c.id = #{employeeId}*/
+	</select>
+
+	<!--查询角色为主管的用户-->
+	<select id="queryEmployeeIdByRole" parameterType="Integer" resultType="String">
+	  select c.id
+        from tb_role a
+                 left join tb_manager_role b on a.num = b.role_id
+                 left join tb_manager c on b.manager_id = c.id
+        where a.num = 1 AND LENGTH(IFNULL(c.id,'')) > 0
+	</select>
+	
+	<select id="queryReqList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestDto">
+	SELECT
+	WAREHOUSE_REQU_ID,
+	STOREROOM_ID,
+	STOREROOM,
+	REQU_BATCH_NO,
+	REQU_PERSON,
+	REQU_MOBILE,
+	REQU_NAME,
+	DATE_FORMAT(REQU_TIME,'%Y-%m-%d') requTime,
+	DATE_FORMAT(CREATE_DATE,'%Y-%m-%d %H:%i:%s') createDate,
+	REQU_REMARK,
+	REQU_STATUS
+	from tb_warehouse_requ a
+	WHERE FIND_IN_SET(#{positionId},POSITION_ID)
+	AND REQU_STATUS =#{requStatus}
+	</select>
+
+
+	<!--查询领用明细-->
+	<select id="queryReqDetailList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestDto">
+	select
+        a.WAREHOUSE_REQU_ID,
+        WAREHOUSE_REQDETAIL_ID,
+        STOREROOM_ID,
+        STOREROOM,
+        REQU_BATCH_NO,
+        REQU_PERSON,
+        REQU_MOBILE,
+        REQU_NAME,
+        DATE_FORMAT(REQU_TIME,'%Y-%m-%d') requTime,
+        a.REQU_STATUS,
+        a.GOODS_NO  goodsNo,
+        a.GOODS_NAME goodsName,
+        REQU_LOC,
+        REQU_LOC_NAME,
+        APPLY_NUM,
+        REAL_NUM,
+        MIN_UNIT,
+        a.REQU_REMARK
+        from tb_warehouse_reqdetail a
+        LEFT JOIN tb_warehouse_requ b
+        on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
+        where  a.WAREHOUSE_REQU_ID = #{warehouseRequId}
+        AND a.REQU_STATUS =#{requStatus}
+        order by a.CREATE_DATE DESC
+	</select>
+	
+	
+	
+</mapper>

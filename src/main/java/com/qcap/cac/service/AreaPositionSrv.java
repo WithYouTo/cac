@@ -36,7 +36,7 @@ public interface AreaPositionSrv extends IService<TbAreaPosition> {
      * @param areaPosition
      * @return
      */
-    Integer updateAreaPosition(TbAreaPosition areaPosition);
+    Integer updateAreaPosition(TbAreaPosition areaPosition) throws Exception;
 
 
     /**

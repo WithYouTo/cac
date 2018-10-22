@@ -127,7 +127,28 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
     }
 
     @Override
-    public Integer updateAreaPosition(TbAreaPosition areaPosition) {
+    public Integer updateAreaPosition(TbAreaPosition areaPosition) throws Exception{
+
+        String positionId = areaPosition.getPositionId();
+        if(StringUtils.isEmpty(positionId)){
+            throw  new RuntimeException("岗位修改主键为空");
+        }
+
+        TbAreaPosition area = this.areaPositionMapper.selectById(positionId);
+        if(null == area){
+            throw  new RuntimeException("根据主键没有查询到岗位信息");
+        }
+
+        if(StringUtils.isEmpty(area.getPositionCode())){
+            throw  new RuntimeException("修改岗位时，岗位编码为空");
+        }
+
+        if(StringUtils.isEmpty(area.getPositionUrl())){
+            //根据岗位编码生成二维码
+            String positionUrl = getQrCodeUrlByPositionCode(area.getPositionCode());
+            areaPosition.setPositionUrl(positionUrl);
+        }
+
         return this.areaPositionMapper.updateById(areaPosition);
     }
 
