@@ -44,6 +44,7 @@
 		SUPER_AREA_CODE,
 		BUILDING_PURPOSE,
 		SEQ_NO,
+		LEVEL,
 		REMARK1
 		FROM tb_area where  1 = 1
 		<if test="areaCode!=null and areaCode!=''">
@@ -54,7 +55,7 @@
 		LEFT JOIN tb_area b
 		on t.SUPER_AREA_CODE = b.AREA_CODE
 		GROUP BY t.AREA_ID
-		ORDER BY t.AREA_CODE,t.SEQ_NO
+		ORDER BY t.LEVEL,t.SEQ_NO
 	</select>
 
 
@@ -68,6 +69,7 @@
 		FROM
 		tb_area m
 		LEFT JOIN tb_area n ON m.SUPER_AREA_CODE = n.AREA_CODE
+        ORDER BY m.`LEVEL`,m.SEQ_NO
 	</select>
 	
 

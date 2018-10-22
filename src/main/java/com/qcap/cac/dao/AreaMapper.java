@@ -26,5 +26,9 @@ public interface AreaMapper extends BaseMapper<TbArea> {
     @Select("select IFNULL(MAX(SUBSTRING(AREA_CODE, - 3)),99) + 1 from tb_area t WHERE `LEVEL` = #{level} ")
     Integer selectMaxNum(Integer level);
 
+    @Select("select IFNULL(MAX(SEQ_NO),0) + 1 from tb_area t WHERE `SUPER_AREA_CODE` = #{superAreaCode} ")
+    Integer selectMaxSeqNo(String superAreaCode);
+
+
 
 }

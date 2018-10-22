@@ -90,12 +90,16 @@ public class AreaController {
 
 
     /**
-     * 新增
+     * 修改
      */
     @ResponseBody
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResParams updateArea(@Valid  TbArea area) {
-        this.areaSrv.updateById(area);
+        try {
+            area =  this.areaSrv.updateArea(area);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
+        }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, area);
     }
 

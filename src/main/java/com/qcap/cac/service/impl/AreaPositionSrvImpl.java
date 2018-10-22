@@ -66,6 +66,22 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
     public Integer insertAreaPosition(TbAreaPosition areaPosition) throws Exception{
 
         String positionCode = UUIDUtils.getPositionCode();
+
+        QueryWrapper<TbAreaPosition> wrapper = new QueryWrapper<>();
+        //岗位编码是否重复
+        wrapper.eq("POSITION_CODE", areaPosition.getPositionCode());
+        if(areaPositionMapper.selectCount(wrapper) > 0){
+            throw new  RuntimeException("岗位编码已经存在");
+        }
+
+        wrapper = new QueryWrapper<>();
+        //岗位名称是否存在
+        wrapper.eq("POSITION_NAME", areaPosition.getPositionName());
+        //wrapper.eq("AREA_CODE", areaPosition.getAreaCode());
+        if(areaPositionMapper.selectCount(wrapper) > 0){
+            throw new  RuntimeException("岗位已经存在");
+        }
+
         //根据岗位编码生成二维码
         String positionUrl = getQrCodeUrlByPositionCode(positionCode);
         areaPosition.setPositionCode(positionCode);

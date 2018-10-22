@@ -31,4 +31,12 @@ public interface AreaSrv extends IService<TbArea> {
     TbArea insertArea(TbArea area);
 
 
+    /**
+     * 修改区域
+     * @param area
+     * @return
+     */
+    TbArea updateArea(TbArea area);
+
+
 }

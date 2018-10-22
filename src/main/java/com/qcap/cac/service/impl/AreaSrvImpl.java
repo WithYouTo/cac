@@ -49,6 +49,8 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
         }
 
         QueryWrapper<TbArea> wrapper = new QueryWrapper<>();
+        //不同的父级，可以有相同的区域名称
+        wrapper.eq("SUPER_AREA_CODE",area.getSuperAreaCode());
         wrapper.eq("AREA_NAME",area.getAreaName());
         if(areaMapper.selectCount(wrapper) > 0){
             throw new  RuntimeException("区域名称已经存在");
@@ -61,11 +63,34 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
         area.setAreaId(UUIDUtils.getUUID());
         area.setAreaCode(areaCode);
         area.setLevel(Integer.toString(level + 1));//子级
-        area.setSeqNo("1");
+        //排序
+        Integer seqNo = this.areaMapper.selectMaxSeqNo(area.getSuperAreaCode());
+        area.setSeqNo(Integer.toString(seqNo));
+
         area.setFinalFlag("N");
         area.setCreateEmp("SYS");
         area.setCreateDate(new Date());
         this.areaMapper.insert(area);
+        return area;
+    }
+
+    @Override
+    public TbArea updateArea(TbArea area) {
+
+        if(StringUtils.isEmpty(area.getAreaId())){
+            throw new  RuntimeException("修改区域的主键为空");
+        }
+
+
+        QueryWrapper<TbArea> wrapper = new QueryWrapper<>();
+        //不同的父级，可以有相同的区域名称
+        wrapper.eq("SUPER_AREA_CODE",area.getSuperAreaCode());
+        wrapper.eq("AREA_NAME",area.getAreaName());
+        if(areaMapper.selectCount(wrapper) > 1){
+            throw new  RuntimeException("区域名称已经存在");
+        }
+
+        this.areaMapper.updateById(area);
         return area;
     }
 
