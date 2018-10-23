@@ -4,6 +4,7 @@ import com.qcap.cac.dto.ResetPasswordReq;
 import com.qcap.cac.service.LoginRestSrv;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.common.CoreConstant;
+import com.qcap.core.entity.TbManager;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.lang3.StringUtils;
@@ -161,7 +162,7 @@ public class LoginRestController {
 
     /**
      *
-     * @Description:
+     * @Description:获取APP下载地址
      *
      *
      * @MethodName: getAppUrl
@@ -177,6 +178,24 @@ public class LoginRestController {
         Map<String,Object> map = new HashMap<>();
         map.put("url",appUrl);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", map);
+    }
+
+    /**
+     *
+     * @Description: 获取人员列表
+     *
+     *
+     * @MethodName: getUserListByOrgCode
+     * @Parameters: [orgCode, positionCode] 
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/23 15:09
+     */
+    @PostMapping("/getUserListByOrgCode")
+    public ResParams getUserListByOrgCode(String orgCode,String positionCode){
+        List<TbManager> list = this.loginRestSrv.getUserListByOrgCode(orgCode,positionCode);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
     }
 
 }

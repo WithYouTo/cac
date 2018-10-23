@@ -1,6 +1,7 @@
 package com.qcap.cac.service;
 
 import com.qcap.cac.dto.ResetPasswordReq;
+import com.qcap.core.entity.TbManager;
 
 import java.util.List;
 import java.util.Map;
@@ -15,4 +16,6 @@ public interface LoginRestSrv {
     void resetPassword(ResetPasswordReq resetPasswordDto) throws Exception;
 
     Map<String,Object> getLoginInfo(String employeeCode);
+
+    List<TbManager> getUserListByOrgCode(String orgCode, String positionCode);
 }

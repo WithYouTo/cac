@@ -7,19 +7,20 @@ import com.qcap.cac.entity.TbAreaPosition;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.LoginRestSrv;
+import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.Md5Util;
 import com.qcap.core.utils.RedisUtil;
 import com.qcap.core.utils.jwt.JwtTokenUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Transactional
@@ -37,11 +38,15 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     @Resource
     private RedisUtil redisUtil;
 
+    @Resource
+    private TempTaskSrv tempTaskSrv;
+
     @Override
     public Map<String,Object> login(String workNo, String password) throws Exception{
 
         TbManager tbManager = this.loginRestMapper.selectManagerByWorkNo(workNo);
-        TbAreaPosition position = this.loginRestMapper.selectAreaPositionByWorkNo(workNo);
+        List<Map<String,Object>> positionList = this.tempTaskSrv.selectCurrountWorkingEmployee(workNo);
+//        TbAreaPosition position = this.loginRestMapper.selectAreaPositionByWorkNo(workNo);
         if (tbManager != null) {
             if (checkPassword(tbManager.getPassword(), password, tbManager.getSalt())) {
                 String managerId = tbManager.getId();
@@ -53,7 +58,7 @@ public class LoginRestSrvImpl implements LoginRestSrv {
                 Map<String, Object> data = new HashMap<>(2);
                 data.put("access_token", jwtTokenUtil.doGenerateToken(managerId));
                 data.put("employee", tbManager);
-                data.put("position", position);
+                data.put("positionList", positionList);
                 return data;
             } else {
                 throw new BaseException("密码错误！");
@@ -101,11 +106,26 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     @Override
     public Map<String, Object> getLoginInfo(String employeeCode) {
         TbManager tbManager = this.loginRestMapper.selectManagerByWorkNo(employeeCode);
-        TbAreaPosition position = this.loginRestMapper.selectAreaPositionByWorkNo(employeeCode);
+        List<Map<String,Object>> positionList = this.tempTaskSrv.selectCurrountWorkingEmployee(employeeCode);
         Map<String, Object> data = new HashMap<>(2);
         data.put("employee", tbManager);
-        data.put("position", position);
+        data.put("positionList", positionList);
         return data;
+    }
+
+    @Override
+    public List<TbManager> getUserListByOrgCode(String orgCode, String positionCode) {
+        DateFormat format = new SimpleDateFormat("yyyyMM");
+        String s = format.format(new Date());
+
+        Set<TbManager> set = new HashSet<TbManager>();
+        List<TbManager> orgList = this.loginRestMapper.getUserListByOrgCode(orgCode);
+        List<TbManager> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s);
+
+        CollectionUtils.addAll(set, orgList);
+        CollectionUtils.addAll(set, poList);
+        List<TbManager> result = new ArrayList(set);
+        return result;
     }
 
     private boolean checkPassword(String encryptPassword, String password, String salt) {

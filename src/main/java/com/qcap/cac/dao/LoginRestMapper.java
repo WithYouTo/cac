@@ -20,4 +20,8 @@ public interface LoginRestMapper {
     void updateManagerPwd(TbManager tbManager);
 
     TbAreaPosition selectAreaPositionByWorkNo(String workNo);
+
+    List<TbManager> getUserListByOrgCode(String orgCode);
+
+    List<TbManager> getUserListByPositionCode(@Param("positionCode")String positionCode,@Param("month")String month);
 }

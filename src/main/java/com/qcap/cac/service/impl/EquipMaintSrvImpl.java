@@ -68,7 +68,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
                 //1、重组维保记录对象
                 BeanUtils.copyProperties(equipInfo,equipMaint);
                 BeanUtils.copyProperties(equipInfo,equipPlan);
-                equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
+                equipMaint.setMaintType(CommonConstant.MAINT_TYPE_EQUIP);
                 Date time = format.parse(equipMaintInsertDto.getMaintTime());
 
 
@@ -84,7 +84,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
 
                     BeanUtils.copyProperties(equipParts,equipMaint);
                     BeanUtils.copyProperties(equipParts,equipPlan);
-                    equipMaint.setEquipType(CommonConstant.MAINT_TYPE_PARTS);
+                    equipMaint.setMaintType(CommonConstant.MAINT_TYPE_PARTS);
                 }
 
                 //2、新增一条维保记录
