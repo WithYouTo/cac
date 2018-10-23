@@ -1,6 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.PlanMapper;
 import com.qcap.cac.dto.PlanDto;
 import com.qcap.cac.dto.QueryPlanListDto;
 import com.qcap.cac.entity.TbPlan;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.PlanSrv;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 
 @Service
@@ -32,7 +33,7 @@ public class PlanSrvImpl implements PlanSrv {
 	}
 
 	@Override
-	public void addPlan(PlanDto planDto, String userId) throws Exception {
+	public void addPlan(PlanDto planDto) throws Exception {
 		String[] planStartTimeArr = planDto.getPlanStartTime().split(",");
 		String[] planEndTimeArr = planDto.getPlanEndTime().split(",");
 		if (planStartTimeArr != null && planEndTimeArr != null && planStartTimeArr.length == planEndTimeArr.length) {
@@ -46,14 +47,20 @@ public class PlanSrvImpl implements PlanSrv {
 				plan.setStartTime(planStartTime);
 				plan.setEndTime(planEndTime);
 
-				plan.setCreateEmp(userId);
+				if (CommonConstant.PLAN_TIME_TYPE_DAY.equals(plan.getPlanTimeType())) {
+					plan.setMonth(null);
+					plan.setDay(null);
+					plan.setWeek(null);
+				}
+
+				plan = EntityTools.setCreateEmpAndTime(plan);
 				planMapper.insert(plan);
 			}
 		}
 	}
 
 	@Override
-	public void editPlan(PlanDto planDto, String userId) throws Exception {
+	public void editPlan(PlanDto planDto) throws Exception {
 		TbPlan plan = planMapper.selectPlanById(planDto.getPlanId());
 		if (plan != null) {
 			BeanUtils.copyProperties(plan, planDto);
@@ -61,8 +68,13 @@ public class PlanSrvImpl implements PlanSrv {
 			plan.setStartTime(planDto.getPlanStartTime());
 			plan.setEndTime(planDto.getPlanEndTime());
 
-			plan.setUpdateEmp(userId);
-			plan.setUpdateDate(new Date());
+			if (CommonConstant.PLAN_TIME_TYPE_DAY.equals(plan.getPlanTimeType())) {
+				plan.setMonth(null);
+				plan.setDay(null);
+				plan.setWeek(null);
+			}
+
+			plan = EntityTools.setUpdateEmpAndTime(plan);
 			planMapper.updatePlan(plan);
 		} else {
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, CommonCodeConstant.ERROR_CODE_40401_MSG);

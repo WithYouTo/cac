@@ -1,9 +1,12 @@
 package com.qcap.cac.constant;
 
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CommonConstant {
+
+	public final static SimpleDateFormat sdf_YMDHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	// 设备状态
 	public final static String EQUIP_STATUS_NORMAL = "NORMAL";
@@ -182,6 +185,15 @@ public class CommonConstant {
 	static {
 		GUARANTEE_TYPE.put("NORMAL", "一般");
 		GUARANTEE_TYPE.put("IMPORTANT", "重要");
+	}
+
+	// 是否已读
+	public final static String READ_FLAG_0 = "0";
+	public final static String READ_FLAG_1 = "1";
+	public static Map<String, String> READ_FLAG = new LinkedHashMap<String, String>();
+	static {
+		READ_FLAG.put("0", "未读");
+		READ_FLAG.put("1", "已读");
 	}
 
 }
