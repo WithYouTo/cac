@@ -11,20 +11,23 @@
  */
 package com.qcap.cac.rest;
 
-import com.qcap.cac.constant.CommonCodeConstant;
-import com.qcap.cac.dto.EventTaskRestDto;
-import com.qcap.cac.service.EventTaskRestSrv;
-import com.qcap.cac.tools.CommonTools;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.validation.Valid;
-import java.util.Map;
+import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.dto.EventTaskRestDto;
+import com.qcap.cac.service.EventTaskRestSrv;
+import com.qcap.core.model.ResParams;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * @ClassName: GoodsApplyRestController
@@ -45,7 +48,7 @@ public class GoodsApplyRestController {
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object geneEventTask(@Valid EventTaskRestDto eventTaskDto) {
 			this.eventTaskSrvImpl.geneEventTask(eventTaskDto);
-			return CommonTools.setMessage(CommonCodeConstant.SUCCESS_CODE, "新增航班数据成功",null);
+			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "新增航班数据成功",null);
 
 	}
 
