@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.EventTaskRestDto;
 import com.qcap.cac.service.EventTaskRestSrv;
-import com.qcap.cac.tools.CommonTools;
+import com.qcap.core.model.ResParams;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(description="事件性任务接口")
 @RestController
-@RequestMapping(value="/eventTask",headers="api_version=v1")
+@RequestMapping(value="/rest/eventTask",headers="api_version=v1")
 public class EventTaskRestController {
 	
 	@Resource
@@ -50,7 +50,7 @@ public class EventTaskRestController {
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object geneEventTask(@Valid EventTaskRestDto eventTaskDto) {
 			this.eventTaskSrvImpl.geneEventTask(eventTaskDto);
-			return CommonTools.setMessage(CommonCodeConstant.SUCCESS_CODE, "新增航班数据成功",null);
+			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "新增航班数据成功");
 		
 	}
 

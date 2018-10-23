@@ -195,10 +195,6 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 //		task.setTaskScore(taskScore);
 //		task.setTaskAdvice(taskAdvice);
 		task.setCreateDate(now);
-		/**
-		 * 登录没做，无法获取登录人
-		 * TODO
-		 */
 		task.setCreateEmp(eventTaskDto.getLoginName());
 		task.setVersion(0);
 		
