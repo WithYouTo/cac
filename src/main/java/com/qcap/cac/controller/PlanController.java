@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,10 +27,7 @@ import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
-import com.qcap.core.utils.jwt.JwtProperties;
-import com.qcap.core.utils.jwt.JwtTokenUtil;
 
-@SuppressWarnings("static-access")
 @RestController
 @RequestMapping("/plan")
 public class PlanController {
@@ -41,12 +37,6 @@ public class PlanController {
 
 	@Resource
 	private CommonSrv commonSrv;
-
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-
-	@Autowired
-	private JwtProperties jwtProperties;
 
 	@RequestMapping(value = "/queryPlanListByPage", method = RequestMethod.POST)
 	public PageResParams queryPlanListByPage(@Valid QueryPlanListDto queryPlanListDto) {
@@ -67,19 +57,13 @@ public class PlanController {
 
 	@RequestMapping(value = "/addPlan", method = RequestMethod.POST)
 	public ResParams addPlan(HttpServletRequest request, @Valid PlanDto planDto) throws Exception {
-
-		String token = request.getHeader(jwtProperties.getTokenHeader());
-		String userId = jwtTokenUtil.getUsernameFromToken(token);
-		this.planSrv.addPlan(planDto, userId);
+		this.planSrv.addPlan(planDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC);
 	}
 
 	@RequestMapping(value = "/editPlan", method = RequestMethod.POST)
 	public ResParams editPlan(HttpServletRequest request, @Valid PlanDto planDto) throws Exception {
-
-		String token = request.getHeader(jwtProperties.getTokenHeader());
-		String userId = jwtTokenUtil.getUsernameFromToken(token);
-		this.planSrv.editPlan(planDto, userId);
+		this.planSrv.editPlan(planDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
 	}
 
