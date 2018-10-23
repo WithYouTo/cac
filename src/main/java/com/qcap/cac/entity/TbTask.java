@@ -1,17 +1,9 @@
 package com.qcap.cac.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class TbTask implements Serializable {
+public class TbTask {
     /**
-	 * @fieldName: serialVersionUID
-	 * @fieldType: long
-	 * @Description: TODO
-	 */
-	private static final long serialVersionUID = 3485330243865514103L;
-
-	/**
     *   主键
      */
     private String taskId;
@@ -147,6 +139,16 @@ public class TbTask implements Serializable {
     private Date taskRemindTime;
 
     /**
+    *   清洁人员反馈图片路径
+     */
+    private String feedbackImgUrl;
+
+    /**
+    *   检查人员上传图片路径
+     */
+    private String checkImgUrl;
+
+    /**
     *   
      */
     private String lineNo;
@@ -197,7 +199,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.TASK_ID
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getTaskId() {
         return taskId;
@@ -209,7 +211,7 @@ public class TbTask implements Serializable {
      *
      * @param taskId the value for tb_task.TASK_ID
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setTaskId(String taskId) {
         this.taskId = taskId == null ? null : taskId.trim();
@@ -221,7 +223,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.TASK_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getTaskCode() {
         return taskCode;
@@ -233,7 +235,7 @@ public class TbTask implements Serializable {
      *
      * @param taskCode the value for tb_task.TASK_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setTaskCode(String taskCode) {
         this.taskCode = taskCode == null ? null : taskCode.trim();
@@ -245,7 +247,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.PLAN_ID
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getPlanId() {
         return planId;
@@ -257,7 +259,7 @@ public class TbTask implements Serializable {
      *
      * @param planId the value for tb_task.PLAN_ID
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setPlanId(String planId) {
         this.planId = planId == null ? null : planId.trim();
@@ -269,7 +271,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.TASK_TYPE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getTaskType() {
         return taskType;
@@ -281,7 +283,7 @@ public class TbTask implements Serializable {
      *
      * @param taskType the value for tb_task.TASK_TYPE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setTaskType(String taskType) {
         this.taskType = taskType == null ? null : taskType.trim();
@@ -293,7 +295,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.POSITION_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getPositionCode() {
         return positionCode;
@@ -305,7 +307,7 @@ public class TbTask implements Serializable {
      *
      * @param positionCode the value for tb_task.POSITION_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setPositionCode(String positionCode) {
         this.positionCode = positionCode == null ? null : positionCode.trim();
@@ -317,7 +319,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.POSITION_NAME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getPositionName() {
         return positionName;
@@ -329,7 +331,7 @@ public class TbTask implements Serializable {
      *
      * @param positionName the value for tb_task.POSITION_NAME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setPositionName(String positionName) {
         this.positionName = positionName == null ? null : positionName.trim();
@@ -341,7 +343,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.AREA_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getAreaCode() {
         return areaCode;
@@ -353,7 +355,7 @@ public class TbTask implements Serializable {
      *
      * @param areaCode the value for tb_task.AREA_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setAreaCode(String areaCode) {
         this.areaCode = areaCode == null ? null : areaCode.trim();
@@ -365,7 +367,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.AREA_NAME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getAreaName() {
         return areaName;
@@ -377,7 +379,7 @@ public class TbTask implements Serializable {
      *
      * @param areaName the value for tb_task.AREA_NAME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setAreaName(String areaName) {
         this.areaName = areaName == null ? null : areaName.trim();
@@ -389,7 +391,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.STANDARD_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getStandardCode() {
         return standardCode;
@@ -401,7 +403,7 @@ public class TbTask implements Serializable {
      *
      * @param standardCode the value for tb_task.STANDARD_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setStandardCode(String standardCode) {
         this.standardCode = standardCode == null ? null : standardCode.trim();
@@ -413,7 +415,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.STANDARD_NAME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getStandardName() {
         return standardName;
@@ -425,7 +427,7 @@ public class TbTask implements Serializable {
      *
      * @param standardName the value for tb_task.STANDARD_NAME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setStandardName(String standardName) {
         this.standardName = standardName == null ? null : standardName.trim();
@@ -437,7 +439,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.SHIFT
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getShift() {
         return shift;
@@ -449,7 +451,7 @@ public class TbTask implements Serializable {
      *
      * @param shift the value for tb_task.SHIFT
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setShift(String shift) {
         this.shift = shift == null ? null : shift.trim();
@@ -461,7 +463,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.SPEC
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getSpec() {
         return spec;
@@ -473,7 +475,7 @@ public class TbTask implements Serializable {
      *
      * @param spec the value for tb_task.SPEC
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setSpec(String spec) {
         this.spec = spec == null ? null : spec.trim();
@@ -485,7 +487,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.EMPLOYEE_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getEmployeeCode() {
         return employeeCode;
@@ -497,7 +499,7 @@ public class TbTask implements Serializable {
      *
      * @param employeeCode the value for tb_task.EMPLOYEE_CODE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setEmployeeCode(String employeeCode) {
         this.employeeCode = employeeCode == null ? null : employeeCode.trim();
@@ -509,7 +511,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.EMPLOYEE_NAME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getEmployeeName() {
         return employeeName;
@@ -521,7 +523,7 @@ public class TbTask implements Serializable {
      *
      * @param employeeName the value for tb_task.EMPLOYEE_NAME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName == null ? null : employeeName.trim();
@@ -533,7 +535,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.EMPLOYEE_TEL
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getEmployeeTel() {
         return employeeTel;
@@ -545,7 +547,7 @@ public class TbTask implements Serializable {
      *
      * @param employeeTel the value for tb_task.EMPLOYEE_TEL
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setEmployeeTel(String employeeTel) {
         this.employeeTel = employeeTel == null ? null : employeeTel.trim();
@@ -557,7 +559,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.COMPLETE_TIME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public Date getCompleteTime() {
         return completeTime;
@@ -569,7 +571,7 @@ public class TbTask implements Serializable {
      *
      * @param completeTime the value for tb_task.COMPLETE_TIME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setCompleteTime(Date completeTime) {
         this.completeTime = completeTime;
@@ -581,7 +583,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.START_TIME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public Date getStartTime() {
         return startTime;
@@ -593,7 +595,7 @@ public class TbTask implements Serializable {
      *
      * @param startTime the value for tb_task.START_TIME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
@@ -605,7 +607,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.END_TIME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public Date getEndTime() {
         return endTime;
@@ -617,7 +619,7 @@ public class TbTask implements Serializable {
      *
      * @param endTime the value for tb_task.END_TIME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
@@ -629,7 +631,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.TASK_STATUS
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getTaskStatus() {
         return taskStatus;
@@ -641,7 +643,7 @@ public class TbTask implements Serializable {
      *
      * @param taskStatus the value for tb_task.TASK_STATUS
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setTaskStatus(String taskStatus) {
         this.taskStatus = taskStatus == null ? null : taskStatus.trim();
@@ -653,7 +655,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.CHECK_STATUS
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getCheckStatus() {
         return checkStatus;
@@ -665,7 +667,7 @@ public class TbTask implements Serializable {
      *
      * @param checkStatus the value for tb_task.CHECK_STATUS
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setCheckStatus(String checkStatus) {
         this.checkStatus = checkStatus == null ? null : checkStatus.trim();
@@ -677,7 +679,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.TASK_SCORE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public Integer getTaskScore() {
         return taskScore;
@@ -689,7 +691,7 @@ public class TbTask implements Serializable {
      *
      * @param taskScore the value for tb_task.TASK_SCORE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setTaskScore(Integer taskScore) {
         this.taskScore = taskScore;
@@ -701,7 +703,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.UPLOAD_PIC_FLAG
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getUploadPicFlag() {
         return uploadPicFlag;
@@ -713,7 +715,7 @@ public class TbTask implements Serializable {
      *
      * @param uploadPicFlag the value for tb_task.UPLOAD_PIC_FLAG
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setUploadPicFlag(String uploadPicFlag) {
         this.uploadPicFlag = uploadPicFlag == null ? null : uploadPicFlag.trim();
@@ -725,7 +727,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.CHECK_FLAG
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getCheckFlag() {
         return checkFlag;
@@ -737,7 +739,7 @@ public class TbTask implements Serializable {
      *
      * @param checkFlag the value for tb_task.CHECK_FLAG
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setCheckFlag(String checkFlag) {
         this.checkFlag = checkFlag == null ? null : checkFlag.trim();
@@ -749,7 +751,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.TASK_ADVICE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getTaskAdvice() {
         return taskAdvice;
@@ -761,7 +763,7 @@ public class TbTask implements Serializable {
      *
      * @param taskAdvice the value for tb_task.TASK_ADVICE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setTaskAdvice(String taskAdvice) {
         this.taskAdvice = taskAdvice == null ? null : taskAdvice.trim();
@@ -773,7 +775,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.TASK_FINISH_DESC
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getTaskFinishDesc() {
         return taskFinishDesc;
@@ -785,7 +787,7 @@ public class TbTask implements Serializable {
      *
      * @param taskFinishDesc the value for tb_task.TASK_FINISH_DESC
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setTaskFinishDesc(String taskFinishDesc) {
         this.taskFinishDesc = taskFinishDesc == null ? null : taskFinishDesc.trim();
@@ -797,7 +799,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.DISQUALIFIED_REASON
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getDisqualifiedReason() {
         return disqualifiedReason;
@@ -809,7 +811,7 @@ public class TbTask implements Serializable {
      *
      * @param disqualifiedReason the value for tb_task.DISQUALIFIED_REASON
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setDisqualifiedReason(String disqualifiedReason) {
         this.disqualifiedReason = disqualifiedReason == null ? null : disqualifiedReason.trim();
@@ -821,7 +823,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.TASK_REMIND_TIME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public Date getTaskRemindTime() {
         return taskRemindTime;
@@ -833,10 +835,58 @@ public class TbTask implements Serializable {
      *
      * @param taskRemindTime the value for tb_task.TASK_REMIND_TIME
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setTaskRemindTime(Date taskRemindTime) {
         this.taskRemindTime = taskRemindTime;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column tb_task.FEEDBACK_IMG_URL
+     *
+     * @return the value of tb_task.FEEDBACK_IMG_URL
+     *
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
+     */
+    public String getFeedbackImgUrl() {
+        return feedbackImgUrl;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column tb_task.FEEDBACK_IMG_URL
+     *
+     * @param feedbackImgUrl the value for tb_task.FEEDBACK_IMG_URL
+     *
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
+     */
+    public void setFeedbackImgUrl(String feedbackImgUrl) {
+        this.feedbackImgUrl = feedbackImgUrl == null ? null : feedbackImgUrl.trim();
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method returns the value of the database column tb_task.CHECK_IMG_URL
+     *
+     * @return the value of tb_task.CHECK_IMG_URL
+     *
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
+     */
+    public String getCheckImgUrl() {
+        return checkImgUrl;
+    }
+
+    /**
+     * This method was generated by MyBatis Generator.
+     * This method sets the value of the database column tb_task.CHECK_IMG_URL
+     *
+     * @param checkImgUrl the value for tb_task.CHECK_IMG_URL
+     *
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
+     */
+    public void setCheckImgUrl(String checkImgUrl) {
+        this.checkImgUrl = checkImgUrl == null ? null : checkImgUrl.trim();
     }
 
     /**
@@ -845,7 +895,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.LINE_NO
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getLineNo() {
         return lineNo;
@@ -857,7 +907,7 @@ public class TbTask implements Serializable {
      *
      * @param lineNo the value for tb_task.LINE_NO
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setLineNo(String lineNo) {
         this.lineNo = lineNo == null ? null : lineNo.trim();
@@ -869,7 +919,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.REMARK1
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getRemark1() {
         return remark1;
@@ -881,7 +931,7 @@ public class TbTask implements Serializable {
      *
      * @param remark1 the value for tb_task.REMARK1
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setRemark1(String remark1) {
         this.remark1 = remark1 == null ? null : remark1.trim();
@@ -893,7 +943,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.REMARK2
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getRemark2() {
         return remark2;
@@ -905,7 +955,7 @@ public class TbTask implements Serializable {
      *
      * @param remark2 the value for tb_task.REMARK2
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setRemark2(String remark2) {
         this.remark2 = remark2 == null ? null : remark2.trim();
@@ -917,7 +967,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.REMARK3
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getRemark3() {
         return remark3;
@@ -929,7 +979,7 @@ public class TbTask implements Serializable {
      *
      * @param remark3 the value for tb_task.REMARK3
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setRemark3(String remark3) {
         this.remark3 = remark3 == null ? null : remark3.trim();
@@ -941,7 +991,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.CREATE_EMP
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getCreateEmp() {
         return createEmp;
@@ -953,7 +1003,7 @@ public class TbTask implements Serializable {
      *
      * @param createEmp the value for tb_task.CREATE_EMP
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setCreateEmp(String createEmp) {
         this.createEmp = createEmp == null ? null : createEmp.trim();
@@ -965,7 +1015,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.CREATE_DATE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public Date getCreateDate() {
         return createDate;
@@ -977,7 +1027,7 @@ public class TbTask implements Serializable {
      *
      * @param createDate the value for tb_task.CREATE_DATE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
@@ -989,7 +1039,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.UPDATE_DATE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public Date getUpdateDate() {
         return updateDate;
@@ -1001,7 +1051,7 @@ public class TbTask implements Serializable {
      *
      * @param updateDate the value for tb_task.UPDATE_DATE
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
@@ -1013,7 +1063,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.UPDATE_EMP
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public String getUpdateEmp() {
         return updateEmp;
@@ -1025,7 +1075,7 @@ public class TbTask implements Serializable {
      *
      * @param updateEmp the value for tb_task.UPDATE_EMP
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setUpdateEmp(String updateEmp) {
         this.updateEmp = updateEmp == null ? null : updateEmp.trim();
@@ -1037,7 +1087,7 @@ public class TbTask implements Serializable {
      *
      * @return the value of tb_task.VERSION
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public Integer getVersion() {
         return version;
@@ -1049,7 +1099,7 @@ public class TbTask implements Serializable {
      *
      * @param version the value for tb_task.VERSION
      *
-     * @mbggenerated Tue Oct 16 11:48:39 CST 2018
+     * @mbggenerated Tue Oct 23 16:13:12 CST 2018
      */
     public void setVersion(Integer version) {
         this.version = version;
