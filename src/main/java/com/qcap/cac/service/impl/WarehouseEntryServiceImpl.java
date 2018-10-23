@@ -176,13 +176,14 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             String  stockId = UUIDUtils.getUUID();
             //判断物品编码是否在库存表中存在
             QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
-             wrapper.eq("GOODS_NO",buyNo)
-                    .eq("SUPPLIER_NAME",supplierName)
+            wrapper.eq("GOODS_NO",buyNo)
+                    //.eq("SUPPLIER_NAME",supplierName)
                     .eq("STOREROOM_ID",storeroomId);
 
              //存在，直接更新库存数量
             if( warehouseStockMapper.selectCount(wrapper) > 0){
                 TbWarehouseStock warehouseStock = warehouseStockMapper.selectOne(wrapper);
+                BeanUtil.copyProperties(item,warehouseStock);
                 BigDecimal oldNum = new BigDecimal(warehouseStock.getGoodsNum());
                 BigDecimal goodsNum = oldNum.add(new BigDecimal(sumNum));
                 warehouseStock.setGoodsNum(ToolUtil.toInt(goodsNum));

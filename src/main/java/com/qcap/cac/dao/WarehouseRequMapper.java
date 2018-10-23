@@ -21,4 +21,14 @@ public interface WarehouseRequMapper extends BaseMapper<TbWarehouseRequ> {
 
     List<Map<String,String>> getRequGoodsList(WarehouseReqDto warehouseReqDto);
 
+    /**
+     * 根据用户Id查询岗位Id
+     * @param param
+     * @return
+     */
+    String getPositionIdByEmployeeId(Map<String,String> param);
+
+
+
+
 }

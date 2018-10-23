@@ -8,17 +8,21 @@ import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.service.WarehouseReqDetailService;
 import com.qcap.cac.service.WarehouseRequService;
-import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
+import com.qcap.core.utils.jwt.JwtProperties;
+import com.qcap.core.utils.jwt.JwtTokenUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +37,12 @@ import java.util.Map;
 @RequestMapping("/warehouseReqGoods")
 public class WarehouseReqGoodsController {
 
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private JwtProperties jwtProperties;
 
     @Autowired
     private WarehouseReqDetailService warehouseReqDetailService;
@@ -69,7 +79,7 @@ public class WarehouseReqGoodsController {
         List<Map<String,String>> list =  this.warehouseRequService.getRequList(warehouseReqDto);
         PageInfo pageInfo = new PageInfo(list);
 
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", pageInfo.getTotal(), list);
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
     }
 
 
@@ -85,7 +95,7 @@ public class WarehouseReqGoodsController {
         List<Map<String,Object>> list =  this.warehouseReqDetailService.getReqDetailList(warehouseRequId);
         PageInfo pageInfo = new PageInfo(list);
 
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", pageInfo.getTotal(), list);
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
     }
 
 
@@ -94,15 +104,19 @@ public class WarehouseReqGoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Object addRequ(TbWarehouseRequ warehouseRequ) {
+    public Object addRequ(@Valid  TbWarehouseRequ warehouseRequ, HttpServletRequest request) {
        if(null == warehouseRequ){
            ResParams.newInstance(CoreConstant.FAIL_CODE,"领用单参数为空",null);
        }
 
-       warehouseRequ.setRequBatchNo(UUIDUtils.getBatchNo());
-       warehouseRequ.setRequStatus("INIT");
-       warehouseRequ.setCreateEmp("SYS");
-       this.warehouseRequService.save(warehouseRequ);
+        String token = request.getHeader(jwtProperties.getTokenHeader());
+        String userId = jwtTokenUtil.getUsernameFromToken(token);
+
+        try {
+           this.warehouseRequService.insertWarehouseRequ(warehouseRequ,userId);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
+        }
        return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.ADD_SUCCESS,null);
     }
 
@@ -151,18 +165,45 @@ public class WarehouseReqGoodsController {
 
 
     /**
+     * 物品列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/goodsList", method = RequestMethod.POST)
+    public Object goodsList(@Valid  String storeroomId) {
+        if(StringUtils.isEmpty(storeroomId)){
+            ResParams.newInstance(CoreConstant.FAIL_CODE,"查询物品列表参数为空",null);
+        }
+
+        //返回主键
+        Map<String,Object> map =new HashMap<>();
+        try {
+            List<Map<String,String>> list = this.warehouseReqDetailService.GoodsNoAppList(storeroomId);
+            map.put("goodsList",list);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
+        }
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_QUERY_DESC,map);
+    }
+
+
+    /**
      * 新增领用明细
      */
     @ResponseBody
     @RequestMapping(value = "/addDetail", method = RequestMethod.POST)
-    public Object addReqDetail(TbWarehouseReqdetail warehouseReqdetail) {
+    public Object addReqDetail(@Valid  TbWarehouseReqdetail warehouseReqdetail) {
         if(null == warehouseReqdetail){
             ResParams.newInstance(CoreConstant.FAIL_CODE,"领用明细参数为空",null);
         }
 
-        Map<String,String> map = new HashMap<>();
-        String warehouseRequId = this.warehouseReqDetailService.insertReqDetail(warehouseReqdetail);
-        map.put("warehouseRequId",warehouseRequId);
+        //返回主键
+        Map<String,String> map =new HashMap<>();
+        try {
+            String warehouseRequId = this.warehouseReqDetailService.insertReqDetail(warehouseReqdetail);
+            map.put("warehouseRequId",warehouseRequId);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
+        }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.ADD_SUCCESS,map);
     }
 

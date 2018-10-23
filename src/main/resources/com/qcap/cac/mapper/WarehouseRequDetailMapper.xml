@@ -92,6 +92,16 @@
         where WAREHOUSE_REQU_ID = #{warehouseRequId}  and REQU_STATUS = #{requStatus}
     </update>
 
+    <!--查询物品下拉框-->
+    <select id="GoodsNoAppList" parameterType="String" resultType="Map">
+        select
+        GOODS_NO id,
+        GOODS_NAME goodsName
+        from  tb_warehouse_stock
+        where STOREROOM_ID = #{storeroomId}
+        group  by GOODS_NO
+    </select>
+
 
 
 </mapper>

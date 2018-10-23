@@ -29,8 +29,9 @@
                  left join tb_manager c on b.manager_id = c.id
         where a.num = 1 AND LENGTH(IFNULL(c.id,'')) > 0
 	</select>
-	
-	<select id="queryReqList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestDto">
+
+    <!--库管领用单列表-->
+	<select id="queryReqListByKuGuan" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestDto">
 	SELECT
 	WAREHOUSE_REQU_ID,
 	STOREROOM_ID,
@@ -39,43 +40,38 @@
 	REQU_PERSON,
 	REQU_MOBILE,
 	REQU_NAME,
+	a.POSITION_ID,
+	(select b.POSITION_NAME from tb_area_position b where a.POSITION_ID = b.POSITION_ID) positionName,
 	DATE_FORMAT(REQU_TIME,'%Y-%m-%d') requTime,
 	DATE_FORMAT(CREATE_DATE,'%Y-%m-%d %H:%i:%s') createDate,
 	REQU_REMARK,
 	REQU_STATUS
 	from tb_warehouse_requ a
-	WHERE FIND_IN_SET(#{positionId},POSITION_ID)
-	AND REQU_STATUS =#{requStatus}
+	LEFT JOIN tb_warehouse_requ b
+    on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
+	WHERE DATE(a.REQU_TIME) =#{date}
+	/*AND FIND_IN_SET(#{positionId},POSITION_ID)*/
+	AND b.REQU_STATUS =#{requStatus}
 	</select>
 
 
-	<!--查询领用明细-->
-	<select id="queryReqDetailList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestDto">
-	select
-        a.WAREHOUSE_REQU_ID,
+	<!--库管查询领用明细-->
+	<select id="queryReqDetailList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqDetailRestDto">
+	 SELECT
+	    a.WAREHOUSE_REQU_ID,
         WAREHOUSE_REQDETAIL_ID,
-        STOREROOM_ID,
-        STOREROOM,
-        REQU_BATCH_NO,
-        REQU_PERSON,
-        REQU_MOBILE,
-        REQU_NAME,
-        DATE_FORMAT(REQU_TIME,'%Y-%m-%d') requTime,
-        a.REQU_STATUS,
         a.GOODS_NO  goodsNo,
         a.GOODS_NAME goodsName,
-        REQU_LOC,
-        REQU_LOC_NAME,
         APPLY_NUM,
-        REAL_NUM,
         MIN_UNIT,
+        (SELECT IFNULL(SUM(GOODS_NUM),0) FROM tb_warehouse_stock c WHERE c.GOODS_NAME = a.GOODS_NAME) goodsNum,
         a.REQU_REMARK
         from tb_warehouse_reqdetail a
         LEFT JOIN tb_warehouse_requ b
         on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
         where  a.WAREHOUSE_REQU_ID = #{warehouseRequId}
         AND a.REQU_STATUS =#{requStatus}
-        order by a.CREATE_DATE DESC
+        order by a.GOODS_NO
 	</select>
 	
 	

@@ -1,12 +1,10 @@
 package com.qcap.cac.service;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -31,5 +29,13 @@ public interface WarehouseReqDetailService extends IService<TbWarehouseReqdetail
      * @return
      */
     String insertReqDetail(TbWarehouseReqdetail warehouseReqdetail);
+
+
+    /**
+     * 查询物品编码下拉框
+     * @param storeroomId
+     * @return
+     */
+    List<Map<String,String>> GoodsNoAppList(String storeroomId);
 
 }

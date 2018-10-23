@@ -47,6 +47,11 @@ public class GoodsReqRestDto {
 	 */
 	private String positionId;
 
+    /**
+     *   岗位名称
+     */
+    private String positionName;
+
 
 	/**
 	 *   领用事由
@@ -63,7 +68,15 @@ public class GoodsReqRestDto {
 	 */
 	private String createDate;
 
-	public String getWarehouseRequId() {
+    public String getPositionName() {
+        return positionName;
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
+    }
+
+    public String getWarehouseRequId() {
 		return warehouseRequId;
 	}
 

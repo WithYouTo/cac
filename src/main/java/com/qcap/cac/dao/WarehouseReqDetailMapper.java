@@ -28,4 +28,11 @@ public interface WarehouseReqDetailMapper extends BaseMapper<TbWarehouseReqdetai
 
     Integer deleteReqDetailStatus(TbWarehouseRequ warehouseRequ);
 
+    /**
+     * 查询物品编码下拉框
+     * @param storeroomId
+     * @return
+     */
+    List<Map<String,String>> GoodsNoAppList(String storeroomId);
+
 }

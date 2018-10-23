@@ -1,6 +1,7 @@
 package com.qcap.cac.service.impl;
 
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.WarehouseReqDetailMapper;
@@ -8,13 +9,12 @@ import com.qcap.cac.dao.WarehouseRequMapper;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.service.WarehouseRequService;
+import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -26,6 +26,8 @@ import java.util.Map;
  */
 @Service
 public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, TbWarehouseRequ> implements WarehouseRequService {
+
+    private static final String yyyyMM_DATEFORMAT = "yyyyMM";
 
     @Resource
     private WarehouseRequMapper warehouseRequMapper;
@@ -85,5 +87,28 @@ public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, T
         //删除明细表
         count = this.warehouseReqDetailMapper.deleteReqDetailStatus(warehouseRequ);
         return count;
+    }
+
+    @Override
+    public Integer insertWarehouseRequ(TbWarehouseRequ warehouseRequ,String userId) {
+
+        String month = DateUtil.format(new Date(),yyyyMM_DATEFORMAT);
+
+        Map<String,String> parmMap = new HashMap<>();
+        parmMap.put("employeeId",userId);
+        parmMap.put("month",month);
+        String positionId = warehouseRequMapper.getPositionIdByEmployeeId(parmMap);
+
+        //排班表中数据正确后放开
+//        if(StringUtils.isEmpty(positionId)){
+//            throw  new RuntimeException("根据工号没有查询到当日的排班信息");
+//        }
+
+        warehouseRequ.setPositionId(positionId);
+        warehouseRequ.setRequBatchNo(UUIDUtils.getBatchNo());
+        warehouseRequ.setRequStatus("INIT");
+        warehouseRequ.setCreateEmp("SYS");
+
+        return this.warehouseRequMapper.insert(warehouseRequ);
     }
 }
