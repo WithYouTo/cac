@@ -159,6 +159,8 @@ public class CommonConstant {
 		PLAN_TIME_TYPE.put("MONTH", "每月");
 		PLAN_TIME_TYPE.put("YEAR", "每年");
 	}
+	// 周期性计划，当为时间类型为每天时
+	public final static String DAY_ALL = "ALL";
 
 	// 删除标识
 	public final static String DELETE_FLAG_DELETE = "DELETE";

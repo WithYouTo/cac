@@ -49,8 +49,16 @@ public class PlanSrvImpl implements PlanSrv {
 
 				if (CommonConstant.PLAN_TIME_TYPE_DAY.equals(plan.getPlanTimeType())) {
 					plan.setMonth(null);
-					plan.setDay(null);
+					plan.setDay(CommonConstant.DAY_ALL);
 					plan.setWeek(null);
+				} else if (CommonConstant.PLAN_TIME_TYPE_MONTH.equals(plan.getPlanTimeType())) {
+					plan.setMonth(null);
+					plan.setWeek(null);
+				} else if (CommonConstant.PLAN_TIME_TYPE_YEAR.equals(plan.getPlanTimeType())) {
+					plan.setWeek(null);
+				} else if (CommonConstant.PLAN_TIME_TYPE_WEEK.equals(plan.getPlanTimeType())) {
+					plan.setMonth(null);
+					plan.setDay(null);
 				}
 
 				plan = EntityTools.setCreateEmpAndTime(plan);
@@ -65,13 +73,21 @@ public class PlanSrvImpl implements PlanSrv {
 		if (plan != null) {
 			BeanUtils.copyProperties(plan, planDto);
 			// plan.setPlanId(UUIDUtils.getUUID());
-			plan.setStartTime(planDto.getPlanStartTime());
-			plan.setEndTime(planDto.getPlanEndTime());
+			plan.setStartTime(planDto.getPlanStartTime().replace(",", ""));
+			plan.setEndTime(planDto.getPlanEndTime().replace(",", ""));
 
 			if (CommonConstant.PLAN_TIME_TYPE_DAY.equals(plan.getPlanTimeType())) {
 				plan.setMonth(null);
-				plan.setDay(null);
+				plan.setDay(CommonConstant.DAY_ALL);
 				plan.setWeek(null);
+			} else if (CommonConstant.PLAN_TIME_TYPE_MONTH.equals(plan.getPlanTimeType())) {
+				plan.setMonth(null);
+				plan.setWeek(null);
+			} else if (CommonConstant.PLAN_TIME_TYPE_YEAR.equals(plan.getPlanTimeType())) {
+				plan.setWeek(null);
+			} else if (CommonConstant.PLAN_TIME_TYPE_WEEK.equals(plan.getPlanTimeType())) {
+				plan.setMonth(null);
+				plan.setDay(null);
 			}
 
 			plan = EntityTools.setUpdateEmpAndTime(plan);
