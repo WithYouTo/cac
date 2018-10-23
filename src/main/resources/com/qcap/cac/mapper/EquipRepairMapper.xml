@@ -4,32 +4,35 @@
 
     <select id="listEquipRepair" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipRepairSearchDto">
         select
-        EQUIP_REPAIR_ID equipRepairId,
-        EQUIP_ID equipId,
-        EQUIP_NAME equipName,
-        EQUIP_NO equipNo,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        DATE_FORMAT(REPAIR_TIME,'%Y-%m-%d %H:%i:%S') repairTime,
-        PERSON_NAME personName,
-        PERSON_MOBILE personMobile,
-        EQUIP_DESC equipDesc,
-        STATUS status
-        from TB_EQUIP_REPAIR
-        where 1=1
+        a.EQUIP_REPAIR_ID equipRepairId,
+        a.EQUIP_ID equipId,
+        a.EQUIP_NAME equipName,
+        a.EQUIP_NO equipNo,
+        b.DESC1_ equipType,
+        a.EQUIP_MODEL equipModel,
+        DATE_FORMAT(a.REPAIR_TIME,'%Y-%m-%d %H:%i:%S') repairTime,
+        a.PERSON_NAME personName,
+        a.PERSON_MOBILE personMobile,
+        a.EQUIP_DESC equipDesc,
+        a.STATUS status
+        from TB_EQUIP_REPAIR a
+        LEFT JOIN tbpubcode01 b
+        ON a.EQUIP_TYPE = b.DESC_
+        where
+        b.CONFIG_CODE_ = 'EQUIP_TYPE'
         <if test="obj.equipType != null and obj.equipType != ''">
-            and EQUIP_TYPE = #{obj.equipType}
+            and a.EQUIP_TYPE = #{obj.equipType}
         </if>
         <if test="obj.equipName != null and obj.equipName != ''">
-            and EQUIP_NAME = #{obj.equipName}
+            and a.EQUIP_NAME = #{obj.equipName}
         </if>
         <if test="obj.repairTime != null and obj.repairTime != ''">
-            and REPAIR_TIME &gt; #{obj.repairTime}
+            and a.REPAIR_TIME &gt; #{obj.repairTime}
         </if>
         <if test="obj.status != null and obj.status != ''">
-            and STATUS = #{obj.status}
+            and a.STATUS = #{obj.status}
         </if>
-        ORDER BY REPAIR_TIME
+        ORDER BY a.REPAIR_TIME
     </select>
 
     <update id="updateEquipRepair" parameterType="com.qcap.cac.entity.TbEquipRepair">

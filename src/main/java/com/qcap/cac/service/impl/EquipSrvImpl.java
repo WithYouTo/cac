@@ -375,6 +375,7 @@ public class EquipSrvImpl implements EquipSrv {
             part.setPartsNo(partsNo.toString());
             part.setStartUseTime(equip.getStartUseTime());
             part.setEquipNo(equipNo);
+            part.setEquipType(equip.getEquipType());
             count++;
             this.equipPartsMapper.updatePartsNoAndNextMaintTimeByPartsId(part);
             insertMaintPlan(part);
