@@ -183,6 +183,26 @@ public class TbManager implements Serializable {
 		this.version = version;
 	}
 
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		TbManager tbManager = (TbManager) o;
+
+		return id.equals(tbManager.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
 	@Override
 	public String toString() {
 		return "TbManager{" + ", id=" + id + ", account=" + account + ", password=" + password + ", salt=" + salt

@@ -1,11 +1,10 @@
 package com.qcap.cac.controller;
 
-import com.qcap.cac.dto.ResetPasswordDto;
+import com.qcap.cac.dto.ResetPasswordReq;
 import com.qcap.cac.service.LoginRestSrv;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.common.CoreConstant;
-import com.qcap.core.entity.TbMenu;
-import com.qcap.core.model.MenuTree;
+import com.qcap.core.entity.TbManager;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +52,7 @@ public class LoginRestController {
      */
     @PostMapping("/login")
     public ResParams login(@RequestParam("employeeCode") String employeeCode, @RequestParam("password") String password) {
-        //todo 返回岗位信息和TbManager对象
+
         employeeCode = StringUtils.trimToEmpty(employeeCode);
         try {
             Map<String,Object> data = this.loginRestSrv.login(employeeCode, password);
@@ -63,6 +62,29 @@ public class LoginRestController {
         }
     }
 
+    /**
+     *
+     * @Description: 打开App调用方法
+     *
+     *
+     * @MethodName: login
+     * @Parameters: [employeeCode] 
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/23 10:47
+     */
+    @PostMapping("/getLoginInfo")
+    public ResParams getLoginInfo(@RequestParam("employeeCode") String employeeCode) {
+
+        employeeCode = StringUtils.trimToEmpty(employeeCode);
+        try {
+            Map<String,Object> data = this.loginRestSrv.getLoginInfo(employeeCode);
+            return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "获取信息成功！", data);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
+        }
+    }
 
 
     /**
@@ -115,7 +137,7 @@ public class LoginRestController {
      * @date 2018/10/22 14:20
      */
     @PostMapping("/resetPassword")
-    public ResParams resetPassword(ResetPasswordDto resetPasswordDto) throws Exception{
+    public ResParams resetPassword(ResetPasswordReq resetPasswordDto) throws Exception{
         this.loginRestSrv.resetPassword(resetPasswordDto);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
     }
@@ -140,7 +162,7 @@ public class LoginRestController {
 
     /**
      *
-     * @Description:
+     * @Description:获取APP下载地址
      *
      *
      * @MethodName: getAppUrl
@@ -156,6 +178,24 @@ public class LoginRestController {
         Map<String,Object> map = new HashMap<>();
         map.put("url",appUrl);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", map);
+    }
+
+    /**
+     *
+     * @Description: 获取人员列表
+     *
+     *
+     * @MethodName: getUserListByOrgCode
+     * @Parameters: [orgCode, positionCode] 
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/23 15:09
+     */
+    @PostMapping("/getUserListByOrgCode")
+    public ResParams getUserListByOrgCode(String orgCode,String positionCode){
+        List<TbManager> list = this.loginRestSrv.getUserListByOrgCode(orgCode,positionCode);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
     }
 
 }

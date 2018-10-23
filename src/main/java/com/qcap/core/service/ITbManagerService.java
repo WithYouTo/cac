@@ -66,4 +66,18 @@ public interface ITbManagerService {
 	 *            组织代码
 	 */
 	void buildOrfForManager(String managerId, String orgId);
+
+	/**
+	 *
+	 * @Description: 修改密码
+	 *
+	 *
+	 * @MethodName: resetPassword
+	 * @Parameters: [resetPasswordDto] 
+	 * @ReturnType: void
+	 *
+	 * @author huangxiang
+	 * @date 2018/10/23 9:25
+	 */
+	void changePassword(TbManager mgr, String newPwd, String oldPwd);
 }

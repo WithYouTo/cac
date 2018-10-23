@@ -35,9 +35,9 @@ public class EquipMaintController {
         this.equipMaintSrv.listEquipMaint(page,equipMaintSearchDto);
         List<Map<String, Object>> list = page.getRecords();
         for(Map<String,Object> map:list){
-            String status = map.get("equipType").toString();
+            String status = map.get("maintType").toString();
             CommonConstant.MAINT_TYPE.get(status);
-            map.put("equipTypeName", CommonConstant.MAINT_TYPE.get(status));
+            map.put("maintTypeName", CommonConstant.MAINT_TYPE.get(status));
         }
         return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(),list);
     }

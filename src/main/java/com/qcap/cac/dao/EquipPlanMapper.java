@@ -27,4 +27,8 @@ public interface EquipPlanMapper extends BaseMapper<TbEquipPlan>{
     void deletePlanByPartsId(String partsId);
 
     void deletePlanByEquipId(@Param("equipId") String equipId);
+
+    String selectPlanIdByEquipIdAndPartsId(TbEquipPlan equipPlan);
+
+    String selectPlanIdByEquipId(TbEquipPlan equipPlan);
 }

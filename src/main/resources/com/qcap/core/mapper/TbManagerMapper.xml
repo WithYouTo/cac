@@ -52,4 +52,13 @@
         </if>
         ORDER BY info.WORK_NO
     </select>
+
+    <update id="updateManagerPwd" parameterType="com.qcap.core.entity.TbManager">
+        UPDATE TB_MANAGER
+		SET
+		password = #{password},
+		salt = #{salt}
+		WHERE
+		id = #{id}
+    </update>
 </mapper>

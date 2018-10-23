@@ -1,5 +1,6 @@
 package com.qcap.cac.dao;
 
+import com.qcap.cac.entity.TbAreaPosition;
 import com.qcap.core.entity.TbManager;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,10 @@ public interface LoginRestMapper {
     List<Map<String,Object>> getAppUserInfoByManagerCode(@Param("employeeCode") String employeeCode);
 
     void updateManagerPwd(TbManager tbManager);
+
+    TbAreaPosition selectAreaPositionByWorkNo(String workNo);
+
+    List<TbManager> getUserListByOrgCode(String orgCode);
+
+    List<TbManager> getUserListByPositionCode(@Param("positionCode")String positionCode,@Param("month")String month);
 }

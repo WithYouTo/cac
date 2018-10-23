@@ -16,6 +16,7 @@ import com.qcap.cac.entity.TbEquipPlan;
 import com.qcap.cac.service.EquipMaintSrv;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,7 +69,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
                 //1、重组维保记录对象
                 BeanUtils.copyProperties(equipInfo,equipMaint);
                 BeanUtils.copyProperties(equipInfo,equipPlan);
-                equipMaint.setEquipType(CommonConstant.MAINT_TYPE_EQUIP);
+                equipMaint.setMaintType(CommonConstant.MAINT_TYPE_EQUIP);
                 Date time = format.parse(equipMaintInsertDto.getMaintTime());
 
 
@@ -84,7 +85,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
 
                     BeanUtils.copyProperties(equipParts,equipMaint);
                     BeanUtils.copyProperties(equipParts,equipPlan);
-                    equipMaint.setEquipType(CommonConstant.MAINT_TYPE_PARTS);
+                    equipMaint.setMaintType(CommonConstant.MAINT_TYPE_PARTS);
                 }
 
                 //2、新增一条维保记录
@@ -117,8 +118,18 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
         Date nextTime = getNewPlanDate(time,equipPlan.getMaintCycle());
         equipPlan.setNextMaintTime(nextTime);
         equipPlan.setLatestMaintTime(time);
-//        equipPlan.setLatestMaintDate(time);
-//        equipPlan.setNextMaintDate(getNewPlanDate(time,equipPlan.getMaintCycle()));
+
+
+        if(StringUtils.isEmpty(equipPlan.getPartsId())){
+            //todo 通过设备Id获取planID
+            String planId = this.equipPlanMapper.selectPlanIdByEquipId(equipPlan);
+            equipPlan.setPlanId(planId);
+        }else{
+            //todo 通过设备Id获取planID
+            String planId = this.equipPlanMapper.selectPlanIdByEquipIdAndPartsId(equipPlan);
+            equipPlan.setPlanId(planId);
+
+        }
         this.equipPlanMapper.updateEquipPlan(equipPlan);
     }
 

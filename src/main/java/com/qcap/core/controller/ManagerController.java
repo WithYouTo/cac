@@ -4,10 +4,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.qcap.cac.dto.ResetPasswordReq;
+import com.qcap.cac.service.LoginRestSrv;
 import com.qcap.core.entity.UserInsertDto;
+import com.qcap.core.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +35,11 @@ import cn.hutool.core.util.StrUtil;
 @RequestMapping("/mgr")
 public class ManagerController {
 
+	@Resource
 	private ITbManagerService managerService;
 
+	@Resource
+	private LoginRestSrv loginRestSrv;
 	/**
 	 * 添加用户
 	 *
@@ -124,36 +132,29 @@ public class ManagerController {
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.ROLE_SET_AUTH_SUCCESS, null);
 	}
 
-	// /**
-	// * 修改当前用户的密码
-	// */
-	// @PostMapping("/changePwd")
-	// public Object changePwd(@RequestParam String oldPwd, @RequestParam String
-	// newPwd, @RequestParam String rePwd) {
-	// if (!newPwd.equals(rePwd)) {
-	// throw new BussinessException(BizExceptionEnum.TWO_PWD_NOT_MATCH);
-	// }
-	// HttpSession session = getSession();
-	// TbManager manager = (TbManager) session.getAttribute("manager");
-	//
-	//
-	// String oldMd5 = Md5Util.encrypt(oldPwd,manager.getSalt());
-	// if (manager.getPassword().equals(oldMd5)) {
-	//
-	// String newSalt = Md5Util.getSalt();
-	// String newMd5 = Md5Util.encrypt(newPwd, newSalt);
-	//
-	// manager.setSalt(newSalt);
-	// manager.setPassword(newMd5);
-	//
-	// managerSrv.updateManagerPwd(manager);
-	// return SUCCESS_TIP;
-	// } else {
-	// throw new BussinessException(BizExceptionEnum.OLD_PWD_NOT_RIGHT);
-	// }
-	// }
-	//
-	//
+	 /**
+	 * 修改当前用户的密码
+	 */
+	 @PostMapping("/changePwd")
+	 public Object changePwd(HttpServletRequest request,@RequestParam String oldPass, @RequestParam String
+			 newPass, @RequestParam String finalPass) throws Exception{
+		 if (!newPass.equals(finalPass)) {
+			 throw new BussinessException(BizExceptionEnum.TWO_PWD_NOT_MATCH);
+		 }
+
+		 TbManager mgr = AppUtils.getLoginUser();
+
+		 ResetPasswordReq resetPasswordDto = new ResetPasswordReq();
+		 resetPasswordDto.setEmployeeCode(mgr.getAccount());
+		 resetPasswordDto.setNewPassword(newPass);
+		 resetPasswordDto.setOldPassword(oldPass);
+
+		 this.managerService.changePassword(mgr,newPass,oldPass);
+
+		 return null;
+	 }
+
+
 	// /**
 	// * 重置管理员的密码
 	// */

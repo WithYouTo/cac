@@ -22,7 +22,6 @@ public class EquipPlanSrvImpl implements EquipPlanSrv {
     public void listEquipPlan(IPage<Map<String, Object>> page,EquipPlanSearchDto equipPlanSearchDto) {
         List<Map<String, Object>> list = this.equipPlanMapper.listEquipPlan(page,equipPlanSearchDto);
         page.setRecords(list);
-
     }
 
 

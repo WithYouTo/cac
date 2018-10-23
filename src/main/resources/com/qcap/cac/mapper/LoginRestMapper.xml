@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qcap.cac.dao.AppTaskRestMapper">
+<mapper namespace="com.qcap.cac.dao.LoginRestMapper">
 
 	<select id="selectManagerByWorkNo" parameterType="String" resultType="com.qcap.core.entity.TbManager">
 		SELECT
@@ -25,6 +25,17 @@
 		AND a.manager_id = #{managerId}
 	</select>
 
+	<select id="selectAreaPositionByWorkNo" resultType="com.qcap.cac.entity.TbAreaPosition">
+		SELECT
+		b.POSITION_CODE positionCode,
+		b.POSITION_ID positionId,
+		b.POSITION_NAME positionName
+		FROM TB_TASK a
+		LEFT JOIN TB_AREA_POSITION b
+		ON a.POSITION_CODE = B.POSITION_CODE
+		WHERE  CHARINDEX(a.EMPLOYEE_CODE,#{employeeCode})>0
+	</select>
+
 	<select id="getAppUserInfoByManagerCode" resultType="java.util.Map">
 		SELECT
 		USER_NAME employeeName,
@@ -32,6 +43,34 @@
 		FROM tb_user_info
 		WHERE
 		WORK_NO = #{employeeCode}
+	</select>
+
+	<select id="getUserListByOrgCode" resultType="com.qcap.core.entity.TbManager" parameterType="String">
+		SELECT
+		a.id id,
+		a.name name,
+		a.phone phone
+		FROM tb_manager a
+		left join tb_manager_org b
+		on a.id = b.manager_id
+		left join tb_org c
+		on b.org_id = c.id
+		WHERE
+		c.code = #{orgCode}
+	</select>
+
+	<select id="getUserListByPositionCode" resultType="com.qcap.core.entity.TbManager">
+		SELECT
+		a.id id,
+		a.name name,
+		a.phone phone
+		FROM tb_manager a
+		left join tb_task_arrangement b
+		on a.account = b.employee_code
+		WHERE
+		b.position_code = #{positionCode}
+		AND b.month = #{month}
+		AND DELETE_FLAG = 'NORMAL'
 	</select>
 
 	<update id="updateManagerPwd"  parameterType="com.qcap.core.entity.TbManager">

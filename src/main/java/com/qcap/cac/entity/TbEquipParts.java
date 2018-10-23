@@ -32,6 +32,10 @@ public class TbEquipParts implements Serializable {
      */
     private String equipNo;
     /**
+     * 设备编号
+     */
+    private String equipType;
+    /**
      * 配件编号
      */
     private String partsNo;
@@ -260,12 +264,22 @@ public class TbEquipParts implements Serializable {
         this.startUseTime = startUseTime;
     }
 
+
+    public String getEquipType() {
+        return equipType;
+    }
+
+    public void setEquipType(String equipType) {
+        this.equipType = equipType;
+    }
+
     @Override
     public String toString() {
         return "TbEquipParts{" +
                 "partsId='" + partsId + '\'' +
                 ", equipId='" + equipId + '\'' +
                 ", equipNo='" + equipNo + '\'' +
+                ", equipType='" + equipType + '\'' +
                 ", partsNo='" + partsNo + '\'' +
                 ", partsName='" + partsName + '\'' +
                 ", partsType='" + partsType + '\'' +

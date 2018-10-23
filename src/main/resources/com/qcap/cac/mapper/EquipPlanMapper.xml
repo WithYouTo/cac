@@ -4,39 +4,42 @@
 
     <select id="listEquipPlan" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipPlanSearchDto">
         SELECT
-        PLAN_ID planId,
-        EQUIP_ID equipId,
-        EQUIP_NO equipNo,
-        EQUIP_NAME equipName,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
-        LIFE_CYCLE lifeCycle,
-        PARTS_ID partsId,
-        PARTS_NO partsNo,
-        PARTS_NAME partsName,
-        PARTS_MODEL partsModel,
-        MAINT_CYCLE maintCycle,
-        DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
-        DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
-        REMARK remark
-        FROM TB_EQUIP_PLAN
-        WHERE 1=1
+        a.PLAN_ID planId,
+        a.EQUIP_ID equipId,
+        a.EQUIP_NO equipNo,
+        a.EQUIP_NAME equipName,
+        b.DESC1_ equipType,
+        a.EQUIP_MODEL equipModel,
+        DATE_FORMAT( a.START_USE_TIME,'%Y-%m-%d') startUseTime,
+        a.LIFE_CYCLE lifeCycle,
+        a.PARTS_ID partsId,
+        a.PARTS_NO partsNo,
+        a.PARTS_NAME partsName,
+        a.PARTS_MODEL partsModel,
+        a.MAINT_CYCLE maintCycle,
+        DATE_FORMAT(a.LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
+        DATE_FORMAT(a.NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+        a.REMARK remark
+        FROM TB_EQUIP_PLAN a
+        LEFT JOIN tbpubcode01 b
+        ON a.EQUIP_TYPE = b.DESC_
+        where
+        b.CONFIG_CODE_ = 'EQUIP_TYPE'
         <if test="map.equipType != null and map.equipType != ''">
-            and EQUIP_TYPE = #{map.equipType}
+            and a.EQUIP_TYPE = #{map.equipType}
         </if>
         <if test="map.equipNo != null and map.equipNo != ''">
-            and EQUIP_NO = #{map.equipNo}
+            and a.EQUIP_NO = #{map.equipNo}
         </if>
         <if test="map.equipModel != null and map.equipModel != ''">
-            and EQUIP_MODEL = #{map.equipModel}
+            and a.EQUIP_MODEL = #{map.equipModel}
         </if>
         <if test="map.latestMaintTime != null and map.latestMaintTime != ''">
-            and LATEST_MAINT_TIME &gt; #{map.latestMaintTime}
+            and a.LATEST_MAINT_TIME &gt; #{map.latestMaintTime}
         </if>
-        AND PARTS_NO is null
-        AND  DEL_FLAG = 'NORMAL'
-        ORDER BY LATEST_MAINT_TIME
+        AND a.PARTS_NO is null
+        AND  a.DEL_FLAG = 'NORMAL'
+        ORDER BY a.LATEST_MAINT_TIME
     </select>
 
     <select id="listPartsPlanByEquipId" parameterType="java.lang.String"  resultType="java.util.Map">
