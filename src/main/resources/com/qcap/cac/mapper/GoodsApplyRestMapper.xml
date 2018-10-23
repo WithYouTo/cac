@@ -8,27 +8,9 @@
         from tb_role a
                  left join tb_manager_role b on a.num = b.role_id
                  left join tb_manager c on b.manager_id = c.id
-        where c.id = #{employeeId}
+        where c.account = #{employeeCode}
 	</select>
 
-
-	<!--查询主管对应的岗位-->
-	<select id="queryPositionIdByEmployeeId" parameterType="String" resultType="String">
-	/* select a.num
-        from tb_role a
-                 left join tb_manager_role b on a.num = b.role_id
-                 left join tb_manager c on b.manager_id = c.id
-        where c.id = #{employeeId}*/
-	</select>
-
-	<!--查询角色为主管的用户-->
-	<select id="queryEmployeeIdByRole" parameterType="Integer" resultType="String">
-	  select c.id
-        from tb_role a
-                 left join tb_manager_role b on a.num = b.role_id
-                 left join tb_manager c on b.manager_id = c.id
-        where a.num = 1 AND LENGTH(IFNULL(c.id,'')) > 0
-	</select>
 
     <!--库管领用单列表-->
 	<select id="queryReqList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestReq">
@@ -52,6 +34,11 @@
 	WHERE DATE(a.REQU_TIME) =#{date}
 	/*AND FIND_IN_SET(#{positionId},POSITION_ID)*/
 	AND b.REQU_STATUS =#{requStatus}
+	<if test="lineNo!=null and lineNo!=''">
+		and a.LINE_NO &gt; #{lineNo}
+	</if>
+	order by REQU_BATCH_NO desc
+	limit 0,10
 	</select>
 
 
@@ -72,42 +59,70 @@
         on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
         where  a.WAREHOUSE_REQU_ID = #{warehouseRequId}
         AND a.REQU_STATUS =#{requStatus}
+		<if test="lineNo!=null and lineNo!=''">
+			and a.LINE_NO &gt; #{lineNo}
+		</if>
         order by a.GOODS_NO
+		limit 0,10
 	</select>
 
 
 	<!--主管查询发放-->
 	<select id="queryAvailDistributionList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsDistributionDetailReq">
-	SELECT a.ids,a.goodsNo,a.goodsName,(a.realNum - b.distrNum) availNum,a.minUnit
+		SELECT
+		a.ids,
+		a.goodsNo,
+		a.goodsName,
+		IFNULL(
+			IFNULL(a.realNum, 0) - IFNULL(b.distrNum, 0),
+			0
+		) availNum,
+		a.minUnit,
+		a.POSITION_CODE,
+		a.POSITION_NAME
 	FROM
-	(SELECT
-	  GROUP_CONCAT(a.WAREHOUSE_REQDETAIL_ID) ids,
-		a.GOODS_NO goodsNo,
-		a.GOODS_NAME goodsName,
-		SUM(a.REAL_NUM) realNum,
-		a.MIN_UNIT minUnit
-	FROM
-		tb_warehouse_reqdetail a
-	WHERE
-		REQU_STATUS = 'RECEIVE'
-	GROUP BY
-		a.GOODS_NO
-	ORDER BY
-		a.GOODS_NO) a,
-	(SELECT
-		b.WAREHOUSE_REQDETAIL_ID ids,
-		b.GOODS_NO goodsNo,
-		b.GOODS_NAME goodsName,
-		SUM(b.DISTR_NUM) distrNum,
-		b.MIN_UNIT minUnit
-	FROM
-		tb_warehouse_distribution  b
-	GROUP BY
-		b.WAREHOUSE_REQDETAIL_ID
-	ORDER BY
-		b.GOODS_NO) b where a.ids = b.ids
-
-
+		(
+			SELECT
+				GROUP_CONCAT(a.WAREHOUSE_REQDETAIL_ID) ids,
+				a.GOODS_NO goodsNo,
+				a.GOODS_NAME goodsName,
+				SUM(a.REAL_NUM) realNum,
+        c.POSITION_CODE,
+        c.POSITION_NAME,
+				a.MIN_UNIT minUnit
+			FROM
+				tb_warehouse_reqdetail a LEFT JOIN tb_warehouse_requ c
+        on a.WAREHOUSE_REQU_ID = c.WAREHOUSE_REQU_ID
+			WHERE
+				a.REQU_STATUS = #{requStatus} AND c.POSITION_CODE = #{positionCode}
+			<if test="goodsNo!=null and goodsNo!=''">
+				and a.GOODS_NO = #{goodsNo}
+			</if>
+			GROUP BY
+				a.GOODS_NO
+			ORDER BY
+				a.GOODS_NO
+		) a
+	LEFT JOIN (
+		SELECT
+			b.WAREHOUSE_REQDETAIL_ID ids,
+			b.GOODS_NO goodsNo,
+			b.GOODS_NAME goodsName,
+			SUM(b.DISTR_NUM) distrNum,
+			b.MIN_UNIT minUnit
+		FROM
+			tb_warehouse_distribution b
+		GROUP BY
+			b.WAREHOUSE_REQDETAIL_ID
+		ORDER BY
+			b.GOODS_NO
+	) b ON a.ids = b.ids
+	where  1= 1
+	<if test="lineNo!=null and lineNo!=''">
+		and a.LINE_NO &gt; #{lineNo}
+	</if>
+		order by a.goodsNo
+		limit 0,10
 	</select>
 	
 	

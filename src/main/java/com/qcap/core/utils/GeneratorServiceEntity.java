@@ -20,7 +20,7 @@ public class GeneratorServiceEntity {
 				.setNaming(NamingStrategy.underline_to_camel)
 				// 修改替换成你需要的表名，多个表名传数组
 				.setInclude(tableNames);
-		config.setActiveRecord(false).setAuthor("huangxiang").setOutputDir("G:\\机场保洁项目").setFileOverride(true);
+		config.setActiveRecord(false).setAuthor("cindy").setOutputDir("E:\\物华信息SVN文档\\cac").setFileOverride(true);
 		if (!serviceNameStartWithI) {
 			config.setServiceName("%sService");
 		}
@@ -32,7 +32,7 @@ public class GeneratorServiceEntity {
 
 	public static void main(String[] args) {
 		String[] list = {"tb_equip","tb_equip_charge","tb_equip_maint","tb_equip_plan","tb_equip_repair","tb_equip_use","TB_EQUIP_PARTS"};//静态初始化的简化版
-		generateByTables(true, "com.qcap.cac.entity", "tb_user_info");
+		generateByTables(true, "com.qcap.cac.entity", "tb_warehouse_distribution");
 	}
 
 }

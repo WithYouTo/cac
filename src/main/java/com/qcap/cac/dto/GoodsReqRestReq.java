@@ -43,9 +43,9 @@ public class GoodsReqRestReq {
 	private String requTime;
 
 	/**
-	 *   岗位主键
+	 *   岗位Id
 	 */
-	private String positionId;
+	private String positionCode;
 
     /**
      *   岗位名称
@@ -140,12 +140,12 @@ public class GoodsReqRestReq {
 		this.requTime = requTime;
 	}
 
-	public String getPositionId() {
-		return positionId;
+	public String getPositionCode() {
+		return positionCode;
 	}
 
-	public void setPositionId(String positionId) {
-		this.positionId = positionId;
+	public void setPositionCode(String positionCode) {
+		this.positionCode = positionCode;
 	}
 
 	public String getRequRemark() {

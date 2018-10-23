@@ -68,6 +68,7 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
         area.setSeqNo(Integer.toString(seqNo));
 
         area.setFinalFlag("N");
+        area.setRemark1(null);
         area.setCreateEmp("SYS");
         area.setCreateDate(new Date());
         this.areaMapper.insert(area);
@@ -89,8 +90,8 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
         if(areaMapper.selectCount(wrapper) > 1){
             throw new  RuntimeException("区域名称已经存在");
         }
-
         this.areaMapper.updateById(area);
+        area = this.areaMapper.selectById(area.getAreaId());
         return area;
     }
 

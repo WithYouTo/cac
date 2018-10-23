@@ -1,8 +1,18 @@
 package com.qcap.cac.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcap.cac.entity.TbTaskArrangement;
+import com.qcap.cac.dto.GoodsDistributionDetailReq;
+import com.qcap.cac.dto.GoodsReqDetailReq;
+import com.qcap.cac.dto.GoodsReqRestReq;
 
-public interface GoodsApplyRestMapper extends BaseMapper<TbTaskArrangement> {
+import java.util.List;
+import java.util.Map;
 
+public interface GoodsApplyRestMapper {
+
+
+   List<GoodsReqRestReq> queryReqList(Map<String,String> paramMap);
+
+   List<GoodsReqDetailReq> queryReqDetailList(Map<String,String> paramMap);
+
+   List<GoodsDistributionDetailReq> queryAvailDistributionList(Map<String,String> paramMap);
 }

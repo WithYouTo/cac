@@ -32,11 +32,6 @@ public class TbWarehouseRequ {
     private String requPerson;
 
     /**
-     *   岗位Id
-     */
-    private String positionId;
-
-    /**
      *   领用人电话
      */
     private String requMobile;
@@ -45,6 +40,16 @@ public class TbWarehouseRequ {
      *   领用人姓名
      */
     private String requName;
+
+    /**
+     *   申请人岗位Id
+     */
+    private String positionCode;
+
+    /**
+     *   申请人岗位名称
+     */
+    private String positionName;
 
     /**
      *   领用日期
@@ -86,12 +91,20 @@ public class TbWarehouseRequ {
      */
     private Integer version;
 
-    public String getPositionId() {
-        return positionId;
+    public String getPositionCode() {
+        return positionCode;
     }
 
-    public void setPositionId(String positionId) {
-        this.positionId = positionId;
+    public void setPositionCode(String positionCode) {
+        this.positionCode = positionCode;
+    }
+
+    public String getPositionName() {
+        return positionName;
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
     }
 
     public String getStoreroomId() {

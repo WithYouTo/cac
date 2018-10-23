@@ -1,20 +1,24 @@
 package com.qcap.cac.service.impl;
 
 
-import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.WarehouseReqDetailMapper;
 import com.qcap.cac.dao.WarehouseRequMapper;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseRequ;
+import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.service.WarehouseRequService;
+import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -27,13 +31,16 @@ import java.util.*;
 @Service
 public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, TbWarehouseRequ> implements WarehouseRequService {
 
-    private static final String yyyyMM_DATEFORMAT = "yyyyMM";
 
     @Resource
     private WarehouseRequMapper warehouseRequMapper;
 
     @Resource
     private WarehouseReqDetailMapper warehouseReqDetailMapper;
+
+    @Resource
+    private TempTaskSrv tempTaskSrv;
+
 
     @Override
     public List<Map<String,String>> getRequList(WarehouseReqDto warehouseReqDto) {
@@ -90,21 +97,25 @@ public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, T
     }
 
     @Override
-    public Integer insertWarehouseRequ(TbWarehouseRequ warehouseRequ,String userId) {
+    public Integer insertWarehouseRequ(TbWarehouseRequ warehouseRequ,String employeeCode) {
 
-        String month = DateUtil.format(new Date(),yyyyMM_DATEFORMAT);
+        //查询当前登录人的岗位
+        List<Map<String,Object>> positionList = tempTaskSrv.selectCurrountWorkingEmployee(employeeCode);
 
-        Map<String,String> parmMap = new HashMap<>();
-        parmMap.put("employeeId",userId);
-        parmMap.put("month",month);
-        String positionId = warehouseRequMapper.getPositionIdByEmployeeId(parmMap);
+        if(CollectionUtils.isNotEmpty(positionList)){
+            List<String> positionCodeList = new ArrayList<>();
+            List<String> positionNameList = new ArrayList<>();
+            for (Map<String, Object> m : positionList) {
+                positionCodeList.add(ToolUtil.toStr(m.get("positionCode")));
+                positionNameList.add(ToolUtil.toStr(m.get("positionName")));
+            }
+            String positionCode = String.join(",", positionCodeList);
+            String positionName = String.join(",", positionNameList);
 
-        //排班表中数据正确后放开
-//        if(StringUtils.isEmpty(positionId)){
-//            throw  new RuntimeException("根据工号没有查询到当日的排班信息");
-//        }
+            warehouseRequ.setPositionCode(positionCode);
+            warehouseRequ.setPositionName(positionName);
+        }
 
-        warehouseRequ.setPositionId(positionId);
         warehouseRequ.setRequBatchNo(UUIDUtils.getBatchNo());
         warehouseRequ.setRequStatus("INIT");
         warehouseRequ.setCreateEmp("SYS");

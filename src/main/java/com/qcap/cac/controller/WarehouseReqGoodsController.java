@@ -12,6 +12,7 @@ import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.jwt.JwtProperties;
 import com.qcap.core.utils.jwt.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -104,16 +104,18 @@ public class WarehouseReqGoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Object addRequ(@Valid  TbWarehouseRequ warehouseRequ, HttpServletRequest request) {
+    public Object addRequ(@Valid  TbWarehouseRequ warehouseRequ) {
        if(null == warehouseRequ){
            ResParams.newInstance(CoreConstant.FAIL_CODE,"领用单参数为空",null);
        }
 
-        String token = request.getHeader(jwtProperties.getTokenHeader());
-        String userId = jwtTokenUtil.getUsernameFromToken(token);
+        String employeeCode = AppUtils.getLoginUserAccount();
+        if(StringUtils.isEmpty(employeeCode)){
+            ResParams.newInstance(CoreConstant.FAIL_CODE,"当前登录人为空",null);
+        }
 
         try {
-           this.warehouseRequService.insertWarehouseRequ(warehouseRequ,userId);
+           this.warehouseRequService.insertWarehouseRequ(warehouseRequ,employeeCode);
         } catch (Exception e) {
             return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
         }

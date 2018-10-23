@@ -18,6 +18,16 @@ public class GoodsDistributionDetailReq {
 	private String goodsName;
 
 	/**
+	 *  岗位编码
+	 */
+	private String positionCode;
+
+	/**
+	 *   岗位名称
+	 */
+	private String positionName;
+
+	/**
 	 * 可发放数量
 	 */
 	private Integer availNum;
@@ -65,5 +75,21 @@ public class GoodsDistributionDetailReq {
 
 	public void setMinUnit(String minUnit) {
 		this.minUnit = minUnit;
+	}
+
+	public String getPositionCode() {
+		return positionCode;
+	}
+
+	public void setPositionCode(String positionCode) {
+		this.positionCode = positionCode;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
 	}
 }

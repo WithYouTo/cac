@@ -41,17 +41,5 @@
         ORDER BY a.CREATE_DATE desc
     </select>
 
-    <!--根据userId查询岗位Id-->
-    <select id="getPositionIdByEmployeeId" parameterType="Map" resultType="String">
-        SELECT C.POSITION_ID FROM tb_task_arrangement A
-        LEFT JOIN tb_manager B ON A.EMPLOYEE_CODE = B.account
-        LEFT JOIN tb_area_position C ON C.POSITION_CODE = A.POSITION_CODE
-        WHERE B.id = #{employeeId}
-        AND A.MONTH  = #{month}
-        AND A.DELETE_FLAG  = 'NORMAL'
-        group by C.POSITION_ID
-        limit 1
-    </select>
-
 
 </mapper>
