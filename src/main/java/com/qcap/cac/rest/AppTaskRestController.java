@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qcap.cac.constant.CommonCodeConstant;
-import com.qcap.cac.dto.AppTaskRestCheckReq;
+import com.qcap.cac.dto.AppTaskCheckRestReq;
 import com.qcap.cac.dto.AppTaskRestReq;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AppTaskRestSrv;
@@ -77,7 +77,7 @@ public class AppTaskRestController {
 	@RequestMapping(value = "/queryFinishAndCheckTask", method = RequestMethod.POST)
 	@ApiOperation(value="已完成任务、检查任务、已检查任务列表",notes="已完成任务、检查任务、已检查任务列表",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
-	public Object queryFinishAndCheckTask(@Valid AppTaskRestCheckReq appTaskRestCheckReq) {
+	public Object queryFinishAndCheckTask(@Valid AppTaskCheckRestReq appTaskRestCheckReq) {
 		List<Map<String, Object>> list = this.appTaskRestSrv.queryFinishAndCheckTask(appTaskRestCheckReq);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
 	}

@@ -73,7 +73,6 @@ mybatis:
   iPage:
     page-parameter: page
     size-parameter: size
-FILE_DORMAIN: TEST_FILE_ADDRESS
 
 #fastdfs配置
 fdfs:

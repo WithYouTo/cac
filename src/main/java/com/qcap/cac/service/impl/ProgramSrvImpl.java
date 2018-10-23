@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -27,9 +26,6 @@ import com.qcap.core.utils.DateUtil;
 @Service
 @Transactional
 public class ProgramSrvImpl implements ProgramSrv{
-	
-	@Value("${FILE_DORMAIN}")
-	private String fileDomain;
 	
 	@Resource
 	private ProgramMapper programMapper;

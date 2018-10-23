@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class AppTaskRestCheckReq {
+public class AppTaskCheckRestReq {
 	
 	@NotBlank(message = "员工工号不能为空")
 	@ApiModelProperty(value = "员工工号")

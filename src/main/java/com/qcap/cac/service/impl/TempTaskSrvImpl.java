@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -25,7 +24,6 @@ import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.TempTaskDto;
 import com.qcap.cac.dto.TempTaskSearchParam;
 import com.qcap.cac.entity.TbTask;
-import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.ToolUtil;
@@ -38,17 +36,8 @@ import com.qcap.core.utils.DateUtil;
 @Transactional
 public class TempTaskSrvImpl implements TempTaskSrv {
 
-	@Value("${FILE_DORMAIN}")
-	private String fileDomain;
-
 	@Resource
 	private TempTaskMapper tempTaskMapper;
-
-	// @Autowired
-	// private RedisUtil redisUtil;
-
-	@Resource
-	private CommonSrv commonSrvImpl;
 
 	@Override
 	public List<Map<String, Object>> listTask(TempTaskSearchParam paramDto) {

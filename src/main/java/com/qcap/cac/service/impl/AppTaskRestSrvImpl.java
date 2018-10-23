@@ -1,20 +1,15 @@
 package com.qcap.cac.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.ibatis.annotations.Case;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -22,10 +17,11 @@ import org.springframework.util.StringUtils;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.AppTaskRestMapper;
-import com.qcap.cac.dto.AppTaskRestCheckReq;
+import com.qcap.cac.dto.AppTaskCheckRestReq;
 import com.qcap.cac.dto.AppTaskRestReq;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AppTaskRestSrv;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.utils.DateUtil;
 
 @Service
@@ -85,6 +81,38 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 			List<Map<String, Object>> marterialList = this.appTaskRestMapper.selectStandardDetailList(standardCode);
 			map.put("marterialList", marterialList);
 		}
+		
+		//查询配置管理中存放的文件访问地址前缀
+		String addressPrefix = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+		//处理完成任务时上传图片的url
+		String feedBackImgUrl = Objects.toString(map.get("feedBackImgUrl"));
+		if(!StringUtils.isEmpty(feedBackImgUrl)) {
+			if(feedBackImgUrl.contains(",")) {
+				String [] fileArr = feedBackImgUrl.split(",");
+				for(String str: fileArr) {
+					str = addressPrefix + str;
+				}
+				map.put("feedBackFile", String.join(",", fileArr));
+			}else {
+				String feedBackFile = addressPrefix + feedBackImgUrl;
+				map.put("feedBackFile", feedBackFile);
+			}
+			}
+		
+		//处理检查文件url
+		String checkImgUrl = Objects.toString(map.get("checkImgUrl"));
+		if(!StringUtils.isEmpty(checkImgUrl)) {
+			if(checkImgUrl.contains(",")) {
+				String [] checkFileArr = checkImgUrl.split(",");
+				for(String str: checkFileArr) {
+					str = addressPrefix + str;
+				}
+				map.put("checkFile", String.join(",", checkFileArr));
+			}else {
+				String checkFile = addressPrefix + checkImgUrl;
+				map.put("checkFile", String.join(",", checkFile));
+			}
+		}
 
 		
 		/**
@@ -95,7 +123,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	};
 	
 	@Override
-	public List<Map<String, Object>> queryFinishAndCheckTask (AppTaskRestCheckReq appTaskRestCheckReq){
+	public List<Map<String, Object>> queryFinishAndCheckTask (AppTaskCheckRestReq appTaskRestCheckReq){
 		String employeeCode = Objects.toString(appTaskRestCheckReq.getEmployeeCode());
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_FINISH);

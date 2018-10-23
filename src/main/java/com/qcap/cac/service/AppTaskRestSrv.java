@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
-import com.qcap.cac.dto.AppTaskRestCheckReq;
+import com.qcap.cac.dto.AppTaskCheckRestReq;
 import com.qcap.cac.dto.AppTaskRestReq;
 
 public interface AppTaskRestSrv {
@@ -17,5 +17,5 @@ public interface AppTaskRestSrv {
 	
 	Map<String, Object> queryTaskDetail (String taskCode);
 	
-	List<Map<String, Object>> queryFinishAndCheckTask (AppTaskRestCheckReq appTaskRestCheckReq);
+	List<Map<String, Object>> queryFinishAndCheckTask (AppTaskCheckRestReq appTaskRestCheckReq);
 }
