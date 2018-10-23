@@ -434,4 +434,23 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		return this.tempTaskMapper.selectAllEmployee(monthNo);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectCurrountWorkingEmployee(String employeeCode) {
+		// 封装查询条件
+		Map<String, Object> param = new HashMap<>();
+		
+		// 处理日期
+		Calendar calendar = Calendar.getInstance();
+		int dayNum = calendar.get(Calendar.DAY_OF_MONTH);
+		String queryDay = "day" + dayNum;
+		String month = DateUtil.dateToMonth(new Date());
+		
+		param.put("month", month);
+		param.put("employeeCode", employeeCode);
+		param.put(queryDay, queryDay);
+		// 查询当班人员
+		return this.tempTaskMapper.selectWorkingEmployee(param);
+		
+	}
+
 }

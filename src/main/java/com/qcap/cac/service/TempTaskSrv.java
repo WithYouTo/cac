@@ -25,4 +25,6 @@ public interface TempTaskSrv {
 	List<Map<String, Object>> selectAllEmployee (String monthNo);
 
 	Map<String, Object> selectDefaultEmployee(String startTime, String areaCode);
+	
+	List<Map<String, Object>> selectCurrountWorkingEmployee(String employeeCode);
 }

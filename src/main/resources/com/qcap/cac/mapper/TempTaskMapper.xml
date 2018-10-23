@@ -366,4 +366,21 @@
 	WHERE MONTH =#{monthNo}
 	AND DELETE_FLAG ='NORMAL'
 	</select>
+	
+	<select id="selectCurrountWorkingEmployee" parameterType="Map" resultType="Map">
+	SELECT 
+	ARRANGEMENT_ID  AS  arrangementId,
+	SHIFT  AS  shift,
+	EMPLOYEE_CODE  AS  employeeCode,
+	EMPLOYEE_NAME  AS  employeeName,
+	EMPLOYEE_TEL  AS  employeeTel,
+	POSITION_CODE  AS  positionCode,
+	POSITION_NAME  AS  positionName,
+	MONTH  AS  month
+	FROM tb_task_arrangement 
+	WHERE MONTH=#{month} 
+	AND EMPLOYEE_CODE=#{employeeCode} 
+	AND DELETE_FLAG ='NORMAL'
+	<include refid="selectWorkIngItem"/>
+	</select>
 </mapper>

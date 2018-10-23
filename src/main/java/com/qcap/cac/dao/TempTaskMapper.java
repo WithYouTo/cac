@@ -135,4 +135,6 @@ public interface TempTaskMapper {
 	 * @return: List<Map<String,Object>>
 	 */
 	List<Map<String, Object>> selectAllEmployee (@Param("monthNo") String monthNo);
+
+	List<Map<String, Object>> selectCurrountWorkingEmployee(Map<String, Object> map);
 }
