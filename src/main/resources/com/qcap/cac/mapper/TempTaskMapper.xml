@@ -30,6 +30,8 @@
 		m.TASK_ADVICE  AS  taskAdvice,
 		m.TASK_FINISH_DESC  AS  taskFinishDesc,
 		m.DISQUALIFIED_REASON  AS  disqualifiedReason,
+		m.FEEDBACK_IMG_URL  AS  feedbackImgUrl,
+		m.CHECK_IMG_URL  AS  checkImgUrl,
 		m.LINE_NO  AS  lineNo,
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,
@@ -67,6 +69,7 @@
       TASK_FINISH_DESC, DISQUALIFIED_REASON, LINE_NO,
       REMARK2, REMARK3, CREATE_EMP, 
       CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
+      FEEDBACK_IMG_URL,CHECK_IMG_URL,
       VERSION,UPLOAD_PIC_FLAG)
     values (#{taskId}, #{taskCode}, #{planId}, 
       #{taskType}, #{positionCode}, #{positionName}, 
@@ -79,6 +82,7 @@
       #{taskFinishDesc}, #{disqualifiedReason}, #{lineNo}, 
       #{remark2}, #{remark3}, #{createEmp}, 
       #{createDate}, #{updateDate}, #{updateEmp}, 
+      #{feedbackImgUrl},#{checkImgUrl},
       #{version},#{uploadPicFlag})
 	</insert>
 	
@@ -94,6 +98,7 @@
       TASK_FINISH_DESC, DISQUALIFIED_REASON, LINE_NO,
       REMARK2, REMARK3, CREATE_EMP, 
       CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
+      FEEDBACK_IMG_URL,CHECK_IMG_URL,
       VERSION,UPLOAD_PIC_FLAG)
     values 
     <foreach collection="list" item="item" index="index" separator=",">
@@ -108,6 +113,7 @@
       #{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.lineNo},
       #{item.remark2}, #{item.remark3}, #{item.createEmp}, 
       #{item.createDate}, #{item.updateDate}, #{item.updateEmp}, 
+      #{item.feedbackImgUrl},#{item.checkImgUrl},
       #{item.version},#{item.uploadPicFlag})
       </foreach>
 	</insert>
@@ -183,6 +189,12 @@
       </if>
       <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskAdvice)">
         TASK_ADVICE = #{taskAdvice},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(feedbackImgUrl)">
+        FEEDBACK_IMG_URL = #{feedbackImgUrl},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkImgUrl)">
+        CHECK_IMG_URL = #{checkImgUrl},
       </if>
       <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(remark1)">
         REMARK1 = #{remark1},

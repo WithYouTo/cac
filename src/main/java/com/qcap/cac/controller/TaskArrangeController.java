@@ -18,6 +18,7 @@ import com.qcap.cac.poiEntity.TaskArrangeUploadEntity;
 import com.qcap.cac.service.TaskArrangeSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.poi.PoiUtils;
 
 @RestController
@@ -47,11 +48,7 @@ public class TaskArrangeController {
 		List<TaskArrangeUploadEntity> list= PoiUtils.importExcel(file, TITLE_ROWS, HEAD_ROWS, TaskArrangeUploadEntity.class);
 		Object resParams = null;
 		try {
-			/**
-			 * 当前登陆人未完成
-			 * TODO
-			 */
-			taskArrangeDto.setCreateEmp("SYS导入排班表");
+			 taskArrangeDto.setCreateEmp(AppUtils.getLoginUserAccount());
 			 resParams= this.taskArrangeSrvImpl.importTaskArrange(list,taskArrangeDto, HEAD_AND_TITLE_ROWS);
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block

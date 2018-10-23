@@ -24,18 +24,15 @@ import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.TempTaskDto;
 import com.qcap.cac.dto.TempTaskSearchParam;
-import com.qcap.cac.entity.TbSysFile;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.TempTaskSrv;
-import com.qcap.cac.tools.RedisTools;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.utils.DateUtil;
-
-import cn.hutool.core.util.StrUtil;
 
 @Service
 @Transactional
@@ -178,12 +175,10 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		// task.setCheckFlag(checkFlag);
 		// task.setUploadPicFlag(uploadPicFlag);
 		// task.setTaskAdvice(taskAdvice);
-		task.setCreateDate(now);
-		/**
-		 * 登录没做，无法获取登录人 TODO
-		 */
-		task.setCreateEmp("SYS_TODO");
 		task.setVersion(0);
+		/**设置新增时间和新增人**/
+		EntityTools.setCreateEmpAndTime(task);
+		
 		
 		//处理任务执行人员
 		String employeeCode = "";
@@ -201,10 +196,9 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
 		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
+		task.setFeedbackImgUrl(taskDto.getFileUrl());
+		
 		this.tempTaskMapper.insertTempTask(task);
-
-		// 新增文件到系统文件表
-		insertFile(taskDto.getFileUrl(), taskCode);
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
 		map.put(CommonConstant.BACK_MESSAGE, "新增临时任务成功");
@@ -262,10 +256,6 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
 			employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
 			employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
-
-			/**
-			 * 推送消息到该值班人员
-			 */
 		}
 		String employeeCode = String.join(",", employeeCodeList);
 		String employeeName = String.join(",", employeeNameList);
@@ -330,7 +320,6 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		}
 		String shift = shiftMap.get("shift");
 
-		Date now = new Date();
 		TbTask task = new TbTask();
 		task.setTaskCode(taskCode);
 		task.setPositionCode(positionCode);
@@ -346,11 +335,8 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		// task.setCheckFlag(checkFlag);
 		// task.setUploadPicFlag(uploadPicFlag);
 		// task.setTaskAdvice(taskAdvice);
-		task.setUpdateDate(now);
-		/**
-		 * 登录没做，无法获取登录人 TODO
-		 */
-		task.setUpdateEmp("SYS_TODO");
+		/**设置更新时间和更新人**/
+		EntityTools.setUpdateEmpAndTime(task);
 		
 		//处理任务执行人员
 		String employeeCode = "";
@@ -397,35 +383,12 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeCode(employeeCode);
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
+		task.setFeedbackImgUrl(taskDto.getFileUrl());
 		this.tempTaskMapper.updateTempTask(task);
-
-		// 新增文件到系统文件表
-		insertFile(taskDto.getFileUrl(), taskCode);
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
 		map.put(CommonConstant.BACK_MESSAGE, "临时任务修改成功");
 		return map;
-	}
-
-	private void insertFile(String fileUrl, String taskCode) {
-		// 新增系统文件到数据库
-		String urlPrefix = RedisTools.getCommonConfig(fileDomain);
-		String[] fileurls = fileUrl.split(",");
-
-		for (String url : fileurls) {
-
-			TbSysFile sysFile = new TbSysFile();
-			sysFile.setFileId(UUIDUtils.getUUID());
-			sysFile.setDownloadUrl(urlPrefix + url);
-			sysFile.setFileName(url.substring(url.lastIndexOf(StrUtil.SLASH) + 1));
-			sysFile.setFileType(url.substring(url.lastIndexOf(StrUtil.DOT) + 1));
-			sysFile.setGroupId(taskCode);
-			sysFile.setCreateDate(new Date());
-			sysFile.setCreateEmp("SYS");
-			sysFile.setVersion(0);
-
-			commonSrvImpl.insertSysFile(sysFile);
-		}
 	}
 
 	@Override

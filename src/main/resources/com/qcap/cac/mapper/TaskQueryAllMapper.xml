@@ -30,6 +30,8 @@
 		m.TASK_ADVICE  AS  taskAdvice,
 		m.TASK_FINISH_DESC  AS  taskFinishDesc,
 		m.DISQUALIFIED_REASON  AS  disqualifiedReason,
+		m.FEEDBACK_IMG_URL  AS  feedbackImgUrl,
+		m.CHECK_IMG_URL  AS  checkImgUrl,
 		m.LINE_NO  AS  lineNo,
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,

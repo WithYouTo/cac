@@ -19,6 +19,7 @@ import com.qcap.cac.dto.TaskArrangeDto;
 import com.qcap.cac.entity.TbTaskArrangement;
 import com.qcap.cac.poiEntity.TaskArrangeUploadEntity;
 import com.qcap.cac.service.TaskArrangeSrv;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
 
@@ -51,12 +52,8 @@ public class TaskArrangeSrvImpl implements TaskArrangeSrv{
 			 */
 			
 			taskArrangement.setDeleteFlag(CommonConstant.DELETE_FLAG_NORMAL);
-			/**
-			 * TODO
-			 * 人员管理
-			 */
-//			taskArrangement.setCreateEmp("SYS");
-			taskArrangement.setCreateDate(new Date());
+			/**设置新增时间和新增人**/
+			EntityTools.setCreateEmpAndTime(taskArrangement);
 			taskArrangement.setVersion(0);
 			taskArrangeList.add(taskArrangement);
 		}

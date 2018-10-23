@@ -1,7 +1,6 @@
 package com.qcap.cac.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,16 +17,13 @@ import com.qcap.cac.dao.ProgramMapper;
 import com.qcap.cac.dto.ProgramAddDto;
 import com.qcap.cac.dto.ProgramSearchDto;
 import com.qcap.cac.entity.TbProgram;
-import com.qcap.cac.entity.TbSysFile;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.ProgramSrv;
 import com.qcap.cac.service.TempTaskSrv;
-import com.qcap.cac.tools.RedisTools;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
-
-import cn.hutool.core.util.StrUtil;
 @Service
 @Transactional
 public class ProgramSrvImpl implements ProgramSrv{
@@ -53,36 +49,15 @@ public class ProgramSrvImpl implements ProgramSrv{
 	@Override
 	public void addProgram(ProgramAddDto programAddDto) throws IllegalAccessException, InvocationTargetException {
 		
-		String programId = UUIDUtils.getUUID();
-		String contractFile="";
-		//获取文件访问域名地址
-		String urlPrefix = RedisTools.getCommonConfig(fileDomain);
-		
-		// 新增系统文件到数据库
-		if(!StringUtils.isEmpty(programAddDto.getContractFile())) {
-			contractFile = insertFile(programAddDto, programId, contractFile, urlPrefix);
-		}
-
 		TbProgram program = new TbProgram();
 		BeanUtils.copyProperties(program, programAddDto);
-		program.setProgramId(programId);
+		program.setProgramId(UUIDUtils.getUUID());
 		program.setStartTime(DateUtil.stringToDate(programAddDto.getStartTimeStr()));
 		program.setEndTime(DateUtil.stringToDate(programAddDto.getEndTimeStr()));
 		program.setEffectDate(DateUtil.stringToDate(programAddDto.getEffectDateStr()));
-		program.setCreateDate(new Date());
-		//建筑平面图地址
-		if(!StringUtils.isEmpty(programAddDto.getArchitecturalPic())) {
-			program.setArchitecturalPic(urlPrefix + programAddDto.getArchitecturalPic());
-		}
-		
-		//设置合同附件访问路径
-		program.setContractFile(contractFile);
-		
-		/**
-		 * TODO
-		 */
-		program.setCreateEmp("SYS");
 		program.setVersion(0);
+		/**设置新增时间和新增人**/
+		EntityTools.setCreateEmpAndTime(program);
 		
 		this.programMapper.insertProgram(program);
 		
@@ -91,32 +66,13 @@ public class ProgramSrvImpl implements ProgramSrv{
 	@Override
 	public void editProgram(ProgramAddDto programAddDto) throws IllegalAccessException, InvocationTargetException {
 		
-		//获取文件访问域名地址
-		String urlPrefix = RedisTools.getCommonConfig(fileDomain);
-		
-		String contractFile="";
-		// 新增系统文件到数据库
-		if(!StringUtils.isEmpty(programAddDto.getContractFile())) {
-			contractFile = insertFile(programAddDto, programAddDto.getProgramId(), contractFile, urlPrefix);
-		}
-		
 		TbProgram program = new TbProgram();
 		BeanUtils.copyProperties(program, programAddDto);
 		program.setStartTime(DateUtil.stringToDate(programAddDto.getStartTimeStr()));
 		program.setEndTime(DateUtil.stringToDate(programAddDto.getEndTimeStr()));
 		program.setEffectDate(DateUtil.stringToDate(programAddDto.getEffectDateStr()));
-		program.setUpdateDate(new Date());
-		//建筑平面图地址
-		if(!StringUtils.isEmpty(programAddDto.getArchitecturalPic())) {
-			program.setArchitecturalPic(urlPrefix + programAddDto.getArchitecturalPic());
-		}
-		
-		//设置合同附件访问路径
-		program.setContractFile(contractFile);
-		/**
-		 * TODO
-		 */
-		program.setUpdateEmp("SYS");
+		/**设置更新时间和更新人**/
+		EntityTools.setUpdateEmpAndTime(program);
 		
 		this.programMapper.updateProgramByKey(program);
 		
@@ -130,23 +86,4 @@ public class ProgramSrvImpl implements ProgramSrv{
 		this.programMapper.deleteProgramByKey(programId);
 	}
 	
-	private String insertFile(ProgramAddDto programAddDto, String programId, String contractFile, String urlPrefix) {
-		String[] fileurls = programAddDto.getContractFile().split(",");
-		for (String url : fileurls) {
-			contractFile += urlPrefix + url + ",";
-			TbSysFile sysFile = new TbSysFile();
-			sysFile.setFileId(UUIDUtils.getUUID());
-			sysFile.setDownloadUrl(urlPrefix + url);
-			sysFile.setFileName(url.substring(url.lastIndexOf(StrUtil.SLASH) + 1));
-			sysFile.setFileType(url.substring(url.lastIndexOf(StrUtil.DOT) + 1));
-			sysFile.setGroupId(programId);
-			sysFile.setCreateDate(new Date());
-			sysFile.setCreateEmp("SYS");
-			sysFile.setVersion(0);
-
-			commonSrvImpl.insertSysFile(sysFile);
-		}
-		return contractFile;
-	}
-
 }

@@ -2,43 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.AppTaskRestMapper">
 
-	<select id="queryTaskItem01" parameterType="com.qcap.cac.dto.AppTaskRestDto" resultType="Map">
+	<select id="selectshiftType" parameterType="Map" resultType="String">
+	SELECT DISTINCT SHIFT AS shift
+	FROM tb_task_arrangement 
+	WHERE EMPLOYEE_CODE =#{employeeCode}
+	AND `MONTH` =#{monthNo}
+	</select>
+
+	<select id="selectShiftTime" parameterType="String" resultType="Map">
+	SELECT DESC1_ AS startTime,DESC2_ AS endTime 
+	FROM tbpubcode01 
+	WHERE CONFIG_CODE_= 'SHIFT_TYPE' 
+	AND DESC_ =#{shift}
+	</select>
+
+	<select id="queryTaskItem" parameterType="Map" resultType="Map">
 	select COUNT(1) taskNum,CASE WHEN TASK_STATUS ='FINISH' THEN 'finishItem' 
 	WHEN TASK_STATUS ='WAIT' THEN 'waitingItem' 
 	WHEN TASK_STATUS ='WORKING' THEN 'workingItem' END AS taskItem
 	FROM tb_task 
-	WHERE TASK_STATUS !='CANCLE' 
-	AND DATE(START_TIME)=#{startTime} 
+	WHERE TASK_STATUS !='CANCLE'
+	AND START_TIME &gt;= #{startTime}
+	AND START_TIME &lt; #{endTime}
+	AND FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
 	GROUP BY  TASK_STATUS
 	UNION
 	select COUNT(1), 'tempItem' 
 	FROM tb_task 
 	WHERE TASK_STATUS !='CANCLE' 
 	AND TASK_CODE LIKE 'T%' 
-	AND DATE(START_TIME)=#{startTime}
+	AND START_TIME &gt;= #{startTime}
+	AND START_TIME &lt; #{endTime}
+	AND FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
 	UNION
 	select COUNT(1), 'disqualifiedItem' 
 	FROM tb_task 
 	WHERE TASK_STATUS !='CANCLE' 
 	AND TASK_CODE LIKE 'DQ%' 
-	AND DATE(START_TIME)=#{startTime}
+	AND START_TIME &gt;= #{startTime}
+	AND START_TIME &lt; #{endTime}
+	AND FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
 	</select>
 	
-	<select id="queryTaskItem02" parameterType="String" resultType="Map">
-	SELECT COUNT(1) taskNum,'toCheckItem' AS 'taskItem' 
-	FROM tb_task 
-	WHERE TASK_STATUS ='FINISH' 
-	AND CHECK_STATUS='TOCHECK'  
-	AND DATE(START_TIME)=#{startTime}
-	UNION
-	SELECT COUNT(1) taskNum,'checkedItem' AS 'taskItem' 
-	FROM tb_task 
-	WHERE TASK_STATUS ='FINISH' 
-	AND CHECK_STATUS !='TOCHECK' 
-	AND DATE(START_TIME)=#{startTime}
-	</select>
-	
-	<select id="queryTaskIntro" parameterType="com.qcap.cac.dto.AppTaskRestDto" resultType="Map">
+<!-- 	<select id="queryTaskIntro" parameterType="com.qcap.cac.dto.AppTaskRestDto" resultType="Map">
 	SELECT STANDARD_NAME AS standardName,TASK_CODE AS taskCode,
 	CASE WHEN TASK_TYPE='TEMP' THEN '临时'
 	WHEN TASK_TYPE='REGULAR' THEN '周期'
@@ -49,8 +55,146 @@
 	SPEC AS spec,TASK_SCORE AS taskScore, CHECK_FLAG AS checkFlag
 	FROM tb_task WHERE FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
 	AND TASK_STATUS =#{taskStatus}
+	</select> -->
+	
+	<select id="selectTaskIntro" parameterType="Map" resultType="Map">
+		SELECT
+		m.STANDARD_CODE standardCode,
+		m.STANDARD_NAME standardName,
+		m.TASK_CODE  AS  taskCode,
+		m.TASK_TYPE  AS  taskType,
+		CASE WHEN m.TASK_TYPE ='TEMP' THEN '临时'
+		WHEN m.TASK_TYPE ='REGULAR' THEN '周期'
+		WHEN m.TASK_TYPE ='EVENT' THEN '事件'
+		WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
+		END AS taskTypeName,
+		CONCAT(DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T'),'-',DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')) AS cleanTime,
+		m.SPEC  AS  spec,
+		m.TASK_SCORE  AS  taskScore,
+		m.CHECK_FLAG  AS  checkFlag,
+		CASE WHEN m.CHECK_FLAG ='MUST' THEN '是'
+		WHEN m.CHECK_FLAG ='OPTIONAL' THEN '否'
+		END AS checkFlagName,
+		m.LINE_NO  AS  lineNo
+		FROM tb_task m
+		WHERE 1=1
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskSatus)">
+		AND m.TASK_STATUS = #{taskSatus}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
+		AND m.EMPLOYEE_CODE =#{employeeCode}
+		</if>
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkSatus)">
+		AND m.CHECK_STATUS = #{checkSatus}
+		</if>
+        <!-- <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'ITEM' ">
+        AND START_TIME &gt;= #{startTime}
+        AND END_TIME &lt; #{endTime}
+        </if> -->
+        <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'HISTORY' ">
+        AND END_TIME &lt;= #{endTime}
+        </if>
+        <if test=" type == 'ITEM' or type == 'FINISH'">
+        	 <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTime) and @com.qcap.cac.tools.Ognl@isNotEmpty(endTime) ">
+		        AND START_TIME &gt;= #{startTime}
+		        AND END_TIME &lt; #{endTime}
+	        </if>
+        </if>
+        ORDER BY m.LINE_NO DESC
 	</select>
 	
+	<select id="queryTaskDetail" parameterType="String" resultType="Map">
+	SELECT
+	m.STANDARD_CODE standardCode,
+	m.STANDARD_NAME standardName,
+	m.AREA_CODE  AS  areaCode,
+	m.AREA_NAME  AS  areaName,
+	m.TASK_CODE  AS  taskCode,
+	m.TASK_TYPE  AS  taskType,
+	CASE WHEN m.TASK_TYPE ='TEMP' THEN '临时'
+	WHEN m.TASK_TYPE ='REGULAR' THEN '周期'
+	WHEN m.TASK_TYPE ='EVENT' THEN '事件'
+	WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
+	END AS taskTypeName,
+	CONCAT(DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T'),'-',DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')) AS cleanTime,
+	m.SPEC  AS  spec,
+	m.TASK_SCORE  AS  taskScore,
+	m.CHECK_FLAG  AS  checkFlag,
+	CASE WHEN m.CHECK_FLAG ='MUST' THEN '是'
+	WHEN m.CHECK_FLAG ='OPTIONAL' THEN '否'
+	END AS checkFlagName,
+	n.UPLOAD_PIC_FLAG AS uploadPicFlag,
+	CASE WHEN n.UPLOAD_PIC_FLAG ='MUST' THEN '是'
+	WHEN m.UPLOAD_PIC_FLAG ='OPTIONAL' THEN '否'
+	END AS uploadPicFlagName,
+	m.TASK_FINISH_DESC AS taskFinishDesc,
+	m.TASK_ADVICE AS taskAdvice,
+	m.FEEDBACK_IMG_URL AS feedBackImgUrl,
+	m.CHECK_IMG_URL AS checkImgUrl
+	FROM tb_task m LEFT JOIN tb_area_standard n
+	ON m.STANDARD_CODE = n.STANDARD_CODE
+	WHERE m.TASK_CODE = #{taskCode}
+	</select>
 	
+	<select id="selectSysFile" parameterType="String" resultType="Map">
+	SELECT 
+	m.FILE_ID  AS  fileId,
+	m.GROUP_ID  AS  groupId,
+	m.FILE_NAME  AS  fileName,
+	m.FILE_TYPE  AS  fileType,
+	m.STORE_URL  AS  storeUrl,
+	m.DOWNLOAD_URL  AS  downloadUrl
+	FROM tb_sys_file
+	WHERE GROUP_ID = #{groupId}
+	</select>
+	
+	<update id="updateTask" parameterType="com.qcap.cac.dto.AppTaskUpdateDto" >
+	    update tb_task
+	    <set>
+	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(completeTime)">
+	        COMPLETE_TIME = #{completeTime},
+	      </if>
+	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
+	        TASK_STATUS = #{taskStatus},
+	      </if>
+	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkStatus)">
+	        CHECK_STATUS = #{checkStatus},
+	      </if>
+	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskScore)">
+	        TASK_SCORE = #{taskScore},
+	      </if>
+	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskAdvice)">
+	        TASK_ADVICE = #{taskAdvice},
+	      </if>
+	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskFinishDesc)">
+	        TASK_FINISH_DESC = #{taskFinishDesc},
+	      </if>
+	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(disqualifiedReason)">
+	        DISQUALIFIED_REASON = #{disqualifiedReason},
+	      </if>
+	    </set>
+	    where TASK_CODE = #{taskCode}
+	</update>
+	
+	<select id="selectStandardDetailList" parameterType="String" resultType="Map">
+	SELECT STANDARD_DETAIL_ID AS id, MATERIAL AS material 
+	FROM tb_area_standard_detail 
+	where STANDARD_CODE =#{standardCode}
+	</select>
+	
+	<select id="selectStandardDetailInfo" parameterType="String" resultType="Map">
+	SELECT
+	m.STANDARD_DETAIL_ID  AS  standardDetailId,
+	m.STANDARD_CODE  AS  standardCode,
+	m.MATERIAL  AS  material,
+	m.STANDARD_STEP  AS  standardStep,
+	m.EQUITMET_TYPE  AS  equitmetType,
+	m.CLEAN_TOOLS  AS  cleanTools,
+	m.STANDARD_REQUIREMENT  AS  standardRequirement,
+	m.IMG_URL  AS  imgUrl,
+	m.FILE_URL  AS  fileUrl
+	FROM tb_area_standard_detail m 
+	where m.STANDARD_DETAIL_ID =#{standardDetailId}
+	</select>
 	
 </mapper>
