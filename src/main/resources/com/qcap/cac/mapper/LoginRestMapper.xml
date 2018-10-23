@@ -25,6 +25,17 @@
 		AND a.manager_id = #{managerId}
 	</select>
 
+	<select id="selectAreaPositionByWorkNo" resultType="com.qcap.cac.entity.TbAreaPosition">
+		SELECT
+		b.POSITION_CODE positionCode,
+		b.POSITION_ID positionId,
+		b.POSITION_NAME positionName
+		FROM TB_TASK a
+		LEFT JOIN TB_AREA_POSITION b
+		ON a.POSITION_CODE = B.POSITION_CODE
+		WHERE  CHARINDEX(a.EMPLOYEE_CODE,#{employeeCode})>0
+	</select>
+
 	<select id="getAppUserInfoByManagerCode" resultType="java.util.Map">
 		SELECT
 		USER_NAME employeeName,

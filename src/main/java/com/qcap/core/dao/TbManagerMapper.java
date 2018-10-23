@@ -21,4 +21,6 @@ import com.qcap.core.entity.TbManager;
 @Repository
 public interface TbManagerMapper extends BaseMapper<TbManager> {
 	List<Map<String, Object>> getTbMangerList(IPage page, @Param("map") Map<String, Object> map);
+
+    void updateManagerPwd(TbManager mgr);
 }

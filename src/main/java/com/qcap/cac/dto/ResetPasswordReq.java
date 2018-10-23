@@ -3,7 +3,7 @@ package com.qcap.cac.dto;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel
-public class ResetPasswordDto {
+public class ResetPasswordReq {
 
     private String employeeCode;
 
@@ -37,7 +37,7 @@ public class ResetPasswordDto {
 
     @Override
     public String toString() {
-        return "ResetPasswordDto{" +
+        return "ResetPasswordReq{" +
                 "employeeCode='" + employeeCode + '\'' +
                 ", oldPassword='" + oldPassword + '\'' +
                 ", newPassword='" + newPassword + '\'' +

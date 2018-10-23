@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import com.alibaba.fastjson.JSONObject;
+import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.dao.*;
 import com.qcap.core.entity.*;
@@ -75,6 +76,7 @@ public class TbManagerServiceImpl implements ITbManagerService {
 				String managerId = tbManager.getId();
 				tbManager.setPassword("");
 				tbManager.setSalt("");
+
 				String str= JSONObject.toJSONString(tbManager);
 
 				// 存储token的过期时间和用户ID
@@ -232,6 +234,25 @@ public class TbManagerServiceImpl implements ITbManagerService {
 			tbManagerOrgMapper.insert(managerOrg);
 		}
 
+	}
+
+	@Override
+	public void changePassword(TbManager mgr, String newPwd, String oldPwd) {
+		TbManager tbManager = tbManagerMapper.selectOne(new QueryWrapper<TbManager>().eq("account", mgr.getAccount()));
+
+		if (tbManager != null) {
+			if (checkPassword(tbManager.getPassword(), oldPwd, tbManager.getSalt())) {
+				String newSalt = Md5Util.getSalt();
+				String newMd5 = Md5Util.encrypt(newPwd, newSalt);
+				mgr.setSalt(newSalt);
+				mgr.setPassword(newMd5);
+				this.tbManagerMapper.updateManagerPwd(mgr);
+			} else {
+				throw new BaseException("密码错误！");
+			}
+		} else {
+			throw new BaseException("用户不存在！");
+		}
 	}
 
 	private boolean checkPassword(String encryptPassword, String password, String salt) {
