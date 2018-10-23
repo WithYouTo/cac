@@ -31,7 +31,7 @@
 	</select>
 
     <!--库管领用单列表-->
-	<select id="queryReqListByKuGuan" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestDto">
+	<select id="queryReqList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestReq">
 	SELECT
 	WAREHOUSE_REQU_ID,
 	STOREROOM_ID,
@@ -56,13 +56,14 @@
 
 
 	<!--库管查询领用明细-->
-	<select id="queryReqDetailList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqDetailRestDto">
+	<select id="queryReqDetailList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqDetailReq">
 	 SELECT
 	    a.WAREHOUSE_REQU_ID,
         WAREHOUSE_REQDETAIL_ID,
         a.GOODS_NO  goodsNo,
         a.GOODS_NAME goodsName,
         APPLY_NUM,
+        REAL_NUM,
         MIN_UNIT,
         (SELECT IFNULL(SUM(GOODS_NUM),0) FROM tb_warehouse_stock c WHERE c.GOODS_NAME = a.GOODS_NAME) goodsNum,
         a.REQU_REMARK
@@ -72,6 +73,41 @@
         where  a.WAREHOUSE_REQU_ID = #{warehouseRequId}
         AND a.REQU_STATUS =#{requStatus}
         order by a.GOODS_NO
+	</select>
+
+
+	<!--主管查询发放-->
+	<select id="queryAvailDistributionList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsDistributionDetailReq">
+	SELECT a.ids,a.goodsNo,a.goodsName,(a.realNum - b.distrNum) availNum,a.minUnit
+	FROM
+	(SELECT
+	  GROUP_CONCAT(a.WAREHOUSE_REQDETAIL_ID) ids,
+		a.GOODS_NO goodsNo,
+		a.GOODS_NAME goodsName,
+		SUM(a.REAL_NUM) realNum,
+		a.MIN_UNIT minUnit
+	FROM
+		tb_warehouse_reqdetail a
+	WHERE
+		REQU_STATUS = 'RECEIVE'
+	GROUP BY
+		a.GOODS_NO
+	ORDER BY
+		a.GOODS_NO) a,
+	(SELECT
+		b.WAREHOUSE_REQDETAIL_ID ids,
+		b.GOODS_NO goodsNo,
+		b.GOODS_NAME goodsName,
+		SUM(b.DISTR_NUM) distrNum,
+		b.MIN_UNIT minUnit
+	FROM
+		tb_warehouse_distribution  b
+	GROUP BY
+		b.WAREHOUSE_REQDETAIL_ID
+	ORDER BY
+		b.GOODS_NO) b where a.ids = b.ids
+
+
 	</select>
 	
 	

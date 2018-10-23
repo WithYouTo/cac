@@ -1,6 +1,6 @@
 package com.qcap.cac.dto;
 
-public class GoodsReqRestDto {
+public class GoodsReqRestReq {
 
 	/**
 	 * 领用申请主键ID
