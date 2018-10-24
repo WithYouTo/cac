@@ -1,14 +1,23 @@
 package com.qcap.cac.dto;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotBlank;
 
 @ApiModel
 public class ResetPasswordReq {
 
+    @NotBlank(message="工号不能为空")
+    @ApiModelProperty(value="工号")
     private String employeeCode;
 
+    @NotBlank(message="旧密码不能为空")
+    @ApiModelProperty(value="旧密码")
     private String oldPassword;
 
+    @NotBlank(message="新密码不能为空")
+    @ApiModelProperty(value="新密码")
     private String newPassword;
 
     public String getEmployeeCode() {

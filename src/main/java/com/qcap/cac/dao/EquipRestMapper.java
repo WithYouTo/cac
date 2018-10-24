@@ -13,4 +13,6 @@ public interface EquipRestMapper {
     List<EquipListResp> getEquipList(String employeeNo);
 
     void getWorkOrder(@Param("map") Map<String, Object> map);
+
+    Map<String,String> getShiftTimeByShift(String shift);
 }
