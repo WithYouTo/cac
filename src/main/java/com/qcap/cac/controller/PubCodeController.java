@@ -287,17 +287,18 @@ public class PubCodeController {
 	 */
 	@RequestMapping(value = "/pubCode01Edit")
 	@ResponseBody
-	public Object editpubCode01(HttpServletRequest request, HttpServletResponse response) {
-		String tbpubcode01Id = ToolUtil.toStr(request.getParameter("tbpubcode01Id"));
-		String desc1 = ToolUtil.toStr(request.getParameter("desc1"));
-		String desc2 = ToolUtil.toStr(request.getParameter("desc2"));
-		String desc3 = ToolUtil.toStr(request.getParameter("desc3"));
-
-		Tbpubcode01 tbpubCode01 = new Tbpubcode01();
-		tbpubCode01.setTbpubcode01Id(tbpubcode01Id);
-		tbpubCode01.setDesc1(desc1);
-		tbpubCode01.setDesc2(desc2);
-		tbpubCode01.setDesc3(desc3);
+	public Object editpubCode01(Tbpubcode01 tbpubCode01) {
+		// String tbpubcode01Id =
+		// ToolUtil.toStr(request.getParameter("tbpubcode01Id"));
+		// String desc1 = ToolUtil.toStr(request.getParameter("desc1"));
+		// String desc2 = ToolUtil.toStr(request.getParameter("desc2"));
+		// String desc3 = ToolUtil.toStr(request.getParameter("desc3"));
+		//
+		// Tbpubcode01 tbpubCode01 = new Tbpubcode01();
+		// tbpubCode01.setTbpubcode01Id(tbpubcode01Id);
+		// tbpubCode01.setDesc1(desc1);
+		// tbpubCode01.setDesc2(desc2);
+		// tbpubCode01.setDesc3(desc3);
 		tbpubCode01.setUpdateEmp("sys");
 		tbpubCode01.setUpdateDate(new Date());
 		this.pubCodeSrv.updatePubCode01(tbpubCode01);

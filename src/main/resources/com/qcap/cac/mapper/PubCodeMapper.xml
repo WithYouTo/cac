@@ -221,46 +221,26 @@
   	<!-- 修改二级编码 -->
 	<update id="updatePubCode01" parameterType="com.qcap.cac.entity.Tbpubcode01" >
 		UPDATE tbpubcode01 SET
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(seq)">
-		SEQ_ = #{seq},
-		</if>
-	 	<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc)">
-	 	DESC_ = #{desc},
-	 	</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc1)">
-		DESC1_ = #{desc1},
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc2)">
-		DESC2_ = #{desc2}, 
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc3)">
-		DESC3_ = #{desc3}, 
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc4)">
-		DESC4_ = #{desc4}, 
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc5)">
-		DESC5_ = #{desc5}, 
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc6)">
-		DESC6_ = #{desc6},
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc7)">
-		DESC7_ = #{desc7}, 
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc8)">
-		DESC8_ = #{desc8}, 
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(desc9)">
-		DESC9_ = #{desc9},
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(updateEmp)">
-		UPDATE_EMP_ = #{updateEmp},
-		</if>
-		<if test="@com.whxx.core.utils.Ognl@isNotEmpty(updateDate)">
-		UPDATE_DATE_ = #{updateDate},
-		</if>
-		VERSION = VERSION+1
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(seq)">
+				SEQ_ = #{seq},
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(desc)">
+				DESC_ = #{desc},
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(desc1)">
+				DESC1_ = #{desc1},
+			</if>
+				DESC2_ = #{desc2}, 
+				DESC3_ = #{desc3}, 
+				DESC4_ = #{desc4}, 
+				DESC5_ = #{desc5}, 
+				DESC6_ = #{desc6},
+				DESC7_ = #{desc7}, 
+				DESC8_ = #{desc8}, 
+				DESC9_ = #{desc9},
+				UPDATE_EMP_ = #{updateEmp},
+				UPDATE_DATE_ = #{updateDate},
+				VERSION = VERSION+1
 		WHERE  TBPUBCODE01_ID_ = #{tbpubcode01Id}
   	</update>
 
