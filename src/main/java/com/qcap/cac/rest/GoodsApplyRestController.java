@@ -49,11 +49,13 @@ public class GoodsApplyRestController {
 	@ApiOperation(value="库管查询领用单",notes="库管查询领用单",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object getReqListByWarehouseManager(
-			@ApiParam(value = "登录人主键", required = true) @RequestParam(value = "employeeCode", required = true) String employeeCode) {
+			@ApiParam(value = "登录人主键", required = true) @RequestParam(value = "employeeCode", required = true) String employeeCode,
+			@ApiParam(value = "lineNo", required = false) @RequestParam(value = "lineNo", required = false) String lineNo) {
 		Map<String,Object> map = new HashMap<>();
 		try {
 			Map<String,String> paramMap = new HashMap();
 			paramMap.put("employeeCode",employeeCode);
+			paramMap.put("lineNo",lineNo);
 			List<GoodsReqRestReq> list = this.goodsApplyRestSrv.queryReqList(paramMap);
 			map.put("reqList",list);
 		} catch (Exception e) {
@@ -68,12 +70,14 @@ public class GoodsApplyRestController {
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object getReqDetailListByWarehouseManager(
 			@ApiParam(value = "登录人主键", required = true) @RequestParam(value = "employeeCode", required = true) String employeeCode,
-			@ApiParam(value = "领用单主键", required = true) @RequestParam(value = "warehouseRequId", required = true) String warehouseRequId) {
+			@ApiParam(value = "领用单主键", required = true) @RequestParam(value = "warehouseRequId", required = true) String warehouseRequId,
+			@ApiParam(value = "lineNo", required = false) @RequestParam(value = "lineNo", required = false) String lineNo) {
 		Map<String,Object> map = new HashMap<>();
 		try {
 			Map<String,String> paramMap = new HashMap();
 			paramMap.put("employeeCode",employeeCode);
 			paramMap.put("warehouseRequId",warehouseRequId);
+			paramMap.put("lineNo",lineNo);
 			List<GoodsReqDetailReq> list = this.goodsApplyRestSrv.queryReqDetailList(paramMap);
 			map.put("reqDetailList",list);
 		} catch (Exception e) {
@@ -88,12 +92,14 @@ public class GoodsApplyRestController {
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object getDistributionList(
 			@ApiParam(value = "登录人工号", required = true) @RequestParam(value = "employeeCode", required = true) String employeeCode,
-			@ApiParam(value = "岗位编码", required = true) @RequestParam(value = "positionCode", required = true) String positionCode) {
+			@ApiParam(value = "岗位编码", required = false) @RequestParam(value = "positionCode", required = false) String positionCode,
+			@ApiParam(value = "lineNo", required = false) @RequestParam(value = "lineNo", required = false) String lineNo) {
 		Map<String,Object> map = new HashMap<>();
 		try {
 			Map<String,String> paramMap = new HashMap();
 			paramMap.put("employeeCode",employeeCode);
 			paramMap.put("positionCode",positionCode);
+			paramMap.put("lineNo",lineNo);
 			List<GoodsDistributionDetailReq> list = this.goodsApplyRestSrv.queryAvailDistributionList(paramMap);
 			map.put("distributionList",list);
 		} catch (Exception e) {

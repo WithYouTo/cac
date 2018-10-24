@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import cn.jiguang.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.GoodsApplyRestMapper;
@@ -16,7 +17,6 @@ import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +52,7 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
     @Override
     public List<GoodsReqDetailReq> queryReqDetailList(Map<String, String> paramMap) {
+        paramMap.put("requStatus", CommonConstant.WAREHOUSE_REQ_STATUS_COMMIT);
         return this.goodsApplyRestMapper.queryReqDetailList(paramMap);
     }
 
@@ -69,6 +70,7 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
             //查询库存余量，如果不足，直接弹提示
             String warehouseReqDetailId = item.getWarehouseReqDetailId();
+            Integer realNum = item.getRealNum();
             if(StringUtils.isEmpty(warehouseReqDetailId)){
                 throw new RuntimeException("出库的主键为空");
             }
@@ -80,21 +82,29 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
             String goodsNo = warehouseReqdetail.getGoodsNo();
             String goodsName = warehouseReqdetail.getGoodsName();
-            Integer applyNum = warehouseReqdetail.getApplyNum();
 
             //查询库存余量（库存表中-一个goodsNo对应一条记录，在入库时做了限制）
             QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
             wrapper.eq("GOODS_NO",goodsNo);
-            Integer goodsNum = ToolUtil.toInt(warehouseStockMapper.selectOne(wrapper).getGoodsNum());
-            if(applyNum > goodsNum){
+            TbWarehouseStock stock = warehouseStockMapper.selectOne(wrapper);
+            if(null == stock){
+                throw new RuntimeException("根据物品编码没有查询到库存信息");
+            }
+
+            Integer goodsNum = ToolUtil.toInt(stock.getGoodsNum());
+            if(realNum > goodsNum){
                 throw new RuntimeException("物品编码【" + goodsNo + "】/物品名称【" + goodsName + "】库存余量不足");
             }
 
             //正常出库
+            warehouseReqdetail.setWarehouseReqdetailId(warehouseReqDetailId);
             warehouseReqdetail.setRealNum(item.getRealNum());
             warehouseReqdetail.setRequStatus(CommonConstant.WAREHOUSE_REQ_STATUS_RECEIVE);
-            this.warehouseReqDetailMapper.updateById(warehouseReqdetail);
+            this.goodsApplyRestMapper.updateReqDetailByGoodsOut(EntityTools.setCreateEmpAndTime(warehouseReqdetail));
 
+            //更新库存
+            stock.setGoodsNum(goodsNum - realNum);
+            this.goodsApplyRestMapper.updateStockByGoodsOut(EntityTools.setUpdateEmpAndTime(stock));
         }
 
     }
