@@ -59,7 +59,13 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
             wrapper.like("AREA_NAME","%" + areaPositionDto.getAreaName() + "%");
         }
 
-        return this.areaPositionMapper.selectList(wrapper);
+        List<TbAreaPosition> list = this.areaPositionMapper.selectList(wrapper);
+        for(TbAreaPosition item : list){
+            String positionType = areaPositionMapper.selectPositionTypeName(item.getPositionType());
+            item.setPositionType(positionType);
+        }
+
+        return list;
     }
 
     @Override

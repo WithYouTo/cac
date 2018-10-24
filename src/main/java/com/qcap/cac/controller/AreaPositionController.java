@@ -2,6 +2,7 @@ package com.qcap.cac.controller;
 
 
 import com.github.pagehelper.PageInfo;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.AreaPositionDto;
 import com.qcap.cac.entity.TbAreaPosition;
@@ -10,6 +11,7 @@ import com.qcap.core.common.CoreConstant;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,9 @@ public class AreaPositionController {
 
     @Autowired
     private AreaPositionSrv areaPositionSrv;
+
+    @Autowired
+    private FastFileStorageClient storageClient;
 
 
     /**
@@ -98,6 +103,10 @@ public class AreaPositionController {
     @ResponseBody
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResParams deleteById(@Valid  String positionId) {
+        TbAreaPosition areaPosition = this.areaPositionSrv.getById(positionId);
+        if(StringUtils.isNotEmpty(areaPosition.getPositionUrl())){
+            storageClient.deleteFile(areaPosition.getPositionUrl());
+        }
         this.areaPositionSrv.deleteAreaPosition(positionId);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
     }
