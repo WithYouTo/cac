@@ -310,7 +310,6 @@ public class EquipSrvImpl implements EquipSrv {
      * @date 2018/10/16 20:46
      */
     private String getQrCodeUrlByEquipNo(String equipNo) throws Exception{
-        //todo 设定图片暂存路径
         String dir = RedisTools.getCommonConfig("CAC_AREA_SAVE_PATH");
 
         File directory = new File(dir);

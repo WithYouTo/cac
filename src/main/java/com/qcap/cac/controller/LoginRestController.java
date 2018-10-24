@@ -36,7 +36,6 @@ public class LoginRestController {
     @Resource
     private FastDFSClientWrapper dfsClient;
 
-    //todo 免密登录
 
     /**
      *

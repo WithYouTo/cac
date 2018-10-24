@@ -122,4 +122,24 @@
     <delete id="deletePlanByPartsId"  parameterType="String">
         DELETE FROM TB_EQUIP_PLAN  WHERE PARTS_ID = #{partsId}
     </delete>
+
+    <select id="selectPlanIdByEquipId" parameterType="com.qcap.cac.entity.TbEquipPlan" resultType="String">
+        SELECT
+        PLAN_ID planId
+        FROM TB_EQUIP_PLAN
+        WHERE
+        EQUIP_ID = #{equipId}
+        AND DEL_FLAG = 'NORMAL'
+        AND PARTS_NO is null
+    </select>
+
+    <select id="selectPlanIdByEquipIdAndPartsId" parameterType="com.qcap.cac.entity.TbEquipPlan" resultType="String">
+        SELECT
+        PLAN_ID planId
+        FROM TB_EQUIP_PLAN
+        WHERE
+        EQUIP_ID = #{equipId}
+        AND DEL_FLAG = 'NORMAL'
+        AND PARTS_ID =#{partsId}
+    </select>
 </mapper>

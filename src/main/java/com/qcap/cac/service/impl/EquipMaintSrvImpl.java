@@ -121,14 +121,11 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
 
 
         if(StringUtils.isEmpty(equipPlan.getPartsId())){
-            //todo 通过设备Id获取planID
             String planId = this.equipPlanMapper.selectPlanIdByEquipId(equipPlan);
             equipPlan.setPlanId(planId);
         }else{
-            //todo 通过设备Id获取planID
             String planId = this.equipPlanMapper.selectPlanIdByEquipIdAndPartsId(equipPlan);
             equipPlan.setPlanId(planId);
-
         }
         this.equipPlanMapper.updateEquipPlan(equipPlan);
     }
