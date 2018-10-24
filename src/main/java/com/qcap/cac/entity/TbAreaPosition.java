@@ -17,6 +17,11 @@ public class TbAreaPosition {
     private String positionCode;
 
     /**
+     *   岗位类型
+     */
+    private String positionType;
+
+    /**
     *   岗位名称
      */
     private String positionName;
@@ -76,6 +81,13 @@ public class TbAreaPosition {
      */
     private Integer version;
 
+    public String getPositionType() {
+        return positionType;
+    }
+
+    public void setPositionType(String positionType) {
+        this.positionType = positionType;
+    }
 
     public String getPositionUrl() {
         return positionUrl;

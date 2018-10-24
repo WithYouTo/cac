@@ -45,6 +45,7 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
     @Override
     public Integer updatePosition(TbWarehousePosition tbWarehousePosition) {
         tbWarehousePosition.setUpdateDate(new Date());
+        tbWarehousePosition.setDeleteFlag("N");
         tbWarehousePosition.setUpdateEmp("SYS");
         return this.warehousePositionMapper.updateById(tbWarehousePosition);
     }

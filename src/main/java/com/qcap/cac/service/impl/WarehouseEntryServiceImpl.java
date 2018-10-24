@@ -182,6 +182,9 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
 
              //存在，直接更新库存数量
             if( warehouseStockMapper.selectCount(wrapper) > 0){
+                if(warehouseStockMapper.selectCount(wrapper) > 1){
+                    throw new RuntimeException("库存表中物品记录有误，请联系管理员");
+                }
                 TbWarehouseStock warehouseStock = warehouseStockMapper.selectOne(wrapper);
                 BeanUtil.copyProperties(item,warehouseStock);
                 BigDecimal oldNum = new BigDecimal(warehouseStock.getGoodsNum());

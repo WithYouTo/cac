@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,9 +9,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dao.CommonRestMapper;
 import com.qcap.cac.dto.GetAreaReq;
 import com.qcap.cac.dto.GetAreaResp;
+import com.qcap.cac.dto.GetPubCodeReq;
+import com.qcap.cac.dto.GetPubCodeResp;
+import com.qcap.cac.entity.TbAreaPosition;
+import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.CommonRestSrv;
 
 @Service
@@ -23,16 +29,23 @@ public class CommonRestSrvImpl implements CommonRestSrv {
 	@Override
 	public List<GetAreaResp> getArea(GetAreaReq req) {
 		String positionCode = req.getPositionCode();
-		String areaType = req.getAreaType();
 		if (StringUtils.isNotBlank(positionCode)) {
-			// commonRestMapper
-		} else if (StringUtils.isNotBlank(areaType)) {
-			// commonRestMapper
+			try {
+				TbAreaPosition areaPosition = commonRestMapper.getPositionByPositionCode(positionCode);
+				List<String> areaCodeList = Arrays.asList(areaPosition.getAreaCode().split(","));
+				return commonRestMapper.getAreaListByAreaCodeList(areaCodeList);
+			} catch (Exception e) {
+				throw new BaseException(CommonCodeConstant.ERROR_CODE_40403,
+						CommonCodeConstant.ERROR_CODE_40403_MSG + "【" + positionCode + "】");
+			}
 		} else {
-			// commonRestMapper
+			return commonRestMapper.getAreaList(req);
 		}
+	}
 
-		return null;
+	@Override
+	public List<GetPubCodeResp> getPubCode(GetPubCodeReq req) {
+		return commonRestMapper.getPubCodeList(req);
 	}
 
 }

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.GetAreaReq;
 import com.qcap.cac.dto.GetAreaResp;
+import com.qcap.cac.dto.GetPubCodeReq;
+import com.qcap.cac.dto.GetPubCodeResp;
 import com.qcap.cac.service.CommonRestSrv;
 import com.qcap.core.model.ResParams;
 
@@ -33,6 +35,14 @@ public class CommonRestController {
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
 	public ResParams getArea(@Valid GetAreaReq req) {
 		List<GetAreaResp> ls = commonRestSrv.getArea(req);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
+	}
+
+	@RequestMapping(value = "/getPubCode", method = RequestMethod.POST)
+	@ApiOperation(value = "获取通用代码", notes = "获取通用代码", response = Map.class, httpMethod = "POST")
+	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
+	public ResParams getPubCode(@Valid GetPubCodeReq req) throws Exception {
+		List<GetPubCodeResp> ls = commonRestSrv.getPubCode(req);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
 	}
 }
