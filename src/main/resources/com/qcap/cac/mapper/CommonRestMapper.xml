@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.CommonRestMapper">
+	
+	<select id="getPubCodeList" parameterType="com.qcap.cac.dto.GetPubCodeReq"  resultType="com.qcap.cac.dto.GetPubCodeResp">
+        SELECT
+	        DESC_ value,
+	        DESC1_ text
+        FROM
+        	tbpubcode01
+        WHERE
+        	CONFIG_CODE_ = #{getPubCodeReq.configCode}
+    </select>
+    
+    <select id="getAreaList" parameterType="com.qcap.cac.dto.GetAreaReq"  resultType="com.qcap.cac.dto.GetAreaResp">
+        SELECT
+	        AREA_ID areaId,
+	        AREA_CODE areaCode,
+	        AREA_NAME areaName,
+	        AREA_TYPE areaType,
+	        SUPER_AREA_CODE superAreaCode
+        FROM
+        	tb_area
+        <where>
+        	<if test="getAreaReq.areaType != null and getAreaReq.areaType != ''">
+	            AND AREA_TYPE = #{getAreaReq.areaType}
+	        </if>
+	   	</where>
+    </select>
+    
+    <select id="getPositionByPositionCode" parameterType="com.qcap.cac.dto.GetAreaReq"  resultType="com.qcap.cac.entity.TbAreaPosition">
+        SELECT
+	        POSITION_ID positionId,
+	        POSITION_TYPE positionType,
+	        POSITION_CODE positionCode,
+	        POSITION_NAME positionName,
+	        POSITION_URL positionUrl,
+	        AREA_CODE areaCode
+        FROM
+        	tb_area_position
+        WHERE 
+        	POSITION_CODE = #{positionCode}
+    </select>
+    
+    <select id="getAreaListByAreaCodeList" parameterType="java.util.List"  resultType="com.qcap.cac.dto.GetAreaResp">
+        SELECT
+	        AREA_ID areaId,
+	        AREA_CODE areaCode,
+	        AREA_NAME areaName,
+	        AREA_TYPE areaType,
+	        SUPER_AREA_CODE superAreaCode
+        FROM
+        	tb_area
+        WHERE AREA_CODE IN
+		   	<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+	            #{item}
+	        </foreach>
+    </select>
+
+</mapper>
