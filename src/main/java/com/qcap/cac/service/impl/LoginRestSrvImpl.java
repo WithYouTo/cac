@@ -2,12 +2,16 @@ package com.qcap.cac.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.qcap.cac.dao.LoginRestMapper;
+import com.qcap.cac.dto.MyInfoResp;
 import com.qcap.cac.dto.ResetPasswordReq;
+import com.qcap.cac.dto.UserListReq;
+import com.qcap.cac.dto.UserListResp;
 import com.qcap.cac.entity.TbAreaPosition;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.LoginRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.Md5Util;
@@ -42,11 +46,10 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     private TempTaskSrv tempTaskSrv;
 
     @Override
-    public Map<String,Object> login(String workNo, String password) {
-
-        TbManager tbManager = this.loginRestMapper.selectManagerByWorkNo(workNo);
-        List<Map<String,Object>> positionList = this.tempTaskSrv.selectCurrountWorkingEmployee(workNo);
-//        TbAreaPosition position = this.loginRestMapper.selectAreaPositionByWorkNo(workNo);
+    public Map<String,Object> login(String employeeCode, String password) throws Exception{
+        TbManager tbManager = this.loginRestMapper.selectManagerByWorkNo(employeeCode);
+        List<Map<String,Object>> positionList = this.tempTaskSrv.selectCurrountWorkingEmployee(employeeCode);
+        String positions = getPositionsFromList(positionList);
         if (tbManager != null) {
             if (checkPassword(tbManager.getPassword(), password, tbManager.getSalt())) {
                 String managerId = tbManager.getId();
@@ -55,10 +58,11 @@ public class LoginRestSrvImpl implements LoginRestSrv {
                 String str=JSONObject.toJSONString(tbManager);
                 // 存储token的过期时间和用户ID
                 redisUtil.set(AppUtils.getApplicationName() + ":manager:" + managerId, str);
-                Map<String, Object> data = new HashMap<>(2);
+                Map<String, Object> data = new HashMap<>();
                 data.put("access_token", jwtTokenUtil.doGenerateToken(managerId));
-                data.put("employee", tbManager);
-                data.put("positionList", positionList);
+                data.put("employeeId", tbManager.getId());
+                data.put("employeeCode", tbManager.getAccount());
+                data.put("positionList", positions);
                 return data;
             } else {
                 throw new BaseException("密码错误！");
@@ -69,14 +73,21 @@ public class LoginRestSrvImpl implements LoginRestSrv {
 
     }
 
+
+
     @Override
     public List<Map<String,Object>> getAppMenuByManagerId(String employeeId) {
         return this.loginRestMapper.getAppMenuByManagerId(employeeId);
     }
 
     @Override
-    public List<Map<String, Object>> getAppUserInfoByManagerCode(String employeeCode) {
-        return this.loginRestMapper.getAppUserInfoByManagerCode(employeeCode);
+    public MyInfoResp getAppUserInfoByManagerCode(String employeeCode) {
+        MyInfoResp info = this.loginRestMapper.getAppUserInfoByManagerCode(employeeCode);
+        String baseUrl = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+        String url = baseUrl+info.getUrl();
+        info.setUrl(url);
+        return info;
+
     }
 
     @Override
@@ -107,28 +118,48 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     public Map<String, Object> getLoginInfo(String employeeCode) {
         TbManager tbManager = this.loginRestMapper.selectManagerByWorkNo(employeeCode);
         List<Map<String,Object>> positionList = this.tempTaskSrv.selectCurrountWorkingEmployee(employeeCode);
-        Map<String, Object> data = new HashMap<>(2);
-        data.put("employee", tbManager);
-        data.put("positionList", positionList);
+
+        String positions = getPositionsFromList(positionList);
+        Map<String, Object> data = new HashMap<>();
+        data.put("access_token", jwtTokenUtil.doGenerateToken(tbManager.getId()));
+        data.put("employeeId", tbManager.getId());
+        data.put("employeeCode", tbManager.getAccount());
+        data.put("positionList", positions);
         return data;
     }
 
     @Override
-    public List<TbManager> getUserListByOrgCode(String orgCode, String positionCode) {
+    public List<UserListResp> getUserListByOrgCode(UserListReq userListReq) {
         DateFormat format = new SimpleDateFormat("yyyyMM");
         String s = format.format(new Date());
+        String orgCode = userListReq.getOrgCode();
+        String positionCode = userListReq.getPositionCode();
 
-        Set<TbManager> set = new HashSet<TbManager>();
-        List<TbManager> orgList = this.loginRestMapper.getUserListByOrgCode(orgCode);
-        List<TbManager> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s);
+        Set<UserListResp> set = new HashSet<UserListResp>();
+        List<UserListResp> orgList = this.loginRestMapper.getUserListByOrgCode(orgCode);
+        List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s);
 
         CollectionUtils.addAll(set, orgList);
         CollectionUtils.addAll(set, poList);
-        List<TbManager> result = new ArrayList(set);
+        List<UserListResp> result = new ArrayList(set);
         return result;
+    }
+
+    @Override
+    public void updateImgByEmployeeId(String employeeId, String path) {
+        this.loginRestMapper.updateImgByEmployeeId(employeeId,path);
     }
 
     private boolean checkPassword(String encryptPassword, String password, String salt) {
         return Objects.equals(encryptPassword, Md5Util.encrypt(password, salt));
+    }
+
+
+    private String getPositionsFromList(List<Map<String, Object>> positionList) {
+        StringBuilder sb = new StringBuilder("");
+        for (Map<String,Object> map : positionList){
+            sb.append(Objects.toString(map.get("positionCode")));
+        }
+        return sb.toString();
     }
 }

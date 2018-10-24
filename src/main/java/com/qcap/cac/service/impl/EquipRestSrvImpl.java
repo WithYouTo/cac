@@ -23,8 +23,13 @@ public class EquipRestSrvImpl implements EquipRestSrv {
     @Override
     public List<EquipListResp> getEquipList(String employeeCode) {
         List<EquipListResp> list = this.equipRestMapper.getEquipList(employeeCode);
-        List<Map<String,Object>> workOrders = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(employeeCode);
+        List<Map<String,Object>> tempList = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(employeeCode);
+        String shift = Objects.toString(tempList.get(0).get("shift"));
+        Map<String,String> shiftTime = this.equipRestMapper.getShiftTimeByShift(shift);
+        for(EquipListResp ep : list){
 
+            //todo 重组对象，加入设备使用时间
+        }
         return null;
     }
 

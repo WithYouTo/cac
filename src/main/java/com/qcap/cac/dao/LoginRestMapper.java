@@ -1,5 +1,7 @@
 package com.qcap.cac.dao;
 
+import com.qcap.cac.dto.MyInfoResp;
+import com.qcap.cac.dto.UserListResp;
 import com.qcap.cac.entity.TbAreaPosition;
 import com.qcap.core.entity.TbManager;
 import org.apache.ibatis.annotations.Param;
@@ -11,17 +13,19 @@ import java.util.Map;
 @SuppressWarnings("rawtypes")
 @Repository
 public interface LoginRestMapper {
-    TbManager selectManagerByWorkNo(String workNo);
+    TbManager selectManagerByWorkNo(@Param("employeeCode") String employeeCode);
 
     List<Map<String,Object>> getAppMenuByManagerId(String employeeId);
 
-    List<Map<String,Object>> getAppUserInfoByManagerCode(@Param("employeeCode") String employeeCode);
+    MyInfoResp getAppUserInfoByManagerCode(@Param("employeeCode") String employeeCode);
 
     void updateManagerPwd(TbManager tbManager);
 
     TbAreaPosition selectAreaPositionByWorkNo(String workNo);
 
-    List<TbManager> getUserListByOrgCode(String orgCode);
+    List<UserListResp> getUserListByOrgCode(@Param("orgCode") String orgCode);
 
-    List<TbManager> getUserListByPositionCode(@Param("positionCode")String positionCode,@Param("month")String month);
+    List<UserListResp> getUserListByPositionCode(@Param("positionCode")String positionCode,@Param("month")String month);
+
+    void updateImgByEmployeeId(@Param("employeeId") String employeeId,@Param("path") String path);
 }

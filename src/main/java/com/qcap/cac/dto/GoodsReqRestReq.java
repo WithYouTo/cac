@@ -63,12 +63,27 @@ public class GoodsReqRestReq {
 	 */
 	private String requStatus;
 
+
+
 	/**
 	 *   新增时间
 	 */
 	private String createDate;
 
-    public String getPositionName() {
+	/**
+	 *   分页序号
+	 */
+	private String lineNo;
+
+	public String getLineNo() {
+		return lineNo;
+	}
+
+	public void setLineNo(String lineNo) {
+		this.lineNo = lineNo;
+	}
+
+	public String getPositionName() {
         return positionName;
     }
 

@@ -45,6 +45,19 @@ public class GoodsReqDetailReq {
      */
     private String requRemark;
 
+    /**
+     *   分页序号
+     */
+    private String lineNo;
+
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
+
     public String getWarehouseReqDetailId() {
         return warehouseReqDetailId;
     }

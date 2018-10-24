@@ -4,12 +4,15 @@
 
 	<select id="selectManagerByWorkNo" parameterType="String" resultType="com.qcap.core.entity.TbManager">
 		SELECT
+		id id,
 		account account,
 		password password,
 		salt salt,
 		name name
 		FROM
 		tb_manager
+		WHERE
+		account = #{employeeCode}
 	</select>
 
 	<select id="getAppMenuByManagerId" resultType="java.util.Map">
@@ -21,8 +24,10 @@
 		FROM tb_manager_role a
 		left JOIN tb_role_menu b on a.role_id = b.role_num
 		left JOIN tb_menu c ON c.code = b.menu_code
-		WHERE c.is_menu = 0
+		WHERE c.is_menu = 2
 		AND a.manager_id = #{managerId}
+		AND c.url != '#'
+		order by c.seq
 	</select>
 
 	<select id="selectAreaPositionByWorkNo" resultType="com.qcap.cac.entity.TbAreaPosition">
@@ -36,40 +41,49 @@
 		WHERE  CHARINDEX(a.EMPLOYEE_CODE,#{employeeCode})>0
 	</select>
 
-	<select id="getAppUserInfoByManagerCode" resultType="java.util.Map">
+	<select id="getAppUserInfoByManagerCode" resultType="com.qcap.cac.dto.MyInfoResp"  parameterType="String">
 		SELECT
 		USER_NAME employeeName,
+		CASE
+			WHEN GENDER = 'MALE' THEN '男'
+            WHEN GENDER = 'FEMALE' THEN '女'
+        END gender,
+		DATE_FORMAT(BIRTH,'%Y-%m-%d') birth,
 		HEAD_IMG_URL url
 		FROM tb_user_info
 		WHERE
 		WORK_NO = #{employeeCode}
 	</select>
 
-	<select id="getUserListByOrgCode" resultType="com.qcap.core.entity.TbManager" parameterType="String">
+	<select id="getUserListByOrgCode" resultType="com.qcap.cac.dto.UserListResp" parameterType="String">
 		SELECT
 		a.id id,
-		a.name name,
-		a.phone phone
+		a.name employeeName,
+		a.account employeeCode
 		FROM tb_manager a
 		left join tb_manager_org b
 		on a.id = b.manager_id
 		left join tb_org c
 		on b.org_id = c.id
-		WHERE
-		c.code = #{orgCode}
+		WHERE 1=1
+		<if test="orgCode != null and orgCode != ''">
+			AND c.code = #{orgCode}
+		</if>
 	</select>
 
-	<select id="getUserListByPositionCode" resultType="com.qcap.core.entity.TbManager">
+	<select id="getUserListByPositionCode" resultType="com.qcap.cac.dto.UserListResp">
 		SELECT
 		a.id id,
-		a.name name,
-		a.phone phone
+		a.name employeeName,
+		a.account employeeCode
 		FROM tb_manager a
 		left join tb_task_arrangement b
 		on a.account = b.employee_code
 		WHERE
-		b.position_code = #{positionCode}
-		AND b.month = #{month}
+	  	b.month = #{month}
+		<if test="positionCode != null and positionCode != ''">
+			AND b.position_code = #{positionCode}
+		</if>
 		AND DELETE_FLAG = 'NORMAL'
 	</select>
 
@@ -80,6 +94,14 @@
 		salt = #{salt}
 		WHERE
 		id = #{id}
+	</update>
+
+	<update id="updateImgByEmployeeId">
+		UPDATE tb_user_info
+		SET
+		HEAD_IMG_URL = #{path}
+		WHERE
+		USER_ID = #{employeeId}
 	</update>
 
 </mapper>

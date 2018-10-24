@@ -37,6 +37,19 @@ public class GoodsDistributionDetailReq {
 	 */
 	private String minUnit;
 
+	/**
+	 *   分页序号
+	 */
+	private String lineNo;
+
+	public String getLineNo() {
+		return lineNo;
+	}
+
+	public void setLineNo(String lineNo) {
+		this.lineNo = lineNo;
+	}
+
 	public String getIds() {
 		return ids;
 	}

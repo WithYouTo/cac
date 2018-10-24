@@ -10,16 +10,16 @@
  */
 package com.qcap.core.utils;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Predicate;
-
-import javax.servlet.http.HttpServletRequest;
-
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.FileAppender;
+import com.qcap.core.entity.TbManager;
+import com.qcap.core.model.ZTreeNode;
+import com.qcap.core.utils.jwt.JwtProperties;
+import com.qcap.core.utils.jwt.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -27,17 +27,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.qcap.core.entity.TbManager;
-import com.qcap.core.model.ZTreeNode;
-import com.qcap.core.utils.jwt.JwtProperties;
-import com.qcap.core.utils.jwt.JwtTokenUtil;
-
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.FileAppender;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * AppUtils工具类
@@ -351,11 +344,12 @@ public final class AppUtils {
 		HttpServletRequest request = getCurrentRequest();
 		if (request != null) {
 			String token = request.getHeader(JwtProperties.getTokenHeader());
-			String managerId = jtu.getUsernameFromToken(token);
-			return ru.get(getApplicationName() + ":manager:" + managerId, TbManager.class);
-		} else {
-			return null;
+			if(StringUtils.isNotEmpty(token)){
+				String managerId = jtu.getUsernameFromToken(token);
+				return ru.get(getApplicationName() + ":manager:" + managerId, TbManager.class);
+			}
 		}
+		return null;
 	}
 
 	/**

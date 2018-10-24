@@ -14,49 +14,50 @@
 
     <!--库管领用单列表-->
 	<select id="queryReqList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqRestReq">
-	SELECT
-	WAREHOUSE_REQU_ID,
-	STOREROOM_ID,
-	STOREROOM,
-	REQU_BATCH_NO,
-	REQU_PERSON,
-	REQU_MOBILE,
-	REQU_NAME,
-	a.POSITION_ID,
-	(select b.POSITION_NAME from tb_area_position b where a.POSITION_ID = b.POSITION_ID) positionName,
-	DATE_FORMAT(REQU_TIME,'%Y-%m-%d') requTime,
-	DATE_FORMAT(CREATE_DATE,'%Y-%m-%d %H:%i:%s') createDate,
-	REQU_REMARK,
-	REQU_STATUS
-	from tb_warehouse_requ a
-	LEFT JOIN tb_warehouse_requ b
-    on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
-	WHERE DATE(a.REQU_TIME) =#{date}
-	/*AND FIND_IN_SET(#{positionId},POSITION_ID)*/
-	AND b.REQU_STATUS =#{requStatus}
-	<if test="lineNo!=null and lineNo!=''">
-		and a.LINE_NO &gt; #{lineNo}
-	</if>
-	order by REQU_BATCH_NO desc
-	limit 0,10
+		SELECT
+		a.LINE_NO,
+		a.WAREHOUSE_REQU_ID,
+		a.STOREROOM_ID,
+		a.STOREROOM,
+		a.REQU_BATCH_NO,
+		a.REQU_PERSON,
+		a.REQU_MOBILE,
+		a.REQU_NAME,
+		a.POSITION_CODE,
+		(select b.POSITION_NAME from tb_area_position b where a.POSITION_CODE = b.POSITION_CODE) positionName,
+		DATE_FORMAT(a.REQU_TIME,'%Y-%m-%d') requTime,
+		DATE_FORMAT(a.CREATE_DATE,'%Y-%m-%d %H:%i:%s') createDate,
+		a.REQU_REMARK,
+		a.REQU_STATUS
+		from tb_warehouse_requ a
+		LEFT JOIN tb_warehouse_requ b
+		on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
+		WHERE DATE(a.REQU_TIME) =#{date}
+		AND b.REQU_STATUS =#{requStatus}
+		<if test="lineNo!=null and lineNo!=''">
+			and a.LINE_NO &gt; #{lineNo}
+		</if>
+		order by a.REQU_BATCH_NO desc
+		limit 0,10
 	</select>
 
 
 	<!--库管查询领用明细-->
 	<select id="queryReqDetailList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsReqDetailReq">
-	 SELECT
-	    a.WAREHOUSE_REQU_ID,
-        WAREHOUSE_REQDETAIL_ID,
-        a.GOODS_NO  goodsNo,
-        a.GOODS_NAME goodsName,
-        APPLY_NUM,
-        REAL_NUM,
-        MIN_UNIT,
-        (SELECT IFNULL(SUM(GOODS_NUM),0) FROM tb_warehouse_stock c WHERE c.GOODS_NAME = a.GOODS_NAME) goodsNum,
-        a.REQU_REMARK
-        from tb_warehouse_reqdetail a
-        LEFT JOIN tb_warehouse_requ b
-        on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
+		SELECT
+		a.LINE_NO,
+		a.WAREHOUSE_REQU_ID,
+		WAREHOUSE_REQDETAIL_ID,
+		a.GOODS_NO  goodsNo,
+		a.GOODS_NAME goodsName,
+		APPLY_NUM,
+		a.LINE_NO,
+		(SELECT MIN_UNIT FROM tb_warehouse_stock c WHERE c.GOODS_NO = a.GOODS_NO) minUnit,
+		(SELECT IFNULL(SUM(GOODS_NUM),0) FROM tb_warehouse_stock c WHERE c.GOODS_NAME = a.GOODS_NAME) goodsNum,
+		a.REQU_REMARK
+		from tb_warehouse_reqdetail a
+		LEFT JOIN tb_warehouse_requ b
+		on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
         where  a.WAREHOUSE_REQU_ID = #{warehouseRequId}
         AND a.REQU_STATUS =#{requStatus}
 		<if test="lineNo!=null and lineNo!=''">
@@ -78,23 +79,28 @@
 			0
 		) availNum,
 		a.minUnit,
+		a.LINE_NO,
 		a.POSITION_CODE,
 		a.POSITION_NAME
 	FROM
 		(
 			SELECT
 				GROUP_CONCAT(a.WAREHOUSE_REQDETAIL_ID) ids,
+				a.LINE_NO,
 				a.GOODS_NO goodsNo,
 				a.GOODS_NAME goodsName,
 				SUM(a.REAL_NUM) realNum,
         c.POSITION_CODE,
         c.POSITION_NAME,
-				a.MIN_UNIT minUnit
+		(SELECT MIN_UNIT FROM tb_warehouse_stock c WHERE c.GOODS_NO = a.GOODS_NO) minUnit
 			FROM
 				tb_warehouse_reqdetail a LEFT JOIN tb_warehouse_requ c
         on a.WAREHOUSE_REQU_ID = c.WAREHOUSE_REQU_ID
 			WHERE
-				a.REQU_STATUS = #{requStatus} AND c.POSITION_CODE = #{positionCode}
+				a.REQU_STATUS = #{requStatus}
+			<if test="positionCode!=null and positionCode!=''">
+				AND c.POSITION_CODE = #{positionCode}
+			</if>
 			<if test="goodsNo!=null and goodsNo!=''">
 				and a.GOODS_NO = #{goodsNo}
 			</if>
@@ -124,6 +130,30 @@
 		order by a.goodsNo
 		limit 0,10
 	</select>
+
+
+	<!--库管出库，更新领用单库存-->
+	<update id="updateReqDetailByGoodsOut" parameterType="com.qcap.cac.entity.TbWarehouseReqdetail" >
+        update tb_warehouse_reqdetail
+        set
+        REAL_NUM = #{realNum,jdbcType=INTEGER},
+        REQU_STATUS = #{requStatus,jdbcType=VARCHAR},
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+        VERSION = VERSION + 1
+        where WAREHOUSE_REQDETAIL_ID = #{warehouseReqdetailId,jdbcType=VARCHAR}
+    </update>
+
+	<!--库管出库，更新库存-->
+	<update id="updateStockByGoodsOut" parameterType="com.qcap.cac.entity.TbWarehouseStock" >
+        update tb_warehouse_stock
+        set
+        GOODS_NUM = #{goodsNum,jdbcType=INTEGER},
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
+        VERSION = VERSION + 1
+        where WAREHOUSE_STOCK_ID = #{warehouseStockId,jdbcType=VARCHAR}
+    </update>
 	
 	
 	

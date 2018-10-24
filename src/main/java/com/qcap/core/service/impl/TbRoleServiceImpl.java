@@ -44,7 +44,7 @@ public class TbRoleServiceImpl implements ITbRoleService {
 	public void getRoleList(IPage<TbRole> page, String roleName) {
 		QueryWrapper<TbRole> wrapper = new QueryWrapper<>();
 		if (StringUtils.isNotEmpty(roleName)) {
-			wrapper.lambda().like(TbRole::getName, roleName + "%");
+			wrapper.lambda().like(TbRole::getName, roleName);
 		}
 		tbRoleMapper.selectPage(page, wrapper);
 	}
