@@ -253,6 +253,7 @@
 	<select id="selectPositionInfoByAreaCode" parameterType="String" resultType="Map">
 	SELECT POSITION_CODE positionCode,POSITION_NAME positionName from tb_area_position 
 	WHERE FIND_IN_SET(#{areaCode},AREA_CODE)
+	AND POSITION_TYPE = '3'
 	</select>
 	
 	<sql id="selectWorkIngItem">

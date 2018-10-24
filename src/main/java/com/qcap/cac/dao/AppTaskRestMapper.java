@@ -1,11 +1,10 @@
 package com.qcap.cac.dao;
 
-import java.util.List;
-import java.util.Map;
-
+import com.qcap.cac.dto.AppTaskUpdateReq;
 import org.apache.ibatis.annotations.Param;
 
-import com.qcap.cac.dto.AppTaskUpdateDto;
+import java.util.List;
+import java.util.Map;
 
 public interface AppTaskRestMapper {
 	
@@ -19,9 +18,7 @@ public interface AppTaskRestMapper {
 	
 	Map<String, Object> queryTaskDetail (@Param("taskCode") String taskCode);
 	
-	List<Map<String, Object>> selectSysFile (@Param("groupId") String groupId);
-	
-	void updateTask (AppTaskUpdateDto appTaskUpdateDto);
+	void updateTask (AppTaskUpdateReq appTaskUpdateReq);
 	
 	List<Map<String, Object>> selectStandardDetailList (@Param("standardCode") String standardCode);
 	

@@ -48,7 +48,7 @@ public class MessageRestController {
 	@RequestMapping(value = "/updateMessageForRead", method = RequestMethod.POST)
 	@ApiOperation(value = "更新消息状态为已读", notes = "更新消息状态为已读", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public ResParams updateMessageForRead(@Valid UpdateMessageReadReq req) throws Exception {
+	public ResParams updateMessageForRead(@Valid UpdateMessageReadReq req) {
 		messageRestSrv.updateMessageForRead(req);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC);
 	}

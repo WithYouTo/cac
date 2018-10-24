@@ -137,7 +137,7 @@ public class ManagerController {
 	 */
 	 @PostMapping("/changePwd")
 	 public Object changePwd(HttpServletRequest request,@RequestParam String oldPass, @RequestParam String
-			 newPass, @RequestParam String finalPass) throws Exception{
+			 newPass, @RequestParam String finalPass) {
 		 if (!newPass.equals(finalPass)) {
 			 throw new BussinessException(BizExceptionEnum.TWO_PWD_NOT_MATCH);
 		 }

@@ -8,10 +8,10 @@ import com.qcap.cac.dto.UpdateMessageReadReq;
 
 public interface MessageRestSrv {
 
-	public List<GetMessageResp> getMessageForNewest(GetMessageReq req) throws Exception;
+	List<GetMessageResp> getMessageForNewest(GetMessageReq req) throws Exception;
 
-	public List<GetMessageResp> getMessage(GetMessageReq req) throws Exception;
+	List<GetMessageResp> getMessage(GetMessageReq req) throws Exception;
 
-	public void updateMessageForRead(UpdateMessageReadReq req);
+	void updateMessageForRead(UpdateMessageReadReq req);
 
 }

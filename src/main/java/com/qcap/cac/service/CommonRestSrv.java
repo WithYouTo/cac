@@ -7,6 +7,6 @@ import com.qcap.cac.dto.GetAreaResp;
 
 public interface CommonRestSrv {
 
-	public List<GetAreaResp> getArea(GetAreaReq req);
+	List<GetAreaResp> getArea(GetAreaReq req);
 
 }

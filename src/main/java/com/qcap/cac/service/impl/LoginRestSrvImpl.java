@@ -42,7 +42,7 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     private TempTaskSrv tempTaskSrv;
 
     @Override
-    public Map<String,Object> login(String workNo, String password) throws Exception{
+    public Map<String,Object> login(String workNo, String password) {
 
         TbManager tbManager = this.loginRestMapper.selectManagerByWorkNo(workNo);
         List<Map<String,Object>> positionList = this.tempTaskSrv.selectCurrountWorkingEmployee(workNo);
@@ -80,7 +80,7 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     }
 
     @Override
-    public void resetPassword(ResetPasswordReq resetPasswordDto) throws Exception{
+    public void resetPassword(ResetPasswordReq resetPasswordDto) {
         String employeeCode = resetPasswordDto.getEmployeeCode();
         String oldPassword = resetPasswordDto.getOldPassword();
         String newPassword = resetPasswordDto.getNewPassword();

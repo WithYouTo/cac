@@ -46,7 +46,7 @@ public class RedisTools {
 		JwtProperties jwtProperties = SpringContextHolder.getBean(JwtProperties.class);
 		JwtTokenUtil jwtTokenUtil = SpringContextHolder.getBean(JwtTokenUtil.class);
 
-		String token = request.getHeader(jwtProperties.getTokenHeader());
+		String token = request.getHeader(JwtProperties.getTokenHeader());
 		String userId = jwtTokenUtil.getUsernameFromToken(token);
 		String key = AppUtils.getApplicationName() + StrUtil.COLON + "manager" + StrUtil.COLON + userId;
 //		TbManager manager = (TbManager) JSONObject.parseObject().parse();

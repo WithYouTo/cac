@@ -11,9 +11,9 @@ import com.qcap.cac.entity.TbMessage;
 @Repository
 public interface MessageRestMapper extends BaseMapper<TbMessage> {
 
-	public List<TbMessage> getMessageForNewest(GetMessageReq req);
+	List<TbMessage> getMessageForNewest(GetMessageReq req);
 
-	public List<TbMessage> getMessage(GetMessageReq req);
+	List<TbMessage> getMessage(GetMessageReq req);
 
-	public int updateMessageForRead(TbMessage message);
+	int updateMessageForRead(TbMessage message);
 }

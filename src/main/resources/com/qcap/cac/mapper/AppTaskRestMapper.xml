@@ -63,6 +63,7 @@
 		m.STANDARD_NAME standardName,
 		m.TASK_CODE  AS  taskCode,
 		m.TASK_TYPE  AS  taskType,
+		CONCAT(m.AREA_NAME,m.STANDARD_NAME) AS taskName,
 		CASE WHEN m.TASK_TYPE ='TEMP' THEN '临时'
 		WHEN m.TASK_TYPE ='REGULAR' THEN '周期'
 		WHEN m.TASK_TYPE ='EVENT' THEN '事件'
@@ -111,6 +112,7 @@
 	m.AREA_NAME  AS  areaName,
 	m.TASK_CODE  AS  taskCode,
 	m.TASK_TYPE  AS  taskType,
+	CONCAT(m.AREA_NAME,m.STANDARD_NAME) AS taskName,
 	CASE WHEN m.TASK_TYPE ='TEMP' THEN '临时'
 	WHEN m.TASK_TYPE ='REGULAR' THEN '周期'
 	WHEN m.TASK_TYPE ='EVENT' THEN '事件'
@@ -136,19 +138,7 @@
 	WHERE m.TASK_CODE = #{taskCode}
 	</select>
 	
-	<select id="selectSysFile" parameterType="String" resultType="Map">
-	SELECT 
-	m.FILE_ID  AS  fileId,
-	m.GROUP_ID  AS  groupId,
-	m.FILE_NAME  AS  fileName,
-	m.FILE_TYPE  AS  fileType,
-	m.STORE_URL  AS  storeUrl,
-	m.DOWNLOAD_URL  AS  downloadUrl
-	FROM tb_sys_file
-	WHERE GROUP_ID = #{groupId}
-	</select>
-	
-	<update id="updateTask" parameterType="com.qcap.cac.dto.AppTaskUpdateDto" >
+	<update id="updateTask" parameterType="com.qcap.cac.dto.AppTaskUpdateReq" >
 	    update tb_task
 	    <set>
 	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(completeTime)">
@@ -172,6 +162,12 @@
 	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(disqualifiedReason)">
 	        DISQUALIFIED_REASON = #{disqualifiedReason},
 	      </if>
+	    	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(feedbackImgUrl)">
+				FEEDBACK_IMG_URL = #{feedbackImgUrl},
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkImgUrl)">
+				CHECK_IMG_URL = #{checkImgUrl},
+			</if>
 	    </set>
 	    where TASK_CODE = #{taskCode}
 	</update>

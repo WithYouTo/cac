@@ -1,28 +1,25 @@
 package com.qcap.cac.service.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-
+import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.constant.CommonConstant;
+import com.qcap.cac.dao.AppTaskRestMapper;
+import com.qcap.cac.dto.AppTaskCheckRestReq;
+import com.qcap.cac.dto.AppTaskFinishReq;
+import com.qcap.cac.dto.AppTaskRestReq;
+import com.qcap.cac.dto.AppTaskUpdateReq;
+import com.qcap.cac.exception.BaseException;
+import com.qcap.cac.service.AppTaskRestSrv;
+import com.qcap.cac.tools.RedisTools;
+import com.qcap.core.utils.DateUtil;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.qcap.cac.constant.CommonCodeConstant;
-import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dao.AppTaskRestMapper;
-import com.qcap.cac.dto.AppTaskCheckRestReq;
-import com.qcap.cac.dto.AppTaskRestReq;
-import com.qcap.cac.exception.BaseException;
-import com.qcap.cac.service.AppTaskRestSrv;
-import com.qcap.cac.tools.RedisTools;
-import com.qcap.core.utils.DateUtil;
+import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 @Service
 @Transactional
@@ -69,9 +66,9 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		param.put("employeeCode", appTaskRestDto.getEmployeeCode());
 		param.put("taskSatus", appTaskRestDto.getTaskStatus());
 		return this.appTaskRestMapper.selectTaskIntro(param);
-	};
-	
-	@Override
+	}
+
+    @Override
 	public Map<String, Object> queryTaskDetail (String taskCode){
 		
 		Map<String, Object> map = this.appTaskRestMapper.queryTaskDetail(taskCode);
@@ -114,15 +111,10 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 			}
 		}
 
-		
-		/**
-		 * 图片路径处理
-		 * TODO
-		 */
 		return map;
-	};
-	
-	@Override
+	}
+
+    @Override
 	public List<Map<String, Object>> queryFinishAndCheckTask (AppTaskCheckRestReq appTaskRestCheckReq){
 		String employeeCode = Objects.toString(appTaskRestCheckReq.getEmployeeCode());
 		//根据查询时间分白班和夜班进行统计
@@ -130,9 +122,30 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		param.put("taskSatus", appTaskRestCheckReq.getTaskStatus());
 		param.put("checkSatus", appTaskRestCheckReq.getCheckStatus());
 		return this.appTaskRestMapper.selectTaskIntro(param);
-	};
+	}
 
-	/** 
+    @Override
+    public  Map<String, Object> selectStandardDetailInfo (String standardDetailId){
+        return this.appTaskRestMapper.selectStandardDetailInfo(standardDetailId);
+    }
+
+    @Override
+    public void workingTask(String taskCode) {
+        AppTaskUpdateReq appTaskUpdateReq = new AppTaskUpdateReq();
+        appTaskUpdateReq.setTaskCode(taskCode);
+        appTaskUpdateReq.setTaskStatus(CommonConstant.TASK_STATUS_WORKING);
+        this.appTaskRestMapper.updateTask(appTaskUpdateReq);
+    }
+
+    @Override
+    public void finishTask(AppTaskFinishReq appTaskFinishReq) throws InvocationTargetException, IllegalAccessException {
+        AppTaskUpdateReq appTaskUpdateReq = new AppTaskUpdateReq();
+        BeanUtils.copyProperties(appTaskUpdateReq , appTaskFinishReq);
+		appTaskUpdateReq.setTaskStatus(CommonConstant.TASK_STATUS_FINISH);
+        this.appTaskRestMapper.updateTask(appTaskUpdateReq);
+    }
+
+    /**
 	 * 查询任务、或统计任务时，
 	 * 对于白班和夜班的任务时间进行处理
 	 * @Title: getTaskQueryTime 

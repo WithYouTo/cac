@@ -31,7 +31,7 @@ public class CommonRestController {
 	@RequestMapping(value = "/getArea", method = RequestMethod.POST)
 	@ApiOperation(value = "获取区域下拉框", notes = "获取区域下拉框", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public ResParams getArea(@Valid GetAreaReq req) throws Exception {
+	public ResParams getArea(@Valid GetAreaReq req) {
 		List<GetAreaResp> ls = commonRestSrv.getArea(req);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
 	}
