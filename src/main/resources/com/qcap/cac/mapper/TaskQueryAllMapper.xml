@@ -132,10 +132,13 @@
 	FROM tb_sys_file m where GROUP_ID =#{groupId}
 	</select>
 	
-<!-- 	<select id="selectEmployee" resultType="Map">
-	SELECT WORK_NO AS code,CONCAT(NAME,'_',WORK_NO) AS text 
-	FROM tb_user ORDER BY WORK_NO
-	</select> -->
+ 	<select id="selectEmployee" resultType="Map">
+	SELECT
+	DISTINCT
+	account AS employeeCode,CONCAT(`name`,'_',account) AS employeeName,phone AS employeeTel
+	FROM tb_manager
+	WHERE `status` !='3'
+	</select>
 	
 	
 <!-- 	<select id="selectAreaItem" resultType="Map">

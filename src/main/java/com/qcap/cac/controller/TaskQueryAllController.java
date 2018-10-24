@@ -1,17 +1,5 @@
 package com.qcap.cac.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.validation.Valid;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.TaskQueryAllSearchDto;
@@ -19,6 +7,16 @@ import com.qcap.cac.service.TaskQueryAllSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/taskQuery")
@@ -57,10 +55,10 @@ public class TaskQueryAllController {
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, map);
 	}
 	
-//	@ResponseBody
-//	@RequestMapping(value="/selectEmployee",method=RequestMethod.POST)
-//	public Object selectEmployee() {
-//		List<Map>list=this.taskQueryAllSrvImpl.selectEmployee();
-//		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
-//	}
+	@ResponseBody
+	@RequestMapping(value="/selectEmployee",method=RequestMethod.POST)
+	public Object selectEmployee() {
+		List<Map<String,Object>>list=this.taskQueryAllSrvImpl.selectEmployee();
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
+	}
 }

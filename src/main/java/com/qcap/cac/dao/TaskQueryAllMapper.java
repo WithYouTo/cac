@@ -1,12 +1,11 @@
 package com.qcap.cac.dao;
 
-import java.util.List;
-import java.util.Map;
-
+import com.qcap.cac.dto.TaskQueryAllSearchDto;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.qcap.cac.dto.TaskQueryAllSearchDto;
+import java.util.List;
+import java.util.Map;
 @Repository
 public interface TaskQueryAllMapper {
 	
@@ -16,7 +15,7 @@ public interface TaskQueryAllMapper {
 	
 	List<Map<String,Object>> selectPosition();
 	
-//	List<Map<String,Object>> selectEmployee();
+	List<Map<String,Object>> selectEmployee();
 	
 	Map<String,Object> selectStandardInfo(@Param("standardCode")String standardCode);
 	

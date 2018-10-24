@@ -1,9 +1,9 @@
 package com.qcap.cac.service;
 
+import com.qcap.cac.dto.TaskQueryAllSearchDto;
+
 import java.util.List;
 import java.util.Map;
-
-import com.qcap.cac.dto.TaskQueryAllSearchDto;
 
 public interface TaskQueryAllSrv {
 	
@@ -13,7 +13,7 @@ public interface TaskQueryAllSrv {
 	
 	List<Map<String,Object>> selectPosition();
 	
-//	List<Map<String,Object>> selectEmployee();
+	List<Map<String,Object>> selectEmployee();
 	
 	Map<String,Object> selectStandardDetail(String standardCode);
 }

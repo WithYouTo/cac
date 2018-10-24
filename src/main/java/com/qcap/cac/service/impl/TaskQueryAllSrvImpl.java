@@ -11,17 +11,15 @@
  */
 package com.qcap.cac.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.qcap.cac.dao.TaskQueryAllMapper;
 import com.qcap.cac.dto.TaskQueryAllSearchDto;
 import com.qcap.cac.service.TaskQueryAllSrv;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 /** 
  * @ClassName: TaskQueryAllSrvImpl 
@@ -38,24 +36,20 @@ public class TaskQueryAllSrvImpl implements TaskQueryAllSrv {
 
 	@Override
 	public List<Map<String,Object>> selectAllTask(TaskQueryAllSearchDto taskQueryDto) {
-		// TODO Auto-generated method stub
 		return taskQueryMapper.selectAllTask(taskQueryDto);
 	}
 
 
 	@Override
 	public List<Map<String,Object>> selectStandard() {
-		// TODO Auto-generated method stub
 		return taskQueryMapper.selectStandard();
 	}
 
 
 	@Override
 	public List<Map<String,Object>> selectPosition() {
-		// TODO Auto-generated method stub
 		return taskQueryMapper.selectPosition();
 	}
-
 
 	@Override
 	public Map<String,Object> selectStandardDetail(String standardCode) {
@@ -66,10 +60,9 @@ public class TaskQueryAllSrvImpl implements TaskQueryAllSrv {
 		return standardMap;
 	}
 	
-//	@Override
-//	public List<Map> selectEmployee() {
-//		// TODO Auto-generated method stub
-//		return taskQueryMapper.selectEmployee();
-//	}
+	@Override
+	public List<Map<String,Object>> selectEmployee() {
+		return taskQueryMapper.selectEmployee();
+	}
 
 }
