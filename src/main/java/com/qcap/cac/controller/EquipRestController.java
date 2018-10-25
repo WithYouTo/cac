@@ -26,7 +26,7 @@ public class EquipRestController {
 
     /**
      *
-     * @Description: 获取所有可用设备
+     * @Description: 获取可用设备类型列表
      *
      *
      * @MethodName: getEquipList
@@ -37,14 +37,25 @@ public class EquipRestController {
      * @date 2018/10/23 15:48
      */
     @PostMapping("/listUseEquip")
-    @ApiOperation(value="获取可用设备列表",notes="获取可用设备列表",response=Map.class,httpMethod="POST")
+    @ApiOperation(value="获取可用设备类型列表",notes="获取可用设备类型列表",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
     public ResParams listUseEquip(String employeeCode){
         List<EquipListResp> list = this.equipRestSrv.getEquipList(employeeCode);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
     }
 
-
+    /**
+     *
+     * @Description: 获取可用设备列表
+     *
+     *
+     * @MethodName: listUnrevertEquip
+     * @Parameters: [employeeCode]
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/25 18:42
+     */
     @PostMapping("/listUnrevertEquip")
     @ApiOperation(value="获取可用设备列表",notes="获取可用设备列表",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
@@ -53,6 +64,18 @@ public class EquipRestController {
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
     }
 
+    /**
+     *
+     * @Description: 获取设备状态
+     *
+     *
+     * @MethodName: getEquipStatus
+     * @Parameters: [equipNo]
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/25 18:42
+     */
     @PostMapping("/getEquipStatus")
     @ApiOperation(value="获取设备状态",notes="获取设备状态",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
@@ -61,6 +84,18 @@ public class EquipRestController {
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", map);
     }
 
+    /**
+     *
+     * @Description: 使用设备时修改设备状态
+     *
+     *
+     * @MethodName: updateStopEquipStatus
+     * @Parameters: [updateStopEquipStatusReq]
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/25 18:42
+     */
     @PostMapping("/updateStopEquipStatus")
     @ApiOperation(value="使用设备时修改设备状态",notes="使用设备时修改设备状态",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
@@ -68,7 +103,18 @@ public class EquipRestController {
         return this.equipRestSrv.updateStopEquipStatus(updateStopEquipStatusReq);
     }
 
-
+    /**
+     *
+     * @Description: 归还设备时修改设备状态
+     *
+     *
+     * @MethodName: updateUsingEquipStatus
+     * @Parameters: [updateUsingEquipStatusReq]
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/25 18:42
+     */
     @PostMapping("/updateUsingEquipStatus")
     @ApiOperation(value="归还设备时修改设备状态",notes="归还设备时修改设备状态",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")

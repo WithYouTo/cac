@@ -13,7 +13,7 @@ import java.util.Map;
 
 @SuppressWarnings("rawtypes")
 @Repository
-public interface EquipChargeMapper extends BaseMapper<TbManager> {
+public interface EquipChargeMapper extends BaseMapper<TbEquipCharge> {
     List<Map<String, Object>> listEquipCharge(IPage<Map<String, Object>> page, @Param("obj") EquipChargeSearchDto equipChargeSearchDto);
 
     String getChargeTotalTimeByEquipId(String equipId);

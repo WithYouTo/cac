@@ -27,5 +27,7 @@ public interface EquipMapper extends BaseMapper<TbEquip>{
 
     void deleteEquipByEquipId(@Param("equipId")String equipId);
 
-    void updateStopEquipStatus(@Param("equipNo")String equipNo);
+//    void updateStopEquipStatus(@Param("equipNo")String equipNo);
+
+    void updateEquipStatusByEquipNoAndStatus(@Param("equipNo")String equipNo, @Param("status")String equipWorkStatusInuse);
 }

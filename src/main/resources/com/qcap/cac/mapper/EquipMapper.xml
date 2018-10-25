@@ -197,10 +197,10 @@
         EQUIP_ID = #{equipId}
     </update>
 
-    <update id="updateStopEquipStatus" parameterType="String">
+    <update id="updateEquipStatusByEquipNoAndStatus">
         UPDATE  tb_equip
         SET
-        EQUIP_WORK_STATE = 'INUSE'
+        EQUIP_WORK_STATE = #{status}
         WHERE
         EQUIP_NO = #{equipNo}
     </update>

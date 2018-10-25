@@ -3,6 +3,7 @@ package com.qcap.cac.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -48,11 +49,16 @@ public class TbEquipRepair implements Serializable {
     /**
      * 报修人联系方式
      */
+    private String personNo;
+
+    /**
+     * 报修人联系方式
+     */
     private String personMobile;
     /**
      * 报修时间
      */
-    private LocalDateTime repairTime;
+    private Date repairTime;
     /**
      * 描述
      */
@@ -72,7 +78,7 @@ public class TbEquipRepair implements Serializable {
     /**
      * 新增时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
     /**
      * 修改人
      */
@@ -80,7 +86,7 @@ public class TbEquipRepair implements Serializable {
     /**
      * 修改时间
      */
-    private LocalDateTime updateDate;
+    private Date updateDate;
     /**
      * 版本
      */
@@ -151,12 +157,36 @@ public class TbEquipRepair implements Serializable {
         this.personMobile = personMobile;
     }
 
-    public LocalDateTime getRepairTime() {
+    public String getPersonNo() {
+        return personNo;
+    }
+
+    public void setPersonNo(String personNo) {
+        this.personNo = personNo;
+    }
+
+    public Date getRepairTime() {
         return repairTime;
     }
 
-    public void setRepairTime(LocalDateTime repairTime) {
+    public void setRepairTime(Date repairTime) {
         this.repairTime = repairTime;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public String getEquipDesc() {
@@ -191,13 +221,7 @@ public class TbEquipRepair implements Serializable {
         this.createEmp = createEmp;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
 
     public String getUpdateEmp() {
         return updateEmp;
@@ -207,13 +231,7 @@ public class TbEquipRepair implements Serializable {
         this.updateEmp = updateEmp;
     }
 
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
-    }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
-        this.updateDate = updateDate;
-    }
 
     public Integer getVersion() {
         return version;
@@ -226,23 +244,24 @@ public class TbEquipRepair implements Serializable {
     @Override
     public String toString() {
         return "TbEquipRepair{" +
-        ", equipRepairId=" + equipRepairId +
-        ", equipId=" + equipId +
-        ", equipNo=" + equipNo +
-        ", equipName=" + equipName +
-        ", equipModel=" + equipModel +
-        ", equipType=" + equipType +
-        ", personName=" + personName +
-        ", personMobile=" + personMobile +
-        ", repairTime=" + repairTime +
-        ", equipDesc=" + equipDesc +
-        ", status=" + status +
-        ", remark=" + remark +
-        ", createEmp=" + createEmp +
-        ", createDate=" + createDate +
-        ", updateEmp=" + updateEmp +
-        ", updateDate=" + updateDate +
-        ", version=" + version +
-        "}";
+                "equipRepairId='" + equipRepairId + '\'' +
+                ", equipId='" + equipId + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", equipType='" + equipType + '\'' +
+                ", personName='" + personName + '\'' +
+                ", personNo='" + personNo + '\'' +
+                ", personMobile='" + personMobile + '\'' +
+                ", repairTime=" + repairTime +
+                ", equipDesc='" + equipDesc + '\'' +
+                ", status='" + status + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
     }
 }

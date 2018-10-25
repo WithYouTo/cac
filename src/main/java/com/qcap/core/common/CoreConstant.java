@@ -86,6 +86,11 @@ public class CoreConstant {
 
 	public static final String MANAGER_IM_ERROR_MSG = "云信初始化异常，请稍后重试";
 
+	public static final String MANAGER_SET_ROLE_SUCCESS = "角色分配成功";
+
+	public static final String MANAGER_SET_ORG_SUCCESS = "组织分配成功";
+
+
 	// 角色
 	public static final int ROLE_IS_ROOT_CODE = 3001;
 

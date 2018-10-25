@@ -16,8 +16,6 @@ public interface EquipRestSrv {
 
     Map<String,Object> getEquipStatus(String equipNo);
 
-    void updateEquipStatus(UpdateEquipStatusReq updateEquipStatusReq);
-
     ResParams updateStopEquipStatus(UpdateStopEquipStatusReq updateStopEquipStatusReq);
 
     void updateUsingEquipStatus(UpdateUsingEquipStatusReq updateUsingEquipStatusReq);

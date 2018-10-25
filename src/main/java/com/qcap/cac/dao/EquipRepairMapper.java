@@ -1,5 +1,6 @@
 package com.qcap.cac.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dto.EquipRepairSearchDto;
 import com.qcap.cac.entity.TbEquipRepair;
@@ -12,8 +13,7 @@ import java.util.Map;
 
 @SuppressWarnings("rawtypes")
 @Repository
-public interface EquipRepairMapper {
-    int insert(TbEquipRepair record);
+public interface EquipRepairMapper extends BaseMapper<TbEquipRepair>{
 
     List<Map<String,Object>> listEquipRepair(IPage<Map<String, Object>> page,@Param("obj") EquipRepairSearchDto equipRepairSearchDto);
 

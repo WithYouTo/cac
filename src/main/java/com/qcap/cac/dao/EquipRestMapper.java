@@ -19,4 +19,6 @@ public interface EquipRestMapper {
     List<EquipListResp> getUnrevertEquipList(@Param("employeeCode")String employeeCode);
 
     Map<String,Object> getEquipStatus(@Param("equipNo")String equipNo);
+
+    List<EquipListResp> getEquipTypeList(String employeeCode);
 }

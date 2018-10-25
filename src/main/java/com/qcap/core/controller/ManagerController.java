@@ -105,7 +105,7 @@ public class ManagerController {
 			return ResParams.newInstance(CoreConstant.FAIL_CODE, CoreConstant.MANAGER_MULTI_ORG_MSG, null);
 		}
 		managerService.buildOrfForManager(userId, ids[0]);
-		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.SUCCESS_DESC, null);
+		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.MANAGER_SET_ORG_SUCCESS, null);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class ManagerController {
 			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 		}
 		managerService.buildRoleForManager(userId, Arrays.asList(roleIds.split(",")));
-		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.ROLE_SET_AUTH_SUCCESS, null);
+		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.MANAGER_SET_ROLE_SUCCESS, null);
 	}
 
 	 /**

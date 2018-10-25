@@ -2,16 +2,14 @@ package com.qcap.cac.service.impl;
 
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dao.EquipChargeMapper;
-import com.qcap.cac.dao.EquipMapper;
-import com.qcap.cac.dao.EquipRestMapper;
-import com.qcap.cac.dao.EquipUseMapper;
+import com.qcap.cac.dao.*;
 import com.qcap.cac.dto.EquipListResp;
 import com.qcap.cac.dto.UpdateEquipStatusReq;
 import com.qcap.cac.dto.UpdateStopEquipStatusReq;
 import com.qcap.cac.dto.UpdateUsingEquipStatusReq;
 import com.qcap.cac.entity.TbEquip;
 import com.qcap.cac.entity.TbEquipCharge;
+import com.qcap.cac.entity.TbEquipRepair;
 import com.qcap.cac.entity.TbEquipUse;
 import com.qcap.cac.service.EquipRestSrv;
 import com.qcap.cac.tools.UUIDUtils;
@@ -44,6 +42,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
     private EquipChargeMapper equipChargeMapper;
 
     @Resource
+    private EquipRepairMapper equipRepairMapper;
+
+    @Resource
     private TempTaskSrvImpl tempTaskSrvImpl;
 
     @Resource
@@ -51,7 +52,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
 
     @Override
     public List<EquipListResp> getEquipList(String employeeCode) {
-        List<EquipListResp> list = this.equipRestMapper.getEquipList(employeeCode);
+        List<EquipListResp> list = this.equipRestMapper.getEquipTypeList(employeeCode);
         return rebuildEquipListWithUseTime(list,employeeCode);
     }
 
@@ -67,21 +68,6 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         String status = Objects.toString(map.get("status"));
         map.put("statusName", CommonConstant.EQUIP_WORK_STATUS.get(status));
         return map;
-    }
-
-    @Override
-    public void updateEquipStatus(UpdateEquipStatusReq updateEquipStatusReq) {
-        String status = updateEquipStatusReq.getStatus();
-        String equipNo = updateEquipStatusReq.getEquipNo();
-
-        Map<String,Object> map = this.equipRestMapper.getEquipStatus(equipNo);
-        String curStatus = Objects.toString(map.get("status"));
-
-        if(("INSTOP").equals(curStatus)){
-
-        }
-
-
     }
 
     @Override
@@ -116,7 +102,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         this.equipUseMapper.insertEquipUse(equipUse);
 
         //通过设备编号将设备信息表中的设备工作状态改为使用中
-        this.equipMapper.updateStopEquipStatus(equipNo);
+        this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INUSE);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
     }
 
@@ -127,11 +113,8 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         String operateCode = updateUsingEquipStatusReq.getOperateCode();
         //通过工号，获取人员信息
         TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
-
-        //更新设备使用记录表中的数据
         //通过设备编码和使用状态查询设备使用记录
         TbEquipUse equipUse= this.equipUseMapper.getEquipUseIdByEquipNoAndStatus(equipNo);
-
         Date endUseTime = new Date();
         //重组设备充电记录对象
         TbEquipUse eu = new TbEquipUse();
@@ -144,19 +127,48 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         //更新设备充电记录中结束充电时间和充电时长
         this.equipUseMapper.updateEquipUseByEquipUseId(eu);
 
-
-        //获取当前设备的工作状态
-        Map<String,Object> map = this.equipRestMapper.getEquipStatus(equipNo);
-        String curStatus = Objects.toString(map.get("status"));
-
+        TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
         if(CommonConstant.EQUIP_WORK_STATUS_INREPAIR.equals(operateCode)){
+            TbEquipRepair equipRepair = new TbEquipRepair();
 
+
+            BeanUtils.copyProperties(equip,equipRepair);
+            //重组equipRepair对象
+            equipRepair.setEquipId(UUIDUtils.getUUID());
+            equipRepair.setStatus(CommonConstant.EQUIP_CHARGE_STATUS_REPAIR);
+            equipRepair.setCreateEmp(employeeCode);
+            equipRepair.setUpdateEmp(employeeCode);
+            equipRepair.setPersonMobile(manager.getPhone());
+            equipRepair.setPersonNo(manager.getAccount());
+            equipRepair.setPersonName(manager.getName());
+            equipRepair.setRepairTime(new Date());
+            //新增一条设备维修记录
+            this.equipRepairMapper.insert(equipRepair);
+            //修改设备信息表设备工作状态
+            this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INREPAIR);
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INCHARGE.equals(operateCode)){
+            TbEquipCharge equipCharge = new TbEquipCharge();
 
+
+            BeanUtils.copyProperties(equip,equipCharge);
+            //重组equipCharge对象
+            equipCharge.setEquipId(UUIDUtils.getUUID());
+            equipCharge.setStatus(CommonConstant.EQUIP_CHARGE_STATUS_REPAIR);
+            equipCharge.setCreateEmp(employeeCode);
+            equipCharge.setUpdateEmp(employeeCode);
+            equipCharge.setPersonMobile(manager.getPhone());
+            equipCharge.setPersonNo(manager.getAccount());
+            equipCharge.setPersonName(manager.getName());
+            equipCharge.setStartChargeTime(new Date());
+            //新增一条设备充电记录
+            this.equipChargeMapper.insert(equipCharge);
+            //修改设备信息表设备工作状态
+            this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INCHARGE);
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INSTOP.equals(operateCode)){
-
+            //修改设备信息表设备工作状态
+            this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
         }
     }
 

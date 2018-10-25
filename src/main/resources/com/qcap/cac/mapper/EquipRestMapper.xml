@@ -22,6 +22,21 @@
 		limit 0,10
 	</select>
 
+	<select id="getEquipTypeList" resultType="com.qcap.cac.dto.EquipListResp">
+		SELECT
+		b.IMG_URL url,
+		a.DESC_ equipTypeCode,
+		a.DESC1_ equipTypeName
+		FROM
+		tbpubcode01 a
+		LEFT JOIN
+		tb_equip b
+		ON a.DESC_ = b.EQUIP_TYPE
+		WHERE
+		a.CONFIG_CODE_ = 'EQUIP_TYPE'
+		GROUP BY  b.EQUIP_TYPE
+	</select>
+
 	<select id="getShiftTimeByShift" parameterType="String" resultType="Map">
 		SELECT
 		DESC1_ startTime,
