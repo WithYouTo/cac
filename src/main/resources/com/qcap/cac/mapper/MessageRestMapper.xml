@@ -62,5 +62,23 @@
 	</update>
 	
 	
+	<update id="updateMessageALLForRead" parameterType="com.qcap.cac.entity.TbMessage">
+		UPDATE tb_message SET
+			READ_FLAG  = #{readFlag},
+			UPDATE_EMP = #{updateEmp},
+			UPDATE_DATE = #{updateDate},
+			VERSION = VERSION + 1
+		WHERE 
+			USER_ID = #{userId}
+	</update>
+	
+	<select id="isMesisMessageNoRead" parameterType="com.qcap.cac.dto.IsMessageNoReadReq" resultType="java.lang.Integer">
+		SELECT 
+			COUNT(1) 
+		FROM 
+			tb_message 
+		WHERE USER_ID = #{employeeCode} AND READ_FLAG = '0'
+	</select>
+	
   
 </mapper>
