@@ -37,7 +37,7 @@
 		<if test="lineNo!=null and lineNo!=''">
 			and a.LINE_NO &gt; #{lineNo}
 		</if>
-		order by a.REQU_BATCH_NO desc
+		order by a.LINE_NO DESC
 		limit 0,10
 	</select>
 
@@ -63,7 +63,7 @@
 		<if test="lineNo!=null and lineNo!=''">
 			and a.LINE_NO &gt; #{lineNo}
 		</if>
-        order by a.GOODS_NO
+        order by a.LINE_NO DESC
 		limit 0,10
 	</select>
 
@@ -127,7 +127,7 @@
 	<if test="lineNo!=null and lineNo!=''">
 		and a.LINE_NO &gt; #{lineNo}
 	</if>
-		order by a.goodsNo
+		order by a.LINE_NO DESC
 		limit 0,10
 	</select>
 

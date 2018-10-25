@@ -212,4 +212,18 @@ public class CommonConstant {
 		READ_FLAG.put("1", "已读");
 	}
 
+
+	// 请假状态
+	public final static String LEAVE_STATUS_AUDITING = "AUDITING ";
+	public final static String LEAVE_STATUS_REFUSE = "REFUSE";
+	public final static String LEAVE_STATUS_PASS = "PASS";
+	public final static String LEAVE_STATUS_CANCEL = "CANCEL";
+	public static Map<String, String> LEAVE_STATUS = new LinkedHashMap<String, String>();
+	static {
+		LEAVE_STATUS.put("AUDITING", "待审批");
+		LEAVE_STATUS.put("REFUSE", "已驳回");
+		LEAVE_STATUS.put("PASS", "已通过");
+		LEAVE_STATUS.put("CANCEL", "已撤回");
+	}
+
 }

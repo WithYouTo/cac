@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcap.cac.dao.LeaveRestMapper">
+
+	<!--查询当前登录人的组织编码-->
+	<select id="queryLoginOrgCode" parameterType="String" resultType="String">
+	 select a.`code`
+        from tb_org a
+                 left join tb_manager_org b on a.id = b.org_id
+                 left join tb_manager c on b.manager_id = c.id
+        where c.account = #{employeeCode}
+	</select>
+
+
+    <!--请假列表-->
+	<select id="queryLeaveList" parameterType="Map" resultType="com.qcap.cac.dto.AppLeaveReq">
+		SELECT
+		LEAVE_ID,
+		LINE_NO,
+		PERSON_ID,
+		WORK_NO,
+		LEAVE_TYPE,
+		(SELECT desc1_ FROM tbpubcode01 A WHERE A.CONFIG_CODE_ = 'LEAVE_TYPE' AND A.DESC_ = b.LEAVE_TYPE) leaveTypeName,
+		PERSON_NAME,
+		PERSON_MOBILE,
+		LEAVE_REASON,
+		LEAVE_STATUS,
+		case LEAVE_STATUS
+		 when 'AUDITING' then '待审核'
+		 when 'PASS' then '已通过'
+		 when 'REFUSE' then '已驳回'
+		 when 'CANCEL' then '已撤回'
+		else '' END leaveStatusName,
+		AUDIT_PERSON,
+		LEAVE_START_TIME,
+		LEAVE_END_TIME,
+		LEAVE_URL,
+		LEAVE_TOTAL_TIME,
+		REMARK,
+		AUDIT_PERSON,
+		REFUSE_REASON,
+		REFUSE_URL,
+		DATE_FORMAT(CREATE_TIME,'%Y.%m.%d')
+		FROM tb_leave b
+		where 1 = 1
+		<if test="leaveStatus!=null and leaveStatus!=''">
+			and b.LEAVE_STATUS = #{leaveStatus}
+		</if>
+		<if test="employeeCode!=null and employeeCode!=''">
+			and b.WORK_NO = #{employeeCode}
+		</if>
+		<if test="auditPerson!=null and auditPerson!=''">
+			and b.AUDIT_PERSON = #{auditPerson}
+		</if>
+		<if test="employeeCodeList !=null and employeeCodeList!=''">
+			and b.WORK_NO in
+		   <foreach collection="employeeCodeList" index="index" item="item" open="(" separator="," close=")">
+				   #{item}
+		  </foreach>
+		</if>
+		<if test="lineNo!=null and lineNo!=''">
+			and b.LINE_NO &gt; #{lineNo}
+		</if>
+		order by b.LEAVE_START_TIME desc
+		limit 0,10
+	</select>
+
+	<select id="selectLeaveDetailById" parameterType="String" resultType="com.qcap.cac.dto.AppLeaveApplyReq">
+		SELECT
+		LEAVE_ID,
+		LINE_NO,
+		PERSON_ID,
+		WORK_NO,
+		LEAVE_TYPE,
+		(SELECT desc1_ FROM tbpubcode01 A WHERE A.CONFIG_CODE_ = 'LEAVE_TYPE' AND A.DESC_ = b.LEAVE_TYPE) leaveTypeName,
+		PERSON_NAME,
+		PERSON_MOBILE,
+		LEAVE_REASON,
+		LEAVE_STATUS,
+		case LEAVE_STATUS
+		 when 'AUDITING' then '待审核'
+		 when 'PASS' then '已通过'
+		 when 'REFUSE' then '已驳回'
+		 when 'CANCEL' then '已撤回'
+		else '' END leaveStatusName,
+		AUDIT_PERSON,
+		LEAVE_START_TIME,
+		LEAVE_END_TIME,
+		LEAVE_URL,
+		LEAVE_TOTAL_TIME,
+		REMARK,
+		AUDIT_PERSON,
+		REFUSE_REASON,
+		REFUSE_URL,
+		DATE_FORMAT(CREATE_TIME,'%Y.%m.%d')
+		FROM tb_leave b where  LEAVE_ID = #{leaveId}
+	</select>
+
+
+</mapper>

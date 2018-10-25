@@ -20,10 +20,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -112,7 +110,13 @@ public class GoodsApplyRestController {
 	@RequestMapping(value="updateDelivery",method=RequestMethod.POST)
 	@ApiOperation(value="库管出库",notes="库管出库",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
-	public Object updateDeliveryByManager(@Valid GoodsOutListReq goodsOutListReq) {
+	public Object updateDeliveryByManager(@RequestBody  GoodsOutListReq goodsOutListReq) {
+		if(null == goodsOutListReq){
+			return ResParams.newInstance(CoreConstant.FAIL_CODE, "库管出库物品为空",null);
+		}
+		if(CollectionUtils.isEmpty(goodsOutListReq.getGoodsOutReqList())){
+			return ResParams.newInstance(CoreConstant.FAIL_CODE, "库管出库物品为空",null);
+		}
 		try {
 			this.goodsApplyRestSrv.updateDelivery(goodsOutListReq);
 		} catch (Exception e) {
@@ -124,9 +128,9 @@ public class GoodsApplyRestController {
 	@RequestMapping(value="updateDistribution",method=RequestMethod.POST)
 	@ApiOperation(value="主管发放",notes="主管发放",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
-	public Object updateDistribution(@Valid GoodsOutDistruListReq goodsOutDistruListReq) {
+	public Object updateDistribution(@Valid GoodsOutDistruListReq goodsOutDistruReqList) {
 		try {
-			this.goodsApplyRestSrv.updateDistribution(goodsOutDistruListReq);
+			this.goodsApplyRestSrv.updateDistribution(goodsOutDistruReqList);
 		} catch (Exception e) {
 			return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(),null);
 		}

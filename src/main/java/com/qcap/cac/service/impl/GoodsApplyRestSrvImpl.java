@@ -132,6 +132,7 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             paramMap.put("positionCode",positionCode);
             paramMap.put("employeeCode",employeeCode);
             paramMap.put("goodsNo",goodsNo);
+            paramMap.put("requStatus",CommonConstant.WAREHOUSE_REQ_STATUS_RECEIVE);
             List<GoodsDistributionDetailReq> distruList = this.goodsApplyRestMapper.queryAvailDistributionList(paramMap);
             if(CollectionUtils.isEmpty(distruList)){
                 throw new RuntimeException("根据岗位编码没有查询到待发放信息");
