@@ -1,6 +1,7 @@
 package com.qcap.cac.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.entity.TbArea;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -19,7 +20,7 @@ import java.util.Map;
  */
 public interface AreaMapper extends BaseMapper<TbArea> {
 
-    List<Map> selectAreaList(@Param("areaCode") String areaCode);
+    List<Map<String, Object>> selectAreaList(IPage<Map<String, Object>> page, @Param("areaCode") String areaCode);
 
     List<Map> initTree();
 

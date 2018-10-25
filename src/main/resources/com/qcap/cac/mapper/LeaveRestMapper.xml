@@ -32,8 +32,8 @@
 		 when 'CANCEL' then '已撤回'
 		else '' END leaveStatusName,
 		AUDIT_PERSON,
-		LEAVE_START_TIME,
-		LEAVE_END_TIME,
+		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%m:%s') leaveStartTime,
+		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%m:%s') leaveEndTime,
 		LEAVE_URL,
 		LEAVE_TOTAL_TIME,
 		REMARK,
@@ -47,13 +47,16 @@
 		<if test="leaveStatus!=null and leaveStatus!=''">
 			and b.LEAVE_STATUS = #{leaveStatus}
 		</if>
+		<if test="auditCode!=null and auditCode!=''">
+			and b.AUDIT_PERSON = #{auditCode}
+		</if>
 		<if test="employeeCode!=null and employeeCode!=''">
 			and b.WORK_NO = #{employeeCode}
 		</if>
 		<if test="auditPerson!=null and auditPerson!=''">
 			and b.AUDIT_PERSON = #{auditPerson}
 		</if>
-		<if test="employeeCodeList !=null and employeeCodeList!=''">
+		<if test="employeeCodeList !=null and employeeCodeList.size > 0">
 			and b.WORK_NO in
 			<foreach item="item" index="index" collection="employeeCodeList"
 					 open="(" separator="," close=")">
@@ -86,15 +89,16 @@
 		 when 'CANCEL' then '已撤回'
 		else '' END leaveStatusName,
 		AUDIT_PERSON,
-		LEAVE_START_TIME,
-		LEAVE_END_TIME,
+		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%m:%s') leaveStartTime,
+		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%m:%s') leaveEndTime,
 		LEAVE_URL,
 		LEAVE_TOTAL_TIME,
 		REMARK,
 		AUDIT_PERSON,
 		REFUSE_REASON,
 		REFUSE_URL,
-		DATE_FORMAT(CREATE_DATE,'%Y.%m.%d')
+		DATE_FORMAT(AUDIT_TIME,'%Y.%m.%d') auditTime,
+		DATE_FORMAT(CREATE_DATE,'%Y.%m.%d') createTime
 		FROM tb_leave b where  LEAVE_ID = #{leaveId}
 	</select>
 

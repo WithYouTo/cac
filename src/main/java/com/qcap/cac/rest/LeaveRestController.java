@@ -86,7 +86,7 @@ public class LeaveRestController {
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,map);
 	}
 
-	@RequestMapping(value="leaveDetailById",method=RequestMethod.POST)
+	@RequestMapping(value="getLeaveDetailById",method=RequestMethod.POST)
 	@ApiOperation(value="请假详情",notes="请假详情",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object leaveDetailById(
@@ -119,6 +119,26 @@ public class LeaveRestController {
 		}
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,map);
 	}
+
+
+    @RequestMapping(value="auditedList",method=RequestMethod.POST)
+    @ApiOperation(value="我已审批记录",notes="我已审批记录",response=Map.class,httpMethod="POST")
+    @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
+    public Object getMyAuditedList(
+            @ApiParam(value = "登录人工号", required = true) @RequestParam(value = "employeeCode", required = true) String employeeCode,
+            @ApiParam(value = "lineNo", required = false) @RequestParam(value = "lineNo", required = false) String lineNo) {
+        Map<String,Object> map = new HashMap<>();
+        try {
+            Map<String,Object> paramMap = new HashMap();
+            paramMap.put("auditCode",employeeCode);
+            paramMap.put("lineNo",lineNo);
+            List<AppLeaveReq> list = this.leaveRestSrv.queryLeaveList(paramMap);
+            map.put("auditedList",list);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(),null);
+        }
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,map);
+    }
 
 
 	@RequestMapping(value="cancelMyLeaveApply",method=RequestMethod.POST)

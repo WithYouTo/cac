@@ -1,6 +1,7 @@
 package com.qcap.cac.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.PubCodeMapper;
@@ -33,8 +34,9 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
     }
 
     @Override
-    public List<Map> getAreaList(String areaCode) {
-        return areaMapper.selectAreaList(areaCode);
+    public void getAreaList(IPage<Map<String, Object>> page, String areaCode) {
+        List<Map<String, Object>> list =  areaMapper.selectAreaList(page,areaCode);
+        page.setRecords(list);
     }
 
     @Override

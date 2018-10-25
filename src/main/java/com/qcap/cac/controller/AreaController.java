@@ -1,12 +1,11 @@
 package com.qcap.cac.controller;
 
 
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.service.AreaSrv;
 import com.qcap.core.common.CoreConstant;
-import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,14 +49,9 @@ public class AreaController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams getAreaList(String pAreaCode) {
-
-        new PageFactory<Map>().defaultPage();
-
-        List<Map> list = areaSrv.getAreaList(pAreaCode);
-        PageInfo pageInfo = new PageInfo(list);
-
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
+    public PageResParams getAreaList(IPage<Map<String, Object>> page, String pAreaCode) {
+        this.areaSrv.getAreaList(page,pAreaCode);
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(), page.getRecords());
     }
 
 

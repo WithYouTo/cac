@@ -1,5 +1,6 @@
 package com.qcap.cac.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcap.cac.entity.TbArea;
 
@@ -20,7 +21,7 @@ public interface AreaSrv extends IService<TbArea> {
      * @param areaCode
      * @return
      */
-    List<Map> getAreaList(String areaCode);
+    void getAreaList(IPage<Map<String, Object>> page, String areaCode);
 
 
     /**
