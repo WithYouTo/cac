@@ -1,5 +1,21 @@
 package com.qcap.cac.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.MapUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.AppTaskRestMapper;
@@ -10,16 +26,8 @@ import com.qcap.cac.dto.AppTaskUpdateReq;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AppTaskRestSrv;
 import com.qcap.cac.tools.RedisTools;
+import com.qcap.cac.tools.ToolUtil;
 import com.qcap.core.utils.DateUtil;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.MapUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
 
 @Service
 @Transactional
@@ -46,13 +54,35 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 			result.put(map.get("taskItem"), map.get("taskNum"));
 		}
 		
+		//处理未查询到任务时的数据
+		if(!result.containsKey("waitingItem")) {
+			result.put("waitingItem", 0);
+		}
+		
+		if(!result.containsKey("workingItem")) {
+			result.put("workingItem", 0);
+		}
+		
+		if(!result.containsKey("finishItem")) {
+			result.put("finishItem", 0);
+		}
+		
+		if(!result.containsKey("tempItem")) {
+			result.put("tempItem", 0);
+		}
+		
+		if(!result.containsKey("disqualifiedItem")) {
+			result.put("disqualifiedItem", 0);
+		}
+		
+		
 		return result;
 	}
 	
 	@Override
 	public List<Map<String, Object>> queryHistoryTask (AppTaskRestReq appTaskRestDto){
 		
-		String employeeCode = Objects.toString(appTaskRestDto.getEmployeeCode());
+		String employeeCode = ToolUtil.toStr(appTaskRestDto.getEmployeeCode());
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_HISTORY);
 		param.put("taskSatus", appTaskRestDto.getTaskStatus());
@@ -72,7 +102,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	public Map<String, Object> queryTaskDetail (String taskCode){
 		
 		Map<String, Object> map = this.appTaskRestMapper.queryTaskDetail(taskCode);
-		String standardCode = Objects.toString(map.get("standardCode"));
+		String standardCode = ToolUtil.toStr(map.get("standardCode"));
 		
 		if(!StringUtils.isEmpty(standardCode)) {
 			List<Map<String, Object>> marterialList = this.appTaskRestMapper.selectStandardDetailList(standardCode);
@@ -81,42 +111,50 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		
 		//查询配置管理中存放的文件访问地址前缀
 		String addressPrefix = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+		
 		//处理完成任务时上传图片的url
-		String feedBackImgUrl = Objects.toString(map.get("feedBackImgUrl"));
-		if(!StringUtils.isEmpty(feedBackImgUrl)) {
-			if(feedBackImgUrl.contains(",")) {
-				String [] fileArr = feedBackImgUrl.split(",");
-				for(String str: fileArr) {
-					str = addressPrefix + str;
-				}
-				map.put("feedBackFile", String.join(",", fileArr));
-			}else {
-				String feedBackFile = addressPrefix + feedBackImgUrl;
-				map.put("feedBackFile", feedBackFile);
-			}
-			}
+		String feedBackImgUrl = ToolUtil.toStr(map.get("feedBackImgUrl"));
+		dealWithPicUrl(map,"feedBackFile", addressPrefix, feedBackImgUrl);
 		
 		//处理检查文件url
-		String checkImgUrl = Objects.toString(map.get("checkImgUrl"));
+		String checkImgUrl = ToolUtil.toStr(map.get("checkImgUrl"));
+		dealWithPicUrl(map,"checkFile", addressPrefix, checkImgUrl);
+		
+		//处理检查文件url
+		String taskImgUrl = ToolUtil.toStr(map.get("taskImgUrl"));
+		dealWithPicUrl(map,"taskImgFile", addressPrefix, taskImgUrl);
+
+		return map;
+	}
+
+	/** 
+	 * @Title: dealWithPicUrl 
+	 * @Description: TODO
+	 * @param map
+	 * @param addressPrefix
+	 * @param checkImgUrl
+	 * @return: void
+	 */
+	private void dealWithPicUrl(Map<String, Object> map,String fileUrlName, String addressPrefix, String checkImgUrl) {
 		if(!StringUtils.isEmpty(checkImgUrl)) {
 			if(checkImgUrl.contains(",")) {
 				String [] checkFileArr = checkImgUrl.split(",");
 				for(String str: checkFileArr) {
 					str = addressPrefix + str;
 				}
-				map.put("checkFile", String.join(",", checkFileArr));
+				map.put(fileUrlName, checkFileArr);
 			}else {
 				String checkFile = addressPrefix + checkImgUrl;
-				map.put("checkFile", String.join(",", checkFile));
+				String [] fileArray = new String[1];
+				fileArray[0]=checkFile;
+				map.put(fileUrlName, fileArray);
 			}
 		}
-
-		return map;
 	}
 
     @Override
 	public List<Map<String, Object>> queryFinishAndCheckTask (AppTaskCheckRestReq appTaskRestCheckReq){
-		String employeeCode = Objects.toString(appTaskRestCheckReq.getEmployeeCode());
+		String employeeCode = ToolUtil.toStr(appTaskRestCheckReq.getEmployeeCode());
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_FINISH);
 		param.put("taskSatus", appTaskRestCheckReq.getTaskStatus());
@@ -126,6 +164,33 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 
     @Override
     public  Map<String, Object> selectStandardDetailInfo (String standardDetailId){
+    	Map<String, Object> map = this.appTaskRestMapper.selectStandardDetailInfo(standardDetailId);
+    	String imgUrl = ToolUtil.toStr(map.get("imgUrl"));
+    	
+		//查询配置管理中存放的文件访问地址前缀
+		String addressPrefix = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+		dealWithPicUrl(map, "imgUrl", addressPrefix, imgUrl);
+    	
+    	String standardStep = ToolUtil.toStr(map.get("standardStep"));
+    	
+    	if(!StringUtils.isEmpty(standardStep)) {
+    		 String WINDOWS_REGEX = "\n";
+        	 String LINUX_REGEX = "\r\n";
+        	 String [] standardStepArr = null;
+        	if(standardStep.indexOf(WINDOWS_REGEX) != -1) {
+        		standardStepArr = standardStep.split(WINDOWS_REGEX);
+        	}
+        	
+        	if(standardStep.indexOf(LINUX_REGEX)  != -1) {
+        		standardStepArr = standardStep.split(LINUX_REGEX);
+        	}
+        	
+        	map.put("standardStep", standardStepArr);
+    	}
+    	
+    	
+    	 
+    	 
         return this.appTaskRestMapper.selectStandardDetailInfo(standardDetailId);
     }
 
@@ -154,7 +219,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	 * @throws BaseException
 	 * @return: Map<String, Object>
 	 */
-	protected Map<String, Object> getTaskQueryTime(String employeeCode,String queryType) {
+	private Map<String, Object> getTaskQueryTime(String employeeCode,String queryType) {
 		
 		Date now = new Date();
 		String monthNo = DateUtil.dateToMonth(now);
@@ -177,8 +242,8 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		if (MapUtils.isEmpty(shiftMap)) {
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "未查询到班次设置的起止时间");
 		}
-		String startTime = Objects.toString(shiftMap.get("startTime"));
-		String endTime = Objects.toString(shiftMap.get("endTime"));
+		String startTime = ToolUtil.toStr(shiftMap.get("startTime"));
+		String endTime = ToolUtil.toStr(shiftMap.get("endTime"));
 		
 		/**当天日期**/
 		String curDateTime = DateUtil.dateTimeToString(now);
@@ -235,7 +300,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	 * @return
 	 * @return: Map<String,Object>
 	 */
-	protected Map<String, Object> queryTaskItemTime(String shift, String startTime, String endTime, String curDate,
+	private Map<String, Object> queryTaskItemTime(String shift, String startTime, String endTime, String curDate,
 			String curTime, String nextDate, String lastDate) {
 		// 组装查询条件
 		String newStartTime = "";
@@ -278,7 +343,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		return map;
 	}
 	
-	protected Map<String, Object> queryTaskHistoryTime(String endTime, String curDate,String curTime, String lastDate) {
+	private Map<String, Object> queryTaskHistoryTime(String endTime, String curDate,String curTime, String lastDate) {
 		// 组装查询条件
 		String newEndTime = "";
 		Map<String, Object> map = new HashMap<>();
@@ -297,7 +362,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		
 	}
 	
-	protected Map<String, Object> queryFinishTaskTime(String shift, String startTime, String endTime, String curDate,
+	private Map<String, Object> queryFinishTaskTime(String shift, String startTime, String endTime, String curDate,
 			String curTime, String nextDate) {
 		// 组装查询条件
 		String newStartTime = "";

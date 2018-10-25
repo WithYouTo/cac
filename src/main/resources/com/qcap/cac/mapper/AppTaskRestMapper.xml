@@ -29,7 +29,7 @@
 	UNION
 	select COUNT(1), 'tempItem' 
 	FROM tb_task 
-	WHERE TASK_STATUS !='CANCLE' 
+	WHERE TASK_STATUS ='WAIT' 
 	AND TASK_CODE LIKE 'T%' 
 	AND START_TIME &gt;= #{startTime}
 	AND START_TIME &lt; #{endTime}
@@ -63,13 +63,18 @@
 		m.STANDARD_NAME standardName,
 		m.TASK_CODE  AS  taskCode,
 		m.TASK_TYPE  AS  taskType,
+		m.CHECK_STATUS AS checkStatus,
+		CASE WHEN m.CHECK_STATUS ='TOCHECK' THEN '待检查'
+		WHEN m.CHECK_STATUS ='QUALIFIED' THEN '合格'
+		WHEN m.CHECK_STATUS ='DISQUALIFIED' THEN '不合格'
+		END AS checkStatusName,
 		CONCAT(m.AREA_NAME,m.STANDARD_NAME) AS taskName,
 		CASE WHEN m.TASK_TYPE ='TEMP' THEN '临时'
 		WHEN m.TASK_TYPE ='REGULAR' THEN '周期'
 		WHEN m.TASK_TYPE ='EVENT' THEN '事件'
 		WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
 		END AS taskTypeName,
-		CONCAT(DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T'),'-',DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')) AS cleanTime,
+		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
 		m.SPEC  AS  spec,
 		m.TASK_SCORE  AS  taskScore,
 		m.CHECK_FLAG  AS  checkFlag,
@@ -112,13 +117,20 @@
 	m.AREA_NAME  AS  areaName,
 	m.TASK_CODE  AS  taskCode,
 	m.TASK_TYPE  AS  taskType,
+	m.TASK_STATUS  AS  taskStatus,
+	m.CHECK_STATUS AS checkStatus,
+	m.TASK_IMG_URL AS taskImgUrl,
+	CASE WHEN m.CHECK_STATUS ='TOCHECK' THEN '待检查'
+	WHEN m.CHECK_STATUS ='QUALIFIED' THEN '合格'
+	WHEN m.CHECK_STATUS ='DISQUALIFIED' THEN '不合格'
+	END AS checkStatusName,
 	CONCAT(m.AREA_NAME,m.STANDARD_NAME) AS taskName,
 	CASE WHEN m.TASK_TYPE ='TEMP' THEN '临时'
 	WHEN m.TASK_TYPE ='REGULAR' THEN '周期'
 	WHEN m.TASK_TYPE ='EVENT' THEN '事件'
 	WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
 	END AS taskTypeName,
-	CONCAT(DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T'),'-',DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')) AS cleanTime,
+	CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
 	m.SPEC  AS  spec,
 	m.TASK_SCORE  AS  taskScore,
 	m.CHECK_FLAG  AS  checkFlag,

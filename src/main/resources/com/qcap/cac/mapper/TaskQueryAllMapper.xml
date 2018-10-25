@@ -135,7 +135,7 @@
  	<select id="selectEmployee" resultType="Map">
 	SELECT
 	DISTINCT
-	account AS employeeCode,CONCAT(`name`,'_',account) AS employeeName,phone AS employeeTel
+	account AS employeeCode,CONCAT(`name`,'-',account) AS employeeName,phone AS employeeTel
 	FROM tb_manager
 	WHERE `status` !='3'
 	</select>
