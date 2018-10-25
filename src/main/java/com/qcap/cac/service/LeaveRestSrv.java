@@ -20,13 +20,13 @@ public interface LeaveRestSrv extends IService<TbLeave> {
     Integer insertLeaveApply(AppLeaveApplyReq appLeaveApplyReq,Map<String, MultipartFile> mapFile) throws Exception;
 
 
-    AppLeaveApplyReq detailById(String leaveId);
+    AppLeaveReq detailById(String leaveId);
 
 
     Integer cancelLeave(Map<String,Object> paramMap);
 
 
-    Integer auditLeave(Map<String,Object> paramMap);
+    Integer auditLeave(Map<String, MultipartFile> mapFile,String employeeCode,String auditReason,String leaveId) throws Exception;
 
 
 }

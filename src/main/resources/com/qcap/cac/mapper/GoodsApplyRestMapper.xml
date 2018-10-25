@@ -71,6 +71,7 @@
 	<!--主管查询发放-->
 	<select id="queryAvailDistributionList" parameterType="Map" resultType="com.qcap.cac.dto.GoodsDistributionDetailReq">
 		SELECT
+		1 as distrNum,
 		a.ids,
 		a.goodsNo,
 		a.goodsName,

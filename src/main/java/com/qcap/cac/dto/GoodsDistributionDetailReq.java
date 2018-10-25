@@ -33,6 +33,11 @@ public class GoodsDistributionDetailReq {
 	private Integer availNum;
 
 	/**
+	 * 初始化数量
+	 */
+	private Integer distrNum;
+
+	/**
 	 * 单位
 	 */
 	private String minUnit;
@@ -41,6 +46,14 @@ public class GoodsDistributionDetailReq {
 	 *   分页序号
 	 */
 	private String lineNo;
+
+	public Integer getDistrNum() {
+		return distrNum;
+	}
+
+	public void setDistrNum(Integer distrNum) {
+		this.distrNum = distrNum;
+	}
 
 	public String getLineNo() {
 		return lineNo;

@@ -1,11 +1,14 @@
 package com.qcap.cac.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.util.Date;
 
 public class TbLeave {
     /**
      *   主键ID
      */
+    @TableId("LEAVE_ID")
     private String leaveId;
 
     /**
@@ -74,6 +77,12 @@ public class TbLeave {
     private String auditPerson;
 
     /**
+     *   审批时间
+     */
+    private String auditTime;
+
+
+    /**
      *   驳回原因
      */
     private String refuseReason;
@@ -96,7 +105,7 @@ public class TbLeave {
     /**
      *   创建时间
      */
-    private Date createTime;
+    private Date createDate;
 
     /**
      *   修改人
@@ -106,12 +115,20 @@ public class TbLeave {
     /**
      *   修改时间
      */
-    private Date updateTime;
+    private Date updateDate;
 
     /**
      *   版本
      */
     private Integer version;
+
+    public String getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(String auditTime) {
+        this.auditTime = auditTime;
+    }
 
     public String getRefuseReason() {
         return refuseReason;
@@ -129,33 +146,7 @@ public class TbLeave {
         this.refuseUrl = refuseUrl;
     }
 
-    @Override
-    public String toString() {
-        return "TbLeave{" +
-                "leaveId='" + leaveId + '\'' +
-                ", lineNo=" + lineNo +
-                ", personId='" + personId + '\'' +
-                ", workNo='" + workNo + '\'' +
-                ", leaveType='" + leaveType + '\'' +
-                ", personName='" + personName + '\'' +
-                ", personMobile='" + personMobile + '\'' +
-                ", leaveReason='" + leaveReason + '\'' +
-                ", leaveStatus='" + leaveStatus + '\'' +
-                ", leaveStartTime='" + leaveStartTime + '\'' +
-                ", leaveEndTime='" + leaveEndTime + '\'' +
-                ", leaveTotalTime='" + leaveTotalTime + '\'' +
-                ", leaveUrl='" + leaveUrl + '\'' +
-                ", auditPerson='" + auditPerson + '\'' +
-                ", refuseReason='" + refuseReason + '\'' +
-                ", refuseUrl='" + refuseUrl + '\'' +
-                ", remark='" + remark + '\'' +
-                ", createEmp='" + createEmp + '\'' +
-                ", createTime=" + createTime +
-                ", updateEmp='" + updateEmp + '\'' +
-                ", updateTime=" + updateTime +
-                ", version=" + version +
-                '}';
-    }
+
 
     public String getLeaveId() {
         return leaveId;
@@ -285,12 +276,12 @@ public class TbLeave {
         this.createEmp = createEmp;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public String getUpdateEmp() {
@@ -301,12 +292,12 @@ public class TbLeave {
         this.updateEmp = updateEmp;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public Integer getVersion() {

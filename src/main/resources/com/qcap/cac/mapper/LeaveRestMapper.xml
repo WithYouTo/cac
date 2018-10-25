@@ -40,7 +40,8 @@
 		AUDIT_PERSON,
 		REFUSE_REASON,
 		REFUSE_URL,
-		DATE_FORMAT(CREATE_TIME,'%Y.%m.%d')
+		DATE_FORMAT(AUDIT_TIME,'%Y.%m.%d') auditTime,
+		DATE_FORMAT(CREATE_DATE,'%Y.%m.%d') createTime
 		FROM tb_leave b
 		where 1 = 1
 		<if test="leaveStatus!=null and leaveStatus!=''">
@@ -54,18 +55,19 @@
 		</if>
 		<if test="employeeCodeList !=null and employeeCodeList!=''">
 			and b.WORK_NO in
-		   <foreach collection="employeeCodeList" index="index" item="item" open="(" separator="," close=")">
-				   #{item}
-		  </foreach>
+			<foreach item="item" index="index" collection="employeeCodeList"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 		</if>
 		<if test="lineNo!=null and lineNo!=''">
 			and b.LINE_NO &gt; #{lineNo}
 		</if>
-		order by b.LEAVE_START_TIME desc
+		order by b.LINE_NO desc
 		limit 0,10
 	</select>
 
-	<select id="selectLeaveDetailById" parameterType="String" resultType="com.qcap.cac.dto.AppLeaveApplyReq">
+	<select id="selectLeaveDetailById" parameterType="String" resultType="com.qcap.cac.dto.AppLeaveReq">
 		SELECT
 		LEAVE_ID,
 		LINE_NO,
@@ -92,7 +94,7 @@
 		AUDIT_PERSON,
 		REFUSE_REASON,
 		REFUSE_URL,
-		DATE_FORMAT(CREATE_TIME,'%Y.%m.%d')
+		DATE_FORMAT(CREATE_DATE,'%Y.%m.%d')
 		FROM tb_leave b where  LEAVE_ID = #{leaveId}
 	</select>
 

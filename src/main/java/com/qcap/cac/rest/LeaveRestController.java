@@ -21,6 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,7 +49,7 @@ public class LeaveRestController {
 	@Resource
 	private LeaveRestSrv leaveRestSrv;
 
-	@RequestMapping(value="leaveApply",method=RequestMethod.POST)
+	@RequestMapping(value="提交请假申请",method=RequestMethod.POST)
 	@ApiOperation(value="",notes="提交请假申请",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object insertLeaveApply(MultipartHttpServletRequest req) {
@@ -92,7 +93,7 @@ public class LeaveRestController {
 			@ApiParam(value = "请假主键", required = true) @RequestParam(value = "leaveId", required = true) String leaveId) {
 		Map<String,Object> map = new HashMap<>();
 		try {
-			AppLeaveApplyReq detail = this.leaveRestSrv.detailById(leaveId);
+            AppLeaveReq detail = this.leaveRestSrv.detailById(leaveId);
 			map.put("leaveDetail",detail);
 		} catch (Exception e) {
 			return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(),null);
@@ -126,18 +127,37 @@ public class LeaveRestController {
 	public Object cancelMyLeaveApply(
 			@ApiParam(value = "登录人工号", required = true) @RequestParam(value = "employeeCode", required = true) String employeeCode,
 			@ApiParam(value = "请假单主键", required = true) @RequestParam(value = "leaveId", required = false) String leaveId,
-			@ApiParam(value = "操作类型（撤销cancel/通过pass）", required = true) @RequestParam(value = "operaType", required = false) String operaType) {
+			@ApiParam(value = "操作类型（撤销CANCEL/通过PASS）", required = true) @RequestParam(value = "operaType", required = false) String operaType) {
 		try {
 			Map<String,Object> paramMap = new HashMap();
 			paramMap.put("employeeCode",employeeCode);
 			paramMap.put("leaveId",leaveId);
 			paramMap.put("operaType",operaType);
-			List<AppLeaveReq> list = this.leaveRestSrv.queryAuditingList(paramMap);
-			//map.put("auditingList",list);
+			this.leaveRestSrv.cancelLeave(paramMap);
 		} catch (Exception e) {
 			return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(),null);
 		}
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,null);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC,null);
 	}
+
+
+    @RequestMapping(value="refuseMyLeaveApply",method=RequestMethod.POST)
+    @ApiOperation(value="驳回请假单",notes="驳回请假单",response=Map.class,httpMethod="POST")
+    @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
+    public Object refuseMyLeaveApply(MultipartHttpServletRequest req) {
+        Map<String, MultipartFile> mapFile = req.getFileMap();
+        String employeeCode = req.getParameter("employeeCode");
+        String auditReason = req.getParameter("auditReason");
+        String leaveId = req.getParameter("leaveId");
+        try {
+            if(StringUtils.isEmpty(employeeCode)){
+                return ResParams.newInstance(CoreConstant.FAIL_CODE, "用户工号为空",null);
+            }
+            this.leaveRestSrv.auditLeave(mapFile,employeeCode,auditReason,leaveId);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(),null);
+        }
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC,null);
+    }
 
 }

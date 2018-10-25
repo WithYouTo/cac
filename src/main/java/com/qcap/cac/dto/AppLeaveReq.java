@@ -94,6 +94,47 @@ public class AppLeaveReq {
 	 */
 	private String createTime;
 
+
+	/**
+	 *   审批时间
+	 */
+	private String auditTime;
+
+
+	/**
+	 *   驳回原因
+	 */
+	private String refuseReason;
+
+	/**
+	 *   驳回图片
+	 */
+	private String refuseUrl;
+
+	public String getAuditTime() {
+		return auditTime;
+	}
+
+	public void setAuditTime(String auditTime) {
+		this.auditTime = auditTime;
+	}
+
+	public String getRefuseReason() {
+		return refuseReason;
+	}
+
+	public void setRefuseReason(String refuseReason) {
+		this.refuseReason = refuseReason;
+	}
+
+	public String getRefuseUrl() {
+		return refuseUrl;
+	}
+
+	public void setRefuseUrl(String refuseUrl) {
+		this.refuseUrl = refuseUrl;
+	}
+
 	public String getLeaveId() {
 		return leaveId;
 	}

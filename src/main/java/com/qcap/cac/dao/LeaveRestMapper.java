@@ -1,7 +1,6 @@
 package com.qcap.cac.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcap.cac.dto.AppLeaveApplyReq;
 import com.qcap.cac.dto.AppLeaveReq;
 import com.qcap.cac.entity.TbLeave;
 
@@ -15,5 +14,5 @@ public interface LeaveRestMapper  extends BaseMapper<TbLeave> {
 	List<AppLeaveReq> queryLeaveList(Map<String,Object> paramMap);
 
 
-	AppLeaveApplyReq selectLeaveDetailById(String leaveId);
+	AppLeaveReq selectLeaveDetailById(String leaveId);
 }

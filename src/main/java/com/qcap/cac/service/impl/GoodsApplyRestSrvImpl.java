@@ -125,8 +125,12 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             String positionCode = item.getPositionCode();
             String goodsNo = item.getGoodsNo();
             String goodsName = item.getGoodsName();
+            String areaCode = item.getAreaId();
             Integer distruNum = item.getDistrNum();
 
+            if(StringUtils.isEmpty(areaCode)){
+                throw new RuntimeException("请选择区域");
+            }
 
             Map<String,String> paramMap = new HashMap<>();
             paramMap.put("positionCode",positionCode);

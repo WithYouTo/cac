@@ -214,7 +214,7 @@ public class CommonConstant {
 
 
 	// 请假状态
-	public final static String LEAVE_STATUS_AUDITING = "AUDITING ";
+	public final static String LEAVE_STATUS_AUDITING = "AUDITING";
 	public final static String LEAVE_STATUS_REFUSE = "REFUSE";
 	public final static String LEAVE_STATUS_PASS = "PASS";
 	public final static String LEAVE_STATUS_CANCEL = "CANCEL";

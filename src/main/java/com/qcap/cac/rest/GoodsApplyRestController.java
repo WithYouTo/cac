@@ -24,7 +24,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +94,7 @@ public class GoodsApplyRestController {
 		Map<String,Object> map = new HashMap<>();
 		try {
 			Map<String,String> paramMap = new HashMap();
-			paramMap.put("employeeCode",employeeCode);
+			//paramMap.put("employeeCode",employeeCode);
 			paramMap.put("positionCode",positionCode);
 			paramMap.put("lineNo",lineNo);
 			List<GoodsDistributionDetailReq> list = this.goodsApplyRestSrv.queryAvailDistributionList(paramMap);
@@ -128,7 +127,13 @@ public class GoodsApplyRestController {
 	@RequestMapping(value="updateDistribution",method=RequestMethod.POST)
 	@ApiOperation(value="主管发放",notes="主管发放",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
-	public Object updateDistribution(@Valid GoodsOutDistruListReq goodsOutDistruReqList) {
+	public Object updateDistribution(@RequestBody GoodsOutDistruListReq goodsOutDistruReqList) {
+		if(null == goodsOutDistruReqList){
+			return ResParams.newInstance(CoreConstant.FAIL_CODE, "物品发放参数为空",null);
+		}
+		if(CollectionUtils.isEmpty(goodsOutDistruReqList.getGoodsOutDistruReqList())){
+			return ResParams.newInstance(CoreConstant.FAIL_CODE, "物品发放参数为空",null);
+		}
 		try {
 			this.goodsApplyRestSrv.updateDistribution(goodsOutDistruReqList);
 		} catch (Exception e) {

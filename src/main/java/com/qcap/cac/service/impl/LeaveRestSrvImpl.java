@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.LeaveRestMapper;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,11 +83,12 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
                     pathList.add(baseUrl + path);
                 }
             }
-        }
 
-        //逗号拼接
-        String path = pathList.stream().collect(Collectors.joining(","));
-        appLeaveApplyReq.setLeaveUrl(path);
+            //逗号拼接
+            String path = pathList.stream().collect(Collectors.joining(","));
+            appLeaveApplyReq.setLeaveUrl(path);
+
+        }
 
         TbLeave leave = new TbLeave();
         BeanUtils.copyProperties(appLeaveApplyReq,leave);
@@ -95,7 +98,7 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
     }
 
     @Override
-    public AppLeaveApplyReq detailById(String leaveId) {
+    public AppLeaveReq detailById(String leaveId) {
         if (StringUtils.isEmpty(leaveId)){
             throw  new RuntimeException("请假单主键为空");
         }
@@ -128,24 +131,56 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
 
         if(CommonConstant.LEAVE_STATUS_CANCEL.equals(operaType)){
             leave.setLeaveStatus(CommonConstant.LEAVE_STATUS_CANCEL);
+            leave.setAuditTime(DateUtil.formatDateTime(new Date()));
         }else if(CommonConstant.LEAVE_STATUS_PASS.equals(operaType)){
+            //审批通过
+            leave.setAuditPerson(ToolUtil.toStr(paramMap.get("employeeCode")));
+            leave.setAuditTime(DateUtil.formatDateTime(new Date()));
             leave.setLeaveStatus(CommonConstant.LEAVE_STATUS_PASS);
         }else{
             throw  new RuntimeException("操作类型不正确");
         }
 
-        EntityTools.setUpdateEmpAndTime(leave);
+        //leave.setUpdateTime(new Date());
+        leave.setUpdateEmp(ToolUtil.toStr(paramMap.get("employeeCode")));
         return this.leaveRestMapper.updateById(leave);
     }
 
     @Override
-    public Integer auditLeave(Map<String, Object> paramMap) {
-        return null;
-    }
+    public Integer auditLeave(Map<String, MultipartFile> mapFile,String employeeCode,String auditReason,String leaveId) throws Exception {
 
+        if(StringUtils.isEmpty(leaveId)){
+            throw  new RuntimeException("请假单主键为空");
+        }
 
-    public Integer updateLeave(TbLeave leave) {
+        TbLeave leave = new TbLeave();
+        leave.setLeaveId(leaveId);
+        leave.setRefuseReason(auditReason);
+        leave.setAuditPerson(employeeCode);
+        leave.setAuditTime(DateUtil.formatDateTime(new Date()));
         EntityTools.setUpdateEmpAndTime(leave);
+
+        // 文件前缀
+        String baseUrl = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+
+        //存放图片url
+        List<String> pathList = new ArrayList<>();
+        // 判断是否有文件
+        if (mapFile != null && !mapFile.isEmpty()) {
+            for (Map.Entry<String, MultipartFile> ent : mapFile.entrySet()) {
+                MultipartFile mf = ent.getValue();
+                String path = dfsClient.uploadFile(mf);
+                if(StringUtils.isNotEmpty(path)){
+                    pathList.add(baseUrl + path);
+                }
+            }
+            //逗号拼接
+            String path = pathList.stream().collect(Collectors.joining(","));
+            leave.setRefuseUrl(path);
+            //appLeaveApplyReq.setLeaveUrl(path);
+        }
         return this.leaveRestMapper.updateById(leave);
     }
+
+
 }
