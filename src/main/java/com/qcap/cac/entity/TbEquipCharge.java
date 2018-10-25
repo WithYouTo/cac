@@ -3,6 +3,7 @@ package com.qcap.cac.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -41,11 +42,11 @@ public class TbEquipCharge implements Serializable {
     /**
      * 充电开始时间
      */
-    private LocalDateTime startChargeTime;
+    private Date startChargeTime;
     /**
      * 充电结束时间
      */
-    private LocalDateTime endChargeTime;
+    private Date endChargeTime;
     /**
      * 充电时长
      */
@@ -78,7 +79,7 @@ public class TbEquipCharge implements Serializable {
     /**
      * 新增时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
     /**
      * 修改人
      */
@@ -86,7 +87,7 @@ public class TbEquipCharge implements Serializable {
     /**
      * 修改时间
      */
-    private LocalDateTime updateDate;
+    private Date updateDate;
     /**
      * 版本
      */
@@ -141,20 +142,28 @@ public class TbEquipCharge implements Serializable {
         this.equipModel = equipModel;
     }
 
-    public LocalDateTime getStartChargeTime() {
+    public Date getStartChargeTime() {
         return startChargeTime;
     }
 
-    public void setStartChargeTime(LocalDateTime startChargeTime) {
+    public void setStartChargeTime(Date startChargeTime) {
         this.startChargeTime = startChargeTime;
     }
 
-    public LocalDateTime getEndChargeTime() {
+    public Date getEndChargeTime() {
         return endChargeTime;
     }
 
-    public void setEndChargeTime(LocalDateTime endChargeTime) {
+    public void setEndChargeTime(Date endChargeTime) {
         this.endChargeTime = endChargeTime;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public String getTotalChargeTime() {
@@ -221,14 +230,6 @@ public class TbEquipCharge implements Serializable {
         this.createEmp = createEmp;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
     public String getUpdateEmp() {
         return updateEmp;
     }
@@ -237,13 +238,6 @@ public class TbEquipCharge implements Serializable {
         this.updateEmp = updateEmp;
     }
 
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(LocalDateTime updateDate) {
-        this.updateDate = updateDate;
-    }
 
     public Integer getVersion() {
         return version;

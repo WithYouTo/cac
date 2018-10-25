@@ -61,4 +61,15 @@
 		WHERE
 		id = #{id}
     </update>
+
+    <select id="getMangerByEmployeeCode" parameterType="com.qcap.core.entity.TbManager">
+        SELECT
+        account account,
+        name name,
+        phone phone
+        FROM
+        tb_manager
+        WHERE
+        account = #{employeeCode}
+    </select>
 </mapper>

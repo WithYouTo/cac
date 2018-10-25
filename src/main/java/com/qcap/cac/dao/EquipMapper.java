@@ -21,7 +21,11 @@ public interface EquipMapper extends BaseMapper<TbEquip>{
 
     TbEquip selectEquipByEquipId(String equipId);
 
+    TbEquip selectEquipByEquipNo(@Param("equipNo")String equipNo);
+
     void updateEquip(TbEquip equip);
 
     void deleteEquipByEquipId(@Param("equipId")String equipId);
+
+    void updateStopEquipStatus(@Param("equipNo")String equipNo);
 }

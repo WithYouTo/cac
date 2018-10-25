@@ -15,4 +15,8 @@ public interface EquipRestMapper {
     void getWorkOrder(@Param("map") Map<String, Object> map);
 
     Map<String,String> getShiftTimeByShift(@Param("shift") String shift);
+
+    List<EquipListResp> getUnrevertEquipList(@Param("employeeCode")String employeeCode);
+
+    Map<String,Object> getEquipStatus(@Param("equipNo")String equipNo);
 }

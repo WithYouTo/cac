@@ -214,6 +214,7 @@ public class EquipSrvImpl implements EquipSrv {
         partsNo.append(equip.getEquipNo()).append(str);
         parts.setPartsNo(partsNo.toString());
         parts.setStartUseTime(equip.getStartUseTime());
+        parts.setEquipNo(equip.getEquipNo());
 
         //todo 通用方法，待修改
         parts.setCreateDate(new Date());

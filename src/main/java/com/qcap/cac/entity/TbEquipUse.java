@@ -3,6 +3,7 @@ package com.qcap.cac.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -60,11 +61,11 @@ public class TbEquipUse implements Serializable {
     /**
      * 使用开始时间
      */
-    private LocalDateTime startUseTime;
+    private Date startUseTime;
     /**
      * 使用结束时间
      */
-    private LocalDateTime endUseTime;
+    private Date endUseTime;
     /**
      * 使用时长
      */
@@ -84,7 +85,7 @@ public class TbEquipUse implements Serializable {
     /**
      * 新增时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
     /**
      * 修改人
      */
@@ -92,7 +93,7 @@ public class TbEquipUse implements Serializable {
     /**
      * 修改时间
      */
-    private LocalDateTime updateDate;
+    private Date updateDate;
     /**
      * 版本
      */
@@ -179,21 +180,7 @@ public class TbEquipUse implements Serializable {
         this.personMobile = personMobile;
     }
 
-    public LocalDateTime getStartUseTime() {
-        return startUseTime;
-    }
 
-    public void setStartUseTime(LocalDateTime startUseTime) {
-        this.startUseTime = startUseTime;
-    }
-
-    public LocalDateTime getEndUseTime() {
-        return endUseTime;
-    }
-
-    public void setEndUseTime(LocalDateTime endUseTime) {
-        this.endUseTime = endUseTime;
-    }
 
     public String getTotalUseTime() {
         return totalUseTime;
@@ -227,13 +214,6 @@ public class TbEquipUse implements Serializable {
         this.createEmp = createEmp;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
 
     public String getUpdateEmp() {
         return updateEmp;
@@ -243,11 +223,35 @@ public class TbEquipUse implements Serializable {
         this.updateEmp = updateEmp;
     }
 
-    public LocalDateTime getUpdateDate() {
+    public Date getStartUseTime() {
+        return startUseTime;
+    }
+
+    public void setStartUseTime(Date startUseTime) {
+        this.startUseTime = startUseTime;
+    }
+
+    public Date getEndUseTime() {
+        return endUseTime;
+    }
+
+    public void setEndUseTime(Date endUseTime) {
+        this.endUseTime = endUseTime;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 

@@ -33,6 +33,33 @@
 		AND
 		CONFIG_CODE_ = 'SHIFT_TYPE'
 	</select>
+	
+	<select id="getUnrevertEquipList"  parameterType="String" resultType="com.qcap.cac.dto.EquipListResp">
+		SELECT
+		b.EQUIP_ID equipId,
+		b.EQUIP_NO equipNo,
+		b.EQUIP_NAME equipName,
+		b.IMG_URL url,
+		b.STORE_AREA storeAreaName,
+		a.STATUS status,
+		FROM
+		tb_equip_use a
+		LEFT JOIN tb_equip b
+		on a.EQUIP_ID = b.EQUIP_ID
+		WHERE
+		b.DEL_FLAG = 'NORMAL'
+		AND
+		a.STATUS = 'INUSE'
+	</select>
 
-
+	<select id="getEquipStatus" parameterType="String" resultType="Map">
+		SELECT
+		EQUIP_WORK_STATE status
+		FROM
+		tb_equip
+		WHERE
+		DEL_FLAG = 'NORMAL'
+		AND
+		EQUIP_NO = #{equipNo}
+	</select>
 </mapper>

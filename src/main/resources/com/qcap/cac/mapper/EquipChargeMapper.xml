@@ -39,4 +39,27 @@
         where
         EQUIP_ID = #{equipId}
     </select>
+
+    <select id="getEquipChargeIdByEquipNoAndStatus" resultType="com.qcap.cac.entity.TbEquipCharge" parameterType="java.lang.String">
+        select
+        EQUIP_CHARGE_ID equipChargeId,
+        START_CHARGE_TIME startChargeTime
+        from TB_EQUIP_CHARGE
+        where
+        EQUIP_NO = #{equipNo}
+        AND
+        STATUS ='INCHARGE'
+    </select>
+
+    <update id="updateEquipChargeByEquipChargeId" parameterType="com.qcap.cac.entity.TbEquipCharge">
+        UPDATE TB_EQUIP_CHARGE
+        SET
+        TOTAL_CHARGE_TIME = #{totalChargeTime},
+        END_CHARGE_TIME = #{endChargeTime},
+        STATUS = #{status},
+        UPDATE_EMP = #{updateEmp},
+        UPDATE_DATE = #{updateDate}
+        where
+        EQUIP_CHARGE_ID = #{equipChargeId}
+    </update>
 </mapper>

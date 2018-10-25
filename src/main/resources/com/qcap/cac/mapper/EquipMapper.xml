@@ -79,6 +79,33 @@
         EQUIP_ID = #{equipId}
     </select>
 
+    <select id="selectEquipByEquipNo" resultType="com.qcap.cac.entity.TbEquip" parameterType="String">
+        select
+        EQUIP_ID equipId,
+        PROJECT_CODE projectCode,
+        EQUIP_NO equipNo,
+        EQUIP_CODE_URL equipCodeUrl,
+        EQUIP_NAME equipName,
+        EQUIP_TYPE equipType,
+        EQUIP_MODEL equipModel,
+        RESPONSE_NO responseNo,
+        RESPONSE_NAME responseName,
+        MANUFACT manufact,
+        AGENCE_NO agenceNo,
+        AGENCE_NAME agenceName,
+        RELATE_NAME relateName,
+        RELATE_MOBILE relateMobile,
+        DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
+        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+        ATTENTION attention,
+        EQUIP_STATE equipState
+        FROM TB_EQUIP
+        WHERE
+        DEL_FLAG = 'NORMAL'
+        AND
+        EQUIP_NO = #{equipNo}
+    </select>
+
     <select id="getMaxEquipNumByEquipType" parameterType="String" resultType="int">
         SELECT
         count(EQUIP_ID)+1 num
@@ -162,11 +189,19 @@
         where EQUIP_ID = #{equipId}
     </update>
 
-    <update id="deleteEquipByEquipId">
+    <update id="deleteEquipByEquipId" parameterType="String" >
         UPDATE  tb_equip
         SET
         DEL_FLAG = 'DEL'
         WHERE
         EQUIP_ID = #{equipId}
+    </update>
+
+    <update id="updateStopEquipStatus" parameterType="String">
+        UPDATE  tb_equip
+        SET
+        EQUIP_WORK_STATE = 'INUSE'
+        WHERE
+        EQUIP_NO = #{equipNo}
     </update>
 </mapper>

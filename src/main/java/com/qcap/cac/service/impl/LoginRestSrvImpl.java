@@ -63,7 +63,7 @@ public class LoginRestSrvImpl implements LoginRestSrv {
                 data.put("access_token", jwtTokenUtil.doGenerateToken(managerId));
                 data.put("employeeId", tbManager.getId());
                 data.put("employeeCode", tbManager.getAccount());
-                data.put("positionList", positions);
+                data.put("positionCodes", positions);
                 return data;
             } else {
                 throw new BaseException("密码错误！");
@@ -125,7 +125,7 @@ public class LoginRestSrvImpl implements LoginRestSrv {
         data.put("access_token", jwtTokenUtil.doGenerateToken(tbManager.getId()));
         data.put("employeeId", tbManager.getId());
         data.put("employeeCode", tbManager.getAccount());
-        data.put("positionList", positions);
+        data.put("positionCodes", positions);
         return data;
     }
 

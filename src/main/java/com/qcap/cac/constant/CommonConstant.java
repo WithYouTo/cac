@@ -9,6 +9,20 @@ public class CommonConstant {
 	public final static SimpleDateFormat sdf_YMDHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	// 设备状态
+	public final static String EQUIP_WORK_STATUS_INSTOP = "INSTOP";
+	public final static String EQUIP_WORK_STATUS_INCHARGE = "INCHARGE";
+	public final static String EQUIP_WORK_STATUS_INUSE = "INUSE";
+	public final static String EQUIP_WORK_STATUS_INREPAIR = "INREPAIR";
+
+	public static Map<String, String> EQUIP_WORK_STATUS = new LinkedHashMap<String, String>();
+	static {
+		EQUIP_WORK_STATUS.put("INSTOP", "停泊中");
+		EQUIP_WORK_STATUS.put("INCHARGE", "充电中");
+		EQUIP_WORK_STATUS.put("INUSE", "使用中");
+		EQUIP_WORK_STATUS.put("INREPAIR", "维修中");
+	}
+
+	// 设备状态
 	public final static String EQUIP_STATUS_NORMAL = "NORMAL";
 	public final static String EQUIP_STATUS_ABORT = "ABORT";
 	public static Map<String, String> EQUIP_STATUS = new LinkedHashMap<String, String>();
@@ -27,8 +41,8 @@ public class CommonConstant {
 	}
 
 	// 设备使用状态
-	public final static String EQUIP_CHARGE_STATUS_INUSE = "INUSE";
-	public final static String EQUIP_CHARGE_STATUS_USED = "USED";
+	public final static String EQUIP_USE_STATUS_INUSE = "INUSE";
+	public final static String EQUIP_USE_STATUS_USED = "USED";
 	public static Map<String, String> EQUIP_USE_STATUS = new LinkedHashMap<String, String>();
 	static {
 		EQUIP_USE_STATUS.put("INUSE", "使用中");
