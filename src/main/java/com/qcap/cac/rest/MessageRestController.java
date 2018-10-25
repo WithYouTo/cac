@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.GetMessageReq;
 import com.qcap.cac.dto.GetMessageResp;
+import com.qcap.cac.dto.IsMessageNoReadReq;
+import com.qcap.cac.dto.IsMessageNoReadResp;
+import com.qcap.cac.dto.UpdateAllMessageReadReq;
 import com.qcap.cac.dto.UpdateMessageReadReq;
 import com.qcap.cac.service.MessageRestSrv;
 import com.qcap.core.model.ResParams;
@@ -48,9 +51,25 @@ public class MessageRestController {
 	@RequestMapping(value = "/updateMessageForRead", method = RequestMethod.POST)
 	@ApiOperation(value = "更新消息状态为已读", notes = "更新消息状态为已读", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public ResParams updateMessageForRead(@Valid UpdateMessageReadReq req) {
+	public ResParams updateMessageForRead(@Valid UpdateMessageReadReq req) throws Exception {
 		messageRestSrv.updateMessageForRead(req);
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC);
+	}
+
+	@RequestMapping(value = "/updateAllMessageForRead", method = RequestMethod.POST)
+	@ApiOperation(value = "更新所有消息状态为已读", notes = "更新所有消息状态为已读", response = Map.class, httpMethod = "POST")
+	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
+	public ResParams updateAllMessageForRead(@Valid UpdateAllMessageReadReq req) throws Exception {
+		messageRestSrv.updateMessageALLForRead(req);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC);
+	}
+
+	@RequestMapping(value = "/isMessageNoRead", method = RequestMethod.POST)
+	@ApiOperation(value = "是否有未读消息", notes = "是否有未读消息", response = Map.class, httpMethod = "POST")
+	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
+	public ResParams isMessageNoRead(@Valid IsMessageNoReadReq req) throws Exception {
+		IsMessageNoReadResp resp = messageRestSrv.isMessageNoRead(req);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC, resp);
 	}
 
 }
