@@ -11,6 +11,7 @@
 package com.qcap.cac.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +89,7 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 		int count = this.selectStandardName(cleaningStandardDto.getStandardName());
 		
 		if(count > 0){
-			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "清洁标准名称重复，请重新编写名称。", null);
+			return ResParams.newInstance(300, "清洁标准名称重复，请重新编写名称。", null);
 		}
 		String newStandardCode = this.newStandardCode();
 		Date date = new Date();
@@ -116,6 +117,7 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 				tbAreaStandardDetail.setMaterial(map.get("material").toString());
 				tbAreaStandardDetail.setStandardRequirement(map.get("standardRequirement").toString());
 				tbAreaStandardDetail.setStandardStep(map.get("standardStep").toString());
+				tbAreaStandardDetail.setImgUrl(map.get("imgUrl").toString());
 				
 				tbAreaStandardDetail.setCreateEmp("sys");
 				tbAreaStandardDetail.setCreateDate(date);
@@ -143,7 +145,7 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 		
 		//1.修改标准时标准名称不能出现2次重复
 		int countStandardName = this.selectStandardName(cleaningStandardDto.getStandardName());
-		if(countStandardName > 1){
+		if(countStandardName > 0){
 			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "清洁标准名称重复，请重新编写名称。", null);
 		}
 		//2.判断是否有与该清洁标准相关已经生成但是还未执行的清洁任务
@@ -225,6 +227,20 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 	@Override
 	public Object editStandardDetail(@Valid CleaningStandardDetailDto cleaningStandardDetailDto) {
 		
+		String material = cleaningStandardDetailDto.getMaterial();
+		String standardCode = cleaningStandardDetailDto.getStandardCode();
+		
+		Map<String ,String> map=new HashMap<String,String>();
+		map.put("material", material);
+		map.put("standardCode", standardCode);
+		
+		int count  = this.cleaningStandardMapper.selectStandardMaterial(map);
+		
+		if(count > 0){
+			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "清洁标准材质已经存在。", null);
+		}
+		
+		
 		TbAreaStandardDetail tbAreaStandardDetail = new TbAreaStandardDetail();
 		BeanUtils.copyProperties(cleaningStandardDetailDto, tbAreaStandardDetail);
 		
@@ -261,6 +277,18 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 	public Object addStandardDetail(@Valid CleaningStandardDetailDto cleaningStandardDetailDto) {
 		
 		Date date = new Date();
+		String material = cleaningStandardDetailDto.getMaterial();
+		String standardCode = cleaningStandardDetailDto.getStandardCode();
+		
+		Map<String ,String> map=new HashMap<String,String>();
+		map.put("material", material);
+		map.put("standardCode", standardCode);
+		
+		int count  = this.cleaningStandardMapper.selectStandardMaterial(map);
+		
+		if(count > 0){
+			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "清洁标准材质已经存在。", null);
+		}
 		
 		TbAreaStandardDetail tbAreaStandardDetail = new TbAreaStandardDetail();
 		BeanUtils.copyProperties(cleaningStandardDetailDto, tbAreaStandardDetail);

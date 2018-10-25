@@ -70,6 +70,11 @@ public interface CleaningStandardMapper {
 	 * @return: int
 	 */
 	int selectStandardName(String standardName);
+	
+	
+	
+	
+	int selectStandardMaterial(Map map);
 
 	/** 
 	 *

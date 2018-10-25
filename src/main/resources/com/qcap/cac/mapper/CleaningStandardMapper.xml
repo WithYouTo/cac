@@ -54,6 +54,7 @@
 	    VERSION version
     from tb_area_standard_detail
     where STANDARD_CODE = #{standardCode}
+    ORDER BY material
   </select>
   
   <insert id="addTbAreaStandard" parameterType="com.qcap.cac.entity.TbAreaStandard" >
@@ -145,6 +146,16 @@
     	COUNT(1)
     from tb_area_standard
 	WHERE STANDARD_NAME = #{standaedName}
+  </select>
+  
+  
+  
+  <select id="selectStandardMaterial" parameterType="map" resultType="int" >
+    select  
+    	COUNT(1)
+    from tb_area_standard_detail
+	WHERE MATERIAL = #{material}
+	and STANDARD_CODE = #{standardCode}
   </select>
   
   
