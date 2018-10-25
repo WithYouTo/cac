@@ -22,6 +22,17 @@
 		limit 0,10
 	</select>
 
+	<select id="getShiftTimeByShift" parameterType="String" resultType="Map">
+		SELECT
+		DESC1_ startTime,
+		DESC2_ endTime
+		FROM
+		tbpubcode01
+		WHERE
+		DESC_ = #{shift}
+		AND
+		CONFIG_CODE_ = 'SHIFT_TYPE'
+	</select>
 
 
 </mapper>

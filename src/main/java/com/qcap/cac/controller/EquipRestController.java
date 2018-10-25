@@ -4,6 +4,8 @@ import com.qcap.cac.dto.EquipListResp;
 import com.qcap.cac.service.EquipRestSrv;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.model.ResParams;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,9 +33,20 @@ public class EquipRestController {
      * @author huangxiang
      * @date 2018/10/23 15:48
      */
-    @PostMapping("/getEquipList")
-    public ResParams getEquipList(String employeeNo){
+    @PostMapping("/listUseEquip")
+    @ApiOperation(value="获取可用设备列表",notes="获取可用设备列表",response=Map.class,httpMethod="POST")
+    @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
+    public ResParams listUseEquip(String employeeNo){
         List<EquipListResp> list = this.equipRestSrv.getEquipList(employeeNo);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
     }
+
+
+    @PostMapping("/listUseEquip")
+    @ApiOperation(value="获取可用设备列表",notes="获取可用设备列表",response=Map.class,httpMethod="POST")
+    @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
+    public ResParams listUnrevertEquip(){
+        return null;
+    }
+
 }
