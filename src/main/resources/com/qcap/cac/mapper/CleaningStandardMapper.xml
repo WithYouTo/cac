@@ -156,6 +156,7 @@
     from tb_area_standard_detail
 	WHERE MATERIAL = #{material}
 	and STANDARD_CODE = #{standardCode}
+	and STANDARD_DETAIL_ID != #{standardDetailId}
   </select>
   
   

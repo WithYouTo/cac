@@ -229,10 +229,12 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 		
 		String material = cleaningStandardDetailDto.getMaterial();
 		String standardCode = cleaningStandardDetailDto.getStandardCode();
+		String standardDetailId=cleaningStandardDetailDto.getStandardDetailId();
 		
 		Map<String ,String> map=new HashMap<String,String>();
 		map.put("material", material);
 		map.put("standardCode", standardCode);
+		map.put("standardDetailId",standardDetailId);
 		
 		int count  = this.cleaningStandardMapper.selectStandardMaterial(map);
 		
@@ -279,10 +281,12 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 		Date date = new Date();
 		String material = cleaningStandardDetailDto.getMaterial();
 		String standardCode = cleaningStandardDetailDto.getStandardCode();
+		String standardDetailId=cleaningStandardDetailDto.getStandardDetailId();
 		
 		Map<String ,String> map=new HashMap<String,String>();
 		map.put("material", material);
 		map.put("standardCode", standardCode);
+		map.put("standardDetailId",standardDetailId);
 		
 		int count  = this.cleaningStandardMapper.selectStandardMaterial(map);
 		
