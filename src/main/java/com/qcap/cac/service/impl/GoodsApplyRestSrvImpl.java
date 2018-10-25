@@ -3,13 +3,11 @@ package com.qcap.cac.service.impl;
 import cn.jiguang.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dao.GoodsApplyRestMapper;
-import com.qcap.cac.dao.WarehouseDistributionMapper;
-import com.qcap.cac.dao.WarehouseReqDetailMapper;
-import com.qcap.cac.dao.WarehouseStockMapper;
+import com.qcap.cac.dao.*;
 import com.qcap.cac.dto.*;
 import com.qcap.cac.entity.TbWarehouseDistribution;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
+import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.GoodsApplyRestSrv;
 import com.qcap.cac.tools.EntityTools;
@@ -36,6 +34,9 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
     @Resource
     private WarehouseReqDetailMapper warehouseReqDetailMapper;
+
+    @Resource
+    private WarehouseRequMapper warehouseRequMapper;
 
     @Resource
     private WarehouseStockMapper warehouseStockMapper;
@@ -101,6 +102,11 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             warehouseReqdetail.setRealNum(item.getRealNum());
             warehouseReqdetail.setRequStatus(CommonConstant.WAREHOUSE_REQ_STATUS_RECEIVE);
             this.goodsApplyRestMapper.updateReqDetailByGoodsOut(EntityTools.setCreateEmpAndTime(warehouseReqdetail));
+
+            TbWarehouseRequ requ = new TbWarehouseRequ();
+            requ.setWarehouseRequId(warehouseReqdetail.getWarehouseRequId());
+            requ.setRequStatus(CommonConstant.WAREHOUSE_REQ_STATUS_RECEIVE);
+            this.warehouseRequMapper.updateById(requ);
 
             //更新库存
             stock.setGoodsNum(goodsNum - realNum);

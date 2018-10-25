@@ -26,11 +26,17 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         List<Map<String,Object>> tempList = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(employeeCode);
         String shift = Objects.toString(tempList.get(0).get("shift"));
         Map<String,String> shiftTime = this.equipRestMapper.getShiftTimeByShift(shift);
-        for(EquipListResp ep : list){
+        String startTime = shiftTime.get("startTime");
+        String endTime = shiftTime.get("endTime");
 
+        StringBuilder sb = new StringBuilder("");
+
+        for(EquipListResp ep : list){
             //todo 重组对象，加入设备使用时间
+            ep.setUseTime(sb.append(startTime).append("-").append(endTime).toString());
+
         }
-        return null;
+        return list;
     }
 
 

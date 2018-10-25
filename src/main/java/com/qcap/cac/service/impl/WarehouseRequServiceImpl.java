@@ -57,6 +57,8 @@ public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, T
         Integer count = 0;//更新记录数
 
         String warehouseRequId = warehouseRequ.getWarehouseRequId();
+        warehouseRequ = this.warehouseRequMapper.selectById(warehouseRequId);
+
         if(StringUtils.isEmpty(warehouseRequId)){
             throw  new RuntimeException("请先选择一条记录");
         }
@@ -66,6 +68,7 @@ public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, T
         }
         warehouseRequ.setRequStatus(CommonConstant.WAREHOUSE_REQ_STATUS_COMMIT);
         //更新主表
+        warehouseRequ.setStoreroomId(warehouseRequ.getStoreroomId());
         this.warehouseRequMapper.updateById(warehouseRequ);
         //更新明细表
         count = this.warehouseReqDetailMapper.updateReqDetailStatus(warehouseRequ);
