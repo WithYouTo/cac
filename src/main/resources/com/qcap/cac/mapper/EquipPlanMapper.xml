@@ -62,7 +62,7 @@
         WHERE
         EQUIP_ID = #{equipId}
         AND PARTS_NO is not null
-        ORDER BY a.NEXT_MAINT_TIME
+        ORDER BY NEXT_MAINT_TIME
     </select>
 
     <select id="selectPartsPlanByPartsId" parameterType="java.lang.String" resultType="com.qcap.cac.entity.TbEquipPlan">
