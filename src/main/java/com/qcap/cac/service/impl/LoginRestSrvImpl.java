@@ -12,6 +12,7 @@ import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.LoginRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.RedisTools;
+import com.qcap.cac.tools.ToolUtil;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.Md5Util;
@@ -158,7 +159,7 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     private String getPositionsFromList(List<Map<String, Object>> positionList) {
         StringBuilder sb = new StringBuilder("");
         for (Map<String,Object> map : positionList){
-            sb.append(Objects.toString(map.get("positionCode")));
+            sb.append(ToolUtil.toStr(map.get("positionCode")));
         }
         return sb.toString();
     }

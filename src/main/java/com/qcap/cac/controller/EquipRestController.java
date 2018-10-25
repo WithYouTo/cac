@@ -42,7 +42,7 @@ public class EquipRestController {
     }
 
 
-    @PostMapping("/listUseEquip")
+    @PostMapping("/listUnrevertEquip")
     @ApiOperation(value="获取可用设备列表",notes="获取可用设备列表",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
     public ResParams listUnrevertEquip(){
