@@ -15,6 +15,7 @@ public class EntityTools {
 		try {
 			PropertyUtils.setProperty(t, "createEmp", AppUtils.getLoginUserAccount());
 			PropertyUtils.setProperty(t, "createDate", new Date());
+			PropertyUtils.setProperty(t, "version", 0);
 		} catch (Exception e) {
 		}
 		return t;

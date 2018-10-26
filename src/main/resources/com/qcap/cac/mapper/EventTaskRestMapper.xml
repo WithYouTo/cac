@@ -2,40 +2,95 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.EventTaskRestMapper">
 
-  <insert id="insertFlightInfo" parameterType="com.qcap.cac.entity.TbFlightInfo">
-    insert into tb_flight_info (FLIGHT_INFO_ID, FLIGNT_NAME, EVENT_TYPE, 
-      FLIGHT_TYPE, DEPARTURE_GATE, GUARANTEE_TYPE, 
-      PLANNING_TAKEOFF_TIME, ESTIMATED_TAKEOFF_TIME, 
-      AIRCRAFT_TYPE, REMARK1, REMARK2, 
-      REMARK3, CREATE_EMP, CREATE_DATE, 
-      UPDATE_DATE, UPDATE_EMP, VERSION
-      )
-    values (#{flightInfoId}, #{fligntName}, #{eventType}, 
-      #{flightType}, #{departureGate}, #{guaranteeType}, 
-      #{planningTakeoffTime}, #{estimatedTakeoffTime}, 
-      #{aircraftType}, #{remark1}, #{remark2}, 
-      #{remark3}, #{createEmp}, #{createDate}, 
-      #{updateDate}, #{updateEmp}, #{version}
-      )
-  </insert>
+  	<insert id="insertFlightInfo" parameterType="com.qcap.cac.entity.TbFlightInfo">
+    	INSERT INTO tb_flight_info 
+	    (
+	    		FLIGHT_INFO_ID, 
+	    		FLIGNT_NAME, 
+	    		EVENT_TYPE, 
+	      		FLIGHT_TYPE, 
+	      		DEPARTURE_GATE, 
+	      		GUARANTEE_TYPE, 
+	      		PLANNING_TAKEOFF_TIME, 
+	      		ESTIMATED_TAKEOFF_TIME, 
+	      		AIRCRAFT_TYPE, 
+	      		REMARK1, 
+	      		REMARK2, 
+	      		REMARK3, 
+	      		CREATE_EMP, 
+	      		CREATE_DATE, 
+	      		UPDATE_DATE, 
+	      		UPDATE_EMP, 
+	      		VERSION
+		)
+		VALUES
+    	(
+    		#{flightInfoId}, 
+    		#{fligntName}, 
+    		#{eventType}, 
+      		#{flightType}, 
+      		#{departureGate}, 
+      		#{guaranteeType}, 
+      		#{planningTakeoffTime}, 
+      		#{estimatedTakeoffTime}, 
+      		#{aircraftType}, 
+      		#{remark1}, 
+      		#{remark2}, 
+      		#{remark3}, 
+      		#{createEmp}, 
+      		#{createDate}, 
+      		#{updateDate}, 
+      		#{updateEmp}, 
+      		0
+      	)
+  	</insert>
   
-  <select id="selectEventPlan" parameterType="com.qcap.cac.dto.EventTaskRestDto" resultType="Map">
-	  SELECT 
-		m.PLAN_EVENT_ID  AS  planEventId,
-		m.AREA_CODE  AS  areaCode,
-		m.STANDARD_CODE  AS  standardCode,
-		m.EVENT_TYPE  AS  eventType,
-		m.GUARANTEE_TYPE  AS  guaranteeType 
-		FROM tb_plan_event m
-		WHERE AREA_CODE =#{areaCode} 
-		AND EVENT_TYPE=#{eventType}   
-		AND  GUARANTEE_TYPE =#{guaranteeType}
-  </select>
+	<select id="selectEventPlan" parameterType="com.qcap.cac.dto.EventTaskRestDto" resultType="Map">
+		SELECT 
+			m.PLAN_EVENT_ID  AS  planEventId,
+			m.AREA_CODE  AS  areaCode,
+			m.STANDARD_CODE  AS  standardCode,
+			m.EVENT_TYPE  AS  eventType,
+			m.GUARANTEE_TYPE  AS  guaranteeType 
+		FROM 
+			tb_plan_event m
+		WHERE 
+			AREA_CODE = #{areaCode} 
+		AND EVENT_TYPE = #{eventType}   
+		AND GUARANTEE_TYPE = #{guaranteeType}
+	</select>
   
-  <select id="selectAdvanceTime" parameterType="String" resultType="String">
-  SELECT DESC1_ AS advanceTime 
-  FROM tbpubcode01 
-  WHERE CONFIG_CODE_ ='EVENT_BASIC_CONF' 
-  AND DESC_ =#{eventBasicType}
-  </select>
+	<select id="selectAdvanceTime" parameterType="String" resultType="String">
+		SELECT 
+			DESC1_ AS advanceTime 
+		FROM 
+			tbpubcode01 
+		WHERE 
+			CONFIG_CODE_ ='EVENT_BASIC_CONF' AND DESC_ =#{eventBasicType}
+	</select>
+	
+	<select id="selectFlightInfo" parameterType="com.qcap.cac.dto.QueryHistoryFlightInfoReq" resultType="com.qcap.cac.dto.QueryHistoryFlightInfoResp">
+		SELECT 
+			FLIGNT_NAME fligntName,
+			EVENT_TYPE eventType,
+			(SELECT DESC1_ FROM tbpubcode01 WHERE CONFIG_CODE_ = 'EVENT_TYPE' AND DESC_ = A.eventType) eventTypeName,
+			FLIGHT_TYPE flightType,
+			(SELECT DESC1_ FROM tbpubcode01 WHERE CONFIG_CODE_ = 'FLIGHT_TYPE' AND DESC_ = A.flightType) flightTypeName,
+			DEPARTURE_GATE areaCode,
+			(SELECT AREA_NAME FROM tb_area WHERE AREA_CODE_ = A.areaCode) areaCodeName,
+			GUARANTEE_TYPE guaranteeType,
+			DATE_FORMAT(PLANNING_TAKEOFF_TIME, '%Y-%m-%d %T') planningTakeoffTime,
+			DATE_FORMAT(ESTIMATED_TAKEOFF_TIME, '%Y-%m-%d %T') estimatedTakeoffTime,
+			AIRCRAFT_TYPE aircraftType,
+			LINE_NO lineNo,
+		FROM 
+			tb_flight_info A 
+		<where>
+			<if test="lineNo != null and lineNo != ''">
+				AND LINE_NO &gt;= #{lineNo}
+			</if>
+		</where>
+		ORDER BY LINE_NO DESC
+		LIMIT 0,10
+	</select>
 </mapper>

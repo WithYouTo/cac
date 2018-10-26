@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.qcap.cac.dao.CommonMapper;
 import com.qcap.cac.entity.TbSysFile;
 import com.qcap.cac.service.CommonSrv;
+import com.qcap.core.entity.TbOrg;
+import com.qcap.core.entity.TbUserInfo;
 import com.qcap.core.model.ZTreeNode;
 
 @Service
@@ -104,5 +106,23 @@ public class CommonSrvImpl implements CommonSrv {
 	@Override
 	public List<Map<String, String>> getListByCode(String str) {
 		return this.commonMapper.getListByCode(str);
+	}
+
+	@Override
+	public TbOrg getOrgByWorkNo(String workNo) {
+		List<TbOrg> ls = this.commonMapper.getOrgByWorkNo(workNo);
+		if (CollectionUtils.isNotEmpty(ls)) {
+			return ls.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public TbUserInfo getUserInfoByWorkNo(String workNo) {
+		List<TbUserInfo> ls = this.commonMapper.getUserInfoByWorkNo(workNo);
+		if (CollectionUtils.isNotEmpty(ls)) {
+			return ls.get(0);
+		}
+		return null;
 	}
 }

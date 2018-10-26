@@ -106,5 +106,79 @@
         WHERE
         CONFIG_CODE_ = #{code}
     </select>
+    
+    <select id="getOrgByWorkNo" parameterType="String"  resultType="com.qcap.core.entity.TbOrg">
+       	SELECT  
+       		id,
+       		code,
+       		parent_code parentCode,
+       		fullcodes,
+       		num,
+       		parent_num parentNum,
+       		name,
+       		fullnames,
+       		is_open isOpen,
+       		seq,
+       		create_emp createEmp,
+       		create_time createTime,
+       		update_emp updateEmp,
+       		update_time updateTime,
+       		status,
+       		version
+       	FROM 
+       		tb_org m,
+       		(
+       		SELECT 
+       			b.org_id 
+       		FROM 
+       			tb_manager a,tb_manager_org b 
+       		WHERE 
+       			a.id = b.manager_id and a.account = #{work_no}
+       		)n 
+       	WHERE m.id = n.org_id
+    </select>
+    
+    <select id="getUserInfoByWorkNo" parameterType="String"  resultType="com.qcap.core.entity.TbUserInfo">
+        SELECT
+        	USER_INFO_ID userInfoId,
+        	USER_ID userId,
+        	USER_NAME userName,
+        	WORK_NO workNo,
+        	FLOWER flower,
+        	WINTER_CLO winterClo,
+        	SUMMER_CLO summerClo,
+        	WORK_NO_CARD workNoCard,
+        	TAPE tape,
+        	GOOD_CAP_KEY goodCapKey,
+        	LIVING_KEY livingKey,
+        	ENTER_NO enterNo,
+        	PASS_NO passNo,
+        	DOOR_OPEN doorOpen,
+        	EQUIP_USE equipUse,
+        	PASS_AREA passArea,
+        	EVALUATE evalupate,
+        	CARD_TYPE cardType,
+        	CARD_NO cardNo,
+        	GENDER gender,
+        	BIRTH birth,
+        	MARRIAGE_SIT marriageSit,
+        	WORK_DATE workDate,
+        	MOBILE mobile,
+        	EMAIL email,
+        	ADDRESS address,
+        	EMER_MOBILE emerMobile,
+        	EMER_PERSON emerPerson,
+        	HEAD_IMG_URL headImgUrl,
+        	REMARK remark,
+			CREATE_EMP createEmp,
+			CREATE_DATE createDate,
+			UPDATE_EMP updateEmp,
+			UPDATE_DATE updateDate,
+			VERSION version
+		FROM
+			tb_user_info
+        WHERE
+        	WORK_NO = #{work_no}
+    </select>
 
 </mapper>
