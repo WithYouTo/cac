@@ -3,6 +3,7 @@ package com.qcap.cac.controller;
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.TaskQueryAllSearchDto;
+import com.qcap.cac.service.GenTaskJobSrv;
 import com.qcap.cac.service.TaskQueryAllSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
@@ -24,6 +25,12 @@ public class TaskQueryAllController {
 	
 	@Resource
 	private TaskQueryAllSrv taskQueryAllSrvImpl;
+	
+	@Resource(name = "genDayTimeTaskJobSrvImpl")
+	private GenTaskJobSrv genDayTimeTaskJobSrvImpl;
+	
+	@Resource(name = "genNightTaskJobSrvImpl")
+	private GenTaskJobSrv genNightTaskJobSrvImpl;
 	
 	@ResponseBody
 	@RequestMapping(value="/selectAllTask",method=RequestMethod.POST)
@@ -47,7 +54,7 @@ public class TaskQueryAllController {
 		List<Map<String,Object>>list=this.taskQueryAllSrvImpl.selectPosition();
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value="/selectStandardDetail",method=RequestMethod.POST)
 	public Object selectStandardDetail(@RequestParam(value="standardCode",required=true) String standardCode) {
@@ -61,4 +68,20 @@ public class TaskQueryAllController {
 		List<Map<String,Object>>list=this.taskQueryAllSrvImpl.selectEmployee();
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/genDayTimeJob",method=RequestMethod.POST)
+	public Object genDayTimeJob() {
+		this.genDayTimeTaskJobSrvImpl.geneTask();
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/genNightJob",method=RequestMethod.POST)
+	public Object genNightJob() {
+		this.genNightTaskJobSrvImpl.geneTask();
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC);
+	}
+	
+	
 }

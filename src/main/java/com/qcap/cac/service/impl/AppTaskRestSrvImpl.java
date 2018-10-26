@@ -1,21 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.MapUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.AppTaskRestMapper;
@@ -25,9 +9,20 @@ import com.qcap.cac.dto.AppTaskRestReq;
 import com.qcap.cac.dto.AppTaskUpdateReq;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AppTaskRestSrv;
+import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.core.utils.DateUtil;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 @Service
 @Transactional
@@ -39,8 +34,13 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	
 	private static final String QUERY_TASK_TIME_FINISH = "FINISH";
 
+	private static final String QUERY_TASK_TIME_CHECK = "CHECK";
+
 	@Resource
 	private AppTaskRestMapper appTaskRestMapper;
+
+	@Resource
+	private TempTaskSrv tempTaskSrvImpl;
 
 	@Override
 	public Map<String, Object> queryTaskItem(String employeeCode) {
@@ -188,9 +188,6 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
         	map.put("standardStep", standardStepArr);
     	}
     	
-    	
-    	 
-    	 
         return this.appTaskRestMapper.selectStandardDetailInfo(standardDetailId);
     }
 
@@ -210,7 +207,28 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
         this.appTaskRestMapper.updateTask(appTaskUpdateReq);
     }
 
-    /**
+	/**
+	 * 从此处开始是检查人员的接口
+	 */
+	@Override
+	public Map<String, Object> queryCheckTaskItem (String employeeCode){
+		Map<String, Object> map = new HashMap<>();
+		//查询管理人员是否当班
+		List<Map<String,Object>> list = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(employeeCode);
+		//当班
+		if(CollectionUtils.isNotEmpty(list)){
+
+		}else{
+			//不当班
+			map.put("toCheckItem",0);
+			map.put("checkedItem",0);
+		}
+		return null;
+	};
+
+
+
+	/**
 	 * 查询任务、或统计任务时，
 	 * 对于白班和夜班的任务时间进行处理
 	 * @Title: getTaskQueryTime 
@@ -278,6 +296,11 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		case QUERY_TASK_TIME_FINISH:
 			map = queryFinishTaskTime(shift, startTime, endTime, curDate, curTime, nextDate);
 			break;
+		case QUERY_TASK_TIME_CHECK:
+			//检查任务的开始、结束检查时间与查询完成任务的时间相同
+			map =  queryFinishTaskTime(shift, startTime, endTime, curDate, curTime, nextDate);
+			break;
+
 		}
 		
 		//返回参数

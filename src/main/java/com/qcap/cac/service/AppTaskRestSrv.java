@@ -26,4 +26,7 @@ public interface AppTaskRestSrv {
 
     void finishTask(AppTaskFinishReq appTaskFinishReq) throws InvocationTargetException, IllegalAccessException;
 
+    //----------------检查人员接口
+    Map<String, Object> queryCheckTaskItem (String employeeCode);
+
 }

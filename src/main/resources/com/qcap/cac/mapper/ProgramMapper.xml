@@ -47,11 +47,17 @@
 	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaCode)">
         AND AREA_CODE = #{areaCode}
       </if>
-	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTime)">
-         AND START_TIME = #{startTime}
+	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTimeStart)">
+         AND START_TIME &gt;= #{startTimeStart}
       </if>
-      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTime)">
-        AND END_TIME = #{endTime}
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTimeEnd)">
+        AND START_TIME &lt;= #{startTimeEnd}
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTimeStart)">
+        AND END_TIME &gt;= #{endTimeStart}
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTimeEnd)">
+        AND END_TIME &lt;= #{endTimeEnd}
       </if>
       <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(effectDate)">
         AND EFFECT_DATE = #{effectDate}
@@ -226,5 +232,15 @@
     delete from tb_program
     where PROGRAM_ID = #{programId}
   </delete>
+
+  <select id="selectIfCodeExist" parameterType="Map" resultType="String">
+    SELECT PROGRAM_ID AS programId
+    FROM tb_program
+    where PROGRAM_CODE =#{programCode}
+    <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programId)">
+      AND PROGRAM_ID != #{programId}
+    </if>
+    LIMIT 1
+  </select>
 	
 </mapper>

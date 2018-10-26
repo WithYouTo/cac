@@ -1,13 +1,12 @@
 package com.qcap.cac.dao;
 
-import java.util.List;
-import java.util.Map;
-
+import com.qcap.cac.dto.ProgramSearchDto;
+import com.qcap.cac.entity.TbProgram;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.qcap.cac.dto.ProgramSearchDto;
-import com.qcap.cac.entity.TbProgram;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ProgramMapper {
@@ -19,5 +18,7 @@ public interface ProgramMapper {
 	void updateProgramByKey (TbProgram tbProgram);
 	
 	void deleteProgramByKey (@Param("programId") String programId);
+
+	String selectIfCodeExist (Map<String,Object> map );
 
 }

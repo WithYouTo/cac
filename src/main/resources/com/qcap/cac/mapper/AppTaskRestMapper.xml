@@ -204,5 +204,11 @@
 	FROM tb_area_standard_detail m 
 	where m.STANDARD_DETAIL_ID =#{standardDetailId}
 	</select>
+
+	<select id="selectAreaByPositionCode" parameterType="String" resultType="String">
+		SELECT AREA_CODE AS areaCode
+		FROM tb_area_position
+		where POSITION_CODE = #{positionCode}
+	</select>
 	
 </mapper>

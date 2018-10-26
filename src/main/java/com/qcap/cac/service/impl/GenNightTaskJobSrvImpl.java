@@ -6,14 +6,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.qcap.cac.constant.CommonConstant;
@@ -21,10 +21,12 @@ import com.qcap.cac.dao.GenDayTimeTaskJobMapper;
 import com.qcap.cac.dao.GenNightTaskJobMapper;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.service.GenTaskJobSrv;
+import com.qcap.cac.tools.ToolUtil;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
 
-
+@Service
+@Transactional
 public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 
 	@Resource
@@ -35,8 +37,8 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 
 	private Logger log = AppUtils.getLogger("genNightTask", true);
 
-	@Value("${SHIFT_NIGHT}")
-	private String shift;
+//	@Value("${SHIFT_NIGHT}")
+	private String shift = "NIGHT";
 
 	@Override
 	public void geneTask() {
@@ -51,8 +53,8 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 
 		// 1、查询班次
 		Map<String, Object> shiftMap = this.dayTimeTaskMapper.selectShift(shift);
-		String startTime = Objects.toString(shiftMap.get("startTime"), "");
-		String endTime = Objects.toString(shiftMap.get("endTime"), "");
+		String startTime = ToolUtil.toStr(shiftMap.get("startTime"));
+		String endTime = ToolUtil.toStr(shiftMap.get("endTime"));
 
 		if ("".equals(startTime) || "".equals(endTime)) {
 			log.info("------------------班次设置有误：开始时间或结束时间为空---------");
@@ -110,12 +112,12 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 		// 遍历计划
 		for (Map<String, Object> map : planList) {
 
-			String planId = Objects.toString(map.get("planId"), "");
-			String areaCode = Objects.toString(map.get("areaCode"), "");
-			String standardCode = Objects.toString(map.get("standardCode"), "");
-			String planStartTime = Objects.toString(map.get("startTime"), "");
-			String planEndTime = Objects.toString(map.get("endTime"), "");
-			String planTimeType = Objects.toString(map.get("planTimeType"), "");
+			String planId = ToolUtil.toStr(map.get("planId"));
+			String areaCode = ToolUtil.toStr(map.get("areaCode"));
+			String standardCode = ToolUtil.toStr(map.get("standardCode"));
+			String planStartTime = ToolUtil.toStr(map.get("startTime"));
+			String planEndTime = ToolUtil.toStr(map.get("endTime"));
+			String planTimeType = ToolUtil.toStr(map.get("planTimeType"));
 
 			// 参数校验
 			if (StringUtils.isEmpty(areaCode)) {
@@ -125,8 +127,8 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 
 			// 3、查询岗位
 			Map<String, Object> positionMap = this.dayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode);
-			String positionCode = Objects.toString(positionMap.get("positionCode"), "");
-			String positionName = Objects.toString(positionMap.get("positionName"), "");
+			String positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+			String positionName = ToolUtil.toStr(positionMap.get("positionName"));
 			
 			// 4、查询值班人员
 			// 4.1处理日期
@@ -160,9 +162,9 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			List<String> employeeTelList = new ArrayList<>();
 
 			for (Map<String, Object> m : employeeList) {
-				employeeCodeList.add(Objects.toString(m.get("employeeCode")));
-				employeeNameList.add(Objects.toString(m.get("employeeName")));
-				employeeTelList.add(Objects.toString(m.get("employeeTel")));
+				employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
+				employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
+				employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
 			}
 
 			String employeeCode = String.join(",", employeeCodeList);
@@ -176,9 +178,9 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 				return;
 			}
 
-			String uploadPicFlag = Objects.toString(standardMap.get("uploadPicFlag"));
-			String checkFlag = Objects.toString(standardMap.get("checkFlag"));
-			String standardName = Objects.toString(standardMap.get("standardName"));
+			String uploadPicFlag = ToolUtil.toStr(standardMap.get("uploadPicFlag"));
+			String checkFlag = ToolUtil.toStr(standardMap.get("checkFlag"));
+			String standardName = ToolUtil.toStr(standardMap.get("standardName"));
 			
 			String areaName=this.dayTimeTaskMapper.selectAreaName(areaCode);
 			

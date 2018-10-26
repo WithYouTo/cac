@@ -5,13 +5,25 @@ public class ProgramSearchDto {
 	private String programName;
 	
 	private String areaCode;
-	
-	private String startTime;
-	
-	private String endTime;
+
+	private String startTimeStart;
+
+	private String startTimeEnd;
+
+	private String endTimeStart;
+
+	private String endTimeEnd;
 	
 	private String effectDate;
-	
+
+	public String getProgramName() {
+		return programName;
+	}
+
+	public void setProgramName(String programName) {
+		this.programName = programName;
+	}
+
 	public String getAreaCode() {
 		return areaCode;
 	}
@@ -20,36 +32,43 @@ public class ProgramSearchDto {
 		this.areaCode = areaCode;
 	}
 
-	public String getProgramName() {
-		return programName;
+	public String getStartTimeStart() {
+		return startTimeStart;
 	}
 
-	public String getStartTime() {
-		return startTime;
+	public void setStartTimeStart(String startTimeStart) {
+		this.startTimeStart = startTimeStart;
 	}
 
-	public String getEndTime() {
-		return endTime;
+	public String getStartTimeEnd() {
+		return startTimeEnd;
+	}
+
+	public void setStartTimeEnd(String startTimeEnd) {
+		this.startTimeEnd = startTimeEnd;
+	}
+
+	public String getEndTimeStart() {
+		return endTimeStart;
+	}
+
+	public void setEndTimeStart(String endTimeStart) {
+		this.endTimeStart = endTimeStart;
+	}
+
+	public String getEndTimeEnd() {
+		return endTimeEnd;
+	}
+
+	public void setEndTimeEnd(String endTimeEnd) {
+		this.endTimeEnd = endTimeEnd;
 	}
 
 	public String getEffectDate() {
 		return effectDate;
 	}
 
-	public void setProgramName(String programName) {
-		this.programName = programName;
-	}
-
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-
 	public void setEffectDate(String effectDate) {
 		this.effectDate = effectDate;
 	}
-	
 }
