@@ -1,6 +1,7 @@
 package com.qcap.cac.service;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseEntry;
@@ -19,7 +20,7 @@ import java.util.Map;
  */
 public interface WarehouseEntryService extends IService<TbWarehouseEntry> {
 
-    List<Map> getEntryList(WarehouseEntryDto warehouseEntryDto);
+    void getEntryList(IPage<Map<String, Object>> page, WarehouseEntryDto warehouseEntryDto);
 
     List<Map> getStoreRoomList();
 

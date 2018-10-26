@@ -1,9 +1,11 @@
 package com.qcap.cac.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcap.cac.dto.AreaPositionDto;
 import com.qcap.cac.entity.TbAreaPosition;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +23,7 @@ public interface AreaPositionSrv extends IService<TbAreaPosition> {
      * @param areaPositionDto
      * @return
      */
-    List<TbAreaPosition> getAreaPositionList(AreaPositionDto areaPositionDto);
+    IPage<TbAreaPosition> getAreaPositionList(IPage<TbAreaPosition> page, @Valid AreaPositionDto areaPositionDto);
 
 
     /**
@@ -45,6 +47,14 @@ public interface AreaPositionSrv extends IService<TbAreaPosition> {
      * @return
      */
     Integer deleteAreaPosition(String areaPositionId);
+
+    /**
+     * 根据岗位类型查询岗位类型名称
+     * @param positionType
+     * @return
+     */
+
+    String selectPositionTypeName(String positionType);
 
 
 }

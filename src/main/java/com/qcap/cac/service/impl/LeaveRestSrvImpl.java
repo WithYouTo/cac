@@ -14,12 +14,15 @@ import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.dao.TbManagerMapper;
+import com.qcap.core.entity.TbManager;
 import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -37,6 +40,9 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
 
     @Resource
     private LoginRestMapper loginRestMapper;
+
+    @Resource
+    private TbManagerMapper managerMapper;
 
     @Resource
     private FastDFSClientWrapper dfsClient;
@@ -62,21 +68,45 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
 
         List<String> employeeCodeList = user.stream().map(UserListResp::getEmployeeCode).collect(Collectors.toList());
         paramMap.remove("employeeCode");
+        paramMap.put("leaveStatus",CommonConstant.LEAVE_STATUS_AUDITING);
         paramMap.put("employeeCodeList",employeeCodeList);
         return this.leaveRestMapper.queryLeaveList(paramMap);
     }
 
     @Override
-    public Integer insertLeaveApply(AppLeaveApplyReq appLeaveApplyReq,Map<String, MultipartFile> mapFile) throws Exception{
+    public Integer insertLeaveApply(MultipartHttpServletRequest req, Map<String, MultipartFile> mapFile) throws Exception{
         // 文件前缀
         String baseUrl = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+
+        String employeeCode = req.getParameter("employeeCode");
+        if(StringUtils.isEmpty(employeeCode)){
+            throw new RuntimeException("用户工号为空");
+        }
+
+        TbManager manager = this.managerMapper.getMangerByEmployeeCode(employeeCode);
+        if(null == manager){
+            throw new RuntimeException("根据用户工号没有查询到用户信息");
+        }
+
+        //请假申请参数转化为对象
+        AppLeaveApplyReq appLeaveApplyReq = new AppLeaveApplyReq();
+        appLeaveApplyReq.setWorkNo(req.getParameter("employeeCode"));
+        appLeaveApplyReq.setPersonId(req.getParameter("employeeId"));
+        appLeaveApplyReq.setPersonName(manager.getName());
+        appLeaveApplyReq.setPersonMobile(manager.getPhone());
+        appLeaveApplyReq.setLeaveStartTime(req.getParameter("leaveStartTime"));
+        appLeaveApplyReq.setLeaveEndTime(req.getParameter("leaveEndTime"));
+        appLeaveApplyReq.setLeaveType(req.getParameter("leaveType"));
+        appLeaveApplyReq.setLeaveReason(req.getParameter("leaveReason"));
+
+        //TODO请假时长未计算
+
 
         //存放图片url
         List<String> pathList = new ArrayList<>();
         // 判断是否有文件
         if (mapFile != null && !mapFile.isEmpty()) {
             for (Map.Entry<String, MultipartFile> ent : mapFile.entrySet()) {
-
                 MultipartFile mf = ent.getValue();
                 String path = dfsClient.uploadFile(mf);
                 if(StringUtils.isNotEmpty(path)){
@@ -94,6 +124,7 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         BeanUtils.copyProperties(appLeaveApplyReq,leave);
         leave.setLeaveId(UUIDUtils.getUUID());
         EntityTools.setCreateEmpAndTime(leave);
+        EntityTools.setUpdateEmpAndTime(leave);
         return this.leaveRestMapper.insert(leave);
     }
 
@@ -157,6 +188,7 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         leave.setLeaveId(leaveId);
         leave.setRefuseReason(auditReason);
         leave.setAuditPerson(employeeCode);
+        leave.setLeaveStatus(CommonConstant.LEAVE_STATUS_REFUSE);
         leave.setAuditTime(DateUtil.formatDateTime(new Date()));
         EntityTools.setUpdateEmpAndTime(leave);
 

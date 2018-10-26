@@ -1,11 +1,13 @@
 package com.qcap.cac.entity;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 public class TbWarehouseStock {
     /**
      *   主键ID
      */
+    @NotBlank
     private String warehouseStockId;
 
     /**

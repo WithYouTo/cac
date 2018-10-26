@@ -17,26 +17,26 @@
         REQU_STATUS
         from tb_warehouse_requ a
         where 1 = 1
-        <if test="storeroomId!=null and storeroomId!=''">
-            and a.STOREROOM_ID = #{storeroomId}
+        <if test="obj.storeroomId!=null and obj.storeroomId!=''">
+            and a.STOREROOM_ID = #{obj.storeroomId}
         </if>
-        <if test="requMobile!=null and requMobile!=''">
-            and a.REQU_MOBILE like concat('%',#{requMobile},'%')
+        <if test="obj.requMobile!=null and obj.requMobile!=''">
+            and a.REQU_MOBILE like concat('%',#{obj.requMobile},'%')
         </if>
-        <if test="requName!=null and requName!=''">
-            and a.REQU_NAME like concat('%',#{requName},'%')
+        <if test="obj.requName!=null and obj.requName!=''">
+            and a.REQU_NAME like concat('%',#{obj.requName},'%')
         </if>
-        <if test="requStatus!=null and requStatus!=''">
-            and a.REQU_STATUS = #{requStatus}
+        <if test="obj.requStatus!=null and obj.requStatus!=''">
+            and a.REQU_STATUS = #{obj.requStatus}
         </if>
-        <if test="requBatchNo!=null and requBatchNo!=''">
-            and a.REQU_BATCH_NO like  concat('%',#{requBatchNo},'%')
+        <if test="obj.requBatchNo!=null and obj.requBatchNo!=''">
+            and a.REQU_BATCH_NO like  concat('%',#{obj.requBatchNo},'%')
         </if>
-        <if test="startDate!=null and startDate!=''">
-            and DATE(a.REQU_TIME) &gt;= #{startDate}
+        <if test="obj.startDate!=null and obj.startDate!=''">
+            and DATE(a.REQU_TIME) &gt;= #{obj.startDate}
         </if>
-        <if test="endDate!=null and endDate!=''">
-            and DATE(a.REQU_TIME) &lt;= #{endDate}
+        <if test="obj.endDate!=null and obj.endDate!=''">
+            and DATE(a.REQU_TIME) &lt;= #{obj.endDate}
         </if>
         ORDER BY a.CREATE_DATE desc
     </select>

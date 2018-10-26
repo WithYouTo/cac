@@ -1,7 +1,7 @@
 package com.qcap.cac.controller;
 
 
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
@@ -9,12 +9,9 @@ import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.service.WarehouseReqDetailService;
 import com.qcap.cac.service.WarehouseRequService;
 import com.qcap.core.common.CoreConstant;
-import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.utils.AppUtils;
-import com.qcap.core.utils.jwt.JwtProperties;
-import com.qcap.core.utils.jwt.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 出库查询
+ * 领用申请和领用查询
  *
  * @author cindy
  * @Date 2018-10-09 19:20:15
@@ -37,12 +34,6 @@ import java.util.Map;
 @RequestMapping("/warehouseReqGoods")
 public class WarehouseReqGoodsController {
 
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private JwtProperties jwtProperties;
 
     @Autowired
     private WarehouseReqDetailService warehouseReqDetailService;
@@ -55,14 +46,13 @@ public class WarehouseReqGoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/requestedList", method = RequestMethod.POST)
-    public PageResParams getRequestedGoodsList(WarehouseReqDto warehouseReqDto) {
-
-        new PageFactory<Map<String, Object>>().defaultPage();
-
-        List<Map<String, Object>> list =  this.warehouseReqDetailService.getRequestedList(warehouseReqDto);
-        PageInfo pageInfo = new PageInfo(list);
-
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
+    public PageResParams getRequestedGoodsList(IPage<Map<String, Object>> page,@Valid  WarehouseReqDto warehouseReqDto) {
+        try {
+            this.warehouseReqDetailService.getRequestedList(page,warehouseReqDto);
+        } catch (Exception e) {
+            return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
+        }
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,  page.getTotal(), page.getRecords());
     }
 
 
@@ -71,15 +61,13 @@ public class WarehouseReqGoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/requlist", method = RequestMethod.POST)
-    public PageResParams getReqList(WarehouseReqDto warehouseReqDto) {
-
-        new PageFactory<Map<String, Object>>().defaultPage();
-
-
-        List<Map<String,String>> list =  this.warehouseRequService.getRequList(warehouseReqDto);
-        PageInfo pageInfo = new PageInfo(list);
-
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
+    public PageResParams getReqList(IPage<Map<String,String>> page, @Valid  WarehouseReqDto warehouseReqDto) {
+        try {
+            this.warehouseRequService.getRequList(page,warehouseReqDto);
+        } catch (Exception e) {
+            return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
+        }
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,  page.getTotal(), page.getRecords());
     }
 
 
@@ -88,14 +76,13 @@ public class WarehouseReqGoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/reqDetailList", method = RequestMethod.POST)
-    public PageResParams getReqDetailList(String warehouseRequId) {
-
-        new PageFactory<Map<String, Object>>().defaultPage();
-
-        List<Map<String,Object>> list =  this.warehouseReqDetailService.getReqDetailList(warehouseRequId);
-        PageInfo pageInfo = new PageInfo(list);
-
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
+    public PageResParams getReqDetailList(IPage<Map<String, Object>> page,String warehouseRequId) {
+        try {
+            this.warehouseReqDetailService.getReqDetailList(page,warehouseRequId);
+        } catch (Exception e) {
+            return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
+        }
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,  page.getTotal(), page.getRecords());
     }
 
 
@@ -105,13 +92,10 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Object addRequ(@Valid  TbWarehouseRequ warehouseRequ) {
-       if(null == warehouseRequ){
-           ResParams.newInstance(CoreConstant.FAIL_CODE,"领用单参数为空",null);
-       }
-
+        //获取当前登录人
         String employeeCode = AppUtils.getLoginUserAccount();
         if(StringUtils.isEmpty(employeeCode)){
-            ResParams.newInstance(CoreConstant.FAIL_CODE,"当前登录人为空",null);
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,CoreConstant.EXCEL_ILLEGAL_USER_MSG,null);
         }
 
         try {
@@ -128,7 +112,7 @@ public class WarehouseReqGoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Object updateReq(TbWarehouseRequ warehouseRequ) {
+    public Object updateReq(@Valid TbWarehouseRequ warehouseRequ) {
         try {
             this.warehouseRequService.updateById(warehouseRequ);
         } catch (Exception e) {
@@ -142,7 +126,7 @@ public class WarehouseReqGoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/commit", method = RequestMethod.POST)
-    public Object commitRequ(TbWarehouseRequ warehouseRequ) {
+    public Object commitRequ(@Valid TbWarehouseRequ warehouseRequ) {
         try {
             this.warehouseRequService.commitRequ(warehouseRequ);
         } catch (Exception e) {
@@ -172,12 +156,12 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/goodsList", method = RequestMethod.POST)
     public Object goodsList(@Valid  String storeroomId) {
-        if(StringUtils.isEmpty(storeroomId)){
-            ResParams.newInstance(CoreConstant.FAIL_CODE,"查询物品列表参数为空",null);
-        }
-
-        //返回主键
+        //返回结果
         Map<String,Object> map =new HashMap<>();
+        //选择储藏室的物品
+        if(StringUtils.isEmpty(storeroomId)){
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,"请先选择储藏室",null);
+        }
         try {
             List<Map<String,String>> list = this.warehouseReqDetailService.GoodsNoAppList(storeroomId);
             map.put("goodsList",list);
@@ -194,11 +178,7 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/addDetail", method = RequestMethod.POST)
     public Object addReqDetail(@Valid  TbWarehouseReqdetail warehouseReqdetail) {
-        if(null == warehouseReqdetail){
-            ResParams.newInstance(CoreConstant.FAIL_CODE,"领用明细参数为空",null);
-        }
-
-        //返回主键
+        //返回结果
         Map<String,String> map =new HashMap<>();
         try {
             String warehouseRequId = this.warehouseReqDetailService.insertReqDetail(warehouseReqdetail);
@@ -216,9 +196,11 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/updateDetail", method = RequestMethod.POST)
     public Object updateReqDetail(TbWarehouseReqdetail warehouseReqdetail) {
-
-        this.warehouseReqDetailService.updateById(warehouseReqdetail);
-
+        try {
+            this.warehouseReqDetailService.updateById(warehouseReqdetail);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
+        }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.EDIT_SUCCESS,null);
     }
 
@@ -228,12 +210,13 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/deleteDetail", method = RequestMethod.POST)
     public Object deleteReqDetail(String warehouseReqdetailId) {
-
-        this.warehouseReqDetailService.removeById(warehouseReqdetailId);
-
+        try {
+            this.warehouseReqDetailService.removeById(warehouseReqdetailId);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
+        }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE,CoreConstant.DELETE_SUCCESS,null);
     }
-
 
 
 

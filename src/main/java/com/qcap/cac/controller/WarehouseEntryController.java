@@ -1,26 +1,23 @@
 package com.qcap.cac.controller;
 
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.poiEntity.EntryPoiEntity;
 import com.qcap.cac.service.WarehouseEntryService;
 import com.qcap.core.common.CoreConstant;
-import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.utils.poi.PoiUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -44,18 +41,13 @@ public class WarehouseEntryController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams list(WarehouseEntryDto warehouseEntryDto) {
-
-        new PageFactory<Map<String, Object>>().defaultPage();
-
-        List<Map> list = new ArrayList<>();
-        if (StringUtils.isNotEmpty(warehouseEntryDto.getStoreroomId())) {
-            list = warehouseEntryService.getEntryList(warehouseEntryDto);
+    public PageResParams list(IPage<Map<String, Object>> page, @Valid  WarehouseEntryDto warehouseEntryDto) {
+        try {
+            this.warehouseEntryService.getEntryList(page,warehouseEntryDto);
+        } catch (Exception e) {
+            return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
         }
-        PageInfo pageInfo = new PageInfo(list);
-        Page pageList = (Page) list;
-
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), pageList);
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,  page.getTotal(), page.getRecords());
     }
 
 
@@ -64,9 +56,9 @@ public class WarehouseEntryController {
      */
     @ResponseBody
     @RequestMapping(value = "/storeRoomList", method = RequestMethod.POST)
-    public Object getStoreRoomlist() {
+    public Object getStoreRoomList() {
        List<Map> list =  this.warehouseEntryService.getStoreRoomList();
-       return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", list);
+       return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
     }
 
 
@@ -87,12 +79,5 @@ public class WarehouseEntryController {
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "成功导入" + count + "条记录", null);
     }
 
-    /**
-     * 入库管理详情
-     */
-    @RequestMapping(value = "/detail/{warehouseEntryId}")
-    @ResponseBody
-    public Object detail(@PathVariable("warehouseEntryId") String warehouseEntryId) {
-        return warehouseEntryService.getById(warehouseEntryId);
-    }
+
 }

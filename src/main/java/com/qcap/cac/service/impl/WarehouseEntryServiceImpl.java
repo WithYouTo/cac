@@ -4,6 +4,7 @@ package com.qcap.cac.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseEntryMapper;
 import com.qcap.cac.dao.WarehousePositionMapper;
@@ -52,9 +53,9 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
     private WarehouseStorageMapper warehouseStorageMapper;
 
     @Override
-    public List<Map> getEntryList(WarehouseEntryDto warehouseEntryDto) {
-        List<Map> list = warehouseEntryMapper.getWarehouseEntryList(warehouseEntryDto);
-        return list;
+    public void  getEntryList(IPage<Map<String, Object>> page, WarehouseEntryDto warehouseEntryDto) {
+        List<Map<String, Object>> list = warehouseEntryMapper.getWarehouseEntryList(page,warehouseEntryDto);
+        page.setRecords(list);
     }
 
     @Override

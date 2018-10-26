@@ -5,16 +5,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.PubCodeMapper;
+import com.qcap.cac.dto.AreaDto;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.service.AreaSrv;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,40 +42,44 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
     }
 
     @Override
-    public TbArea insertArea(TbArea area) {
+    public TbArea insertArea(AreaDto areaDto) {
 
-        if(StringUtils.isEmpty(area.getAreaName())){
+        if(StringUtils.isEmpty(areaDto.getAreaName())){
             throw new  RuntimeException("区域名称为空");
         }
 
-        if(StringUtils.isEmpty(area.getLevel())){
+        if(StringUtils.isEmpty(areaDto.getLevel())){
             throw new  RuntimeException("选择树节点的层级为空");
         }
 
         QueryWrapper<TbArea> wrapper = new QueryWrapper<>();
         //不同的父级，可以有相同的区域名称
-        wrapper.eq("SUPER_AREA_CODE",area.getSuperAreaCode());
-        wrapper.eq("AREA_NAME",area.getAreaName());
+        wrapper.eq("SUPER_AREA_CODE",areaDto.getSuperAreaCode());
+        wrapper.eq("AREA_NAME",areaDto.getAreaName());
         if(areaMapper.selectCount(wrapper) > 0){
             throw new  RuntimeException("区域名称已经存在");
         }
 
-        //选中父级
-        Integer level = Integer.parseInt(area.getLevel());
+        //选中父级层级
+        Integer level = Integer.parseInt(areaDto.getLevel());
+        //查询新增子级的区域编码
         String areaCode = initAreaCode(level);
 
-        area.setAreaId(UUIDUtils.getUUID());
+        TbArea area = new TbArea();
+        BeanUtils.copyProperties(areaDto,area);
+
+        String areaId = UUIDUtils.getUUID();
+        area.setAreaId(areaId);
         area.setAreaCode(areaCode);
         area.setLevel(Integer.toString(level + 1));//子级
-        //排序
+        //子级排序
         Integer seqNo = this.areaMapper.selectMaxSeqNo(area.getSuperAreaCode());
         area.setSeqNo(Integer.toString(seqNo));
 
-        area.setFinalFlag("N");
-        area.setRemark1(null);
-        area.setCreateEmp("SYS");
-        area.setCreateDate(new Date());
+        EntityTools.setCreateEmpAndTime(area);
         this.areaMapper.insert(area);
+
+        area = this.areaMapper.selectById(areaId);
         return area;
     }
 
@@ -83,7 +89,6 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
         if(StringUtils.isEmpty(area.getAreaId())){
             throw new  RuntimeException("修改区域的主键为空");
         }
-
 
         QueryWrapper<TbArea> wrapper = new QueryWrapper<>();
         //不同的父级，可以有相同的区域名称

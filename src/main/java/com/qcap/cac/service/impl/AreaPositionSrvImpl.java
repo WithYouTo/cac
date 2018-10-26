@@ -2,6 +2,7 @@ package com.qcap.cac.service.impl;
 
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Date;
@@ -48,7 +50,7 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
     }
 
     @Override
-    public List<TbAreaPosition> getAreaPositionList(AreaPositionDto areaPositionDto) {
+    public IPage<TbAreaPosition> getAreaPositionList(IPage<TbAreaPosition> page, @Valid AreaPositionDto areaPositionDto) {
        QueryWrapper<TbAreaPosition> wrapper = new QueryWrapper<>();
 
        if(StringUtils.isNotEmpty(areaPositionDto.getPositionName())){
@@ -59,13 +61,13 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
             wrapper.like("AREA_NAME","%" + areaPositionDto.getAreaName() + "%");
         }
 
-        List<TbAreaPosition> list = this.areaPositionMapper.selectList(wrapper);
-        for(TbAreaPosition item : list){
-            String positionTypeName = areaPositionMapper.selectPositionTypeName(item.getPositionType());
-            item.setPositionTypeName(positionTypeName);
-        }
-
-        return list;
+        return this.areaPositionMapper.selectPage(page,wrapper);
+//        for(TbAreaPosition item : list){
+//            String positionTypeName = areaPositionMapper.selectPositionTypeName(item.getPositionType());
+//            item.setPositionTypeName(positionTypeName);
+//        }
+//
+//        return list;
     }
 
     @Override
@@ -161,5 +163,10 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
     @Override
     public Integer deleteAreaPosition(String positionId) {
         return this.areaPositionMapper.deleteById(positionId);
+    }
+
+    @Override
+    public String selectPositionTypeName(String positionType) {
+        return this.areaPositionMapper.selectPositionTypeName(positionType);
     }
 }

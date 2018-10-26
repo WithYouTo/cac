@@ -2,17 +2,19 @@ package com.qcap.cac.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseReqDetailMapper;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.service.WarehouseReqDetailService;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -32,21 +34,15 @@ public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetai
 
 
     @Override
-    public List<Map<String, Object>> getRequestedList(WarehouseReqDto warehouseReqDto) {
-        if(StringUtils.isEmpty(warehouseReqDto.getStoreroomId())){
-            return new ArrayList<>();
-        }
-        List<Map<String, Object>> list = this.warehouseReqDetailMapper.getRequestedGoodsList(warehouseReqDto);
-        return list;
+    public void  getRequestedList(IPage<Map<String, Object>> page, @Valid  WarehouseReqDto warehouseReqDto) {
+        List<Map<String, Object>> list = this.warehouseReqDetailMapper.getRequestedGoodsList(page,warehouseReqDto);
+        page.setRecords(list);
     }
 
     @Override
-    public List<Map<String, Object>> getReqDetailList(String warehouseRequId) {
-        if(StringUtils.isEmpty(warehouseRequId)){
-            return new ArrayList<>();
-        }
-        List<Map<String, Object>> list = this.warehouseReqDetailMapper.getReqDetailList(warehouseRequId);
-        return list;
+    public void getReqDetailList(IPage<Map<String, Object>> page, String warehouseRequId) {
+        List<Map<String, Object>> list = this.warehouseReqDetailMapper.getReqDetailList(page,warehouseRequId);
+        page.setRecords(list);
     }
 
     @Override
@@ -81,11 +77,12 @@ public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetai
             }
             Integer newNum = old.getApplyNum() + warehouseReqdetail.getApplyNum();
             old.setApplyNum(newNum);
+            EntityTools.setUpdateEmpAndTime(old);
             this.warehouseReqDetailMapper.updateById(old);
         }else{
             warehouseReqdetail.setWarehouseReqdetailId(UUIDUtils.getUUID());
             warehouseReqdetail.setRequStatus("INIT");
-            warehouseReqdetail.setCreateEmp("SYS");
+            EntityTools.setCreateEmpAndTime(warehouseReqdetail);
             this.warehouseReqDetailMapper.insert(warehouseReqdetail);
         }
         return warehouseRequId;

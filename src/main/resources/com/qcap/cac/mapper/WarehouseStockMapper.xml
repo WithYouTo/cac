@@ -17,17 +17,17 @@
         a.REMARK
         from tb_warehouse_stock a
         where 1 = 1 AND a.DELETE_FLAG = 'N'
-        <if test="storeroomId!=null and storeroomId!=''">
-            and a.STOREROOM_ID = #{storeroomId}
+        <if test="obj.storeroomId!=null and obj.storeroomId!=''">
+            and a.STOREROOM_ID = #{obj.storeroomId}
         </if>
-        <if test="goodsNo!=null and goodsNo!=''">
-            and a.GOODS_NO like concat('%',#{goodsNo},'%')
+        <if test="obj.goodsNo!=null and obj.goodsNo!=''">
+            and a.GOODS_NO like concat('%',#{obj.goodsNo},'%')
         </if>
-        <if test="goodsName!=null and goodsName!=''">
-            and a.GOODS_NAME like  concat('%',#{goodsName},'%')
+        <if test="obj.goodsName!=null and obj.goodsName!=''">
+            and a.GOODS_NAME like  concat('%',#{obj.goodsName},'%')
         </if>
-        <if test="supplierName!=null and supplierName!=''">
-            and a.SUPPLIER_NAME like concat('%',#{supplierName},'%')
+        <if test="obj.supplierName!=null and obj.supplierName!=''">
+            and a.SUPPLIER_NAME like concat('%',#{obj.supplierName},'%')
         </if>
         group by  a.GOODS_NO
         ORDER BY  a.GOODS_NO

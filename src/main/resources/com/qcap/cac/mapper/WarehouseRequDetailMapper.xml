@@ -16,7 +16,7 @@
         REQU_LOC_NAME,
         APPLY_NUM,
         REAL_NUM,
-        MIN_UNIT,
+        (select MIN_UNIT from tb_warehouse_stock where goods_no = a.goods_no limit 1) minUnit,
         a.REQU_STATUS,
         a.REQU_REMARK,
         DATE_FORMAT(b.REQU_TIME,'%Y-%m-%d') requTime,
@@ -25,26 +25,26 @@
         LEFT JOIN tb_warehouse_requ b
         on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
         where a.REQU_STATUS = 'RECEIVE'
-        <if test="storeroomId!=null and storeroomId!=''">
-            and b.STOREROOM_ID = #{storeroomId}
+        <if test="obj.storeroomId!=null and obj.storeroomId!=''">
+            and b.STOREROOM_ID = #{obj.storeroomId}
         </if>
-        <if test="requLocName!=null and requLocName!=''">
-            and a.REQU_LOC_NAME like concat('%',#{requLocName},'%')
+        <if test="obj.requLocName!=null and obj.requLocName!=''">
+            and a.REQU_LOC_NAME like concat('%',#{obj.requLocName},'%')
         </if>
-        <if test="goodsNo!=null and goodsNo!=''">
-            and a.GOODS_NO like concat('%',#{goodsNo},'%')
+        <if test="obj.goodsNo!=null and obj.goodsNo!=''">
+            and a.GOODS_NO like concat('%',#{obj.goodsNo},'%')
         </if>
-        <if test="goodsName!=null and goodsName!=''">
-            and a.GOODS_NAME like  concat('%',#{goodsName},'%')
+        <if test="obj.goodsName!=null and obj.goodsName!=''">
+            and a.GOODS_NAME like  concat('%',#{obj.goodsName},'%')
         </if>
-        <if test="requName!=null and requName!=''">
-            and b.REQU_NAME like  concat('%',#{requName},'%')
+        <if test="obj.requName!=null and obj.requName!=''">
+            and b.REQU_NAME like  concat('%',#{obj.requName},'%')
         </if>
-        <if test="startDate!=null and startDate!=''">
-            and DATE(b.REQU_TIME) &gt;= #{startDate}
+        <if test="obj.startDate!=null and obj.startDate!=''">
+            and DATE(b.REQU_TIME) &gt;= #{obj.startDate}
         </if>
-        <if test="endDate!=null and endDate!=''">
-            and DATE(b.REQU_TIME) &lt;= #{endDate}
+        <if test="obj.endDate!=null and obj.endDate!=''">
+            and DATE(b.REQU_TIME) &lt;= #{obj.endDate}
         </if>
         ORDER BY  b.REQU_TIME desc
     </select>

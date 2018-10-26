@@ -24,26 +24,26 @@
         left join tb_warehouse_stock b
         on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
         where 1 = 1 AND a.DELETE_FLAG = 'N'
-        <if test="storeroomId!=null and storeroomId!=''">
-            and a.STOREROOM_ID = #{storeroomId}
+        <if test="obj.storeroomId!=null and obj.storeroomId!=''">
+            and a.STOREROOM_ID = #{obj.storeroomId}
         </if>
-        <if test="entryBatchNo!=null and entryBatchNo!=''">
-            and a.ENTRY_BATCH_NO like concat('%',#{entryBatchNo},'%')
+        <if test="obj.entryBatchNo!=null and obj.entryBatchNo!=''">
+            and a.ENTRY_BATCH_NO like concat('%',#{obj.entryBatchNo},'%')
         </if>
-        <if test="goodsNo!=null and goodsNo!=''">
-            and b.GOODS_NO like concat('%',#{goodsNo},'%')
+        <if test="obj.goodsNo!=null and obj.goodsNo!=''">
+            and b.GOODS_NO like concat('%',#{obj.goodsNo},'%')
         </if>
-        <if test="goodsName!=null and goodsName!=''">
-            and b.GOODS_NAME like  concat('%',#{goodsName},'%')
+        <if test="obj.goodsName!=null and obj.goodsName!=''">
+            and b.GOODS_NAME like  concat('%',#{obj.goodsName},'%')
         </if>
-        <if test="startDate!=null and startDate!=''">
-            and DATE(a.ENTRY_TIME) &gt;= #{startDate}
+        <if test="obj.startDate!=null and obj.startDate!=''">
+            and DATE(a.ENTRY_TIME) &gt;= #{obj.startDate}
         </if>
-        <if test="endDate!=null and endDate!=''">
-            and DATE(a.ENTRY_TIME) &lt;= #{endDate}
+        <if test="obj.endDate!=null and obj.endDate!=''">
+            and DATE(a.ENTRY_TIME) &lt;= #{obj.endDate}
         </if>
-        <if test="supplierName!=null and supplierName!=''">
-            and b.SUPPLIER_NAME like concat('%',#{supplierName},'%')
+        <if test="obj.supplierName!=null and obj.supplierName!=''">
+            and b.SUPPLIER_NAME like concat('%',#{obj.supplierName},'%')
         </if>
         order by a.ENTRY_TIME DESC,b.GOODS_NO ASC
     </select>

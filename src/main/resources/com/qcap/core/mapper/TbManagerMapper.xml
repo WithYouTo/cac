@@ -62,7 +62,7 @@
 		id = #{id}
     </update>
 
-    <select id="getMangerByEmployeeCode" resultType="com.qcap.core.entity.TbManager">
+    <select id="getMangerByEmployeeCode" parameterType="String" resultType="com.qcap.core.entity.TbManager">
         SELECT
         account account,
         name name,

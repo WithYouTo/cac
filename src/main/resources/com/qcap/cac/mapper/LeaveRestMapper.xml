@@ -26,14 +26,14 @@
 		LEAVE_REASON,
 		LEAVE_STATUS,
 		case LEAVE_STATUS
-		 when 'AUDITING' then '待审核'
+		 when 'AUDITING' then '待审批'
 		 when 'PASS' then '已通过'
-		 when 'REFUSE' then '已驳回'
-		 when 'CANCEL' then '已撤回'
+		 when 'REFUSE' then '未通过'
+		 when 'CANCEL' then '已撤销'
 		else '' END leaveStatusName,
 		AUDIT_PERSON,
-		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%m:%s') leaveStartTime,
-		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%m:%s') leaveEndTime,
+		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%m') leaveStartTime,
+		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%m') leaveEndTime,
 		LEAVE_URL,
 		LEAVE_TOTAL_TIME,
 		REMARK,
@@ -83,14 +83,14 @@
 		LEAVE_REASON,
 		LEAVE_STATUS,
 		case LEAVE_STATUS
-		 when 'AUDITING' then '待审核'
+		 when 'AUDITING' then '待审批'
 		 when 'PASS' then '已通过'
-		 when 'REFUSE' then '已驳回'
-		 when 'CANCEL' then '已撤回'
+		 when 'REFUSE' then '未通过'
+		 when 'CANCEL' then '已撤销'
 		else '' END leaveStatusName,
 		AUDIT_PERSON,
-		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%m:%s') leaveStartTime,
-		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%m:%s') leaveEndTime,
+		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%m') leaveStartTime,
+		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%m') leaveEndTime,
 		LEAVE_URL,
 		LEAVE_TOTAL_TIME,
 		REMARK,

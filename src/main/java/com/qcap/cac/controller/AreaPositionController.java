@@ -1,14 +1,13 @@
 package com.qcap.cac.controller;
 
 
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.AreaPositionDto;
 import com.qcap.cac.entity.TbAreaPosition;
 import com.qcap.cac.service.AreaPositionSrv;
 import com.qcap.core.common.CoreConstant;
-import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.apache.commons.lang3.StringUtils;
@@ -56,14 +55,18 @@ public class AreaPositionController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams getAreaPositionList(AreaPositionDto areaPositionDto) {
-
-        new PageFactory<Map>().defaultPage();
-
-        List<TbAreaPosition> list = areaPositionSrv.getAreaPositionList(areaPositionDto);
-        PageInfo pageInfo = new PageInfo(list);
-
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, pageInfo.getTotal(), list);
+    public PageResParams getAreaPositionList(IPage<TbAreaPosition> page,AreaPositionDto areaPositionDto) {
+        try {
+            this.areaPositionSrv.getAreaPositionList(page,areaPositionDto);
+            List<TbAreaPosition> ls = page.getRecords();
+            for(TbAreaPosition item : ls){
+                String positionTypeName = areaPositionSrv.selectPositionTypeName(item.getPositionType());
+                item.setPositionTypeName(positionTypeName);
+            }
+        } catch (Exception e) {
+            return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
+        }
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,  page.getTotal(), page.getRecords());
     }
 
 

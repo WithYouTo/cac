@@ -1,12 +1,12 @@
 package com.qcap.cac.controller;
 
 
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.WarehouseEntryDto;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.WarehouseStockService;
 import com.qcap.core.common.CoreConstant;
-import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
- * 入库管理控制器
+ * 库存查询
  *
  * @author cindy
  * @Date 2018-10-09 19:20:15
@@ -38,15 +38,13 @@ public class WarehouseStockController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams list(WarehouseEntryDto warehouseEntryDto) {
-        new PageFactory<Map<String, Object>>().defaultPage();
-
-        List<Map> list = warehouseStockService.getWarehouseStockList(warehouseEntryDto);
-
-        PageInfo pageInfo = new PageInfo(list);
-        //Page pageList = (Page) list;
-
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
+    public PageResParams list(IPage<Map<String, Object>> page, @Valid  WarehouseEntryDto warehouseEntryDto) {
+        try {
+            warehouseStockService.getWarehouseStockList(page,warehouseEntryDto);
+        } catch (Exception e) {
+            return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
+        }
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,  page.getTotal(), page.getRecords());
     }
 
 
@@ -55,16 +53,13 @@ public class WarehouseStockController {
      */
     @ResponseBody
     @RequestMapping(value = "/positionList", method = RequestMethod.POST)
-    public PageResParams getGoodsPositionList(String warehouseStockId) {
-        new PageFactory<Map<String, Object>>().defaultPage();
-
-
-        List<Map> list =  this.warehouseStockService.getPositionList(warehouseStockId);
-
-        PageInfo pageInfo = new PageInfo(list);
-        //Page pageList = (Page) list;
-
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
+    public PageResParams getGoodsPositionList(IPage<Map<String, Object>> page,String warehouseStockId) {
+        try {
+            this.warehouseStockService.getPositionList(page,warehouseStockId);
+        } catch (Exception e) {
+            return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
+        }
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,  page.getTotal(), page.getRecords());
     }
 
 
@@ -73,12 +68,13 @@ public class WarehouseStockController {
      */
     @ResponseBody
     @RequestMapping(value = "/adjustGoodsNum", method = RequestMethod.POST)
-    public Object updateGoodsNum(TbWarehouseStock warehouseStock) {
-        if(warehouseStock == null){
-            return ResParams.newInstance(CoreConstant.FAIL_CODE, "库存调整参数为空", null);
+    public Object updateGoodsNum(@Valid TbWarehouseStock warehouseStock) {
+        try {
+            this.warehouseStockService.updateGoodsNum(warehouseStock);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.SYS_EXCEPTION_MSG, null);
         }
-        this.warehouseStockService.updateGoodsNum(warehouseStock);
-        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "库存调整成功", null);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC, null);
     }
 
 

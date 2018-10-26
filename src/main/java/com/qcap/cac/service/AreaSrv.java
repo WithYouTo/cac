@@ -2,6 +2,7 @@ package com.qcap.cac.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcap.cac.dto.AreaDto;
 import com.qcap.cac.entity.TbArea;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface AreaSrv extends IService<TbArea> {
      * @param area
      * @return
      */
-    TbArea insertArea(TbArea area);
+    TbArea insertArea(AreaDto areaDto);
 
 
     /**

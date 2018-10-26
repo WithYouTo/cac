@@ -5,6 +5,7 @@ import com.qcap.cac.dto.AppLeaveApplyReq;
 import com.qcap.cac.dto.AppLeaveReq;
 import com.qcap.cac.entity.TbLeave;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public interface LeaveRestSrv extends IService<TbLeave> {
     List<AppLeaveReq> queryAuditingList(Map<String,Object> paramMap);
 
 
-    Integer insertLeaveApply(AppLeaveApplyReq appLeaveApplyReq,Map<String, MultipartFile> mapFile) throws Exception;
+    Integer insertLeaveApply(MultipartHttpServletRequest req, Map<String, MultipartFile> mapFile) throws Exception;
 
 
     AppLeaveReq detailById(String leaveId);

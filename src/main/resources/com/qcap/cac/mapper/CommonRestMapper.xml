@@ -10,6 +10,7 @@
         	tbpubcode01
         WHERE
         	CONFIG_CODE_ = #{getPubCodeReq.configCode}
+        	order by DESC_
     </select>
     
     <select id="getAreaList" parameterType="com.qcap.cac.dto.GetAreaReq"  resultType="com.qcap.cac.dto.GetAreaResp">

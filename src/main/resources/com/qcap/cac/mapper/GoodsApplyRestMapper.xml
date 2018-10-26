@@ -30,13 +30,14 @@
 		a.REQU_REMARK,
 		a.REQU_STATUS
 		from tb_warehouse_requ a
-		LEFT JOIN tb_warehouse_requ b
+		LEFT JOIN tb_warehouse_reqdetail b
 		on a.WAREHOUSE_REQU_ID = b.WAREHOUSE_REQU_ID
 		WHERE DATE(a.REQU_TIME) =#{date}
 		AND b.REQU_STATUS =#{requStatus}
 		<if test="lineNo!=null and lineNo!=''">
 			and a.LINE_NO &gt; #{lineNo}
 		</if>
+		group  by a.WAREHOUSE_REQU_ID
 		order by a.LINE_NO DESC
 		limit 0,10
 	</select>
@@ -98,7 +99,7 @@
 				tb_warehouse_reqdetail a LEFT JOIN tb_warehouse_requ c
         on a.WAREHOUSE_REQU_ID = c.WAREHOUSE_REQU_ID
 			WHERE
-				a.REQU_STATUS = #{requStatus}
+				a.REQU_STATUS = #{requStatus} AND DATE(c.REQU_TIME) =#{date}
 			<if test="positionCode!=null and positionCode!=''">
 				AND c.POSITION_CODE = #{positionCode}
 			</if>

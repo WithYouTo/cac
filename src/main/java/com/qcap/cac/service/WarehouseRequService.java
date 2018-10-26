@@ -1,11 +1,12 @@
 package com.qcap.cac.service;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseRequ;
 
-import java.util.List;
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -19,12 +20,12 @@ import java.util.Map;
 public interface WarehouseRequService extends IService<TbWarehouseRequ> {
 
 
-    List<Map<String,String>> getRequList(WarehouseReqDto warehouseReqDto);
+    void getRequList(IPage<Map<String,String>> page, @Valid WarehouseReqDto warehouseReqDto);
 
-    Integer commitRequ(TbWarehouseRequ warehouseRequ);
+    void commitRequ(TbWarehouseRequ warehouseRequ);
 
-    Integer delete(String warehouseRequId);
+    void delete(String warehouseRequId);
 
-    Integer insertWarehouseRequ(TbWarehouseRequ warehouseRequ,String userId);
+    void insertWarehouseRequ(TbWarehouseRequ warehouseRequ,String userId);
 
 }

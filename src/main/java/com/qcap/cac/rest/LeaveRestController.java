@@ -12,7 +12,6 @@
 package com.qcap.cac.rest;
 
 import com.qcap.cac.constant.CommonCodeConstant;
-import com.qcap.cac.dto.AppLeaveApplyReq;
 import com.qcap.cac.dto.AppLeaveReq;
 import com.qcap.cac.service.LeaveRestSrv;
 import com.qcap.core.common.CoreConstant;
@@ -22,7 +21,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,17 +47,15 @@ public class LeaveRestController {
 	@Resource
 	private LeaveRestSrv leaveRestSrv;
 
-	@RequestMapping(value="提交请假申请",method=RequestMethod.POST)
+	@RequestMapping(value="/leaveApply",method=RequestMethod.POST)
 	@ApiOperation(value="",notes="提交请假申请",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object insertLeaveApply(MultipartHttpServletRequest req) {
 		try {
-			//请假申请参数转化为对象
-			AppLeaveApplyReq appLeaveApplyReq = new AppLeaveApplyReq();
-			BeanUtils.copyProperties(req,appLeaveApplyReq);
 			//图片流
 			Map<String, MultipartFile> mapFile = req.getFileMap();
-            this.leaveRestSrv.insertLeaveApply(appLeaveApplyReq,mapFile);
+			//req除图片外的请求参数
+			this.leaveRestSrv.insertLeaveApply(req,mapFile);
 		} catch (Exception e) {
 			return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(),null);
 		}
@@ -167,7 +163,7 @@ public class LeaveRestController {
     public Object refuseMyLeaveApply(MultipartHttpServletRequest req) {
         Map<String, MultipartFile> mapFile = req.getFileMap();
         String employeeCode = req.getParameter("employeeCode");
-        String auditReason = req.getParameter("auditReason");
+        String auditReason = req.getParameter("refuseReason");
         String leaveId = req.getParameter("leaveId");
         try {
             if(StringUtils.isEmpty(employeeCode)){

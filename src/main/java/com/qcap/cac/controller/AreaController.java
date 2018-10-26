@@ -3,6 +3,7 @@ package com.qcap.cac.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.dto.AreaDto;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.service.AreaSrv;
 import com.qcap.core.common.CoreConstant;
@@ -50,20 +51,22 @@ public class AreaController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public PageResParams getAreaList(IPage<Map<String, Object>> page, String pAreaCode) {
-        this.areaSrv.getAreaList(page,pAreaCode);
-        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(), page.getRecords());
+        try {
+            this.areaSrv.getAreaList(page,pAreaCode);
+        } catch (Exception e) {
+            return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
+        }
+        return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,  page.getTotal(), page.getRecords());
     }
 
 
     /**
-     * 修改
+     * 查询区域信息
      */
     @ResponseBody
     @RequestMapping(value = "/areaInfo", method = RequestMethod.POST)
     public ResParams areaInfo(@Valid  String areaId) {
         TbArea area = this.areaSrv.getById(areaId);
-        //Map<String,Object> map = new HashMap();
-        //map.put("area",area);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, area);
     }
 
@@ -72,9 +75,10 @@ public class AreaController {
      */
     @ResponseBody
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public ResParams insertArea(@Valid  TbArea area) {
+    public ResParams insertArea(@Valid AreaDto areaDto) {
+        TbArea area = new TbArea();
         try {
-            area = this.areaSrv.insertArea(area);
+            area = this.areaSrv.insertArea(areaDto);
         } catch (Exception e) {
             return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
         }
