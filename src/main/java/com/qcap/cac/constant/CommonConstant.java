@@ -13,6 +13,7 @@ public class CommonConstant {
 	public final static String EQUIP_WORK_STATUS_INCHARGE = "INCHARGE";
 	public final static String EQUIP_WORK_STATUS_INUSE = "INUSE";
 	public final static String EQUIP_WORK_STATUS_INREPAIR = "INREPAIR";
+	public final static String EQUIP_WORK_STATUS_INDAMAGE = "INDAMAGE";
 
 	public static Map<String, String> EQUIP_WORK_STATUS = new LinkedHashMap<String, String>();
 	static {
@@ -20,6 +21,30 @@ public class CommonConstant {
 		EQUIP_WORK_STATUS.put("INCHARGE", "充电中");
 		EQUIP_WORK_STATUS.put("INUSE", "使用中");
 		EQUIP_WORK_STATUS.put("INREPAIR", "维修中");
+		EQUIP_WORK_STATUS.put("INDAMAGE", "损坏中");
+
+	}
+
+	//APP端设备领用选项
+	public static Map<String, String> EQUIP_INUSE_OPTION = new LinkedHashMap<String, String>();
+	static {
+		EQUIP_INUSE_OPTION.put("title", "使用");
+		EQUIP_INUSE_OPTION.put("code", "INUSE");
+	}
+	public static Map<String, String> EQUIP_INCHARGE_OPTION = new LinkedHashMap<String, String>();
+	static {
+		EQUIP_INCHARGE_OPTION.put("title", "充电");
+		EQUIP_INCHARGE_OPTION.put("code", "INCHARGE");
+	}
+	public static Map<String, String> EQUIP_INSTOP_OPTION = new LinkedHashMap<String, String>();
+	static {
+		EQUIP_INSTOP_OPTION.put("title", "停泊");
+		EQUIP_INSTOP_OPTION.put("code", "INSTOP");
+	}
+	public static Map<String, String> EQUIP_INREPAIR_OPTION = new LinkedHashMap<String, String>();
+	static {
+		EQUIP_INREPAIR_OPTION.put("title", "损坏");
+		EQUIP_INREPAIR_OPTION.put("code", "INREPAIR");
 	}
 
 	// 设备状态
@@ -59,8 +84,8 @@ public class CommonConstant {
 	}
 
 	// 设备维修状态
-	public final static String EQUIP_CHARGE_STATUS_REPAIR = "REPAIR";
-	public final static String EQUIP_CHARGE_STATUS_REPAIRED = "REPAIRED";
+	public final static String EQUIP_REPAIR_STATUS_REPAIR = "REPAIR";
+	public final static String EQUIP_REPAIR_STATUS_REPAIRED = "REPAIRED";
 	public static Map<String, String> EQUIP_REPAIR_STATUS = new LinkedHashMap<String, String>();
 	static {
 		EQUIP_REPAIR_STATUS.put("REPAIR", "维修中");
@@ -225,5 +250,8 @@ public class CommonConstant {
 		LEAVE_STATUS.put("PASS", "已通过");
 		LEAVE_STATUS.put("CANCEL", "已撤回");
 	}
+
+
+
 
 }

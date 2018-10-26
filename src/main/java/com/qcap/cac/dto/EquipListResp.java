@@ -10,7 +10,7 @@ public class EquipListResp{
 //    private String storeAreaName;
 //    private String status;
 //    private String statusName;
-//    private String lineNo;
+    private String lineNo;
     private String equipTypeCode;
     private String equipTypeName;
 
@@ -47,11 +47,20 @@ public class EquipListResp{
         this.equipTypeName = equipTypeName;
     }
 
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
+
     @Override
     public String toString() {
         return "EquipListResp{" +
                 "url='" + url + '\'' +
                 ", useTime='" + useTime + '\'' +
+                ", lineNo='" + lineNo + '\'' +
                 ", equipTypeCode='" + equipTypeCode + '\'' +
                 ", equipTypeName='" + equipTypeName + '\'' +
                 '}';

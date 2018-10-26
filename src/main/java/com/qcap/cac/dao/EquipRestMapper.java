@@ -1,6 +1,9 @@
 package com.qcap.cac.dao;
 
+import com.qcap.cac.dto.EquipListReq;
 import com.qcap.cac.dto.EquipListResp;
+import com.qcap.cac.dto.GetEquipStatusResp;
+import com.qcap.cac.dto.ListUnrevertEquipResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,9 +19,9 @@ public interface EquipRestMapper {
 
     Map<String,String> getShiftTimeByShift(@Param("shift") String shift);
 
-    List<EquipListResp> getUnrevertEquipList(@Param("employeeCode")String employeeCode);
+    List<ListUnrevertEquipResp> getUnrevertEquipList(@Param("employeeCode")String employeeCode);
 
-    Map<String,Object> getEquipStatus(@Param("equipNo")String equipNo);
+    GetEquipStatusResp getEquipStatus(@Param("equipNo")String equipNo);
 
-    List<EquipListResp> getEquipTypeList(String employeeCode);
+    List<EquipListResp> getEquipTypeList(EquipListReq equipListReq);
 }

@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,7 @@ public class TbOrgServiceImpl implements ITbOrgService {
 		org.setNum(String.valueOf(maxNum));
 		org.setStatus("1");
 		buildTbOrgByParentCode(org, org.getParentCode());
+		org.setId(UUIDUtils.getUUID());
 		tbOrgMapper.insert(org);
 	}
 

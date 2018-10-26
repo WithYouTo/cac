@@ -47,7 +47,7 @@
         (#{equipUseId},#{equipId},#{equipNo},#{equipName},#{equipType},#{equipModel},#{area},#{personNo},#{personName},#{personMobile},#{startUseTime},#{status},#{createEmp},now(),#{updateEmp},now())
     </insert>
 
-    <select id="getEquipChargeIdByEquipNoAndStatus" resultType="com.qcap.cac.entity.TbEquipUse" parameterType="java.lang.String">
+    <select id="getEquipUseIdByEquipNoAndStatus" resultType="com.qcap.cac.entity.TbEquipUse" parameterType="java.lang.String">
         select
         EQUIP_USE_ID equipUseId,
         START_USE_TIME startUseTime
@@ -67,6 +67,6 @@
         UPDATE_EMP = #{updateEmp},
         UPDATE_DATE = #{updateDate}
         where
-        EQUIP_USE_ID = #{equipChargeId}
+        EQUIP_USE_ID = #{equipUseId}
     </update>
 </mapper>

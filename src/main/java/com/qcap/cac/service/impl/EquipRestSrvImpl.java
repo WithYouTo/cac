@@ -3,15 +3,13 @@ package com.qcap.cac.service.impl;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.*;
-import com.qcap.cac.dto.EquipListResp;
-import com.qcap.cac.dto.UpdateEquipStatusReq;
-import com.qcap.cac.dto.UpdateStopEquipStatusReq;
-import com.qcap.cac.dto.UpdateUsingEquipStatusReq;
+import com.qcap.cac.dto.*;
 import com.qcap.cac.entity.TbEquip;
 import com.qcap.cac.entity.TbEquipCharge;
 import com.qcap.cac.entity.TbEquipRepair;
 import com.qcap.cac.entity.TbEquipUse;
 import com.qcap.cac.service.EquipRestSrv;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.dao.TbManagerMapper;
@@ -51,23 +49,25 @@ public class EquipRestSrvImpl implements EquipRestSrv {
     private TbManagerMapper tbManagerMapper;
 
     @Override
-    public List<EquipListResp> getEquipList(String employeeCode) {
-        List<EquipListResp> list = this.equipRestMapper.getEquipTypeList(employeeCode);
-        return rebuildEquipListWithUseTime(list,employeeCode);
+    public List<EquipListResp> getEquipList(EquipListReq equipListReq) {
+        List<EquipListResp> list = this.equipRestMapper.getEquipTypeList(equipListReq);
+        return rebuildEquipListWithUseTime(list,equipListReq.getEmployeeCode());
     }
 
     @Override
-    public List<EquipListResp> getUnrevertEquipList(String employeeCode) {
-        List<EquipListResp> list = this.equipRestMapper.getUnrevertEquipList(employeeCode);
-        return rebuildEquipListWithUseTime(list,employeeCode);
+    public List<ListUnrevertEquipResp> getUnrevertEquipList(String employeeCode) {
+        List<ListUnrevertEquipResp> list = this.equipRestMapper.getUnrevertEquipList(employeeCode);
+        return rebuildUnrevertEquipListWithUseTime(list,employeeCode);
     }
 
     @Override
-    public Map<String, Object> getEquipStatus(String equipNo) {
-        Map<String,Object> map = this.equipRestMapper.getEquipStatus(equipNo);
-        String status = Objects.toString(map.get("status"));
-        map.put("statusName", CommonConstant.EQUIP_WORK_STATUS.get(status));
-        return map;
+    public GetEquipStatusResp getEquipStatus(String equipNo) {
+        String url = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
+        String status = Objects.toString(esr.getStatus());
+        esr.setStatusName(CommonConstant.EQUIP_WORK_STATUS.get(status));
+        esr.setUrl(url+esr.getUrl());
+        return esr;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         String employeeCode = updateStopEquipStatusReq.getEmployeeCode();
         String equipNo = updateStopEquipStatusReq.getEquipNo();
         //获取当前设备状态
-        Map<String,Object> map = this.equipRestMapper.getEquipStatus(equipNo);
-        String curStatus = Objects.toString(map.get("status"));
+        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
+        String curStatus = Objects.toString(esr.getStatus());
         //根据员工编号获取员工信息
         TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
         TbEquipUse equipUse = new TbEquipUse();
@@ -98,6 +98,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         equipUse.setPersonMobile(manager.getPhone());
         equipUse.setPersonNo(manager.getAccount());
         equipUse.setPersonName(manager.getName());
+        equipUse.setStartUseTime(new Date());
         //新增设备使用记录
         this.equipUseMapper.insertEquipUse(equipUse);
 
@@ -134,8 +135,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
 
             BeanUtils.copyProperties(equip,equipRepair);
             //重组equipRepair对象
-            equipRepair.setEquipId(UUIDUtils.getUUID());
-            equipRepair.setStatus(CommonConstant.EQUIP_CHARGE_STATUS_REPAIR);
+
+            equipRepair.setEquipRepairId(UUIDUtils.getUUID());
+            equipRepair.setStatus(CommonConstant.EQUIP_REPAIR_STATUS_REPAIR);
             equipRepair.setCreateEmp(employeeCode);
             equipRepair.setUpdateEmp(employeeCode);
             equipRepair.setPersonMobile(manager.getPhone());
@@ -153,8 +155,8 @@ public class EquipRestSrvImpl implements EquipRestSrv {
 
             BeanUtils.copyProperties(equip,equipCharge);
             //重组equipCharge对象
-            equipCharge.setEquipId(UUIDUtils.getUUID());
-            equipCharge.setStatus(CommonConstant.EQUIP_CHARGE_STATUS_REPAIR);
+            equipCharge.setEquipChargeId(UUIDUtils.getUUID());
+            equipCharge.setStatus(CommonConstant.EQUIP_CHARGE_STATUS_INCHARGE);
             equipCharge.setCreateEmp(employeeCode);
             equipCharge.setUpdateEmp(employeeCode);
             equipCharge.setPersonMobile(manager.getPhone());
@@ -186,16 +188,53 @@ public class EquipRestSrvImpl implements EquipRestSrv {
      */
     private List<EquipListResp> rebuildEquipListWithUseTime(List<EquipListResp> list, String employeeCode){
         List<Map<String,Object>> tempList = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(employeeCode);
-        String shift = Objects.toString(tempList.get(0).get("shift"));
-        Map<String,String> shiftTime = this.equipRestMapper.getShiftTimeByShift(shift);
-        String startTime = shiftTime.get("startTime");
-        String endTime = shiftTime.get("endTime");
-        StringBuilder sb = new StringBuilder("");
-        for(EquipListResp ep : list){
-            ep.setUseTime(sb.append(startTime).append("-").append(endTime).toString());
+        String url = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+
+        if(tempList.size()>0){
+            String shift = Objects.toString(tempList.get(0).get("shift"));
+            Map<String,String> shiftTime = this.equipRestMapper.getShiftTimeByShift(shift);
+            String startTime = shiftTime.get("startTime");
+            String endTime = shiftTime.get("endTime");
+            StringBuilder sb = new StringBuilder("");
+            for(EquipListResp ep : list){
+                ep.setUseTime(sb.append(startTime).append("-").append(endTime).toString());
+                ep.setUrl(url+ep.getUrl());
+            }
+        }else{
+            StringBuilder sb = new StringBuilder("");
+            for(EquipListResp ep : list){
+                ep.setUseTime("无排班");
+                ep.setUrl(url+ep.getUrl());
+            }
         }
         return list;
     }
+
+
+    private List<ListUnrevertEquipResp> rebuildUnrevertEquipListWithUseTime(List<ListUnrevertEquipResp> list, String employeeCode) {
+        List<Map<String,Object>> tempList = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(employeeCode);
+        String url = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+
+        if(tempList.size()>0){
+            String shift = Objects.toString(tempList.get(0).get("shift"));
+            Map<String,String> shiftTime = this.equipRestMapper.getShiftTimeByShift(shift);
+            String startTime = shiftTime.get("startTime");
+            String endTime = shiftTime.get("endTime");
+            StringBuilder sb = new StringBuilder("");
+            for(ListUnrevertEquipResp uer : list){
+                uer.setUseTime(sb.append(startTime).append("-").append(endTime).toString());
+                uer.setUrl(url+uer.getUrl());
+            }
+        }else{
+            StringBuilder sb = new StringBuilder("");
+            for(ListUnrevertEquipResp uer : list){
+                uer.setUseTime("无排班");
+                uer.setUrl(url+uer.getUrl());
+            }
+        }
+        return list;
+    }
+
 
 
     /**

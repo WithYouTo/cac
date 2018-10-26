@@ -17,24 +17,30 @@
 		WHERE
 		DEL_FLAG = 'NORMAL'
 		<if test="lineNo != null and lineNo != ''">
-			and LINE_NO = #{lineNo}
+			and LINE_NO  &gt;  #{lineNo}
 		</if>
 		limit 0,10
 	</select>
 
-	<select id="getEquipTypeList" resultType="com.qcap.cac.dto.EquipListResp">
+	<select id="getEquipTypeList" resultType="com.qcap.cac.dto.EquipListResp" parameterType="com.qcap.cac.dto.EquipListReq">
 		SELECT
 		b.IMG_URL url,
+		a.SEQ_ lineNo,
 		a.DESC_ equipTypeCode,
 		a.DESC1_ equipTypeName
 		FROM
 		tbpubcode01 a
-		LEFT JOIN
+		RIGHT JOIN
 		tb_equip b
 		ON a.DESC_ = b.EQUIP_TYPE
 		WHERE
 		a.CONFIG_CODE_ = 'EQUIP_TYPE'
+		<if test="lineNo != null and lineNo != ''">
+			and a.SEQ_ &gt; #{lineNo}
+		</if>
 		GROUP BY  b.EQUIP_TYPE
+		order by a.SEQ_ DESC
+		limit 0,10
 	</select>
 
 	<select id="getShiftTimeByShift" parameterType="String" resultType="Map">
@@ -49,7 +55,7 @@
 		CONFIG_CODE_ = 'SHIFT_TYPE'
 	</select>
 	
-	<select id="getUnrevertEquipList"  parameterType="String" resultType="com.qcap.cac.dto.EquipListResp">
+	<select id="getUnrevertEquipList"  parameterType="String" resultType="com.qcap.cac.dto.ListUnrevertEquipResp">
 		SELECT
 		b.EQUIP_ID equipId,
 		b.EQUIP_NO equipNo,
@@ -67,9 +73,13 @@
 		a.STATUS = 'INUSE'
 	</select>
 
-	<select id="getEquipStatus" parameterType="String" resultType="Map">
+	<select id="getEquipStatus" parameterType="String" resultType="com.qcap.cac.dto.GetEquipStatusResp">
 		SELECT
-		EQUIP_WORK_STATE status
+		IMG_URL url,
+		EQUIP_NAME equipName,
+		EQUIP_NO equipNo,
+		EQUIP_WORK_STATE status,
+		STOP_PLACE stopPlace
 		FROM
 		tb_equip
 		WHERE

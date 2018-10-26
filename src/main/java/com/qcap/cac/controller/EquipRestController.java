@@ -1,9 +1,6 @@
 package com.qcap.cac.controller;
 
-import com.qcap.cac.dto.EquipListResp;
-import com.qcap.cac.dto.UpdateEquipStatusReq;
-import com.qcap.cac.dto.UpdateStopEquipStatusReq;
-import com.qcap.cac.dto.UpdateUsingEquipStatusReq;
+import com.qcap.cac.dto.*;
 import com.qcap.cac.service.EquipRestSrv;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.model.ResParams;
@@ -39,8 +36,8 @@ public class EquipRestController {
     @PostMapping("/listUseEquip")
     @ApiOperation(value="获取可用设备类型列表",notes="获取可用设备类型列表",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
-    public ResParams listUseEquip(String employeeCode){
-        List<EquipListResp> list = this.equipRestSrv.getEquipList(employeeCode);
+    public ResParams listUseEquip(EquipListReq equipListReq){
+        List<EquipListResp> list = this.equipRestSrv.getEquipList(equipListReq);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
     }
 
@@ -57,10 +54,10 @@ public class EquipRestController {
      * @date 2018/10/25 18:42
      */
     @PostMapping("/listUnrevertEquip")
-    @ApiOperation(value="获取可用设备列表",notes="获取可用设备列表",response=Map.class,httpMethod="POST")
+    @ApiOperation(value="获取待归还设备列表",notes="获取待归还设备列表",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
     public ResParams listUnrevertEquip(String employeeCode){
-        List<EquipListResp> list = this.equipRestSrv.getUnrevertEquipList(employeeCode);
+        List<ListUnrevertEquipResp> list = this.equipRestSrv.getUnrevertEquipList(employeeCode);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", list);
     }
 
@@ -80,8 +77,8 @@ public class EquipRestController {
     @ApiOperation(value="获取设备状态",notes="获取设备状态",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
     public ResParams getEquipStatus(String equipNo){
-        Map<String,Object> map = this.equipRestSrv.getEquipStatus(equipNo);
-        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", map);
+        GetEquipStatusResp esr = this.equipRestSrv.getEquipStatus(equipNo);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", esr);
     }
 
     /**
