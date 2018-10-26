@@ -62,7 +62,7 @@
 		b.EQUIP_NAME equipName,
 		b.IMG_URL url,
 		b.STORE_AREA storeAreaName,
-		a.STATUS status,
+		a.STATUS status
 		FROM
 		tb_equip_use a
 		LEFT JOIN tb_equip b
@@ -71,6 +71,8 @@
 		b.DEL_FLAG = 'NORMAL'
 		AND
 		a.STATUS = 'INUSE'
+		AND
+		a.PERSON_NO = #{employeeCode}
 	</select>
 
 	<select id="getEquipStatus" parameterType="String" resultType="com.qcap.cac.dto.GetEquipStatusResp">

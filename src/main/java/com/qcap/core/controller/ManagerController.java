@@ -50,7 +50,7 @@ public class ManagerController {
 	 * @return response封装
 	 */
 	@PostMapping("/add")
-	public ResParams add(@Valid UserInsertDto userInsertDto, BindingResult result) {
+	public ResParams add(@Valid UserInsertDto userInsertDto, BindingResult result) throws Exception {
 //		if (result.hasErrors()) {
 //			throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
 //		}

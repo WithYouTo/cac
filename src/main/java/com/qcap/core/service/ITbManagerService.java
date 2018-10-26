@@ -29,7 +29,7 @@ public interface ITbManagerService {
      * @param manager
      *            参数对象
      */
-	void insertItem(UserInsertDto manager);
+	void insertItem(UserInsertDto manager) throws Exception;
 
 	/**
 	 * 添加用户

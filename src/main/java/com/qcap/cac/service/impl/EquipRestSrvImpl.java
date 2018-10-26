@@ -81,9 +81,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
         TbEquipUse equipUse = new TbEquipUse();
         //当设备正在维修中，返回提示
-        if(CommonConstant.EQUIP_WORK_STATUS_INREPAIR.equals(curStatus)){
-            return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
-        }
+//        if(CommonConstant.EQUIP_WORK_STATUS_INREPAIR.equals(curStatus)){
+//            return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
+//        }
         //当设备正在充电中，先更新设备充电记录，再插入设备使用记录
         if(CommonConstant.EQUIP_WORK_STATUS_INCHARGE.equals(curStatus)){
             handlerWhenEquipInCharge(manager,equipNo);
@@ -112,32 +112,38 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         String employeeCode = updateUsingEquipStatusReq.getEmployeeCode();
         String equipNo = updateUsingEquipStatusReq.getEquipNo();
         String operateCode = updateUsingEquipStatusReq.getOperateCode();
+
+        //获取当前设备状态
+        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
+        String curStatus = esr.getStatus();
         //通过工号，获取人员信息
         TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
-        //通过设备编码和使用状态查询设备使用记录
-        TbEquipUse equipUse= this.equipUseMapper.getEquipUseIdByEquipNoAndStatus(equipNo);
-        Date endUseTime = new Date();
-        //重组设备充电记录对象
-        TbEquipUse eu = new TbEquipUse();
-        eu.setEquipUseId(equipUse.getEquipUseId());
-        eu.setUpdateEmp(manager.getAccount());
-        eu.setEndUseTime(endUseTime);
-        eu.setUpdateDate(endUseTime);
-        eu.setStatus(CommonConstant.EQUIP_USE_STATUS_USED);
-        eu.setTotalUseTime(getTotalTime(equipUse.getStartUseTime(),endUseTime));
-        //更新设备充电记录中结束充电时间和充电时长
-        this.equipUseMapper.updateEquipUseByEquipUseId(eu);
+        if(curStatus.equals(CommonConstant.EQUIP_WORK_STATUS_INUSE)){
+            //通过设备编码和使用状态查询设备使用记录
+            TbEquipUse equipUse= this.equipUseMapper.getEquipUseIdByEquipNoAndStatus(equipNo);
+            Date endUseTime = new Date();
+            //重组设备充电记录对象
+            TbEquipUse eu = new TbEquipUse();
+            eu.setEquipUseId(equipUse.getEquipUseId());
+            eu.setUpdateEmp(manager.getAccount());
+            eu.setEndUseTime(endUseTime);
+            eu.setUpdateDate(endUseTime);
+            eu.setStatus(CommonConstant.EQUIP_USE_STATUS_USED);
+            eu.setTotalUseTime(getTotalTime(equipUse.getStartUseTime(),endUseTime));
+            //更新设备充电记录中结束使用时间和使用时长
+            this.equipUseMapper.updateEquipUseByEquipUseId(eu);
+        }
+        if(curStatus.equals(CommonConstant.EQUIP_WORK_STATUS_INCHARGE)){
+            handlerWhenEquipInCharge(manager,equipNo);
+        }
 
         TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
-        if(CommonConstant.EQUIP_WORK_STATUS_INREPAIR.equals(operateCode)){
+        if(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE.equals(operateCode)){
             TbEquipRepair equipRepair = new TbEquipRepair();
-
-
             BeanUtils.copyProperties(equip,equipRepair);
             //重组equipRepair对象
-
             equipRepair.setEquipRepairId(UUIDUtils.getUUID());
-            equipRepair.setStatus(CommonConstant.EQUIP_REPAIR_STATUS_REPAIR);
+            equipRepair.setStatus(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE);
             equipRepair.setCreateEmp(employeeCode);
             equipRepair.setUpdateEmp(employeeCode);
             equipRepair.setPersonMobile(manager.getPhone());
@@ -145,9 +151,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
             equipRepair.setPersonName(manager.getName());
             equipRepair.setRepairTime(new Date());
             //新增一条设备维修记录
-            this.equipRepairMapper.insert(equipRepair);
+//            this.equipRepairMapper.insert(equipRepair);
             //修改设备信息表设备工作状态
-            this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INREPAIR);
+            this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INDAMAGE);
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INCHARGE.equals(operateCode)){
             TbEquipCharge equipCharge = new TbEquipCharge();
@@ -171,6 +177,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         if(CommonConstant.EQUIP_WORK_STATUS_INSTOP.equals(operateCode)){
             //修改设备信息表设备工作状态
             this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
+
         }
     }
 
@@ -193,10 +200,10 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         if(tempList.size()>0){
             String shift = Objects.toString(tempList.get(0).get("shift"));
             Map<String,String> shiftTime = this.equipRestMapper.getShiftTimeByShift(shift);
-            String startTime = shiftTime.get("startTime");
-            String endTime = shiftTime.get("endTime");
-            StringBuilder sb = new StringBuilder("");
+            String startTime = shiftTime.get("startTime").substring(0,5);
+            String endTime = shiftTime.get("endTime").substring(0,5);
             for(EquipListResp ep : list){
+                StringBuilder sb = new StringBuilder("");
                 ep.setUseTime(sb.append(startTime).append("-").append(endTime).toString());
                 ep.setUrl(url+ep.getUrl());
             }
@@ -218,10 +225,11 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         if(tempList.size()>0){
             String shift = Objects.toString(tempList.get(0).get("shift"));
             Map<String,String> shiftTime = this.equipRestMapper.getShiftTimeByShift(shift);
-            String startTime = shiftTime.get("startTime");
-            String endTime = shiftTime.get("endTime");
-            StringBuilder sb = new StringBuilder("");
+            String startTime = shiftTime.get("startTime").substring(0,5);
+            String endTime = shiftTime.get("endTime").substring(0,5);
             for(ListUnrevertEquipResp uer : list){
+                StringBuilder sb = new StringBuilder("");
+                uer.setStatusName(CommonConstant.EQUIP_WORK_STATUS.get(uer.getStatus()));
                 uer.setUseTime(sb.append(startTime).append("-").append(endTime).toString());
                 uer.setUrl(url+uer.getUrl());
             }

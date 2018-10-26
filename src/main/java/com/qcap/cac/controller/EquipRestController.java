@@ -1,5 +1,6 @@
 package com.qcap.cac.controller;
 
+import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dto.*;
 import com.qcap.cac.service.EquipRestSrv;
 import com.qcap.core.common.CoreConstant;

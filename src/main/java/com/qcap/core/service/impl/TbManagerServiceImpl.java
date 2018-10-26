@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import com.alibaba.fastjson.JSONObject;
+import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.dao.*;
@@ -116,8 +118,9 @@ public class TbManagerServiceImpl implements ITbManagerService {
 	}
 
 	@Override
-	public void insertItem(UserInsertDto userInsertDto){
+	public void insertItem(UserInsertDto userInsertDto) throws Exception{
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Map<String,Object> map = new HashMap<String,Object>();
 
 		TbManager manager = new TbManager();
 		manager.setId(UUIDUtils.getUUID());
@@ -133,7 +136,8 @@ public class TbManagerServiceImpl implements ITbManagerService {
 			TbManager tbManager = tbManagerMapper
 					.selectOne(new QueryWrapper<TbManager>().eq("account", manager.getAccount()));
 			if (tbManager != null) {
-				throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
+//				throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
+				throw new BaseException(CommonCodeConstant.USER_ALREADY_REG);
 			}
 			// 完善信息
 			manager.setSalt(Md5Util.getSalt());
@@ -154,7 +158,6 @@ public class TbManagerServiceImpl implements ITbManagerService {
 			userInfo.setUpdateDate(new Date());
 			userInfo.setCreateEmp("sys");
 			userInfo.setUpdateEmp("sys");
-//		userInfo.setVersion("0");
 			tbManagerMapper.insert(manager);
 			this.tbUserInfoMapper.insert(userInfo);
 		}catch(ParseException e){
