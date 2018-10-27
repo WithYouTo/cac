@@ -120,4 +120,13 @@ public class EquipRestController {
         this.equipRestSrv.updateUsingEquipStatus(updateUsingEquipStatusReq);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
     }
+
+
+    @PostMapping("/updateEquipStatusInManagerMode")
+    @ApiOperation(value="管理员修改设备状态",notes="管理员修改设备状态",response=Map.class,httpMethod="POST")
+    @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
+    public ResParams updateEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq){
+        this.equipRestSrv.updateEquipStatusInManagerMode(updateUsingEquipStatusReq);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
+    }
 }

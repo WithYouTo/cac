@@ -16,4 +16,6 @@ public interface EquipRestSrv {
     ResParams updateStopEquipStatus(UpdateStopEquipStatusReq updateStopEquipStatusReq);
 
     void updateUsingEquipStatus(UpdateUsingEquipStatusReq updateUsingEquipStatusReq);
+
+    void updateEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq);
 }

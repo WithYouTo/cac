@@ -39,7 +39,7 @@
         </if>
         AND a.PARTS_NO is null
         AND  a.DEL_FLAG = 'NORMAL'
-        ORDER BY a.LATEST_MAINT_TIME
+        ORDER BY a.NEXT_MAINT_TIME
     </select>
 
     <select id="listPartsPlanByEquipId" parameterType="java.lang.String"  resultType="java.util.Map">

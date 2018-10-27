@@ -10,7 +10,7 @@ public class UpdateUsingEquipStatusReq {
     @ApiModelProperty(value = "工号")
     private String employeeCode;
 
-    @NotBlank(message = "工号不能为空")
+    @NotBlank(message = "设备编码不能为空")
     @ApiModelProperty(value = "设备编码")
     private String equipNo;
 
