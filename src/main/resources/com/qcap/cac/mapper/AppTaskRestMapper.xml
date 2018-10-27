@@ -93,10 +93,6 @@
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkSatus)">
 		AND m.CHECK_STATUS = #{checkSatus}
 		</if>
-        <!-- <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'ITEM' ">
-        AND START_TIME &gt;= #{startTime}
-        AND END_TIME &lt; #{endTime}
-        </if> -->
         <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'HISTORY' ">
         AND END_TIME &lt;= #{endTime}
         </if>
@@ -105,6 +101,13 @@
 		        AND START_TIME &gt;= #{startTime}
 		        AND END_TIME &lt; #{endTime}
 	        </if>
+        </if>
+		 <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'CHECK' ">
+		AND INSTR(#{areaCode},AREA_CODE)
+        AND START_TIME &gt;= #{startTime}
+        AND END_TIME &lt; #{endTime}
+		AND CHECK_STATUS != 'DISQUALIFIED'
+		AND TASK_STATUS !='CANCLE'
         </if>
         ORDER BY m.LINE_NO DESC
 	</select>
@@ -209,6 +212,18 @@
 		SELECT AREA_CODE AS areaCode
 		FROM tb_area_position
 		where POSITION_CODE = #{positionCode}
+	</select>
+	
+	<select id="queryCheckTaskItem" parameterType="Map" resultType="Map">
+		SELECT COUNT(1) taskNum,CASE WHEN CHECK_STATUS ='TOCHECK' THEN 'toCheckItem'
+		WHEN CHECK_STATUS ='QUALIFIED' THEN 'checkedItem'  END AS taskItem
+		FROM tb_task
+		WHERE INSTR(#{areaCode},AREA_CODE)
+		AND START_TIME &gt;= #{startTime}
+		AND END_TIME &lt; #{endTime}
+		AND CHECK_STATUS != 'DISQUALIFIED'
+		AND TASK_STATUS !='CANCLE'
+		GROUP BY CHECK_STATUS
 	</select>
 	
 </mapper>

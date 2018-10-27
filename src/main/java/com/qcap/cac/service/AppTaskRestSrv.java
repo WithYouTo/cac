@@ -29,4 +29,6 @@ public interface AppTaskRestSrv {
     //----------------检查人员接口
     Map<String, Object> queryCheckTaskItem (String employeeCode);
 
+    List<Map<String, Object>> queryCheckTask(AppTaskCheckRestReq appTaskCheckRestReq);
+
 }

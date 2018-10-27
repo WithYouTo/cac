@@ -117,4 +117,21 @@ public class AppTaskRestController {
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_UPDATE_DESC);
     }
 
+	@ResponseBody
+	@RequestMapping(value = "/queryCheckTaskItem" ,method = RequestMethod.POST)
+	@ApiOperation(value = "获取检查人员检查任务数量", notes = "获取检查人员检查任务数量",response = Map.class , httpMethod = "POST")
+	@ApiImplicitParam(paramType = "header" ,name = "api_version" , defaultValue = "v1" ,required = true , dataType = "String")
+	public Object queryCheckTaskItem(@ApiParam(value = "员工编号",required = true)@RequestParam("employeeCode")String employeeCode){
+		Map<String ,Object> map = this.appTaskRestSrv.queryCheckTaskItem(employeeCode);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_QUERY_DESC, map);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/queryCheckTask" ,method = RequestMethod.POST)
+	@ApiOperation(value = "检查列表、已检查列表", notes = "检查列表、已检查列表",response = Map.class , httpMethod = "POST")
+	@ApiImplicitParam(paramType = "header" ,name = "api_version" , defaultValue = "v1" ,required = true , dataType = "String")
+	public Object queryCheckTask(@Valid AppTaskCheckRestReq appTaskCheckRestReq){
+		List<Map<String, Object>> list = this.appTaskRestSrv.queryCheckTask(appTaskCheckRestReq);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_QUERY_DESC, list);
+	}
 }

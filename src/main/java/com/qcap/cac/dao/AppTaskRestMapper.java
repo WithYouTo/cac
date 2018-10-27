@@ -23,5 +23,9 @@ public interface AppTaskRestMapper {
 	List<Map<String, Object>> selectStandardDetailList (@Param("standardCode") String standardCode);
 	
 	Map<String, Object> selectStandardDetailInfo (@Param("standardDetailId") String standardDetailId);
+
+	String selectAreaByPositionCode (@Param("positionCode") String positionCode);
+
+	List<Map<String, String>> queryCheckTaskItem(Map<String, Object> map);
 	
 }

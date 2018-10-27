@@ -158,8 +158,14 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_FINISH);
 		param.put("taskSatus", appTaskRestCheckReq.getTaskStatus());
-		param.put("checkSatus", appTaskRestCheckReq.getCheckStatus());
-		return this.appTaskRestMapper.selectTaskIntro(param);
+		String startTime = Objects.toString(param.get("startTime"),"");
+		if(!StringUtils.isEmpty(startTime)){
+			//在当班时间内，则查询已完成任务
+			return this.appTaskRestMapper.selectTaskIntro(param);
+		}else{
+			//不在当班时间内，则不进行查询
+			return null;
+		}
 	}
 
     @Override
@@ -217,16 +223,66 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		List<Map<String,Object>> list = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(employeeCode);
 		//当班
 		if(CollectionUtils.isNotEmpty(list)){
+			//查询管理人员的管理区域
+			String positionCode = Objects.toString(list.get(0).get("positionCode"),"");
+			String areaCode = this.appTaskRestMapper.selectAreaByPositionCode(positionCode);
+			if(StringUtils.isEmpty(areaCode)){
+				throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"根据岗位编号未查询所管辖区域编号");
+			}
+			//查询管理人员上班时间
+			Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_CHECK);
+			String startTime =Objects.toString(param.get("startTime"),"");
+			if(!StringUtils.isEmpty(startTime)){
+				param.put("areaCode",areaCode);
+				List<Map<String,String>> taskItemList = this.appTaskRestMapper.queryCheckTaskItem(param);
+				if(CollectionUtils.isNotEmpty(taskItemList)){
+					for(Map<String,String> m:taskItemList){
+						map.put(m.get("taskItem"),m.get("taskNum"));
+					}
+				}
+			}
+		}
 
-		}else{
-			//不当班
+		if(!map.containsKey("toCheckItem")){
 			map.put("toCheckItem",0);
+		}
+
+		if(!map.containsKey("checkedItem")){
 			map.put("checkedItem",0);
 		}
-		return null;
+
+		return map;
 	};
 
+	@Override
+	public List<Map<String, Object>> queryCheckTask(AppTaskCheckRestReq appTaskCheckRestReq){
+		List<Map<String,Object>> taskItemList =null;
+		//查询管理人员是否当班
+		List<Map<String,Object>> list = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(appTaskCheckRestReq.getEmployeeCode());
+		//当班
+		if(CollectionUtils.isNotEmpty(list)){
+			//查询管理人员的管理区域
+			String positionCode = Objects.toString(list.get(0).get("positionCode"),"");
+			String areaCode = this.appTaskRestMapper.selectAreaByPositionCode(positionCode);
+			if(StringUtils.isEmpty(areaCode)){
+				throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"根据岗位编号未查询所管辖区域编号");
+			}
 
+			//查询管理人员上班时间
+			Map<String, Object> param = getTaskQueryTime(appTaskCheckRestReq.getEmployeeCode(),QUERY_TASK_TIME_CHECK);
+			String startTime =Objects.toString(param.get("startTime"),"");
+			if(!StringUtils.isEmpty(startTime)){
+				param.put("areaCode",areaCode);
+				/**
+				 * 管理人员查询检查任务时，不根据employeeCode查询，而是根据其所管理的岗位对应的区域查询
+				 * 去掉查询条件中的employeeCode；
+				 */
+				param.remove("employeeCode");
+				taskItemList = this.appTaskRestMapper.selectTaskIntro(param);
+			}
+		}
+		return taskItemList;
+	};
 
 	/**
 	 * 查询任务、或统计任务时，
