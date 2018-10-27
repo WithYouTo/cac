@@ -11,6 +11,7 @@ import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.GoodsApplyRestSrv;
 import com.qcap.cac.tools.EntityTools;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
@@ -43,6 +44,9 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
     @Resource
     private WarehouseDistributionMapper warehouseDistributionMapper;
+
+    @Resource
+    private LoginRestMapper loginRestMapper;
 
     @Override
     public List<GoodsReqRestReq> queryReqList(Map<String, String> paramMap) {
@@ -112,6 +116,15 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             //更新库存
             stock.setGoodsNum(goodsNum - realNum);
             this.goodsApplyRestMapper.updateStockByGoodsOut(EntityTools.setUpdateEmpAndTime(stock));
+
+            //判断库存数量是否小于最低警戒线（库存和最低警戒线的单位在导入必须保持一致）
+            //向角色为库管的人员推送消息
+            String roleNum = RedisTools.getCommonConfig("WAREHOUSE_ROLE_NUM");
+            List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum);
+            for(UserListResp user : userList){
+                //TODO
+                String employeeCode = user.getEmployeeCode();
+            }
         }
 
     }
