@@ -75,36 +75,19 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         String employeeCode = updateStopEquipStatusReq.getEmployeeCode();
         String equipNo = updateStopEquipStatusReq.getEquipNo();
         //获取当前设备状态
-        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
-        String curStatus = Objects.toString(esr.getStatus());
+        TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
+        String curStatus = equip.getEquipWorkState();
+//        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
+//        String curStatus = Objects.toString(esr.getStatus());
         //根据员工编号获取员工信息
         TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
-        TbEquipUse equipUse = new TbEquipUse();
-        //当设备正在维修中，返回提示
-//        if(CommonConstant.EQUIP_WORK_STATUS_INREPAIR.equals(curStatus)){
-//            return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
-//        }
         //当设备正在充电中
         if(CommonConstant.EQUIP_WORK_STATUS_INCHARGE.equals(curStatus)){
             //调用设备状态为充电中的方法
             handlerWhenEquipInCharge(manager,equipNo);
         }
-        TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
-        BeanUtils.copyProperties(equip,equipUse);
-        //重组equipUse对象
-        equipUse.setEquipUseId(UUIDUtils.getUUID());
-        equipUse.setStatus(CommonConstant.EQUIP_USE_STATUS_INUSE);
-        equipUse.setCreateEmp(employeeCode);
-        equipUse.setUpdateEmp(employeeCode);
-        equipUse.setPersonMobile(manager.getPhone());
-        equipUse.setPersonNo(manager.getAccount());
-        equipUse.setPersonName(manager.getName());
-        equipUse.setStartUseTime(new Date());
-        //新增设备使用记录
-        this.equipUseMapper.insertEquipUse(equipUse);
+        handlerWhenOperateCodeIsInUse(equip,manager,employeeCode);
 
-        //通过设备编号将设备信息表中的设备工作状态改为使用中
-        this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INUSE);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
     }
 
@@ -114,8 +97,10 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         String equipNo = updateUsingEquipStatusReq.getEquipNo();
         String operateCode = updateUsingEquipStatusReq.getOperateCode();
         //获取当前设备状态
-        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
-        String curStatus = esr.getStatus();
+        TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
+        String curStatus = equip.getEquipWorkState();
+//        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
+//        String curStatus = esr.getStatus();
         //通过工号，获取人员信息
         TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
         //若当前设备的状态为使用中，查询出该设备的使用记录，并更新使用记录的使用结束时间和使用时长
@@ -125,7 +110,6 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         if(curStatus.equals(CommonConstant.EQUIP_WORK_STATUS_INCHARGE)){
             handlerWhenEquipInCharge(manager,equipNo);
         }
-        TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
         if(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE.equals(operateCode)){
             handlerWhenOperateCodeIsInDamage(equip,manager,employeeCode);
         }
@@ -146,19 +130,56 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         String equipNo = updateUsingEquipStatusReq.getEquipNo();
         String operateCode = updateUsingEquipStatusReq.getOperateCode();
         //获取当前设备状态
-        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
-        String curStatus = esr.getStatus();
+        TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
+        String curStatus = equip.getEquipWorkState();
+//        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
+//        String curStatus = esr.getStatus();
         //通过工号，获取人员信息
         TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
         //若当前设备的状态为使用中，查询出该设备的使用记录，并更新使用记录的使用结束时间和使用时长
         if(curStatus.equals(CommonConstant.EQUIP_WORK_STATUS_INUSE)){
             handlerWhenEquipInUse(manager,equipNo);
         }
+        //若当前设备的状态为充电中，查询出该设备的充电记录，并更新使用记录的充电结束时间和充电时长
+        if(curStatus.equals(CommonConstant.EQUIP_WORK_STATUS_INCHARGE)){
+            handlerWhenEquipInCharge(manager,equipNo);
+        }
+        if(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE.equals(operateCode)){
+            handlerWhenOperateCodeIsInDamage(equip,manager,employeeCode);
+        }
+        if(CommonConstant.EQUIP_WORK_STATUS_INCHARGE.equals(operateCode)){
+            handlerWhenOperateCodeIsInCharge(equip,manager,employeeCode);
+        }
+        if(CommonConstant.EQUIP_WORK_STATUS_INSTOP.equals(operateCode)){
+            //修改设备信息表设备工作状态
+            this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
+        }
+    }
+
+    @Override
+    public void updateDamageEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq) {
+        String employeeCode = updateUsingEquipStatusReq.getEmployeeCode();
+        String equipNo = updateUsingEquipStatusReq.getEquipNo();
+        String operateCode = updateUsingEquipStatusReq.getOperateCode();
+        //获取当前设备状态
+        TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
+        String curStatus = equip.getEquipWorkState();
+        //通过工号，获取人员信息
+        TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
+        //控制判断，判断设备当前状态是否为损坏
+        if(curStatus.equals(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE)){
+            if(CommonConstant.EQUIP_WORK_STATUS_INREPAIR.equals(operateCode)){
+                handlerWhenOperateCodeIsInRepair(equip,manager,employeeCode);
+            }
+            if(CommonConstant.EQUIP_WORK_STATUS_INABORT.equals(operateCode)){
+                handlerWhenOperateCodeIsInabort(equip,manager,employeeCode);
+            }
+        }
     }
 
     /**
      *
-     * @Description: 将时间加入equipListResp
+     * @Description: 将时间、图片路径加入equipListResp
      *
      *
      * @MethodName: rebuildEquipListWithUseTime
@@ -193,6 +214,18 @@ public class EquipRestSrvImpl implements EquipRestSrv {
     }
 
 
+    /**
+     *
+     * @Description: 将时间、图片路径加入ListUnrevertEquipResp
+     *
+     *
+     * @MethodName: rebuildEquipListWithUseTime
+     * @Parameters: [list, employeeCode]
+     * @ReturnType: java.util.List<com.qcap.cac.dto.EquipListResp>
+     *
+     * @author huangxiang
+     * @date 2018/10/25 16:55
+     */
     private List<ListUnrevertEquipResp> rebuildUnrevertEquipListWithUseTime(List<ListUnrevertEquipResp> list, String employeeCode) {
         List<Map<String,Object>> tempList = this.tempTaskSrvImpl.selectCurrountWorkingEmployee(employeeCode);
         String url = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
@@ -220,7 +253,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
 
     /**
      *
-     * @Description: 若设备当前状态为使用中，先更新设备使用记录，再插入设备使用记录
+     * @Description: 若设备当前状态为INUSE(使用中)，先更新设备使用记录，再插入设备使用记录
      *
      *
      * @MethodName: handlerWhenEquipInUse
@@ -246,10 +279,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         this.equipUseMapper.updateEquipUseByEquipUseId(eu);
     }
 
-
     /**
      *
-     * @Description: 若设备当前状态为充电中，先更新设备充电记录，再插入设备使用记录
+     * @Description: 若设备当前状态为INCHARGE(充电中)，先更新设备充电记录，再插入设备使用记录
      *
      *
      * @MethodName: handlerWhenEquipInCharge
@@ -275,10 +307,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         this.equipChargeMapper.updateEquipChargeByEquipChargeId(ec);
     }
 
-
     /**
      *
-     * @Description: 若设备的操作代码为损坏中，将设备表的状态修改为损坏中
+     * @Description: 若设备的操作代码为INDAMAGE(损坏)，将设备表的状态修改为损坏中
      *
      *
      * @MethodName: handlerWhenOperateCodeIsInDamage
@@ -289,28 +320,12 @@ public class EquipRestSrvImpl implements EquipRestSrv {
      * @date 2018/10/27 10:24
      */
     private void handlerWhenOperateCodeIsInDamage(TbEquip equip, TbManager manager, String employeeCode) {
-        TbEquipRepair equipRepair = new TbEquipRepair();
-        BeanUtils.copyProperties(equip,equipRepair);
-        //重组equipRepair对象
-        equipRepair.setEquipRepairId(UUIDUtils.getUUID());
-        equipRepair.setStatus(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE);
-        equipRepair.setCreateEmp(employeeCode);
-        equipRepair.setUpdateEmp(employeeCode);
-        equipRepair.setPersonMobile(manager.getPhone());
-        equipRepair.setPersonNo(manager.getAccount());
-        equipRepair.setPersonName(manager.getName());
-        equipRepair.setRepairTime(new Date());
-        //新增一条设备维修记录
-//            this.equipRepairMapper.insert(equipRepair);
-        //修改设备信息表设备工作状态
-        this.equipMapper.updateEquipStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INDAMAGE);
+        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INDAMAGE);
     }
-
-
 
     /**
      *
-     * @Description: 若设备的操作代码为充电中，将设备表的状态修改为充电中，并新增一条设备充电记录
+     * @Description: 若设备的操作代码为INCHARGE(充电)，将设备表的状态修改为充电中，并新增一条设备充电记录
      *
      *
      * @MethodName: handlerWhenOperateCodeIsInCharge
@@ -335,8 +350,87 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         //新增一条设备充电记录
         this.equipChargeMapper.insert(equipCharge);
         //修改设备信息表设备工作状态
-        this.equipMapper.updateEquipStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INCHARGE);
+        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INCHARGE);
     }
+
+    /**
+     *
+     * @Description: 若设备的操作代码为INUSE(使用)，将设备表的状态修改为使用中，并新增一条设备使用记录
+     *
+     *
+     * @MethodName: handlerWhenOperateCodeIsInUse
+     * @Parameters: [equip, manager, employeeCode] 
+     * @ReturnType: void
+     *
+     * @author huangxiang
+     * @date 2018/10/27 11:15
+     */
+    private void handlerWhenOperateCodeIsInUse(TbEquip equip, TbManager manager, String employeeCode) {
+        TbEquipUse equipUse = new TbEquipUse();
+        BeanUtils.copyProperties(equip,equipUse);
+        //重组equipUse对象
+        equipUse.setEquipUseId(UUIDUtils.getUUID());
+        equipUse.setStatus(CommonConstant.EQUIP_USE_STATUS_INUSE);
+        equipUse.setCreateEmp(employeeCode);
+        equipUse.setUpdateEmp(employeeCode);
+        equipUse.setPersonMobile(manager.getPhone());
+        equipUse.setPersonNo(manager.getAccount());
+        equipUse.setPersonName(manager.getName());
+        equipUse.setStartUseTime(new Date());
+        //新增设备使用记录
+        this.equipUseMapper.insertEquipUse(equipUse);
+        //通过设备编号将设备信息表中的设备工作状态改为使用中
+        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INUSE);
+    }
+
+    /**
+     *
+     * @Description: 若设备的操作代码为INREPAIR(维修)，将设备表的状态修改为维修中，并新增一条设备报修记录
+     *
+     *
+     * @MethodName: handlerWhenOperateCodeIsInRepair
+     * @Parameters: [equip, manager, employeeCode]
+     * @ReturnType: void
+     *
+     * @author huangxiang
+     * @date 2018/10/27 13:06
+     */
+    private void handlerWhenOperateCodeIsInRepair(TbEquip equip, TbManager manager, String employeeCode) {
+        TbEquipRepair equipRepair = new TbEquipRepair();
+        BeanUtils.copyProperties(equip,equipRepair);
+        //重组equipRepair对象
+        equipRepair.setEquipRepairId(UUIDUtils.getUUID());
+        equipRepair.setStatus(CommonConstant.EQUIP_WORK_STATUS_INREPAIR);
+        equipRepair.setCreateEmp(employeeCode);
+        equipRepair.setUpdateEmp(employeeCode);
+        equipRepair.setPersonMobile(manager.getPhone());
+        equipRepair.setPersonNo(manager.getAccount());
+        equipRepair.setPersonName(manager.getName());
+        equipRepair.setRepairTime(new Date());
+        //新增一条设备报修记录
+        this.equipRepairMapper.insert(equipRepair);
+        //通过设备编号将设备信息表中的设备工作状态改为使用中
+        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INREPAIR);
+    }
+
+
+    /**
+     *
+     * @Description: 若设备的操作代码为INABORT(报废)，将设备表的状态修改为报废
+     *
+     *
+     * @MethodName: handlerWhenOperateCodeIsInabort
+     * @Parameters: [equip, manager, employeeCode] 
+     * @ReturnType: void
+     *
+     * @author huangxiang
+     * @date 2018/10/27 13:27
+     */
+    private void handlerWhenOperateCodeIsInabort(TbEquip equip, TbManager manager, String employeeCode) {
+        this.equipMapper.updateEquipStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_STATUS_ABORT);
+    }
+
+
 
     /**
      *

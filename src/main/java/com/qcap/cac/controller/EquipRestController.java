@@ -122,11 +122,43 @@ public class EquipRestController {
     }
 
 
+    /**
+     *
+     * @Description: 管理员对设备进行充电，使用，停泊和损坏处理时，修改设备状态并新增对应的数据记录
+     *
+     *
+     * @MethodName: updateEquipStatusInManagerMode
+     * @Parameters: [updateUsingEquipStatusReq]
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/27 12:25
+     */
     @PostMapping("/updateEquipStatusInManagerMode")
     @ApiOperation(value="管理员修改设备状态",notes="管理员修改设备状态",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
     public ResParams updateEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq){
         this.equipRestSrv.updateEquipStatusInManagerMode(updateUsingEquipStatusReq);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
+    }
+
+    /**
+     *
+     * @Description: 管理员对损坏中的设备进行报修，停用处理，修改设备状态并新增对应的数据记录
+     *
+     *
+     * @MethodName: updateDamageEquipStatusInManagerMode
+     * @Parameters: [updateUsingEquipStatusReq] 
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/27 12:40
+     */
+    @PostMapping("/updateDamageEquipStatusInManagerMode")
+    @ApiOperation(value="管理员修改损坏中的设备状态",notes="管理员修改损坏中的设备状态",response=Map.class,httpMethod="POST")
+    @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
+    public ResParams updateDamageEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq){
+        this.equipRestSrv.updateDamageEquipStatusInManagerMode(updateUsingEquipStatusReq);
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
     }
 }

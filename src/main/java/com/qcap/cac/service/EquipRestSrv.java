@@ -18,4 +18,6 @@ public interface EquipRestSrv {
     void updateUsingEquipStatus(UpdateUsingEquipStatusReq updateUsingEquipStatusReq);
 
     void updateEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq);
+
+    void updateDamageEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq);
 }

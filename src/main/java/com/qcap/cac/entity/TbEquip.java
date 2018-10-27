@@ -188,6 +188,10 @@ public class TbEquip implements Serializable {
      */
     private String equipState;
     /**
+     * 设备工作状态
+     */
+    private String equipWorkState;
+    /**
      * 备注
      */
     private String remark;
@@ -549,6 +553,14 @@ public class TbEquip implements Serializable {
         this.equipState = equipState;
     }
 
+    public String getEquipWorkState() {
+        return equipWorkState;
+    }
+
+    public void setEquipWorkState(String equipWorkState) {
+        this.equipWorkState = equipWorkState;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -642,6 +654,7 @@ public class TbEquip implements Serializable {
                 ", imgUrl='" + imgUrl + '\'' +
                 ", fileUrl='" + fileUrl + '\'' +
                 ", equipState='" + equipState + '\'' +
+                ", equipWorkState='" + equipWorkState + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createEmp='" + createEmp + '\'' +
                 ", createDate=" + createDate +
