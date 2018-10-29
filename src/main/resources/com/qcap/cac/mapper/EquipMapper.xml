@@ -208,10 +208,11 @@
         EQUIP_NO = #{equipNo}
     </update>
 
-    <update id="updateEquipStatusByEquipNoAndStatus">
+    <update id="updateEquipStatusAndWorkStatusByEquipNoAndStatus">
         UPDATE  tb_equip
         SET
-        EQUIP_WORK_STATE = #{status}
+        EQUIP_STATE = #{status},
+        EQUIP_WORK_STATE = #{workStatus}
         WHERE
         EQUIP_NO = #{equipNo}
     </update>

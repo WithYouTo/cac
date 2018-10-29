@@ -118,7 +118,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INSTOP.equals(operateCode)){
             //修改设备信息表设备工作状态
-            this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
+            this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
         }
     }
 
@@ -152,7 +152,11 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INSTOP.equals(operateCode)){
             //修改设备信息表设备工作状态
-            this.equipMapper.updateEquipStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
+            this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
+        }
+        if(CommonConstant.EQUIP_WORK_STATUS_INUSE.equals(operateCode)){
+            //修改设备信息表设备工作状态
+            handlerWhenOperateCodeIsInUse(equip,manager,employeeCode);
         }
     }
 
@@ -169,6 +173,14 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         //控制判断，判断设备当前状态是否为损坏
         if(curStatus.equals(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE)){
             if(CommonConstant.EQUIP_WORK_STATUS_INREPAIR.equals(operateCode)){
+                handlerWhenOperateCodeIsInRepair(equip,manager,employeeCode);
+            }
+//            if(CommonConstant.EQUIP_WORK_STATUS_INABORT.equals(operateCode)){
+//                handlerWhenOperateCodeIsInabort(equip,manager,employeeCode);
+//            }
+        }
+        if(curStatus.equals(CommonConstant.EQUIP_WORK_STATUS_INREPAIR)){
+            if(CommonConstant.EQUIP_WORK_STATUS_INSTOP.equals(operateCode)){
                 handlerWhenOperateCodeIsInRepair(equip,manager,employeeCode);
             }
             if(CommonConstant.EQUIP_WORK_STATUS_INABORT.equals(operateCode)){
@@ -427,7 +439,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
      * @date 2018/10/27 13:27
      */
     private void handlerWhenOperateCodeIsInabort(TbEquip equip, TbManager manager, String employeeCode) {
-        this.equipMapper.updateEquipStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_STATUS_ABORT);
+        this.equipMapper.updateEquipStatusAndWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_STATUS_ABORT,CommonConstant.EQUIP_WORK_STATUS_INABORT);
     }
 
 

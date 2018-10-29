@@ -23,7 +23,7 @@ public class CommonConstant {
 		EQUIP_WORK_STATUS.put("INUSE", "使用中");
 		EQUIP_WORK_STATUS.put("INREPAIR", "维修中");
 		EQUIP_WORK_STATUS.put("INDAMAGE", "损坏中");
-
+		EQUIP_WORK_STATUS.put("INABORT","已停用");
 	}
 
 	//APP端设备领用选项
