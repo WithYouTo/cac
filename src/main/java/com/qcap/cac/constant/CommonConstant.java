@@ -14,6 +14,7 @@ public class CommonConstant {
 	public final static String EQUIP_WORK_STATUS_INUSE = "INUSE";
 	public final static String EQUIP_WORK_STATUS_INREPAIR = "INREPAIR";
 	public final static String EQUIP_WORK_STATUS_INDAMAGE = "INDAMAGE";
+	public final static String EQUIP_WORK_STATUS_INABORT = "INABORT";
 
 	public static Map<String, String> EQUIP_WORK_STATUS = new LinkedHashMap<String, String>();
 	static {
