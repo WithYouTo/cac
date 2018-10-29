@@ -18,6 +18,7 @@
 		WHERE PLAN_TIME_TYPE = 'DAY' 
 		AND START_TIME &gt;= #{startTime}
 		AND START_TIME &lt; #{endTime}
+		AND DATE(JOB_RUN_TIME) != DATE(#{curDate})
 		UNION
 		SELECT 
 		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
@@ -26,6 +27,7 @@
 		AND WEEK= #{week} 
 		AND START_TIME &gt;= #{startTime}
 		AND START_TIME &lt; #{endTime}
+		AND DATE(JOB_RUN_TIME) != DATE(#{curDate})
 		UNION
 		SELECT 
 		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
@@ -34,6 +36,7 @@
 		AND DAY = #{day} 
 		AND START_TIME &gt;= #{startTime}
 		AND START_TIME &lt; #{endTime}
+		AND DATE(JOB_RUN_TIME) != DATE(#{curDate})
 		UNION
 		SELECT 
 		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
@@ -43,6 +46,7 @@
 		AND DAY = #{day} 
 		AND START_TIME &gt;= #{startTime}
 		AND START_TIME &lt; #{endTime}
+		AND DATE(JOB_RUN_TIME) != DATE(#{curDate})
 	</select>
 	
 	<select id="selectPositionInfoByAreaCode" parameterType="String" resultType="Map">
@@ -176,7 +180,7 @@
       TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
       CHECK_FLAG, TASK_ADVICE, REMARK1, 
       TASK_FINISH_DESC, DISQUALIFIED_REASON, LINE_NO,
-      REMARK2, REMARK3, CREATE_EMP, TASK_REMIND_TIME
+      REMARK2, REMARK3, CREATE_EMP, TASK_REMIND_TIME,
       CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
       VERSION,UPLOAD_PIC_FLAG)
     values 
@@ -207,5 +211,11 @@
 	WHERE CONFIG_CODE_ ='TASK_REMIND_TIME' 
 	AND DESC_ =#{planTimeType}
 	</select>
+
+	<update id="updateJobRunTime" parameterType="Map" >
+		UPDATE tb_plan
+		SET JOB_RUN_TIME = #{curDate}
+		WHERE FIND_IN_SET(PLAN_ID,#{planId})
+	</update>
 	
 </mapper>

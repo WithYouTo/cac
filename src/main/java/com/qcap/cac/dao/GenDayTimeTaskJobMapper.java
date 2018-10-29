@@ -1,12 +1,11 @@
 package com.qcap.cac.dao;
 
-import java.util.List;
-import java.util.Map;
-
+import com.qcap.cac.entity.TbTask;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.qcap.cac.entity.TbTask;
+import java.util.List;
+import java.util.Map;
 @Repository
 public interface GenDayTimeTaskJobMapper {
 	
@@ -14,7 +13,7 @@ public interface GenDayTimeTaskJobMapper {
 	
 	List<Map<String, Object>>selectPlan(Map<String, Object> map);
 	
-	Map<String, Object> selectPositionInfoByAreaCode(@Param("areaCode") String areaCode);
+	List<Map<String, Object>> selectPositionInfoByAreaCode(@Param("areaCode") String areaCode);
 	
 	Map<String, Object> selectStandardInfo(@Param("standardCode") String standardCode);
 	
@@ -25,5 +24,7 @@ public interface GenDayTimeTaskJobMapper {
 	String selectAreaName(@Param("areaCode") String areaCode);
 	
 	String selectDelayDays(@Param("planTimeType") String planTimeType);
+
+	void updateJobRunTime(Map<String, Object> map);
 	
 }

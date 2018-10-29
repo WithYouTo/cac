@@ -1,9 +1,12 @@
 package com.qcap.cac.service.impl;
 
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.GenDayTimeTaskJobMapper;
 import com.qcap.cac.entity.TbTask;
+import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.tools.ToolUtil;
+import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -16,7 +19,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.*;
 
-@Service
+@Service("genDayTimeTaskJobSrvImpl")
 @Transactional
 public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJobSrv {
 
@@ -38,6 +41,7 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 		log.info("----------------查询班次------------------");
 
 		List<TbTask> taskList = new ArrayList<>();
+		Date jobRunDate = new Date();
 
 		// 1、查询班次
 		Map<String, Object> shiftMap = this.genDayTimeTaskMapper.selectShift(shift);
@@ -46,7 +50,7 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 
 		if ("".equals(startTime) || "".equals(endTime)) {
 			log.info("------------------班次设置有误：开始时间或结束时间为空---------");
-			return;
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"班次设置有误：开始时间或结束时间为空");
 		}
 
 		// 2、查询周期性计划
@@ -70,8 +74,9 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 		planMapParam.put("week", week);
 		planMapParam.put("day", day);
 		planMapParam.put("month", month);
+		planMapParam.put("curDate", new Date());
 
-		// 2.2 查询周期性计划————查询计划
+		// 2.2 查询周期性计划————查询计划curDate
 		log.info("----------------查询周期性计划的参数为：" + planMapParam +"----------------");
 
 		List<Map<String, Object>> planList = this.genDayTimeTaskMapper.selectPlan(planMapParam);
@@ -81,9 +86,11 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 		// 校验List集合
 		if (CollectionUtils.isEmpty(planList)) {
 			log.info("------------------周期性计划的查询结果为空----------------");
-			return;
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"周期性计划的查询结果为空");
 		}
 
+		List<String> unGeneratePlanList = new ArrayList<>();
+		List<String> planIdList = new ArrayList<>();
 		// 遍历计划
 		for (Map<String, Object> map : planList) {
 
@@ -97,13 +104,23 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			// 参数校验
 			if (StringUtils.isEmpty(areaCode)) {
 				log.info("-----------Id为" + planId + ",的计划的区域编码为空----------------");
-				return;
+				unGeneratePlanList.add("Id为" + planId + "，开始时间为："+planStartTime+"结束时间为："+planEndTime+"的计划的区域编码为空");
+				continue;
 			}
 
 			// 3、查询岗位
-			Map<String, Object> positionMap = this.genDayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode);
-			String positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
-			String positionName = ToolUtil.toStr(positionMap.get("positionName"));
+            List<Map<String, Object>> positionList = this.genDayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode);
+            if(CollectionUtils.isEmpty(positionList)){
+                unGeneratePlanList.add("Id为" + planId + "，区域为："+areaCode+"的计划未查询到岗位");
+                continue;
+            }
+
+            if(positionList.size() >1 ){
+                throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"根据区域编码查询到"+positionList.size()+"个岗位");
+            }
+
+            String positionCode = ToolUtil.toStr(positionList.get(0).get("positionCode"));
+            String positionName = ToolUtil.toStr(positionList.get(0).get("positionName"));
 
 			// 处理日期
 			Date curDate = calendar.getTime();
@@ -127,7 +144,8 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 
 			if (CollectionUtils.isEmpty(employeeList)) {
 				log.info("-----------------未查询到当班人员----------------");
-				return;
+				unGeneratePlanList.add("Id为" + planId + "，开始时间为："+planStartTime+"结束时间为："+planEndTime+"的计划未查询到当班人员");
+				continue;
 			}
 
 			List<String> employeeCodeList = new ArrayList<>();
@@ -148,7 +166,8 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			Map<String, Object> standardMap = this.genDayTimeTaskMapper.selectStandardInfo(standardCode);
 			if (MapUtils.isEmpty(standardMap)) {
 				log.info("--------------------根据标准编号未查询到标准----------------");
-				return;
+				unGeneratePlanList.add("Id为" + planId + "，开始时间为："+planStartTime+"结束时间为："+planEndTime+"的计划未查询到标准");
+				continue;
 			}
 
 			String uploadPicFlag = ToolUtil.toStr(standardMap.get("uploadPicFlag"));
@@ -165,9 +184,10 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			Date planEndDate = DateUtil.stringToDateTime(curDateStr + " " + planEndTime);
 			
 			log.info("------------------------开始生成任务---------------");
-			
+
 			// 5、生成任务
 			TbTask task = new TbTask();
+			task.setTaskId(UUIDUtils.getUUID());
 			task.setTaskType(CommonConstant.TASK_TYPE_REGULAR);
 			task.setPositionCode(positionCode);
 			task.setPositionName(positionName);
@@ -185,7 +205,7 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
 			// task.setTaskScore(taskScore);
 			// task.setTaskAdvice(taskAdvice);
-			task.setCreateDate(now);
+			task.setCreateDate(jobRunDate);
 			task.setCreateEmp("SYS-DAYTIME定时任务生成");
 			task.setVersion(0);
 
@@ -196,6 +216,16 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			task.setUploadPicFlag(uploadPicFlag);
 			//设置lineNo
 			task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
+
+			//设置任务编码
+			String taskCodePrefix = "";
+			if(CommonConstant.PLAN_TIME_TYPE_DAY.equals(planTimeType)){
+				taskCodePrefix = CommonConstant.TASK_PREFIX_R;
+			}else {
+				taskCodePrefix = CommonConstant.TASK_PREFIX_S;
+			}
+			String taskCode = taskCodePrefix + DateUtil.dateTimeToStringForLineNo(new Date());
+			task.setTaskCode(taskCode);
 			
 			//如果是专项任务，则设置提醒时间
 			//计划时间类型为周
@@ -251,12 +281,23 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			
 			log.info("---------------------------当前计划已生成任务----------------");
 			taskList.add(task);
-
+			planIdList.add(planId);
 		}
-		
+
+		//跟新计划时间
+		Map<String,Object> param = new HashMap<>();
+		param.put("curDate",jobRunDate);
+		param.put("planId",String.join(",",planIdList));
+		if(CollectionUtils.isNotEmpty(planIdList)){
+			this.genDayTimeTaskMapper.updateJobRunTime(param);
+		}
+
 		//任务全部生成后，新增到数据库
-		this.genDayTimeTaskMapper.insertTaskBatch(taskList);
+		if(CollectionUtils.isNotEmpty(taskList)){
+			this.genDayTimeTaskMapper.insertTaskBatch(taskList);
+		}
 		log.info("---------------------------job执行完毕----------------");
+		System.out.println(unGeneratePlanList.toString());
 	}
 
 }
