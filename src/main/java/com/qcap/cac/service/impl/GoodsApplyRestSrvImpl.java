@@ -10,10 +10,7 @@ import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.GoodsApplyRestSrv;
-import com.qcap.cac.tools.EntityTools;
-import com.qcap.cac.tools.RedisTools;
-import com.qcap.cac.tools.ToolUtil;
-import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.cac.tools.*;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -96,7 +94,12 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
                 throw new RuntimeException("根据物品编码没有查询到库存信息");
             }
 
+            //库存数量
             Integer goodsNum = ToolUtil.toInt(stock.getGoodsNum());
+            //最低警戒线
+            Integer limitStore = ToolUtil.toInt(stock.getLimitStore());
+
+
             if(realNum > goodsNum){
                 throw new RuntimeException("物品编码【" + goodsNo + "】/物品名称【" + goodsName + "】库存余量不足");
             }
@@ -118,11 +121,13 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
             //判断库存数量是否小于最低警戒线（库存和最低警戒线的单位在导入必须保持一致）
             //向角色为库管的人员推送消息
-            String roleNum = RedisTools.getCommonConfig("WAREHOUSE_ROLE_NUM");
-            List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum);
-            for(UserListResp user : userList){
-                //TODO 向角色为库管的人员推送消息
-                String employeeCode = user.getEmployeeCode();
+            if(goodsNum - realNum  < limitStore){
+                String roleNum = RedisTools.getCommonConfig("WAREHOUSE_ROLE_NUM");
+                String message = RedisTools.getCommonConfig("CAC_LIMIT_STORE_MESSAGE");
+                List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum);
+                List<String> pushList = userList.stream().map(UserListResp::getEmployeeCode).collect(Collectors.toList());
+                message = "物品编码【" + goodsNo + "】/物品名称【" + goodsName + "】的" + message;
+                JpushTools.pushArray(pushList,message);
             }
         }
 
