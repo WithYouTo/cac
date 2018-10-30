@@ -14,6 +14,7 @@ public class CommonConstant {
 	public final static String EQUIP_WORK_STATUS_INUSE = "INUSE";
 	public final static String EQUIP_WORK_STATUS_INREPAIR = "INREPAIR";
 	public final static String EQUIP_WORK_STATUS_INDAMAGE = "INDAMAGE";
+	public final static String EQUIP_WORK_STATUS_INABORT = "INABORT";
 
 	public static Map<String, String> EQUIP_WORK_STATUS = new LinkedHashMap<String, String>();
 	static {
@@ -22,7 +23,7 @@ public class CommonConstant {
 		EQUIP_WORK_STATUS.put("INUSE", "使用中");
 		EQUIP_WORK_STATUS.put("INREPAIR", "维修中");
 		EQUIP_WORK_STATUS.put("INDAMAGE", "损坏中");
-
+		EQUIP_WORK_STATUS.put("INABORT","已停用");
 	}
 
 	//APP端设备领用选项
@@ -108,11 +109,13 @@ public class CommonConstant {
 	// 任务编码前缀
 	public final static String TASK_PREFIX_T = "T";
 	public final static String TASK_PREFIX_R = "R";
+	public final static String TASK_PREFIX_S = "S";
 	public final static String TASK_PREFIX_E = "E";
 	public final static String TASK_PREFIX_UQ = "DQ";
 	public static Map<String, String> TASK_PREFIX = new LinkedHashMap<String, String>();
 	static {
 		TASK_PREFIX.put("T", "临时任务前缀");
+		TASK_PREFIX.put("S", "专项任务前缀");
 		TASK_PREFIX.put("R", "周期性任务前缀");
 		TASK_PREFIX.put("E", "事件性任务前缀");
 		TASK_PREFIX.put("DQ", "不合格任务前缀");
