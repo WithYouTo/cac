@@ -6,37 +6,40 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class QueryHistoryFlightInfoResp {
 
-	@ApiModelProperty(value = "员工编号")
+	@ApiModelProperty(value = "航班名称")
 	private String flightName;
 
-	@ApiModelProperty(value = "签到时间")
+	@ApiModelProperty(value = "事件类型")
 	private String eventType;
 
-	@ApiModelProperty(value = "签到地点")
+	@ApiModelProperty(value = "事件类型")
 	private String eventTypeName;
 
-	@ApiModelProperty(value = "签到照片")
+	@ApiModelProperty(value = "航班类型")
 	private String flightType;
 
-	@ApiModelProperty(value = "工作安排")
+	@ApiModelProperty(value = "航班类型")
 	private String flightTypName;
 
-	@ApiModelProperty(value = "签到照片")
+	@ApiModelProperty(value = "区域编码")
 	private String areaCode;
 
-	@ApiModelProperty(value = "工作安排")
+	@ApiModelProperty(value = "区域名称")
 	private String areaName;
 
-	@ApiModelProperty(value = "签到照片")
+	@ApiModelProperty(value = "保障等级")
 	private String guaranteeType;
 
-	@ApiModelProperty(value = "工作安排")
+	@ApiModelProperty(value = "保障等级")
+	private String guaranteeTypeName;
+
+	@ApiModelProperty(value = "计划起飞/到达时间")
 	private String planningTakeoffTime;
 
-	@ApiModelProperty(value = "签到照片")
+	@ApiModelProperty(value = "预计起飞/到达时间")
 	private String estimatedTakeoffTime;
 
-	@ApiModelProperty(value = "工作安排")
+	@ApiModelProperty(value = "机型")
 	private String aircraftType;
 
 	@ApiModelProperty(value = "序号")
@@ -106,6 +109,14 @@ public class QueryHistoryFlightInfoResp {
 		this.guaranteeType = guaranteeType;
 	}
 
+	public String getGuaranteeTypeName() {
+		return guaranteeTypeName;
+	}
+
+	public void setGuaranteeTypeName(String guaranteeTypeName) {
+		this.guaranteeTypeName = guaranteeTypeName;
+	}
+
 	public String getPlanningTakeoffTime() {
 		return planningTakeoffTime;
 	}
@@ -142,9 +153,9 @@ public class QueryHistoryFlightInfoResp {
 	public String toString() {
 		return "QueryHistoryFlightInfoResp [flightName=" + flightName + ", eventType=" + eventType + ", eventTypeName="
 				+ eventTypeName + ", flightType=" + flightType + ", flightTypName=" + flightTypName + ", areaCode="
-				+ areaCode + ", areaName=" + areaName + ", guaranteeType=" + guaranteeType + ", planningTakeoffTime="
-				+ planningTakeoffTime + ", estimatedTakeoffTime=" + estimatedTakeoffTime + ", aircraftType="
-				+ aircraftType + ", lineNo=" + lineNo + "]";
+				+ areaCode + ", areaName=" + areaName + ", guaranteeType=" + guaranteeType + ", guaranteeTypeName="
+				+ guaranteeTypeName + ", planningTakeoffTime=" + planningTakeoffTime + ", estimatedTakeoffTime="
+				+ estimatedTakeoffTime + ", aircraftType=" + aircraftType + ", lineNo=" + lineNo + "]";
 	}
 
 }

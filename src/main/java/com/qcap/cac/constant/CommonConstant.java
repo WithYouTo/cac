@@ -23,10 +23,10 @@ public class CommonConstant {
 		EQUIP_WORK_STATUS.put("INUSE", "使用中");
 		EQUIP_WORK_STATUS.put("INREPAIR", "维修中");
 		EQUIP_WORK_STATUS.put("INDAMAGE", "损坏中");
-		EQUIP_WORK_STATUS.put("INABORT","已停用");
+		EQUIP_WORK_STATUS.put("INABORT", "已停用");
 	}
 
-	//APP端设备领用选项
+	// APP端设备领用选项
 	public static Map<String, String> EQUIP_INUSE_OPTION = new LinkedHashMap<String, String>();
 	static {
 		EQUIP_INUSE_OPTION.put("title", "使用");
@@ -240,7 +240,6 @@ public class CommonConstant {
 		READ_FLAG.put("1", "已读");
 	}
 
-
 	// 请假状态
 	public final static String LEAVE_STATUS_AUDITING = "AUDITING";
 	public final static String LEAVE_STATUS_REFUSE = "REFUSE";
@@ -254,7 +253,10 @@ public class CommonConstant {
 		LEAVE_STATUS.put("CANCEL", "已撤回");
 	}
 
-
-
+	public static Map<String, String> AREA_TYPE = new LinkedHashMap<String, String>();
+	static {
+		AREA_TYPE.put("ARRIVE", "登机口");
+		AREA_TYPE.put("LEAVE", "廊桥");
+	}
 
 }

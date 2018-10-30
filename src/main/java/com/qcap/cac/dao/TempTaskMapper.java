@@ -20,7 +20,7 @@ public interface TempTaskMapper {
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map<String,Object>> listTask(TempTaskSearchParam paramDto);
+	List<Map<String, Object>> listTask(TempTaskSearchParam paramDto);
 
 	/**
 	 * 新增任务
@@ -82,7 +82,7 @@ public interface TempTaskMapper {
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map<String,Object>> selectStandardItem(@Param("standardCode") String standardCode);
+	List<Map<String, Object>> selectStandardItem(@Param("standardCode") String standardCode);
 
 	/**
 	 * 查询区域树形下拉列表
@@ -103,7 +103,7 @@ public interface TempTaskMapper {
 	 * @return
 	 * @return: Map
 	 */
-	Map<String,Object> selectPositionInfoByAreaCode(String areaCode);
+	Map<String, Object> selectPositionInfoByAreaCode(String areaCode);
 
 	/**
 	 * 查询当班值班人员
@@ -114,7 +114,7 @@ public interface TempTaskMapper {
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map<String,Object>> selectWorkingEmployee(Map<String,Object> map);
+	List<Map<String, Object>> selectWorkingEmployee(Map<String, Object> map);
 
 	/**
 	 * 查询班次:**注意传入时间格式严格为：hh:mm:ss
@@ -126,15 +126,17 @@ public interface TempTaskMapper {
 	 * @return: Map<String,String>
 	 */
 	Map<String, String> selectShiftByTime(String startTime);
+
 	/**
 	 * 查询所有人员
-	 * @Title: selectAllEmployee 
+	 * 
+	 * @Title: selectAllEmployee
 	 * @Description: TODO
 	 * @param monthNo
 	 * @return
 	 * @return: List<Map<String,Object>>
 	 */
-	List<Map<String, Object>> selectAllEmployee (@Param("monthNo") String monthNo);
+	List<Map<String, Object>> selectAllEmployee(@Param("monthNo") String monthNo);
 
 	List<Map<String, Object>> selectCurrountWorkingEmployee(Map<String, Object> map);
 }

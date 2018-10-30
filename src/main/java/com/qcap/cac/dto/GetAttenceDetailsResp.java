@@ -11,6 +11,12 @@ public class GetAttenceDetailsResp {
 	@ApiModelProperty(value = "签到时间")
 	private String attenceTime;
 
+	@ApiModelProperty(value = "签到地点")
+	private String attencePlace;
+
+	@ApiModelProperty(value = "签到地点")
+	private String attencePlaceName;
+
 	@ApiModelProperty(value = "工作安排")
 	private String workContent;
 
@@ -23,6 +29,22 @@ public class GetAttenceDetailsResp {
 
 	public void setAttenceTime(String attenceTime) {
 		this.attenceTime = attenceTime;
+	}
+
+	public String getAttencePlace() {
+		return attencePlace;
+	}
+
+	public void setAttencePlace(String attencePlace) {
+		this.attencePlace = attencePlace;
+	}
+
+	public String getAttencePlaceName() {
+		return attencePlaceName;
+	}
+
+	public void setAttencePlaceName(String attencePlaceName) {
+		this.attencePlaceName = attencePlaceName;
 	}
 
 	public String getWorkContent() {
@@ -43,7 +65,8 @@ public class GetAttenceDetailsResp {
 
 	@Override
 	public String toString() {
-		return "GetAttenceDetailsResp [attenceTime=" + attenceTime + ", workContent=" + workContent + ", url="
+		return "GetAttenceDetailsResp [attenceTime=" + attenceTime + ", attencePlace=" + attencePlace
+				+ ", attencePlaceName=" + attencePlaceName + ", workContent=" + workContent + ", url="
 				+ Arrays.toString(url) + "]";
 	}
 

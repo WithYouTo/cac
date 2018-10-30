@@ -31,7 +31,20 @@ public class TbAttence {
 	/**
 	 * 电话
 	 */
-	private String personMoBile;
+	private String personMobile;
+
+	/**
+	 * 签到地点
+	 */
+	private String attencePlace;
+
+	public String getAttencePlace() {
+		return attencePlace;
+	}
+
+	public void setAttencePlace(String attencePlace) {
+		this.attencePlace = attencePlace;
+	}
 
 	/**
 	 * 签到时间
@@ -118,12 +131,12 @@ public class TbAttence {
 		this.personName = personName;
 	}
 
-	public String getPersonMoBile() {
-		return personMoBile;
+	public String getPersonMobile() {
+		return personMobile;
 	}
 
-	public void setPersonMoBile(String personMoBile) {
-		this.personMoBile = personMoBile;
+	public void setPersonMobile(String personMobile) {
+		this.personMobile = personMobile;
 	}
 
 	public Date getAttenceTime() {
@@ -201,10 +214,10 @@ public class TbAttence {
 	@Override
 	public String toString() {
 		return "TbAttence [attenceId=" + attenceId + ", orgName=" + orgName + ", personId=" + personId + ", workNo="
-				+ workNo + ", personName=" + personName + ", personMoBile=" + personMoBile + ", attenceTime="
-				+ attenceTime + ", workContent=" + workContent + ", filesUrl=" + filesUrl + ", remark=" + remark
-				+ ", createEmp=" + createEmp + ", createDate=" + createDate + ", updateEmp=" + updateEmp
-				+ ", updateDate=" + updateDate + ", version=" + version + "]";
+				+ workNo + ", personName=" + personName + ", personMobile=" + personMobile + ", attencePlace="
+				+ attencePlace + ", attenceTime=" + attenceTime + ", workContent=" + workContent + ", filesUrl="
+				+ filesUrl + ", remark=" + remark + ", createEmp=" + createEmp + ", createDate=" + createDate
+				+ ", updateEmp=" + updateEmp + ", updateDate=" + updateDate + ", version=" + version + "]";
 	}
 
 }

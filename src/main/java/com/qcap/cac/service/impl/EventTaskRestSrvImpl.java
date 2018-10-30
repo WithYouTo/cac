@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -38,6 +39,7 @@ import com.qcap.cac.entity.TbFlightInfo;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.EventTaskRestSrv;
+import com.qcap.cac.tools.JpushTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
@@ -58,6 +60,9 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 	@Resource
 	private TempTaskMapper tempTaskMapper;
 
+	@Resource
+	private JdbcTemplate jdbcTemplate;
+
 	@Override
 	public void geneEventTask(EventTaskRestDto eventTaskDto) {
 		Date planningTakeoffDateTime = DateUtil.stringToDateTime(eventTaskDto.getPlanningTakeoffTime());
@@ -67,9 +72,10 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		TbFlightInfo flightInfo = new TbFlightInfo();
 		BeanUtils.copyProperties(eventTaskDto, flightInfo);
 		flightInfo.setFlightInfoId(UUIDUtils.getUUID());
+		flightInfo.setDepartureGate(eventTaskDto.getAreaCode());
 		flightInfo.setPlanningTakeoffTime(planningTakeoffDateTime);
 		flightInfo.setEstimatedTakeoffTime(estimatedTakeoffDateTime);
-		flightInfo.setCreateEmp(eventTaskDto.getLoginName());
+		flightInfo.setCreateEmp(eventTaskDto.getEmployeeCode());
 		flightInfo.setCreateDate(new Date());
 		flightInfo.setVersion(0);
 		eventTaskRestMapper.insertFlightInfo(flightInfo);
@@ -143,7 +149,8 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		// calendar.setTime(planningTakeOffDate);
 		calendar.setTime(taskStartTime);
 		int dayNum = calendar.get(Calendar.DAY_OF_MONTH);
-		String queryDay = "day" + dayNum;
+		// String queryDay = "day" + dayNum;
+		String queryDay = "DAY_" + dayNum;
 		// String month=DateUtil.dateToMonth(planningTakeOffDate);
 		String month = DateUtil.dateToMonth(taskStartTime);
 
@@ -155,9 +162,11 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		param.put(queryDay, queryDay);
 
 		// 查询当班人员
-		List<Map<String, Object>> list = this.tempTaskMapper.selectWorkingEmployee(param);
+		// List<Map<String, Object>> list =
+		// this.tempTaskMapper.selectWorkingEmployee(param);
+		List<Map<String, Object>> list = this.selectWorkingEmployee(shift, month, positionCode, queryDay);
 		if (CollectionUtils.isEmpty(list)) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "根据计划时间未查询到班次，请先设置班次");
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "根据计划时间未查询到当班人员，请先设置当班人员");
 		}
 
 		List<String> employeeCodeList = new ArrayList<>();
@@ -197,7 +206,7 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		// task.setTaskScore(taskScore);
 		// task.setTaskAdvice(taskAdvice);
 		task.setCreateDate(now);
-		task.setCreateEmp(eventTaskDto.getLoginName());
+		task.setCreateEmp(eventTaskDto.getEmployeeCode());
 		task.setVersion(0);
 
 		List<TbTask> taskList = new ArrayList<>();
@@ -226,12 +235,22 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 			taskList.add(task);
 		}
 
+		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
+
 		this.tempTaskMapper.insertTaskBatch(taskList);
 	}
 
 	@Override
 	public List<QueryHistoryFlightInfoResp> queryHistoryFlightInfo(QueryHistoryFlightInfoReq req) {
 		return eventTaskRestMapper.selectFlightInfo(req);
+	}
+
+	public List<Map<String, Object>> selectWorkingEmployee(String shift, String month, String positionCode,
+			String queryDay) {
+		String sql = "SELECT EMPLOYEE_CODE employeeCode,EMPLOYEE_NAME employeeName,EMPLOYEE_TEL employeeTel "
+				+ "FROM tb_task_arrangement WHERE SHIFT = '" + shift + "' AND MONTH = '" + month
+				+ "' AND POSITION_CODE = '" + positionCode + "' AND DELETE_FLAG = 'NORMAL' AND " + queryDay + "='√'";
+		return jdbcTemplate.queryForList(sql);
 	}
 
 }

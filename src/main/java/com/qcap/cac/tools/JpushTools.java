@@ -20,6 +20,30 @@ public class JpushTools {
 	public static final Logger logger = LoggerFactory.getLogger(JpushTools.class);
 
 	// 广播（即全平台、全目标推送）
+	public static PushResult broadcast(String msg) {
+		String masterSecret = RedisTools.getCommonConfig("CAC_MASTER_SECRET_KEY");
+		String appKey = RedisTools.getCommonConfig("CAC_APP_KEY");
+		// 广播
+		return JpushTools.broadcast(masterSecret, appKey, msg);
+	}
+
+	// 向单一目标推送
+	public static PushResult pushSingle(String userNo, String msg) {
+		String masterSecret = RedisTools.getCommonConfig("CAC_MASTER_SECRET_KEY");
+		String appKey = RedisTools.getCommonConfig("CAC_APP_KEY");
+		// 发送单一目标
+		return JpushTools.pushSingle(masterSecret, appKey, userNo, msg);
+	}
+
+	// 向多个目标推送
+	public static PushResult pushArray(List<String> userArr, String msg) {
+		String masterSecret = RedisTools.getCommonConfig("CAC_MASTER_SECRET_KEY");
+		String appKey = RedisTools.getCommonConfig("CAC_APP_KEY");
+		// 发送多个目标
+		return JpushTools.pushArray(masterSecret, appKey, userArr, msg);
+	}
+
+	// 广播（即全平台、全目标推送）
 	public static PushResult broadcast(String masterSecret, String appKey, String alert) {
 		// 创建推送连接
 		JPushClient jpushClient = new JPushClient(masterSecret, appKey, null, ClientConfig.getInstance());

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.CommonRestMapper;
 import com.qcap.cac.dto.GetAreaReq;
 import com.qcap.cac.dto.GetAreaResp;
@@ -39,6 +40,10 @@ public class CommonRestSrvImpl implements CommonRestSrv {
 						CommonCodeConstant.ERROR_CODE_40403_MSG + "【" + positionCode + "】");
 			}
 		} else {
+			String areaType = req.getAreaType();
+			if (StringUtils.isNotBlank(areaType)) {
+				req.setAreaType(CommonConstant.AREA_TYPE.get(areaType));
+			}
 			return commonRestMapper.getAreaList(req);
 		}
 	}

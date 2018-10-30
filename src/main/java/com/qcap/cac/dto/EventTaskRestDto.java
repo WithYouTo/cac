@@ -5,45 +5,45 @@ import javax.validation.constraints.NotBlank;
 import io.swagger.annotations.ApiModelProperty;
 
 public class EventTaskRestDto {
-	
-	@NotBlank(message="航班号不能为空")
-	@ApiModelProperty(value="航班号")
+
+	@NotBlank(message = "航班号不能为空")
+	@ApiModelProperty(value = "航班号")
 	private String flightName;
-	
-	@NotBlank(message="事件类型不能为空")
-	@ApiModelProperty(value="事件类型")
+
+	@NotBlank(message = "事件类型不能为空")
+	@ApiModelProperty(value = "事件类型")
 	private String eventType;
-	
-	@NotBlank(message="航班类型不能为空")
-	@ApiModelProperty(value="航班类型")
+
+	@NotBlank(message = "航班类型不能为空")
+	@ApiModelProperty(value = "航班类型")
 	private String flightType;
-	
-	@NotBlank(message="登机口/廊桥不能为空")
-	@ApiModelProperty(value="登机口/廊桥")
+
+	@NotBlank(message = "登机口/廊桥不能为空")
+	@ApiModelProperty(value = "登机口/廊桥")
 	private String areaName;
-	
-	@NotBlank(message="区域编码不能为空")
-	@ApiModelProperty(value="区域编码")
+
+	@NotBlank(message = "区域编码不能为空")
+	@ApiModelProperty(value = "区域编码")
 	private String areaCode;
-	
-	@NotBlank(message="保障等级不能为空")
-	@ApiModelProperty(value="保障等级")
+
+	@NotBlank(message = "保障等级不能为空")
+	@ApiModelProperty(value = "保障等级")
 	private String guaranteeType;
-	
-	@NotBlank(message="计划起飞、到达时间不能为空")
-	@ApiModelProperty(value="计划起飞、到达时间")
+
+	@NotBlank(message = "计划起飞、到达时间不能为空")
+	@ApiModelProperty(value = "计划起飞、到达时间")
 	private String planningTakeoffTime;
-	
-	@NotBlank(message="预计起飞/到达时间不能为空")
-	@ApiModelProperty(value="预计起飞/到达时间")
+
+	@NotBlank(message = "预计起飞/到达时间不能为空")
+	@ApiModelProperty(value = "预计起飞/到达时间")
 	private String estimatedTakeoffTime;
-	
-	@ApiModelProperty(value="机型")
+
+	@ApiModelProperty(value = "机型")
 	private String aircraftType;
-	
-	@NotBlank(message="app登陆人不能为空")
-	@ApiModelProperty(value="app登陆人")
-	private String loginName;
+
+	@NotBlank(message = "app登陆人不能为空")
+	@ApiModelProperty(value = "app登陆人")
+	private String employeeCode;
 
 	public String getFlightName() {
 		return flightName;
@@ -81,8 +81,8 @@ public class EventTaskRestDto {
 		return aircraftType;
 	}
 
-	public String getLoginName() {
-		return loginName;
+	public String getEmployeeCode() {
+		return employeeCode;
 	}
 
 	public void setFlightName(String flightName) {
@@ -121,8 +121,8 @@ public class EventTaskRestDto {
 		this.aircraftType = aircraftType;
 	}
 
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+	public void setEmployeeCode(String employeeCode) {
+		this.employeeCode = employeeCode;
 	}
 
 	@Override
@@ -130,9 +130,7 @@ public class EventTaskRestDto {
 		return "EventTaskRestDto [flightName=" + flightName + ", eventType=" + eventType + ", flightType=" + flightType
 				+ ", areaName=" + areaName + ", areaCode=" + areaCode + ", guaranteeType=" + guaranteeType
 				+ ", planningTakeoffTime=" + planningTakeoffTime + ", estimatedTakeoffTime=" + estimatedTakeoffTime
-				+ ", aircraftType=" + aircraftType + ", loginName=" + loginName + "]";
+				+ ", aircraftType=" + aircraftType + ", employeeCode=" + employeeCode + "]";
 	}
-	
-	
-	
+
 }

@@ -9,7 +9,6 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +28,7 @@ import com.qcap.cac.dto.GetAttenceResp;
 import com.qcap.cac.entity.TbAttence;
 import com.qcap.cac.service.AttenceRestSrv;
 import com.qcap.cac.service.CommonSrv;
+import com.qcap.cac.tools.DateTool;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.entity.TbOrg;
@@ -61,6 +61,7 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 
 		TbAttence attence = new TbAttence();
 		attence.setAttenceId(UUIDUtils.getUUID());
+		attence.setAttencePlace(req.getAttencePlace());
 		attence.setWorkNo(req.getEmployeeCode());
 		attence.setAttenceTime(StringUtils.isNotBlank(req.getAttenceTime())
 				? CommonConstant.sdf_YMDHMS.parse(req.getAttenceTime()) : new Date());
@@ -71,7 +72,7 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 		if (userInfo != null) {
 			attence.setPersonId(userInfo.getUserId());
 			attence.setPersonName(userInfo.getUserName());
-			attence.setPersonMoBile(userInfo.getMobile());
+			attence.setPersonMobile(userInfo.getMobile());
 		}
 
 		if (CollectionUtils.isNotEmpty(fileList)) {
@@ -89,6 +90,7 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 
 	@Override
 	public List<GetAttenceResp> getAttenceList(GetAttenceReq req) throws Exception {
+		req.setMonth(DateTool.dateFormat("yyyy-MM", "yyyyMM", req.getMonth()));
 		Map<String, Object> taskArrangementMap = this.getTaskArrangement(req);
 		Map<String, Object> attenceMap = this.getAttence(req);
 		List<GetAttenceResp> ls = new ArrayList<>();
@@ -96,28 +98,25 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 		int currentDay = now.get(Calendar.DAY_OF_MONTH);
 		for (int i = 1; i < 32; i++) {
 			GetAttenceResp resp = new GetAttenceResp();
-			int attence = Integer.valueOf(String.valueOf(attenceMap.get("attence_" + i)));
 			String shift = String.valueOf(taskArrangementMap.get("shift_" + i));
+			int attence = Integer.valueOf(String.valueOf(attenceMap.get("attence_" + i)));
 			if (!"0".equals(shift) && attence > 0) {
 				PropertyUtils.setProperty(resp, "attenceStatus", "Y");
-				PropertyUtils.setProperty(resp, "shift", CommonConstant.SHIFT.get(shift));
 			} else if (!"0".equals(shift) && attence == 0) {
 				if (currentDay < i) {
 					PropertyUtils.setProperty(resp, "attenceStatus", "");
-					PropertyUtils.setProperty(resp, "shift", CommonConstant.SHIFT.get(shift));
 				} else {
 					PropertyUtils.setProperty(resp, "attenceStatus", "N");
-					PropertyUtils.setProperty(resp, "shift", CommonConstant.SHIFT.get(shift));
 				}
 			} else if ("0".equals(shift)) {
 				if (currentDay < i) {
 					PropertyUtils.setProperty(resp, "attenceStatus", "");
-					PropertyUtils.setProperty(resp, "shift", CommonConstant.SHIFT.get(shift));
 				} else {
 					PropertyUtils.setProperty(resp, "attenceStatus", "R");
-					PropertyUtils.setProperty(resp, "shift", CommonConstant.SHIFT.get(shift));
+
 				}
 			}
+			PropertyUtils.setProperty(resp, "shift", shift);
 			PropertyUtils.setProperty(resp, "day", Objects.toString(i));
 			ls.add(resp);
 		}
@@ -127,13 +126,16 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 	@Override
 	public List<GetAttenceDetailsResp> getAttenceDetails(GetAttenceDetailsReq req) throws Exception {
 		List<GetAttenceDetailsResp> lsRecord = new ArrayList<>();
-		List<TbAttence> ls = attenceRestMapper.getAttenceList(req);
+		List<Map<String, String>> ls = attenceRestMapper.getAttenceList(req);
 		if (CollectionUtils.isNotEmpty(ls)) {
-			for (TbAttence attence : ls) {
+			for (Map<String, String> attenceMap : ls) {
 				GetAttenceDetailsResp resp = new GetAttenceDetailsResp();
-				BeanUtils.copyProperties(resp, attence);
-				if (StringUtils.isNotBlank(attence.getFilesUrl())) {
-					resp.setUrl(attence.getFilesUrl().split(";"));
+				resp.setAttencePlace(attenceMap.get("attencePlace"));
+				resp.setAttencePlaceName(attenceMap.get("attencePlaceName"));
+				resp.setAttenceTime(attenceMap.get("attenceTime"));
+				resp.setWorkContent(attenceMap.get("workContent"));
+				if (StringUtils.isNotBlank(attenceMap.get("filesUrl"))) {
+					resp.setUrl(attenceMap.get("filesUrl").split(";"));
 				}
 				lsRecord.add(resp);
 			}
@@ -144,18 +146,19 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 	public Map<String, Object> getAttence(GetAttenceReq req) {
 		String currentDate = CommonConstant.sdf_YMDHMS.format(new Date());
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT " + "MAX(attence_1) attence_1, MAX(attence_2) attence_2,MAX(attence_3) attence_3,"
-				+ "MAX(attence_4) attence_4,MAX(attence_5) attence_5,MAX(attence_6) attence_6,"
-				+ "MAX(attence_7) attence_7,MAX(attence_8) attence_8,MAX(attence_9) attence_9,"
-				+ "MAX(attence_10) attence_10,"
-				+ "MAX(attence_11) attence_11, MAX(attence_12) attence_12,MAX(attence_13) attence_13,"
-				+ "MAX(attence_14) attence_14,MAX(attence_15) attence_15,MAX(attence_16) attence_16,"
-				+ "MAX(attence_17) attence_17,MAX(attence_18) attence_18,MAX(attence_19) attence_19,"
-				+ "MAX(attence_20) attence_20,"
-				+ "MAX(attence_21) attence_21, MAX(attence_22) attence_22,MAX(attence_23) attence_23,"
-				+ "MAX(attence_24) attence_24,MAX(attence_25) attence_25,MAX(attence_26) attence_26,"
-				+ "MAX(attence_27) attence_27,MAX(attence_28) attence_28,MAX(attence_29) attence_29,"
-				+ "MAX(attence_30) attence_30, MAX(attence_31) attence_31 FROM(SELECT "
+		sql.append("SELECT "
+				+ "IFNULL(MAX(attence_1),0) attence_1,IFNULL(MAX(attence_2),0) attence_2,IFNULL(MAX(attence_3),0) attence_3,"
+				+ "IFNULL(MAX(attence_4),0) attence_4,IFNULL(MAX(attence_5),0) attence_5,IFNULL(MAX(attence_6),0) attence_6,"
+				+ "IFNULL(MAX(attence_7),0) attence_7,IFNULL(MAX(attence_8),0) attence_8,IFNULL(MAX(attence_9),0) attence_9,"
+				+ "IFNULL(MAX(attence_10),0) attence_10,"
+				+ "IFNULL(MAX(attence_11),0) attence_11,IFNULL(MAX(attence_12),0) attence_12,IFNULL(MAX(attence_13),0) attence_13,"
+				+ "IFNULL(MAX(attence_14),0) attence_14,IFNULL(MAX(attence_15),0) attence_15,IFNULL(MAX(attence_16),0) attence_16,"
+				+ "IFNULL(MAX(attence_17),0) attence_17,IFNULL(MAX(attence_18),0) attence_18,IFNULL(MAX(attence_19),0) attence_19,"
+				+ "IFNULL(MAX(attence_20),0) attence_20,"
+				+ "IFNULL(MAX(attence_21),0) attence_21,IFNULL(MAX(attence_22),0) attence_22,IFNULL(MAX(attence_23),0) attence_23,"
+				+ "IFNULL(MAX(attence_24),0) attence_24,IFNULL(MAX(attence_25),0) attence_25,IFNULL(MAX(attence_26),0) attence_26,"
+				+ "IFNULL(MAX(attence_27),0) attence_27,IFNULL(MAX(attence_28),0) attence_28,IFNULL(MAX(attence_29),0) attence_29,"
+				+ "IFNULL(MAX(attence_30),0) attence_30,IFNULL(MAX(attence_31),0) attence_31 FROM(SELECT "
 				+ "CASE DATE_FORMAT(ATTENCE_TIME,'%e') WHEN '1' THEN COUNT(1) ELSE 0 END  attence_1,"
 				+ "CASE DATE_FORMAT(ATTENCE_TIME,'%e') WHEN '2' THEN COUNT(1) ELSE 0 END  attence_2,"
 				+ "CASE DATE_FORMAT(ATTENCE_TIME,'%e') WHEN '3' THEN COUNT(1) ELSE 0 END  attence_3,"
@@ -194,16 +197,19 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 
 	public Map<String, Object> getTaskArrangement(GetAttenceReq req) {
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT " + " MAX(shift_1) shift_1,MAX(shift_2) shift_2,MAX(shift_3) shift_3,"
-				+ "MAX(shift_4) shift_4,MAX(shift_5) shift_5,MAX(shift_6) shift_6,"
-				+ "MAX(shift_7) shift_7,MAX(shift_8) shift_8,MAX(shift_9) shift_9," + "MAX(shift_10) shift_10,"
-				+ "MAX(shift_11) shift_11, MAX(shift_12) shift_12,MAX(shift_13) shift_13,"
-				+ "MAX(shift_14) shift_14,MAX(shift_15) shift_15,MAX(shift_16) shift_16,"
-				+ "MAX(shift_17) shift_17,MAX(shift_18) shift_18,MAX(shift_19) shift_19," + "MAX(shift_20) shift_20,"
-				+ "MAX(shift_21) shift_21, MAX(shift_22) shift_22,MAX(shift_23) shift_23,"
-				+ "MAX(shift_24) shift_24,MAX(shift_25) shift_25,MAX(shift_26) shift_26,"
-				+ "MAX(shift_27) shift_27,MAX(shift_28) shift_28,MAX(shift_29) shift_29,"
-				+ "MAX(shift_30) shift_30, MAX(shift_31) shift_31 FROM(SELECT "
+		sql.append("SELECT "
+				+ "IFNULL(MAX(shift_1),0) shift_1,IFNULL(MAX(shift_2),0) shift_2,IFNULL(MAX(shift_3),0) shift_3,"
+				+ "IFNULL(MAX(shift_4),0) shift_4,IFNULL(MAX(shift_5),0) shift_5,IFNULL(MAX(shift_6),0) shift_6,"
+				+ "IFNULL(MAX(shift_7),0) shift_7,IFNULL(MAX(shift_8),0) shift_8,IFNULL(MAX(shift_9),0) shift_9,"
+				+ "IFNULL(MAX(shift_10),0) shift_10,"
+				+ "IFNULL(MAX(shift_11),0) shift_11,IFNULL(MAX(shift_12),0) shift_12,IFNULL(MAX(shift_13),0) shift_13,"
+				+ "IFNULL(MAX(shift_14),0) shift_14,IFNULL(MAX(shift_15),0) shift_15,IFNULL(MAX(shift_16),0) shift_16,"
+				+ "IFNULL(MAX(shift_17),0) shift_17,IFNULL(MAX(shift_18),0) shift_18,IFNULL(MAX(shift_19),0) shift_19,"
+				+ "IFNULL(MAX(shift_20),0) shift_20,"
+				+ "IFNULL(MAX(shift_21),0) shift_21,IFNULL(MAX(shift_22),0) shift_22,IFNULL(MAX(shift_23),0) shift_23,"
+				+ "IFNULL(MAX(shift_24),0) shift_24,IFNULL(MAX(shift_25),0) shift_25,IFNULL(MAX(shift_26),0) shift_26,"
+				+ "IFNULL(MAX(shift_27),0) shift_27,IFNULL(MAX(shift_28),0) shift_28,IFNULL(MAX(shift_29),0) shift_29,"
+				+ "IFNULL(MAX(shift_30),0) shift_30,IFNULL(MAX(shift_31),0) shift_31 FROM(SELECT "
 				+ "CASE DAY_1 WHEN '√' THEN SHIFT ELSE 0 END  shift_1,"
 				+ "CASE DAY_2 WHEN '√' THEN SHIFT ELSE 0 END  shift_2,"
 				+ "CASE DAY_3 WHEN '√' THEN SHIFT ELSE 0 END  shift_3,"

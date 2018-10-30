@@ -6,7 +6,7 @@
     	INSERT INTO tb_flight_info 
 	    (
 	    		FLIGHT_INFO_ID, 
-	    		FLIGNT_NAME, 
+	    		FLIGHT_NAME, 
 	    		EVENT_TYPE, 
 	      		FLIGHT_TYPE, 
 	      		DEPARTURE_GATE, 
@@ -26,7 +26,7 @@
 		VALUES
     	(
     		#{flightInfoId}, 
-    		#{fligntName}, 
+    		#{flightName}, 
     		#{eventType}, 
       		#{flightType}, 
       		#{departureGate}, 
@@ -71,18 +71,19 @@
 	
 	<select id="selectFlightInfo" parameterType="com.qcap.cac.dto.QueryHistoryFlightInfoReq" resultType="com.qcap.cac.dto.QueryHistoryFlightInfoResp">
 		SELECT 
-			FLIGNT_NAME fligntName,
+			FLIGHT_NAME flightName,
 			EVENT_TYPE eventType,
-			(SELECT DESC1_ FROM tbpubcode01 WHERE CONFIG_CODE_ = 'EVENT_TYPE' AND DESC_ = A.eventType) eventTypeName,
+			(SELECT DESC1_ FROM tbpubcode01 WHERE CONFIG_CODE_ = 'EVENT_TYPE' AND DESC_ = A.EVENT_TYPE) eventTypeName,
 			FLIGHT_TYPE flightType,
-			(SELECT DESC1_ FROM tbpubcode01 WHERE CONFIG_CODE_ = 'FLIGHT_TYPE' AND DESC_ = A.flightType) flightTypeName,
+			(SELECT DESC1_ FROM tbpubcode01 WHERE CONFIG_CODE_ = 'FLIGHT_TYPE' AND DESC_ = A.FLIGHT_TYPE) flightTypeName,
 			DEPARTURE_GATE areaCode,
-			(SELECT AREA_NAME FROM tb_area WHERE AREA_CODE_ = A.areaCode) areaCodeName,
+			(SELECT AREA_NAME FROM tb_area WHERE AREA_CODE = A.DEPARTURE_GATE) areaName,
 			GUARANTEE_TYPE guaranteeType,
+			(SELECT DESC1_ FROM tbpubcode01 WHERE CONFIG_CODE_ = 'GUARANTEE_TYPE' AND DESC_ = A.GUARANTEE_TYPE) guaranteeTypeName,
 			DATE_FORMAT(PLANNING_TAKEOFF_TIME, '%Y-%m-%d %T') planningTakeoffTime,
 			DATE_FORMAT(ESTIMATED_TAKEOFF_TIME, '%Y-%m-%d %T') estimatedTakeoffTime,
 			AIRCRAFT_TYPE aircraftType,
-			LINE_NO lineNo,
+			LINE_NO lineNo
 		FROM 
 			tb_flight_info A 
 		<where>

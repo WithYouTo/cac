@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.AttenceRestMapper">
 	
-	<select id="getAttenceList" resultType="com.qcap.cac.entity.TbAttence" parameterType="com.qcap.cac.dto.GetAttenceDetailsReq">
+	<select id="getAttenceList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.GetAttenceDetailsReq">
         SELECT
         	ATTENCE_ID attenceId,
         	ORG_NAME orgName,
@@ -10,14 +10,16 @@
         	WORK_NO workNo,
         	PERSON_NAME personName,
         	PERSON_MOBILE personMobile,
-        	ATTENCE_TIME attenceTime,
+        	ATTENCE_PLACE attencePlace,
+			(SELECT POSITION_NAME FROM tb_area_position WHERE POSITION_CODE = A.ATTENCE_PLACE) attencePlaceName,
+        	DATE_FORMAT(ATTENCE_TIME,'%H:%i') attenceTime,
         	WORK_CONTENT workContent,
         	FILES_URL filesUrl,
         	REMARK remark
         FROM
-        	tb_attence
+        	tb_attence A
        	WHERE
-       		WORK_NO = #{employeeCode} AND DATE_FORMAT(ATTENCE_TIME,'%Y%m%d') = #{date};
+       		WORK_NO = #{employeeCode} AND DATE_FORMAT(ATTENCE_TIME,'%Y-%m-%d') = #{date}
         ORDER BY ATTENCE_TIME
     </select>
 	
