@@ -1,4 +1,4 @@
-package com.qcap.cac.controller;
+package com.qcap.cac.rest;
 
 import com.qcap.cac.dto.*;
 import com.qcap.cac.service.LoginRestSrv;
@@ -32,7 +32,7 @@ import java.util.Map;
  * @author huangxiang
  * @date 2018/10/22 14:13
  */
-@Api(description="APP首页相关接口")
+@Api(tags = "APP首页相关接口",description="APP首页相关接口")
 @RestController
 @RequestMapping(value="/rest/login",headers = "api_version=v1")
 public class LoginRestController {

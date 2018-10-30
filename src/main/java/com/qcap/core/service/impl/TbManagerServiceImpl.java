@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.exception.BaseException;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.dao.*;
 import com.qcap.core.entity.*;
@@ -153,11 +154,7 @@ public class TbManagerServiceImpl implements ITbManagerService {
 			userInfo.setBirth(birth);
 			userInfo.setWorkDate(workDate);
 
-			//todo 通用方法，待修改
-			userInfo.setCreateDate(new Date());
-			userInfo.setUpdateDate(new Date());
-			userInfo.setCreateEmp("sys");
-			userInfo.setUpdateEmp("sys");
+			EntityTools.setCreateEmpAndTime(userInfo);
 			tbManagerMapper.insert(manager);
 			this.tbUserInfoMapper.insert(userInfo);
 		}catch(ParseException e){

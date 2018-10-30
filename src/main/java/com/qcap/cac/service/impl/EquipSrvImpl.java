@@ -16,8 +16,10 @@ import com.qcap.cac.entity.TbEquip;
 import com.qcap.cac.entity.TbEquipParts;
 import com.qcap.cac.entity.TbEquipPlan;
 import com.qcap.cac.service.EquipSrv;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.AppUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
@@ -53,6 +55,7 @@ public class EquipSrvImpl implements EquipSrv {
 
     @Override
     public Map<String,String> insertParts(@Valid PartsInsertDto partsInsertParam) {
+        String employeeNo = AppUtils.getLoginUser().getAccount();
         String partsId = UUIDUtils.getUUID();
         TbEquipParts parts = new TbEquipParts();
         Map<String,String> map = new HashMap<String,String>();
@@ -68,12 +71,7 @@ public class EquipSrvImpl implements EquipSrv {
         map.put("equipId",parts.getEquipId());
         parts.setPartsId(partsId);
 
-        //todo 通用方法，待修改
-        parts.setCreateDate(new Date());
-        parts.setUpdateDate(new Date());
-        parts.setCreateEmp("sys");
-        parts.setUpdateEmp("sys");
-
+        EntityTools.setCreateEmpAndTime(parts);
         this.equipPartsMapper.insert(parts);
         return map;
     }
@@ -113,11 +111,8 @@ public class EquipSrvImpl implements EquipSrv {
             equip.setEquipCodeUrl(url);
             equip.setEquipNo(equipNo);
             equip.setEquipState(CommonConstant.EQUIP_STATUS_NORMAL);
-            //todo 通用方法，待修改
-            equip.setCreateDate(new Date());
-            equip.setUpdateDate(new Date());
-            equip.setCreateEmp("sys");
-            equip.setUpdateEmp("sys");
+
+            EntityTools.setCreateEmpAndTime(equip);
             this.equipMapper.insert(equip);
             // 5、根据设备信息生成设备维保计划
             insertMaintPlan(equip);
@@ -143,22 +138,12 @@ public class EquipSrvImpl implements EquipSrv {
             }else{
                 nextPlanTime = getNewPlanDate(partsPlan.getStartUseTime(),equip.getMaintCycle());
             }
-            //todo 通用方法，待修改
-            partsPlan.setCreateDate(new Date());
-            partsPlan.setUpdateDate(new Date());
-            partsPlan.setCreateEmp("sys");
-            partsPlan.setUpdateEmp("sys");
-
+            EntityTools.setUpdateEmpAndTime(partsPlan);
             partsPlan.setNextMaintTime(nextPlanTime);
             this.equipPlanMapper.updateNextMaintTime(partsPlan);
         }
 
-        //todo 通用方法，待修改
-        equip.setCreateDate(new Date());
-        equip.setUpdateDate(new Date());
-        equip.setCreateEmp("sys");
-        equip.setUpdateEmp("sys");
-
+        EntityTools.setUpdateEmpAndTime(equip);
         this.equipMapper.updateEquip(equip);
     }
 
@@ -168,12 +153,8 @@ public class EquipSrvImpl implements EquipSrv {
         TbEquipParts parts = new TbEquipParts();
         BeanUtils.copyProperties(partsInsertDto,parts);
 
-        //todo 通用方法，待修改
-        parts.setCreateDate(new Date());
-        parts.setUpdateDate(new Date());
-        parts.setCreateEmp("sys");
-        parts.setUpdateEmp("sys");
-
+        EntityTools.setUpdateEmpAndTime(parts);
+        EntityTools.setCreateEmpAndTime(parts);
 
         //根据配件Id，获取配件维保计划，判断维保计划中最近维保时间是否为空，若为空，取开始使用时间，通过维保周期获取配件下次维保时间
         TbEquipPlan partsPlan = this.equipPlanMapper.selectPartsPlanByPartsId(parts.getPartsId());
@@ -184,12 +165,8 @@ public class EquipSrvImpl implements EquipSrv {
         }
 
         partsPlan.setMaintCycle(parts.getMaintCycle());
-        //todo 通用方法，待修改
-        partsPlan.setCreateDate(new Date());
-        partsPlan.setUpdateDate(new Date());
-        partsPlan.setCreateEmp("sys");
-        partsPlan.setUpdateEmp("sys");
 
+        EntityTools.setUpdateEmpAndTime(partsPlan);
         partsPlan.setNextMaintTime(nextPlanTime);
         parts.setNextMaintTime(nextPlanTime);
         //修改配件信息
@@ -215,12 +192,8 @@ public class EquipSrvImpl implements EquipSrv {
         parts.setPartsNo(partsNo.toString());
         parts.setStartUseTime(equip.getStartUseTime());
         parts.setEquipNo(equip.getEquipNo());
-
-        //todo 通用方法，待修改
-        parts.setCreateDate(new Date());
-        parts.setUpdateDate(new Date());
-        parts.setCreateEmp("sys");
-        parts.setUpdateEmp("sys");
+        
+        EntityTools.setCreateEmpAndTime(parts);
         //新增配件信息
         this.equipPartsMapper.insert(parts);
         insertMaintPlan(parts);
@@ -256,12 +229,7 @@ public class EquipSrvImpl implements EquipSrv {
         BeanUtils.copyProperties(partsInsertParam,parts);
         map.put("equipId",partsInsertParam.getEquipId());
 
-        //todo 通用方法，待修改
-        parts.setCreateDate(new Date());
-        parts.setUpdateDate(new Date());
-        parts.setCreateEmp("sys");
-        parts.setUpdateEmp("sys");
-
+        EntityTools.setUpdateEmpAndTime(parts);
         this.equipPartsMapper.updatePartsByPartsId(parts);
         return map;
     }

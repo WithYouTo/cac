@@ -88,7 +88,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         }
         handlerWhenOperateCodeIsInUse(equip,manager,employeeCode);
 
-        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC, null);
     }
 
     @Override
