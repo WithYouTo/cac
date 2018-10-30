@@ -87,6 +87,22 @@
 		AND DELETE_FLAG = 'NORMAL'
 	</select>
 
+
+	<!--根据用户角色查询人员信息-->
+	<select id="getUserListByRoleNum" resultType="com.qcap.cac.dto.UserListResp" parameterType="String">
+		SELECT
+		a.id id,
+		a.name employeeName,
+		a.account employeeCode
+		FROM tb_manager a
+		left join tb_manager_role b
+		on a.id = b.manager_id
+		WHERE 1=1
+		<if test="roleNum != null and roleNum != ''">
+			AND  b.role_id  = #{roleNum}
+		</if>
+	</select>
+
 	<update id="updateManagerPwd"  parameterType="com.qcap.core.entity.TbManager">
 		UPDATE TB_MANAGER
 		SET

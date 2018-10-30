@@ -62,5 +62,8 @@
         <if test="org.name!=null and org.name!=''">
            AND name = #{org.name}
         </if>
+        <if test="org.code!=null and org.code!=''">
+            AND parent_code = #{org.code}
+        </if>
     </select>
 </mapper>

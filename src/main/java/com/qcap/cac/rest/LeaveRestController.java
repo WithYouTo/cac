@@ -48,7 +48,7 @@ public class LeaveRestController {
 	private LeaveRestSrv leaveRestSrv;
 
 	@RequestMapping(value="/leaveApply",method=RequestMethod.POST)
-	@ApiOperation(value="",notes="提交请假申请",response=Map.class,httpMethod="POST")
+	@ApiOperation(value="提交请假申请",notes="提交请假申请",response=Map.class,httpMethod="POST")
 	@ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
 	public Object insertLeaveApply(MultipartHttpServletRequest req) {
 		try {

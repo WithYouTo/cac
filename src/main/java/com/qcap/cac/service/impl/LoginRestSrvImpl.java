@@ -6,7 +6,6 @@ import com.qcap.cac.dto.MyInfoResp;
 import com.qcap.cac.dto.ResetPasswordReq;
 import com.qcap.cac.dto.UserListReq;
 import com.qcap.cac.dto.UserListResp;
-import com.qcap.cac.entity.TbAreaPosition;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.LoginRestSrv;
@@ -135,13 +134,17 @@ public class LoginRestSrvImpl implements LoginRestSrv {
         String s = format.format(new Date());
         String orgCode = userListReq.getOrgCode();
         String positionCode = userListReq.getPositionCode();
+        String roleNum = userListReq.getRoleNum();
 
         Set<UserListResp> set = new HashSet<UserListResp>();
         List<UserListResp> orgList = this.loginRestMapper.getUserListByOrgCode(orgCode);
         List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s);
+        List<UserListResp> roleList = this.loginRestMapper.getUserListByOrgCode(roleNum);
+
 
         CollectionUtils.addAll(set, orgList);
         CollectionUtils.addAll(set, poList);
+        CollectionUtils.addAll(set, roleList);
         List<UserListResp> result = new ArrayList(set);
         return result;
     }

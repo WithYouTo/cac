@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.constant.CommonConstant;
@@ -99,8 +100,10 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         appLeaveApplyReq.setLeaveType(req.getParameter("leaveType"));
         appLeaveApplyReq.setLeaveReason(req.getParameter("leaveReason"));
 
-        //TODO请假时长未计算
-
+        //请假时长（以小时为单位）
+        Long hour = DateUtil.between(DateUtil.parse(appLeaveApplyReq.getLeaveStartTime()),
+                DateUtil.parse(appLeaveApplyReq.getLeaveEndTime()), DateUnit.HOUR);
+        appLeaveApplyReq.setLeaveTotalTime(ToolUtil.toStr(hour));
 
         //存放图片url
         List<String> pathList = new ArrayList<>();

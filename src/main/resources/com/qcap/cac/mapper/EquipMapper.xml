@@ -32,7 +32,8 @@
         DATE_FORMAT(a.BUY_TIME,'%Y-%m-%d') buyTime,
         DATE_FORMAT(a.START_USE_TIME,'%Y-%m-%d') startUseTime,
         a.ATTENTION attention,
-        a.EQUIP_STATE equipState
+        a.EQUIP_STATE equipState,
+        a.EQUIP_WORK_STATE equipWorkState
         from TB_EQUIP a
         LEFT JOIN tbpubcode01 b
         ON a.EQUIP_TYPE = b.DESC_
@@ -71,7 +72,8 @@
         DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
         DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
         ATTENTION attention,
-        EQUIP_STATE equipState
+        EQUIP_STATE equipState,
+        EQUIP_WORK_STATE equipWorkState
         FROM TB_EQUIP
         WHERE
         DEL_FLAG = 'NORMAL'
@@ -98,7 +100,8 @@
         DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
         DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
         ATTENTION attention,
-        EQUIP_STATE equipState
+        EQUIP_STATE equipState,
+        EQUIP_WORK_STATE equipWorkState
         FROM TB_EQUIP
         WHERE
         DEL_FLAG = 'NORMAL'
@@ -197,10 +200,19 @@
         EQUIP_ID = #{equipId}
     </update>
 
-    <update id="updateEquipStatusByEquipNoAndStatus">
+    <update id="updateEquipWorkStatusByEquipNoAndStatus">
         UPDATE  tb_equip
         SET
         EQUIP_WORK_STATE = #{status}
+        WHERE
+        EQUIP_NO = #{equipNo}
+    </update>
+
+    <update id="updateEquipStatusAndWorkStatusByEquipNoAndStatus">
+        UPDATE  tb_equip
+        SET
+        EQUIP_STATE = #{status},
+        EQUIP_WORK_STATE = #{workStatus}
         WHERE
         EQUIP_NO = #{equipNo}
     </update>

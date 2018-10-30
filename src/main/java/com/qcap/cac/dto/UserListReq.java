@@ -2,8 +2,6 @@ package com.qcap.cac.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotBlank;
-
 public class UserListReq {
 
     @ApiModelProperty(value="组织编码")
@@ -11,6 +9,17 @@ public class UserListReq {
 
     @ApiModelProperty(value="岗位编码")
     private String positionCode;
+
+    @ApiModelProperty(value="角色编码")
+    private String roleNum;
+
+    public String getRoleNum() {
+        return roleNum;
+    }
+
+    public void setRoleNum(String roleNum) {
+        this.roleNum = roleNum;
+    }
 
     public String getOrgCode() {
         return orgCode;
@@ -33,6 +42,7 @@ public class UserListReq {
         return "UserListReq{" +
                 "orgCode='" + orgCode + '\'' +
                 ", positionCode='" + positionCode + '\'' +
+                ", roleNum='" + roleNum + '\'' +
                 '}';
     }
 }

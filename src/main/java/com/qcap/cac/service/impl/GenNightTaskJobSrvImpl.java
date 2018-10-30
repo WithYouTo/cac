@@ -1,14 +1,16 @@
 package com.qcap.cac.service.impl;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.constant.CommonConstant;
+import com.qcap.cac.dao.GenDayTimeTaskJobMapper;
+import com.qcap.cac.dao.GenNightTaskJobMapper;
+import com.qcap.cac.entity.TbTask;
+import com.qcap.cac.exception.BaseException;
+import com.qcap.cac.service.GenTaskJobSrv;
+import com.qcap.cac.tools.ToolUtil;
+import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.AppUtils;
+import com.qcap.core.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
@@ -16,16 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.qcap.cac.constant.CommonConstant;
-import com.qcap.cac.dao.GenDayTimeTaskJobMapper;
-import com.qcap.cac.dao.GenNightTaskJobMapper;
-import com.qcap.cac.entity.TbTask;
-import com.qcap.cac.service.GenTaskJobSrv;
-import com.qcap.cac.tools.ToolUtil;
-import com.qcap.core.utils.AppUtils;
-import com.qcap.core.utils.DateUtil;
+import javax.annotation.Resource;
+import java.util.*;
 
-@Service
+@Service("genNightTaskJobSrvImpl")
 @Transactional
 public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 
@@ -50,15 +46,16 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 		log.info("----------------查询班次------------------");
 
 		List<TbTask> taskList = new ArrayList<>();
+        Date jobRunDate = new Date();
 
-		// 1、查询班次
+        // 1、查询班次
 		Map<String, Object> shiftMap = this.dayTimeTaskMapper.selectShift(shift);
 		String startTime = ToolUtil.toStr(shiftMap.get("startTime"));
 		String endTime = ToolUtil.toStr(shiftMap.get("endTime"));
 
 		if ("".equals(startTime) || "".equals(endTime)) {
 			log.info("------------------班次设置有误：开始时间或结束时间为空---------");
-			return;
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"班次设置有误：开始时间或结束时间为空");
 		}
 		
 		// 2、查询周期性计划
@@ -95,6 +92,7 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 		planMapParam.put("weekAdd", weekAdd);
 		planMapParam.put("dayAdd", dayAdd);
 		planMapParam.put("monthNoAdd", monthNoAdd);
+		planMapParam.put("curDate", new Date());
 
 		// 2.2 查询周期性计划————查询计划
 		log.info("----------------查询周期性计划的参数为：" + planMapParam +"----------------");
@@ -106,8 +104,11 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 		// 校验List集合
 		if (CollectionUtils.isEmpty(planList)) {
 			log.info("------------------周期性计划的查询结果为空----------------");
-			return;
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"周期性计划的查询结果为空");
 		}
+
+		List<String> unGeneratePlanList = new ArrayList<>();
+		List<String> planIdList = new ArrayList<>();
 
 		// 遍历计划
 		for (Map<String, Object> map : planList) {
@@ -122,13 +123,23 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			// 参数校验
 			if (StringUtils.isEmpty(areaCode)) {
 				log.info("-----------Id为" + planId + ",的计划的区域编码为空----------------");
-				return;
+				unGeneratePlanList.add("Id为" + planId + "，开始时间为："+planStartTime+"结束时间为："+planEndTime+"的计划的区域编码为空");
+				continue;
 			}
 
 			// 3、查询岗位
-			Map<String, Object> positionMap = this.dayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode);
-			String positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
-			String positionName = ToolUtil.toStr(positionMap.get("positionName"));
+			List<Map<String, Object>> positionList = this.dayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode);
+            if(CollectionUtils.isEmpty(positionList)){
+                unGeneratePlanList.add("Id为" + planId + "，区域为："+areaCode+"的计划未查询到岗位");
+                continue;
+            }
+
+            if(positionList.size() >1 ){
+                throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"根据区域编码查询到"+positionList.size()+"个岗位");
+            }
+
+			String positionCode = ToolUtil.toStr(positionList.get(0).get("positionCode"));
+			String positionName = ToolUtil.toStr(positionList.get(0).get("positionName"));
 			
 			// 4、查询值班人员
 			// 4.1处理日期
@@ -153,7 +164,8 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 
 			if (CollectionUtils.isEmpty(employeeList)) {
 				log.info("----------------未查询到当班人员----------------");
-				return;
+				unGeneratePlanList.add("Id为" + planId + "，开始时间为："+planStartTime+"结束时间为："+planEndTime+"的计划未查询到当班人员");
+				continue;
 			}
 			
 			// 5.1 处理人员数据
@@ -175,7 +187,8 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			Map<String, Object> standardMap = this.dayTimeTaskMapper.selectStandardInfo(standardCode);
 			if (MapUtils.isEmpty(standardMap)) {
 				log.info("--------------------根据标准编号未查询到标准----------------");
-				return;
+				unGeneratePlanList.add("Id为" + planId + "，开始时间为："+planStartTime+"结束时间为："+planEndTime+"的计划未查询到标准");
+				continue;
 			}
 
 			String uploadPicFlag = ToolUtil.toStr(standardMap.get("uploadPicFlag"));
@@ -210,6 +223,7 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			
 			// 5.4 生成任务
 			TbTask task = new TbTask();
+            task.setTaskId(UUIDUtils.getUUID());
 			task.setTaskType(CommonConstant.TASK_TYPE_REGULAR);
 			task.setPositionCode(positionCode);
 			task.setPositionName(positionName);
@@ -227,7 +241,7 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
 			// task.setTaskScore(taskScore);
 			// task.setTaskAdvice(taskAdvice);
-			task.setCreateDate(now);
+			task.setCreateDate(jobRunDate);
 			task.setCreateEmp("SYS-NIGHT定时任务生成");
 			task.setVersion(0);
 
@@ -238,6 +252,16 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			task.setUploadPicFlag(uploadPicFlag);
 			//设置lineNo
 			task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
+
+            //设置任务编码
+            String taskCodePrefix = "";
+            if(CommonConstant.PLAN_TIME_TYPE_DAY.equals(planTimeType)){
+                taskCodePrefix = CommonConstant.TASK_PREFIX_R;
+            }else {
+                taskCodePrefix = CommonConstant.TASK_PREFIX_S;
+            }
+            String taskCode = taskCodePrefix + DateUtil.dateTimeToStringForLineNo(new Date());
+            task.setTaskCode(taskCode);
 			
 			//5.5设置提醒时间
 			//如果是专项任务，则设置提醒时间
@@ -294,12 +318,25 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			
 			log.info("---------------------------当前计划已生成任务----------------");
 			taskList.add(task);
-
+			planIdList.add(planId);
 		}
-		
+
+
+		//跟新计划时间
+		Map<String,Object> param = new HashMap<>();
+		param.put("curDate",jobRunDate);
+		param.put("planId",String.join(",",planIdList));
+		if(CollectionUtils.isNotEmpty(planIdList)){
+            this.dayTimeTaskMapper.updateJobRunTime(param);
+        }
+
 		//任务全部生成后，新增到数据库
-		this.dayTimeTaskMapper.insertTaskBatch(taskList);
+        if(CollectionUtils.isNotEmpty(taskList)){
+            this.dayTimeTaskMapper.insertTaskBatch(taskList);
+        }
 		log.info("---------------------------job执行完毕----------------");
+		System.out.println(unGeneratePlanList.toString());
+
 	}
 
 }
