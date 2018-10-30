@@ -1,14 +1,3 @@
-/**   
- * Copyright © 2018 公司名. All rights reserved.
- * 
- * @Title: EventTaskRestController.java 
- * @Prject: cac
- * @Package: com.qcap.cac.rest 
- * @Description: TODO
- * @author: 张天培(2017004)   
- * @date: 2018年10月11日 上午9:16:00 
- * @version: V1.0   
- */
 package com.qcap.cac.rest;
 
 import com.qcap.cac.constant.CommonCodeConstant;
@@ -30,7 +19,7 @@ import java.util.Map;
 
 /**
  * @ClassName: GoodsApplyRestController
- * @Description: TODO
+ * @Description: App物品领用和物品发放
  * @author: 曾欣
  * @date: 2018年10月22日 上午9:16:00
  */

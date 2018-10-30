@@ -73,7 +73,6 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
         List<GoodsOutReq> list = goodsOutListReq.getGoodsOutReqList();
         for(GoodsOutReq item : list){
-
             //查询库存余量，如果不足，直接弹提示
             String warehouseReqDetailId = item.getWarehouseReqDetailId();
             Integer realNum = item.getRealNum();
@@ -122,7 +121,7 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             String roleNum = RedisTools.getCommonConfig("WAREHOUSE_ROLE_NUM");
             List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum);
             for(UserListResp user : userList){
-                //TODO
+                //TODO 向角色为库管的人员推送消息
                 String employeeCode = user.getEmployeeCode();
             }
         }

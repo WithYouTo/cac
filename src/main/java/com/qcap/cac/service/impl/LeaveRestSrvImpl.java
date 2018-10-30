@@ -76,8 +76,6 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
 
     @Override
     public Integer insertLeaveApply(MultipartHttpServletRequest req, Map<String, MultipartFile> mapFile) throws Exception{
-        // 文件前缀
-        String baseUrl = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
 
         String employeeCode = req.getParameter("employeeCode");
         if(StringUtils.isEmpty(employeeCode)){
@@ -105,23 +103,9 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
                 DateUtil.parse(appLeaveApplyReq.getLeaveEndTime()), DateUnit.HOUR);
         appLeaveApplyReq.setLeaveTotalTime(ToolUtil.toStr(hour));
 
-        //存放图片url
-        List<String> pathList = new ArrayList<>();
-        // 判断是否有文件
-        if (mapFile != null && !mapFile.isEmpty()) {
-            for (Map.Entry<String, MultipartFile> ent : mapFile.entrySet()) {
-                MultipartFile mf = ent.getValue();
-                String path = dfsClient.uploadFile(mf);
-                if(StringUtils.isNotEmpty(path)){
-                    pathList.add(baseUrl + path);
-                }
-            }
-
-            //逗号拼接
-            String path = pathList.stream().collect(Collectors.joining(","));
-            appLeaveApplyReq.setLeaveUrl(path);
-
-        }
+        //存储图片
+        String path = fileUploadReturnPath(mapFile);
+        appLeaveApplyReq.setLeaveUrl(path);
 
         TbLeave leave = new TbLeave();
         BeanUtils.copyProperties(appLeaveApplyReq,leave);
@@ -164,6 +148,7 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         }
 
         if(CommonConstant.LEAVE_STATUS_CANCEL.equals(operaType)){
+            //撤销我的请假单
             leave.setLeaveStatus(CommonConstant.LEAVE_STATUS_CANCEL);
             leave.setAuditTime(DateUtil.formatDateTime(new Date()));
         }else if(CommonConstant.LEAVE_STATUS_PASS.equals(operaType)){
@@ -175,7 +160,7 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
             throw  new RuntimeException("操作类型不正确");
         }
 
-        //leave.setUpdateTime(new Date());
+        EntityTools.setUpdateEmpAndTime(leave);
         leave.setUpdateEmp(ToolUtil.toStr(paramMap.get("employeeCode")));
         return this.leaveRestMapper.updateById(leave);
     }
@@ -193,28 +178,36 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         leave.setAuditPerson(employeeCode);
         leave.setLeaveStatus(CommonConstant.LEAVE_STATUS_REFUSE);
         leave.setAuditTime(DateUtil.formatDateTime(new Date()));
+        //存储图片
+        String path = fileUploadReturnPath(mapFile);
+        leave.setRefuseUrl(path);
         EntityTools.setUpdateEmpAndTime(leave);
+        return this.leaveRestMapper.updateById(leave);
+    }
 
+
+
+    private String fileUploadReturnPath(Map<String, MultipartFile> mapFile) throws Exception{
         // 文件前缀
         String baseUrl = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
-
+        if(StringUtils.isEmpty(baseUrl)){
+            throw new RuntimeException("系统没有配置文件的访问前缀");
+        }
         //存放图片url
         List<String> pathList = new ArrayList<>();
-        // 判断是否有文件
+        String path = null;
         if (mapFile != null && !mapFile.isEmpty()) {
             for (Map.Entry<String, MultipartFile> ent : mapFile.entrySet()) {
                 MultipartFile mf = ent.getValue();
-                String path = dfsClient.uploadFile(mf);
-                if(StringUtils.isNotEmpty(path)){
-                    pathList.add(baseUrl + path);
+                String tempPath = dfsClient.uploadFile(mf);
+                if(StringUtils.isNotEmpty(tempPath)){
+                    pathList.add(baseUrl + tempPath);
                 }
             }
             //逗号拼接
-            String path = pathList.stream().collect(Collectors.joining(","));
-            leave.setRefuseUrl(path);
-            //appLeaveApplyReq.setLeaveUrl(path);
+            path = pathList.stream().collect(Collectors.joining(","));
         }
-        return this.leaveRestMapper.updateById(leave);
+        return path;
     }
 
 
