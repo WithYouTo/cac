@@ -1,7 +1,9 @@
 package com.qcap.cac.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.AttenceReq;
@@ -35,7 +38,14 @@ public class AttenceRestController {
 	@RequestMapping(value = "/attence", method = RequestMethod.POST)
 	@ApiOperation(value = "签到", notes = "签到", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public ResParams attence(@Valid AttenceReq req, List<MultipartFile> fileList) throws Exception {
+	public ResParams attence(@Valid AttenceReq req, MultipartHttpServletRequest request) throws Exception {
+		List<MultipartFile> fileList = new ArrayList<MultipartFile>();
+		Map<String, MultipartFile> mapfile = request.getFileMap();
+		if (mapfile != null && !mapfile.isEmpty()) {
+			for (Entry<String, MultipartFile> ent : mapfile.entrySet()) {
+				fileList.add(ent.getValue());
+			}
+		}
 		attenceRestSrv.attence(req, fileList);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC);
 	}

@@ -18,9 +18,6 @@ public class AttenceReq {
 	@ApiModelProperty(value = "签到地点")
 	private String attencePlace;
 
-	@ApiModelProperty(value = "签到照片")
-	private String img;
-
 	@ApiModelProperty(value = "工作安排")
 	private String workContent;
 
@@ -48,14 +45,6 @@ public class AttenceReq {
 		this.attencePlace = attencePlace;
 	}
 
-	public String getImg() {
-		return img;
-	}
-
-	public void setImg(String img) {
-		this.img = img;
-	}
-
 	public String getWorkContent() {
 		return workContent;
 	}
@@ -67,7 +56,7 @@ public class AttenceReq {
 	@Override
 	public String toString() {
 		return "AttenceReq [employeeCode=" + employeeCode + ", attenceTime=" + attenceTime + ", attencePlace="
-				+ attencePlace + ", img=" + img + ", workContent=" + workContent + "]";
+				+ attencePlace + ", workContent=" + workContent + "]";
 	}
 
 }

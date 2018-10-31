@@ -136,6 +136,8 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 				resp.setWorkContent(attenceMap.get("workContent"));
 				if (StringUtils.isNotBlank(attenceMap.get("filesUrl"))) {
 					resp.setUrl(attenceMap.get("filesUrl").split(";"));
+				} else {
+					resp.setUrl(new String[] {});
 				}
 				lsRecord.add(resp);
 			}
