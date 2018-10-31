@@ -30,6 +30,8 @@ public class CommonRestSrvImpl implements CommonRestSrv {
 	@Override
 	public List<GetAreaResp> getArea(GetAreaReq req) {
 		String positionCode = req.getPositionCode();
+		String areaType = req.getAreaType();
+		String eventType = req.getEventType();
 		if (StringUtils.isNotBlank(positionCode)) {
 			try {
 				TbAreaPosition areaPosition = commonRestMapper.getPositionByPositionCode(positionCode);
@@ -39,13 +41,13 @@ public class CommonRestSrvImpl implements CommonRestSrv {
 				throw new BaseException(CommonCodeConstant.ERROR_CODE_40403,
 						CommonCodeConstant.ERROR_CODE_40403_MSG + "【" + positionCode + "】");
 			}
-		} else {
-			String areaType = req.getAreaType();
-			if (StringUtils.isNotBlank(areaType)) {
-				req.setAreaType(CommonConstant.AREA_TYPE.get(areaType));
-			}
+		} else if (StringUtils.isNotBlank(areaType)) {
+			return commonRestMapper.getAreaList(req);
+		} else if (StringUtils.isNotBlank(eventType)) {
+			req.setAreaType(CommonConstant.AREA_TYPE.get(eventType));
 			return commonRestMapper.getAreaList(req);
 		}
+		return null;
 	}
 
 	@Override

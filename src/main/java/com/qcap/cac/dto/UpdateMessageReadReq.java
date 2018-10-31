@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class UpdateMessageReadReq {
 
 	@NotBlank(message = "消息ID不能为空")
-	@ApiModelProperty(value = "员工编号")
+	@ApiModelProperty(value = "消息ID")
 	private String messageId;
 
 	public String getMessageId() {

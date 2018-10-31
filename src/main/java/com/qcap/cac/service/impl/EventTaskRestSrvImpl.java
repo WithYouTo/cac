@@ -167,15 +167,11 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 	public List<QueryHistoryFlightInfoResp> queryHistoryFlightInfo(QueryHistoryFlightInfoReq req) {
 		return eventTaskRestMapper.selectFlightInfo(req);
 	}
-	
+
 	/**
 	 * 
-	 * @Title: getAdvanceHours   
-	 * @Description: 获取提前时间（单位：小时）
-	 * @param: @param eventTaskDto
-	 * @param: @return      
-	 * @return: int      
-	 * @throws
+	 * @Title: getAdvanceHours @Description: 获取提前时间（单位：小时） @param: @param
+	 * eventTaskDto @param: @return @return: int @throws
 	 */
 	public int getAdvanceHours(EventTaskRestDto eventTaskDto) {
 		String eventBasicType = "";
@@ -195,16 +191,12 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		}
 		return Integer.valueOf(advanceTimeCountStr);
 	}
-	
+
 	/**
 	 * 
-	 * @Title: getTaskTime   
-	 * @Description: 获取任务开始、结束时间
-	 * @param: @param advanceHours
-	 * @param: @param planTime
-	 * @param: @return      
-	 * @return: Map<String,Date>      
-	 * @throws
+	 * @Title: getTaskTime @Description: 获取任务开始、结束时间 @param: @param
+	 * advanceHours @param: @param planTime @param: @return @return:
+	 * Map<String,Date> @throws
 	 */
 	public Map<String, Date> getTaskTime(int advanceHours, Date planTime) {
 		Map<String, Date> taskTime = new HashMap<>();
@@ -227,15 +219,11 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		taskTime.put("end", taskEndTime);
 		return taskTime;
 	}
-	
+
 	/**
 	 * 
-	 * @Title: getEventPlan   
-	 * @Description: 获取事件性计划 
-	 * @param: @param eventTaskDto
-	 * @param: @return      
-	 * @return: List<Map<String,String>>      
-	 * @throws
+	 * @Title: getEventPlan @Description: 获取事件性计划 @param: @param
+	 * eventTaskDto @param: @return @return: List<Map<String,String>> @throws
 	 */
 	public List<Map<String, String>> getEventPlan(EventTaskRestDto eventTaskDto) {
 		// 查询事件性计划
@@ -245,15 +233,11 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		}
 		return eventPlanList;
 	}
-	
+
 	/**
 	 * 
-	 * @Title: getPosition   
-	 * @Description: 获取岗位 
-	 * @param: @param eventTaskDto
-	 * @param: @return      
-	 * @return: Map<String,Object>      
-	 * @throws
+	 * @Title: getPosition @Description: 获取岗位 @param: @param
+	 * eventTaskDto @param: @return @return: Map<String,Object> @throws
 	 */
 	public Map<String, Object> getPosition(EventTaskRestDto eventTaskDto) {
 		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(eventTaskDto.getAreaCode());
@@ -265,12 +249,8 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 
 	/**
 	 * 
-	 * @Title: getShift   
-	 * @Description: 获取班次
-	 * @param: @param dateTime
-	 * @param: @return      
-	 * @return: String      
-	 * @throws
+	 * @Title: getShift @Description: 获取班次 @param: @param
+	 * dateTime @param: @return @return: String @throws
 	 */
 	public String getShift(Date dateTime) {
 		String queryTime = DateUtil.dateTimeToString(dateTime).substring(11);
@@ -280,17 +260,12 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		}
 		return shiftMap.get("shift");
 	}
-	
+
 	/**
 	 * 
-	 * @Title: getWorkingEmployee   
-	 * @Description: 获取当班人员
-	 * @param: @param shift
-	 * @param: @param positionCode
-	 * @param: @param dateTime
-	 * @param: @return      
-	 * @return: List<Map<String,Object>>      
-	 * @throws
+	 * @Title: getWorkingEmployee @Description: 获取当班人员 @param: @param
+	 * shift @param: @param positionCode @param: @param
+	 * dateTime @param: @return @return: List<Map<String,Object>> @throws
 	 */
 	public List<Map<String, Object>> getWorkingEmployee(String shift, String positionCode, Date dateTime) {
 		Calendar calendar = Calendar.getInstance();
@@ -309,15 +284,11 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * 
-	 * @Title: getStandard   
-	 * @Description: 获取清洁标准 
-	 * @param: @param standardCode
-	 * @param: @return      
-	 * @return: Map<String,Object>      
-	 * @throws
+	 * @Title: getStandard @Description: 获取清洁标准 @param: @param
+	 * standardCode @param: @return @return: Map<String,Object> @throws
 	 */
 	public Map<String, Object> getStandard(String standardCode) {
 		List<Map<String, Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);

@@ -12,6 +12,9 @@ public class GetAreaReq {
 	@ApiModelProperty(value = "房间类型")
 	private String areaType;
 
+	@ApiModelProperty(value = "事件类型")
+	private String eventType;
+
 	public String getPositionCode() {
 		return positionCode;
 	}
@@ -28,9 +31,17 @@ public class GetAreaReq {
 		this.areaType = areaType;
 	}
 
+	public String getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(String eventType) {
+		this.eventType = eventType;
+	}
+
 	@Override
 	public String toString() {
-		return "GetAreaReq [positionCode=" + positionCode + ", areaType=" + areaType + "]";
+		return "GetAreaReq [positionCode=" + positionCode + ", areaType=" + areaType + ", eventType=" + eventType + "]";
 	}
 
 }
