@@ -40,7 +40,7 @@ public class EquipInsertDto {
 
     private String relateMobile;
 
-    private String baserequire;
+    private String baseRequire;
 
     private String attention;
 
@@ -54,7 +54,9 @@ public class EquipInsertDto {
 
     private String imgUrl;
 
-    private String fileUrl;
+    private String fileUrls;
+
+    private String fileNames;
 
     public String getEquipId() {
         return equipId;
@@ -208,12 +210,12 @@ public class EquipInsertDto {
         this.relateMobile = relateMobile;
     }
 
-    public String getBaserequire() {
-        return baserequire;
+    public String getBaseRequire() {
+        return baseRequire;
     }
 
-    public void setBaserequire(String baserequire) {
-        this.baserequire = baserequire;
+    public void setBaseRequire(String baseRequire) {
+        this.baseRequire = baseRequire;
     }
 
     public String getAttention() {
@@ -264,11 +266,53 @@ public class EquipInsertDto {
         this.imgUrl = imgUrl;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
+    public String getFileUrls() {
+        return fileUrls;
     }
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
+    public void setFileUrls(String fileUrls) {
+        this.fileUrls = fileUrls;
+    }
+
+    public String getFileNames() {
+        return fileNames;
+    }
+
+    public void setFileNames(String fileNames) {
+        this.fileNames = fileNames;
+    }
+
+    @Override
+    public String toString() {
+        return "EquipInsertDto{" +
+                "equipId='" + equipId + '\'' +
+                ", projectCode='" + projectCode + '\'' +
+                ", equipType='" + equipType + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipUse='" + equipUse + '\'' +
+                ", responseNo='" + responseNo + '\'' +
+                ", responseName='" + responseName + '\'' +
+                ", buyTime='" + buyTime + '\'' +
+                ", startUseTime='" + startUseTime + '\'' +
+                ", lifeCycle='" + lifeCycle + '\'' +
+                ", warranty='" + warranty + '\'' +
+                ", dailyMaint='" + dailyMaint + '\'' +
+                ", maintCycle='" + maintCycle + '\'' +
+                ", manufact='" + manufact + '\'' +
+                ", agenceNo='" + agenceNo + '\'' +
+                ", agenceName='" + agenceName + '\'' +
+                ", relateName='" + relateName + '\'' +
+                ", relateMobile='" + relateMobile + '\'' +
+                ", baseRequire='" + baseRequire + '\'' +
+                ", attention='" + attention + '\'' +
+                ", stopPlace='" + stopPlace + '\'' +
+                ", storeArea='" + storeArea + '\'' +
+                ", chargePlace='" + chargePlace + '\'' +
+                ", chargeArea='" + chargeArea + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", fileUrls='" + fileUrls + '\'' +
+                ", fileNames='" + fileNames + '\'' +
+                '}';
     }
 }

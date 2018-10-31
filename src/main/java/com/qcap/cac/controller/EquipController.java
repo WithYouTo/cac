@@ -83,8 +83,6 @@ public class EquipController {
     @ResponseBody
     @RequestMapping(value = "/insertEquip", method = RequestMethod.POST)
     public Object insertEquip(HttpServletRequest request, @Valid EquipInsertDto equipInsertDto){
-//        String userName = RedisTools.getUserName(request);
-//        this.equipSrv.insertEquip(equipInsertDto,userName);
         this.equipSrv.insertEquip(equipInsertDto);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, "");
 

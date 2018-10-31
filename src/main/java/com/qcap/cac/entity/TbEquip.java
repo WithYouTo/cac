@@ -182,7 +182,11 @@ public class TbEquip implements Serializable {
     /**
      * 文件地址
      */
-    private String fileUrl;
+    private String fileUrls;
+    /**
+     * 文件地址
+     */
+    private String fileNames;
     /**
      * 设备状态
      */
@@ -537,12 +541,20 @@ public class TbEquip implements Serializable {
         this.imgUrl = imgUrl;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
+    public String getFileUrls() {
+        return fileUrls;
     }
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
+    public void setFileUrls(String fileUrls) {
+        this.fileUrls = fileUrls;
+    }
+
+    public String getFileNames() {
+        return fileNames;
+    }
+
+    public void setFileNames(String fileNames) {
+        this.fileNames = fileNames;
     }
 
     public String getEquipState() {
@@ -652,7 +664,8 @@ public class TbEquip implements Serializable {
                 ", baseRequire='" + baseRequire + '\'' +
                 ", attention='" + attention + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
-                ", fileUrl='" + fileUrl + '\'' +
+                ", fileUrls='" + fileUrls + '\'' +
+                ", fileNames='" + fileNames + '\'' +
                 ", equipState='" + equipState + '\'' +
                 ", equipWorkState='" + equipWorkState + '\'' +
                 ", remark='" + remark + '\'' +

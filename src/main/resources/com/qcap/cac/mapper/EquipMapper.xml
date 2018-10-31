@@ -33,7 +33,9 @@
         DATE_FORMAT(a.START_USE_TIME,'%Y-%m-%d') startUseTime,
         a.ATTENTION attention,
         a.EQUIP_STATE equipState,
-        a.EQUIP_WORK_STATE equipWorkState
+        a.EQUIP_WORK_STATE equipWorkState,
+        a.FILE_URLS fileUrls,
+        a.FILE_NAMES fileNames
         from TB_EQUIP a
         LEFT JOIN tbpubcode01 b
         ON a.EQUIP_TYPE = b.DESC_
@@ -50,7 +52,7 @@
         <if test="obj.equipType != null and obj.equipType != ''">
           AND a.EQUIP_TYPE = #{obj.equipType}
         </if>
-        ORDER BY a.CREATE_DATE
+        ORDER BY a.EQUIP_NO
     </select>
 
     <select id="selectEquipByEquipId"  resultType="com.qcap.cac.entity.TbEquip" parameterType="com.qcap.cac.dto.EquipInsertDto">
@@ -182,11 +184,8 @@
         <if test="imgUrl != null and imgUrl != ''">
             IMG_URL = #{imgUrl},
         </if>
-        <if test="fileUrl != null and fileUrl != ''">
-            FILE_URL = #{fileUrl},
-        </if>
-        CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
-        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+        FILE_URLS = #{fileUrls},
+        FILE_NAMES = #{fileNames},
         UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
         UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
         where EQUIP_ID = #{equipId}
