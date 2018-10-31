@@ -67,6 +67,13 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 	public void geneEventTask(EventTaskRestDto eventTaskDto) {
 		Date planningTakeoffDateTime = DateUtil.stringToDateTime(eventTaskDto.getPlanningTakeoffTime());
 		Date estimatedTakeoffDateTime = DateUtil.stringToDateTime(eventTaskDto.getEstimatedTakeoffTime());
+		Date taskStartTime = null;
+		Date taskEndTime = null;
+		String positionCode = "";
+		String positionName = "";
+		String employeeCode = "";
+		String employeeName = "";
+		String employeeTel = "";
 
 		// 新增航班数据到数据库
 		TbFlightInfo flightInfo = new TbFlightInfo();
@@ -80,177 +87,244 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		flightInfo.setVersion(0);
 		eventTaskRestMapper.insertFlightInfo(flightInfo);
 
-		// 查询事件基础设定,设置任务开始、结束时间
-		String eventBasicType = "";
-		if (CommonConstant.EVENT_TYPE_ARRIVE.equals(eventTaskDto.getEventType())) {
-			if (CommonConstant.GUARANTEE_TYPE_NORMAL.equals(eventTaskDto.getGuaranteeType())) {
-				eventBasicType = CommonConstant.EVENT_TYPE_ARRIVE + "_" + CommonConstant.GUARANTEE_TYPE_NORMAL;
-			}
-			if (CommonConstant.GUARANTEE_TYPE_IMPORTANT.equals(eventTaskDto.getGuaranteeType())) {
-				eventBasicType = CommonConstant.EVENT_TYPE_ARRIVE + "_" + CommonConstant.GUARANTEE_TYPE_IMPORTANT;
-			}
-		} else {
-			eventBasicType = CommonConstant.EVENT_TYPE_LEAVE;
-		}
-		String advanceTimeCountStr = eventTaskRestMapper.selectAdvanceTime(eventBasicType);
-		if (StringUtils.isEmpty(advanceTimeCountStr)) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "未查询到事件基础设定");
-		}
+		// 查询事件基础设定(提前时间)
+		int advanceHours = this.getAdvanceHours(eventTaskDto);
 
 		// 任务开始时间和结束时间的设置
-		int advanceTimeCount = Integer.valueOf(advanceTimeCountStr);
-		Date taskStartTime = null;
-		Date taskEndTime = null;
-		if (advanceTimeCount > 0) {
-			taskEndTime = planningTakeoffDateTime;
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(planningTakeoffDateTime);
-			cal.add(Calendar.MINUTE, advanceTimeCount * (-1));
-			taskStartTime = cal.getTime();
-		} else {
-			taskStartTime = planningTakeoffDateTime;
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(planningTakeoffDateTime);
-			cal.add(Calendar.MINUTE, advanceTimeCount * (-1));
-			taskEndTime = cal.getTime();
-		}
+		Map<String, Date> taskTime = this.getTaskTime(advanceHours, planningTakeoffDateTime);
+		taskStartTime = taskTime.get("start");
+		taskEndTime = taskTime.get("end");
 
-		// 查询事件性计划
-		List<Map<String, String>> eventPlanList = eventTaskRestMapper.selectEventPlan(eventTaskDto);
-		if (CollectionUtils.isEmpty(eventPlanList)) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "根据区域、到/离类型和保障等级未查询到事件性计划");
-		}
+		// 获取岗位
+		Map<String, Object> positionMap = this.getPosition(eventTaskDto);
+		positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+		positionName = ToolUtil.toStr(positionMap.get("positionName"));
 
-		// 查询岗位
-		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(eventTaskDto.getAreaCode());
-		if (MapUtils.isEmpty(positionMap)) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "该区域未设置岗位");
-		}
-		String positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
-		String positionName = ToolUtil.toStr(positionMap.get("positionName"));
+		// 获取班次
+		String shift = this.getShift(taskStartTime);
 
-		// 查询班次
-		// String planningTakeoffTime = eventTaskDto.getPlanningTakeoffTime();
-		// String queryTime = planningTakeoffTime.substring(11);
-		String queryTime = DateUtil.dateTimeToString(taskStartTime).substring(11);
-		Map<String, String> shiftMap = this.tempTaskMapper.selectShiftByTime(queryTime);
-		if (MapUtils.isEmpty(shiftMap)) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "根据计划时间未查询到班次，请先设置班次");
-		}
-		String shift = shiftMap.get("shift");
-
-		/**
-		 * 查询当班人员
-		 */
-		// 处理日期
-		// Date planningTakeOffDate =
-		// DateUtil.stringToDate(planningTakeoffTime);
-		Calendar calendar = Calendar.getInstance();
-		// calendar.setTime(planningTakeOffDate);
-		calendar.setTime(taskStartTime);
-		int dayNum = calendar.get(Calendar.DAY_OF_MONTH);
-		// String queryDay = "day" + dayNum;
-		String queryDay = "DAY_" + dayNum;
-		// String month=DateUtil.dateToMonth(planningTakeOffDate);
-		String month = DateUtil.dateToMonth(taskStartTime);
-
-		// 封装查询条件
-		Map<String, Object> param = new HashMap<>();
-		param.put("shift", shift);
-		param.put("month", month);
-		param.put("positionCode", positionCode);
-		param.put(queryDay, queryDay);
-
-		// 查询当班人员
-		// List<Map<String, Object>> list =
-		// this.tempTaskMapper.selectWorkingEmployee(param);
-		List<Map<String, Object>> list = this.selectWorkingEmployee(shift, month, positionCode, queryDay);
-		if (CollectionUtils.isEmpty(list)) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "根据计划时间未查询到当班人员，请先设置当班人员");
-		}
-
+		// 获取当班人员
+		List<Map<String, Object>> list = this.getWorkingEmployee(shift, positionCode, taskStartTime);
 		List<String> employeeCodeList = new ArrayList<>();
 		List<String> employeeNameList = new ArrayList<>();
 		List<String> employeeTelList = new ArrayList<>();
-		for (Map<String, Object> m : list) {
-			employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
-			employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
-			employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
-
-			/**
-			 * 推送消息到该值班人员
-			 */
+		for (Map<String, Object> employeeMap : list) {
+			employeeCodeList.add(ToolUtil.toStr(employeeMap.get("employeeCode")));
+			employeeNameList.add(ToolUtil.toStr(employeeMap.get("employeeName")));
+			employeeTelList.add(ToolUtil.toStr(employeeMap.get("employeeTel")));
 		}
-		String employeeCode = String.join(",", employeeCodeList);
-		String employeeName = String.join(",", employeeNameList);
-		String employeeTel = String.join(",", employeeTelList);
+		employeeCode = String.join(",", employeeCodeList);
+		employeeName = String.join(",", employeeNameList);
+		employeeTel = String.join(",", employeeTelList);
 
-		Date now = new Date();
-		TbTask task = new TbTask();
-		task.setTaskType(CommonConstant.TASK_TYPE_EVENT);
-		task.setPositionCode(positionCode);
-		task.setPositionName(positionName);
-		task.setAreaCode(eventTaskDto.getAreaCode());
-		task.setAreaName(eventTaskDto.getAreaName());
-		task.setShift(shift);
-		// task.setSpec(spec);
-		task.setEmployeeCode(employeeCode);
-		task.setEmployeeName(employeeName);
-		task.setEmployeeTel(employeeTel);
-		// task.setCompleteTime(completeTime);
-		// task.setStartTime(planningTakeoffDateTime);
-		task.setStartTime(taskStartTime);
-		task.setEndTime(taskEndTime);
-		task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
-		task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
-		// task.setTaskScore(taskScore);
-		// task.setTaskAdvice(taskAdvice);
-		task.setCreateDate(now);
-		task.setCreateEmp(eventTaskDto.getEmployeeCode());
-		task.setVersion(0);
+		// 获取事件性计划
+		List<Map<String, String>> eventPlanList = this.getEventPlan(eventTaskDto);
 
 		List<TbTask> taskList = new ArrayList<>();
-		for (Map<String, String> m : eventPlanList) {
-
+		for (Map<String, String> eventPlanMap : eventPlanList) {
+			Date now = new Date();
+			TbTask task = new TbTask();
 			task.setTaskId(UUIDUtils.getUUID());
+			task.setPlanId(eventPlanMap.get("planEventId"));
+			task.setTaskType(CommonConstant.TASK_TYPE_EVENT);
+			task.setPositionCode(positionCode);
+			task.setPositionName(positionName);
+			task.setAreaCode(eventTaskDto.getAreaCode());
+			task.setAreaName(eventTaskDto.getAreaName());
+			task.setShift(shift);
+			task.setEmployeeCode(employeeCode);
+			task.setEmployeeName(employeeName);
+			task.setEmployeeTel(employeeTel);
+			task.setStartTime(taskStartTime);
+			task.setEndTime(taskEndTime);
+			task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
+			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
+			task.setCreateDate(now);
+			task.setCreateEmp(eventTaskDto.getEmployeeCode());
+			task.setVersion(0);
 			task.setTaskCode(CommonConstant.TASK_PREFIX_E + DateUtil.dateTimeToStringForLineNo(now));
-			String standardCode = m.get("standardCode");
 
 			// 查询标准详细信息
-			List<Map<String, Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
-			if (CollectionUtils.isEmpty(standardList)) {
-				throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "该标准不存在");
-			}
+			Map<String, Object> standardMap = this.getStandard(eventPlanMap.get("standardCode"));
+			String uploadPicFlag = ToolUtil.toStr(standardMap.get("uploadPicFlag"));
+			String checkFlag = ToolUtil.toStr(standardMap.get("checkFlag"));
+			String standardName = ToolUtil.toStr(standardMap.get("standardName"));
 
-			String uploadPicFlag = ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
-			String checkFlag = ToolUtil.toStr(standardList.get(0).get("checkFlag"));
-			String standardName = ToolUtil.toStr(standardList.get(0).get("standardName"));
-
-			task.setPlanId(m.get("planEventId"));
-			task.setStandardCode(standardCode);
+			task.setStandardCode(eventPlanMap.get("standardCode"));
 			task.setStandardName(standardName);
 			task.setCheckFlag(checkFlag);
 			task.setUploadPicFlag(uploadPicFlag);
 			task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
 			taskList.add(task);
 		}
+		tempTaskMapper.insertTaskBatch(taskList);
 
+		// 根据工号推送任务通知
 		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
-
-		this.tempTaskMapper.insertTaskBatch(taskList);
 	}
 
 	@Override
 	public List<QueryHistoryFlightInfoResp> queryHistoryFlightInfo(QueryHistoryFlightInfoReq req) {
 		return eventTaskRestMapper.selectFlightInfo(req);
 	}
+	
+	/**
+	 * 
+	 * @Title: getAdvanceHours   
+	 * @Description: 获取提前时间（单位：小时）
+	 * @param: @param eventTaskDto
+	 * @param: @return      
+	 * @return: int      
+	 * @throws
+	 */
+	public int getAdvanceHours(EventTaskRestDto eventTaskDto) {
+		String eventBasicType = "";
+		String advanceTimeCountStr = "";
+		if (CommonConstant.EVENT_TYPE_ARRIVE.equals(eventTaskDto.getEventType())
+				&& CommonConstant.GUARANTEE_TYPE_NORMAL.equals(eventTaskDto.getGuaranteeType())) {
+			eventBasicType = CommonConstant.EVENT_TYPE_ARRIVE + "_" + CommonConstant.GUARANTEE_TYPE_NORMAL;
+		} else if (CommonConstant.EVENT_TYPE_ARRIVE.equals(eventTaskDto.getEventType())
+				&& CommonConstant.GUARANTEE_TYPE_IMPORTANT.equals(eventTaskDto.getGuaranteeType())) {
+			eventBasicType = CommonConstant.EVENT_TYPE_ARRIVE + "_" + CommonConstant.GUARANTEE_TYPE_IMPORTANT;
+		} else {
+			eventBasicType = CommonConstant.EVENT_TYPE_LEAVE;
+		}
+		advanceTimeCountStr = eventTaskRestMapper.selectAdvanceTime(eventBasicType);
+		if (StringUtils.isEmpty(advanceTimeCountStr)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "未查询到事件基础设定");
+		}
+		return Integer.valueOf(advanceTimeCountStr);
+	}
+	
+	/**
+	 * 
+	 * @Title: getTaskTime   
+	 * @Description: 获取任务开始、结束时间
+	 * @param: @param advanceHours
+	 * @param: @param planTime
+	 * @param: @return      
+	 * @return: Map<String,Date>      
+	 * @throws
+	 */
+	public Map<String, Date> getTaskTime(int advanceHours, Date planTime) {
+		Map<String, Date> taskTime = new HashMap<>();
+		Date taskStartTime = null;
+		Date taskEndTime = null;
+		if (advanceHours > 0) {
+			taskEndTime = planTime;
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(planTime);
+			cal.add(Calendar.MINUTE, advanceHours * (-1));
+			taskStartTime = cal.getTime();
+		} else {
+			taskStartTime = planTime;
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(planTime);
+			cal.add(Calendar.MINUTE, advanceHours * (-1));
+			taskEndTime = cal.getTime();
+		}
+		taskTime.put("start", taskStartTime);
+		taskTime.put("end", taskEndTime);
+		return taskTime;
+	}
+	
+	/**
+	 * 
+	 * @Title: getEventPlan   
+	 * @Description: 获取事件性计划 
+	 * @param: @param eventTaskDto
+	 * @param: @return      
+	 * @return: List<Map<String,String>>      
+	 * @throws
+	 */
+	public List<Map<String, String>> getEventPlan(EventTaskRestDto eventTaskDto) {
+		// 查询事件性计划
+		List<Map<String, String>> eventPlanList = eventTaskRestMapper.selectEventPlan(eventTaskDto);
+		if (CollectionUtils.isEmpty(eventPlanList)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "根据区域、到/离类型和保障等级未查询到事件性计划");
+		}
+		return eventPlanList;
+	}
+	
+	/**
+	 * 
+	 * @Title: getPosition   
+	 * @Description: 获取岗位 
+	 * @param: @param eventTaskDto
+	 * @param: @return      
+	 * @return: Map<String,Object>      
+	 * @throws
+	 */
+	public Map<String, Object> getPosition(EventTaskRestDto eventTaskDto) {
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(eventTaskDto.getAreaCode());
+		if (MapUtils.isEmpty(positionMap)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "该区域未设置岗位");
+		}
+		return positionMap;
+	}
 
-	public List<Map<String, Object>> selectWorkingEmployee(String shift, String month, String positionCode,
-			String queryDay) {
+	/**
+	 * 
+	 * @Title: getShift   
+	 * @Description: 获取班次
+	 * @param: @param dateTime
+	 * @param: @return      
+	 * @return: String      
+	 * @throws
+	 */
+	public String getShift(Date dateTime) {
+		String queryTime = DateUtil.dateTimeToString(dateTime).substring(11);
+		Map<String, String> shiftMap = this.tempTaskMapper.selectShiftByTime(queryTime);
+		if (MapUtils.isEmpty(shiftMap)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "根据计划时间未查询到班次，请先设置班次");
+		}
+		return shiftMap.get("shift");
+	}
+	
+	/**
+	 * 
+	 * @Title: getWorkingEmployee   
+	 * @Description: 获取当班人员
+	 * @param: @param shift
+	 * @param: @param positionCode
+	 * @param: @param dateTime
+	 * @param: @return      
+	 * @return: List<Map<String,Object>>      
+	 * @throws
+	 */
+	public List<Map<String, Object>> getWorkingEmployee(String shift, String positionCode, Date dateTime) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(dateTime);
+		int dayNum = calendar.get(Calendar.DAY_OF_MONTH);
+		String queryDay = "DAY_" + dayNum;
+		String month = DateUtil.dateToMonth(dateTime);
+
 		String sql = "SELECT EMPLOYEE_CODE employeeCode,EMPLOYEE_NAME employeeName,EMPLOYEE_TEL employeeTel "
 				+ "FROM tb_task_arrangement WHERE SHIFT = '" + shift + "' AND MONTH = '" + month
 				+ "' AND POSITION_CODE = '" + positionCode + "' AND DELETE_FLAG = 'NORMAL' AND " + queryDay + "='√'";
-		return jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+
+		if (CollectionUtils.isEmpty(list)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "根据计划时间未查询到当班人员，请先设置当班人员");
+		}
+		return list;
+	}
+	
+	/**
+	 * 
+	 * @Title: getStandard   
+	 * @Description: 获取清洁标准 
+	 * @param: @param standardCode
+	 * @param: @return      
+	 * @return: Map<String,Object>      
+	 * @throws
+	 */
+	public Map<String, Object> getStandard(String standardCode) {
+		List<Map<String, Object>> standardList = this.tempTaskMapper.selectStandardItem(standardCode);
+		if (CollectionUtils.isEmpty(standardList)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "该标准不存在");
+		}
+		return standardList.get(0);
 	}
 
 }
