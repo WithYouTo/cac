@@ -14,6 +14,8 @@ public class CommonCodeConstant {
 
 	public static final String SUCCESS_UPLOAD_DESC = "上传成功";
 
+	public static final String SUCCESS_DELETE_FILE_DESC = "文件删除成功";
+
 	public static final String SUCCESS_PROCCESS_DESC = "操作成功";
 
 	public static final Integer PARAM_EMPTY_CODE = 4000;
