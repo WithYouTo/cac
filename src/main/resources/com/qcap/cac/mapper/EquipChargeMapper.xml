@@ -23,7 +23,10 @@
             and EQUIP_NO = #{obj.equipNo}
         </if>
         <if test="obj.startChargeTime != null and obj.startChargeTime != ''">
-            and START_CHARGE_TIME &gt; #{obj.startChargeTime}
+            and START_CHARGE_TIME &gt; substring(#{obj.startChargeTime},1,19)
+        </if>
+        <if test="obj.startChargeTime != null and obj.startChargeTime != ''">
+            and START_CHARGE_TIME &lt; substring(#{obj.startChargeTime},22,19)
         </if>
         <if test="obj.status != null and obj.status != ''">
             and STATUS = #{obj.status}
