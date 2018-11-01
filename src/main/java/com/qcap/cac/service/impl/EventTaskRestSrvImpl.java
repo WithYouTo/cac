@@ -147,7 +147,6 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 			task.setStandardName(standardName);
 			task.setCheckFlag(checkFlag);
 			task.setUploadPicFlag(uploadPicFlag);
-			task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
 			taskList.add(task);
 		}
 		tempTaskMapper.insertTaskBatch(taskList);
