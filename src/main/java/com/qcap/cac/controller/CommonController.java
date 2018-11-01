@@ -266,7 +266,24 @@ public class CommonController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public Object upload(MultipartFile file) throws Exception {
         String path = dfsClient.uploadFile(file);
-//        System.out.println(path);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPLOAD_DESC, path);
+    }
+    
+    /**
+     *
+     * @Description: 通过文件路径删除文件
+     *
+     *
+     * @MethodName: delete
+     * @Parameters: [] 
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/31 9:07
+     */
+    @RequestMapping(value = "/deleteFile",method = RequestMethod.POST)
+    public ResParams delete(String url){
+        dfsClient.deleteFile(url);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_FILE_DESC, "");
     }
 }

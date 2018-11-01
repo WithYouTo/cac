@@ -88,7 +88,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         }
         handlerWhenOperateCodeIsInUse(equip,manager,employeeCode);
 
-        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "", null);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC, null);
     }
 
     @Override
@@ -321,7 +321,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
 
     /**
      *
-     * @Description: 若设备的操作代码为INDAMAGE(损坏)，将设备表的状态修改为损坏中
+     * @Description: 若设备的操作代码为INDAMAGE(损坏)，将设备表的状态修改为损坏中,并推送给设备管理员
      *
      *
      * @MethodName: handlerWhenOperateCodeIsInDamage
@@ -333,6 +333,8 @@ public class EquipRestSrvImpl implements EquipRestSrv {
      */
     private void handlerWhenOperateCodeIsInDamage(TbEquip equip, TbManager manager, String employeeCode) {
         this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INDAMAGE);
+        //todo 推送消息给设备管理员
+
     }
 
     /**
