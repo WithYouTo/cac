@@ -5,7 +5,7 @@ public class EquipPlanSearchDto {
     private String equipType;
     private String equipNo;
     private String equipModel;
-    private String latestMaintTime;
+    private String nextMaintTime;
 
     public String getEquipType() {
         return equipType;
@@ -31,12 +31,12 @@ public class EquipPlanSearchDto {
         this.equipModel = equipModel;
     }
 
-    public String getLatestMaintTime() {
-        return latestMaintTime;
+    public String getNextMaintTime() {
+        return nextMaintTime;
     }
 
-    public void setLatestMaintTime(String latestMaintTime) {
-        this.latestMaintTime = latestMaintTime;
+    public void setNextMaintTime(String nextMaintTime) {
+        this.nextMaintTime = nextMaintTime;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class EquipPlanSearchDto {
                 "equipType='" + equipType + '\'' +
                 ", equipNo='" + equipNo + '\'' +
                 ", equipModel='" + equipModel + '\'' +
-                ", latestMaintTime='" + latestMaintTime + '\'' +
+                ", nextMaintTime='" + nextMaintTime + '\'' +
                 '}';
     }
 }

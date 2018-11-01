@@ -27,7 +27,10 @@
             and a.EQUIP_NAME = #{obj.equipName}
         </if>
         <if test="obj.repairTime != null and obj.repairTime != ''">
-            and a.REPAIR_TIME &gt; #{obj.repairTime}
+            and a.REPAIR_TIME &gt; substring(#{obj.repairTime},1,19)
+        </if>
+        <if test="obj.repairTime != null and obj.repairTime != ''">
+            and a.REPAIR_TIME &lt; substring(#{obj.repairTime},22,19)
         </if>
         <if test="obj.status != null and obj.status != ''">
             and a.STATUS = #{obj.status}
