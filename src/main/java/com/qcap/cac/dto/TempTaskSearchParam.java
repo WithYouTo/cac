@@ -3,7 +3,7 @@ package com.qcap.cac.dto;
 import com.qcap.cac.constant.CommonConstant;
 
 public class TempTaskSearchParam {
-	
+
 	private String employeeName;
 	private String employeeTel;
 	private String taskStatus;
@@ -34,5 +34,5 @@ public class TempTaskSearchParam {
 	public void setTaskStatus(String taskStatus) {
 		this.taskStatus = taskStatus;
 	}
-	
+
 }

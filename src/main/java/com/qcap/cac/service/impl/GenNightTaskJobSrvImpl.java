@@ -250,8 +250,6 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			task.setStandardName(standardName);
 			task.setCheckFlag(checkFlag);
 			task.setUploadPicFlag(uploadPicFlag);
-			//设置lineNo
-			task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
 
             //设置任务编码
             String taskCodePrefix = "";

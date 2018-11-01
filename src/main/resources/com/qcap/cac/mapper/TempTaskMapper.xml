@@ -58,63 +58,65 @@
 	</select>
 	
 	<insert id="insertTempTask" parameterType="com.qcap.cac.entity.TbTask">
-	    insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID, 
-      TASK_TYPE, POSITION_CODE, POSITION_NAME, 
-      AREA_CODE, AREA_NAME, STANDARD_CODE, 
-      STANDARD_NAME, SHIFT, SPEC, 
-      EMPLOYEE_CODE, EMPLOYEE_NAME, EMPLOYEE_TEL, 
-      COMPLETE_TIME, START_TIME, END_TIME, 
-      TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
-      CHECK_FLAG, TASK_ADVICE, REMARK1, 
-      TASK_FINISH_DESC, DISQUALIFIED_REASON, LINE_NO,
-      REMARK2, REMARK3, CREATE_EMP, 
-      CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
-      FEEDBACK_IMG_URL,CHECK_IMG_URL,
-      VERSION,UPLOAD_PIC_FLAG)
-    values (#{taskId}, #{taskCode}, #{planId}, 
-      #{taskType}, #{positionCode}, #{positionName}, 
-      #{areaCode}, #{areaName}, #{standardCode}, 
-      #{standardName}, #{shift}, #{spec}, 
-      #{employeeCode}, #{employeeName}, #{employeeTel}, 
-      #{completeTime}, #{startTime}, #{endTime}, 
-      #{taskStatus}, #{checkStatus}, #{taskScore}, 
-      #{checkFlag}, #{taskAdvice}, #{remark1},
-      #{taskFinishDesc}, #{disqualifiedReason}, #{lineNo}, 
-      #{remark2}, #{remark3}, #{createEmp}, 
-      #{createDate}, #{updateDate}, #{updateEmp}, 
-      #{feedbackImgUrl},#{checkImgUrl},
-      #{version},#{uploadPicFlag})
+    insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID,
+      TASK_TYPE, POSITION_CODE, POSITION_NAME,
+      AREA_CODE, AREA_NAME, STANDARD_CODE,
+      STANDARD_NAME, SHIFT, SPEC,
+      EMPLOYEE_CODE, EMPLOYEE_NAME, EMPLOYEE_TEL,
+      COMPLETE_TIME, START_TIME, END_TIME,
+      TASK_STATUS, CHECK_STATUS, TASK_SCORE,
+      UPLOAD_PIC_FLAG, CHECK_FLAG, TASK_ADVICE,
+      TASK_FINISH_DESC, DISQUALIFIED_REASON, TASK_REMIND_TIME,
+      FEEDBACK_IMG_URL, CHECK_IMG_URL, TASK_IMG_URL,
+      REMARK1, REMARK2,
+      REMARK3, CREATE_EMP, CREATE_DATE,
+      UPDATE_DATE, UPDATE_EMP, VERSION
+      )
+    values (#{taskId}, #{taskCode}, #{planId},
+      #{taskType}, #{positionCode}, #{positionName},
+      #{areaCode}, #{areaName}, #{standardCode},
+      #{standardName}, #{shift}, #{spec},
+      #{employeeCode}, #{employeeName}, #{employeeTel},
+      #{completeTime}, #{startTime}, #{endTime},
+      #{taskStatus}, #{checkStatus}, #{taskScore},
+      #{uploadPicFlag}, #{checkFlag}, #{taskAdvice},
+      #{taskFinishDesc}, #{disqualifiedReason}, #{taskRemindTime},
+      #{feedbackImgUrl}, #{checkImgUrl}, #{taskImgUrl},
+      #{remark1}, #{remark2},
+      #{remark3}, #{createEmp}, #{createDate},
+      #{updateDate}, #{updateEmp}, #{version}
+      )
 	</insert>
 	
 	<insert id="insertTaskBatch" parameterType="java.util.List">
-	  insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID, 
-      TASK_TYPE, POSITION_CODE, POSITION_NAME, 
-      AREA_CODE, AREA_NAME, STANDARD_CODE, 
-      STANDARD_NAME, SHIFT, SPEC, 
-      EMPLOYEE_CODE, EMPLOYEE_NAME, EMPLOYEE_TEL, 
-      COMPLETE_TIME, START_TIME, END_TIME, 
-      TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
-      CHECK_FLAG, TASK_ADVICE, REMARK1, 
-      TASK_FINISH_DESC, DISQUALIFIED_REASON, LINE_NO,
-      REMARK2, REMARK3, CREATE_EMP, 
-      CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
-      FEEDBACK_IMG_URL,CHECK_IMG_URL,
-      VERSION,UPLOAD_PIC_FLAG)
+		insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID,
+		TASK_TYPE, POSITION_CODE, POSITION_NAME,
+		AREA_CODE, AREA_NAME, STANDARD_CODE,
+		STANDARD_NAME, SHIFT, SPEC,
+		EMPLOYEE_CODE, EMPLOYEE_NAME, EMPLOYEE_TEL,
+		COMPLETE_TIME, START_TIME, END_TIME,
+		TASK_STATUS, CHECK_STATUS, TASK_SCORE,
+		UPLOAD_PIC_FLAG, CHECK_FLAG, TASK_ADVICE,
+		TASK_FINISH_DESC, DISQUALIFIED_REASON, TASK_REMIND_TIME,
+		FEEDBACK_IMG_URL, CHECK_IMG_URL, TASK_IMG_URL,
+		REMARK1, REMARK2,
+		REMARK3, CREATE_EMP, CREATE_DATE,
+		UPDATE_DATE, UPDATE_EMP, VERSION)
     values 
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.taskId}, #{item.taskCode}, #{item.planId}, 
-      #{item.taskType}, #{item.positionCode}, #{item.positionName}, 
-      #{item.areaCode}, #{item.areaName}, #{item.standardCode}, 
-      #{item.standardName}, #{item.shift}, #{item.spec}, 
-      #{item.employeeCode}, #{item.employeeName}, #{item.employeeTel}, 
-      #{item.completeTime}, #{item.startTime}, #{item.endTime}, 
-      #{item.taskStatus}, #{item.checkStatus}, #{item.taskScore}, 
-      #{item.checkFlag}, #{item.taskAdvice}, #{item.remark1}, 
-      #{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.lineNo},
-      #{item.remark2}, #{item.remark3}, #{item.createEmp}, 
-      #{item.createDate}, #{item.updateDate}, #{item.updateEmp}, 
-      #{item.feedbackImgUrl},#{item.checkImgUrl},
-      #{item.version},#{item.uploadPicFlag})
+		(#{item.taskId}, #{item.taskCode}, #{item.planId},
+		#{item.taskType}, #{item.positionCode}, #{item.positionName},
+		#{item.areaCode}, #{item.areaName}, #{item.standardCode},
+		#{item.standardName}, #{item.shift}, #{item.spec},
+		#{item.employeeCode}, #{item.employeeName}, #{item.employeeTel},
+		#{item.completeTime}, #{item.startTime}, #{item.endTime},
+		#{item.taskStatus}, #{item.checkStatus}, #{item.taskScore},
+		#{item.uploadPicFlag}, #{item.checkFlag}, #{item.taskAdvice},
+		#{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.taskRemindTime},
+		#{item.feedbackImgUrl}, #{item.checkImgUrl}, #{item.taskImgUrl},
+		#{item.remark1}, #{item.remark2},
+		#{item.remark3}, #{item.createEmp}, #{item.createDate},
+		#{item.updateDate}, #{item.updateEmp}, #{item.version})
       </foreach>
 	</insert>
 	
@@ -392,8 +394,13 @@
 	MONTH  AS  month
 	FROM tb_task_arrangement 
 	WHERE MONTH=#{month} 
-	AND EMPLOYEE_CODE=#{employeeCode} 
+	AND EMPLOYEE_CODE=#{employeeCode}
+	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(shift)">
+	AND SHIFT =#{shift}
+	</if>
 	AND DELETE_FLAG ='NORMAL'
 	<include refid="selectWorkIngItem"/>
 	</select>
+
+
 </mapper>

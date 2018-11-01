@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.AppTaskRestMapper">
 
-	<select id="selectshiftType" parameterType="Map" resultType="String">
+	<select id="selectShiftType" parameterType="Map" resultType="String">
 	SELECT DISTINCT SHIFT AS shift
 	FROM tb_task_arrangement 
 	WHERE EMPLOYEE_CODE =#{employeeCode}
@@ -68,14 +68,14 @@
 		WHEN m.CHECK_STATUS ='QUALIFIED' THEN '合格'
 		WHEN m.CHECK_STATUS ='DISQUALIFIED' THEN '不合格'
 		END AS checkStatusName,
-		CONCAT(m.AREA_NAME,m.STANDARD_NAME) AS taskName,
+		CONCAT(m.AREA_NAME,IFNULL(m.STANDARD_NAME,"")) AS taskName,
 		CASE WHEN m.TASK_TYPE ='TEMP' THEN '临时'
 		WHEN m.TASK_TYPE ='REGULAR' THEN '周期'
 		WHEN m.TASK_TYPE ='EVENT' THEN '事件'
 		WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
 		END AS taskTypeName,
 		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
-		m.SPEC  AS  spec,
+		IFNULL(m.SPEC,'') AS  spec,
 		m.TASK_SCORE  AS  taskScore,
 		m.CHECK_FLAG  AS  checkFlag,
 		CASE WHEN m.CHECK_FLAG ='MUST' THEN '是'
@@ -84,32 +84,36 @@
 		m.LINE_NO  AS  lineNo
 		FROM tb_task m
 		WHERE 1=1
-		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskSatus)">
-		AND m.TASK_STATUS = #{taskSatus}
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
+		AND m.TASK_STATUS = #{taskStatus}
 		</if>
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
 		AND m.EMPLOYEE_CODE =#{employeeCode}
 		</if>
-		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkSatus)">
-		AND m.CHECK_STATUS = #{checkSatus}
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkStatus)">
+		AND m.CHECK_STATUS = #{checkStatus}
 		</if>
         <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'HISTORY' ">
-        AND END_TIME &lt;= #{endTime}
+        AND m.END_TIME &lt;= #{endTime}
         </if>
         <if test=" type == 'ITEM' or type == 'FINISH'">
         	 <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTime) and @com.qcap.cac.tools.Ognl@isNotEmpty(endTime) ">
-		        AND START_TIME &gt;= #{startTime}
-		        AND END_TIME &lt; #{endTime}
+		        AND m.START_TIME &gt;= #{startTime}
+		        AND m.END_TIME &lt; #{endTime}
 	        </if>
         </if>
 		 <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'CHECK' ">
-		AND INSTR(#{areaCode},AREA_CODE)
-        AND START_TIME &gt;= #{startTime}
-        AND END_TIME &lt; #{endTime}
-		AND CHECK_STATUS != 'DISQUALIFIED'
-		AND TASK_STATUS !='CANCLE'
+		AND INSTR(#{areaCode},m.AREA_CODE)
+        AND m.START_TIME &gt;= #{startTime}
+        AND m.END_TIME &lt; #{endTime}
+		AND m.CHECK_STATUS != 'DISQUALIFIED'
+		AND m.TASK_STATUS !='CANCLE'
         </if>
-        ORDER BY m.LINE_NO DESC
+        <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)">
+        AND m.LINE_NO &gt; #{lineNo}
+        </if>
+        ORDER BY m.LINE_NO 
+        LIMIT 0,10
 	</select>
 	
 	<select id="queryTaskDetail" parameterType="String" resultType="Map">
@@ -220,10 +224,122 @@
 		FROM tb_task
 		WHERE INSTR(#{areaCode},AREA_CODE)
 		AND START_TIME &gt;= #{startTime}
-		AND END_TIME &lt; #{endTime}
+		AND START_TIME &lt; #{endTime}
 		AND CHECK_STATUS != 'DISQUALIFIED'
-		AND TASK_STATUS !='CANCLE'
+		AND TASK_STATUS ='FINISH'
 		GROUP BY CHECK_STATUS
 	</select>
+
+	<select id="listTempTask" parameterType="String" resultType="Map">
+		SELECT
+		CONCAT(m.AREA_NAME,m.STANDARD_NAME) AS taskName,
+		m.TASK_CODE  AS  taskCode,
+		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
+		m.SPEC  AS  spec,
+		m.TASK_STATUS AS taskStatus,
+		CASE WHEN m.TASK_STATUS ='WAIT' THEN '未开始'
+		WHEN m.TASK_STATUS ='WORKING' THEN '进行中'
+		WHEN m.TASK_STATUS ='FINISH' THEN '已完成'
+		WHEN m.TASK_STATUS ='CANCLE' THEN '已取消'
+		END AS taskStatusName,
+		m.LINE_NO  AS  lineNo
+		FROM tb_task m
+		WHERE m.CREATE_EMP = #{loginName}
+		AND TASK_STATUS !='CANCLE'
+		AND CHECK_STATUS !='DISQUALIFIED'
+	</select>
+
+	<select id="selectTaskByCode" parameterType="String" resultType="com.qcap.cac.entity.TbTask">
+		SELECT
+		m.TASK_ID  AS  taskId,
+		m.PLAN_ID  AS  planId,
+		m.TASK_TYPE  AS  taskType,
+		m.POSITION_CODE  AS  positionCode,
+		m.POSITION_NAME  AS  positionName,
+		m.AREA_CODE  AS  areaCode,
+		m.AREA_NAME  AS  areaName,
+		m.STANDARD_CODE  AS  standardCode,
+		m.STANDARD_NAME  AS  standardName,
+		m.SHIFT  AS  shift,
+		m.SPEC  AS  spec,
+		m.EMPLOYEE_CODE  AS  employeeCode,
+		m.EMPLOYEE_NAME  AS  employeeName,
+		m.EMPLOYEE_TEL  AS  employeeTel,
+		DATE_FORMAT(m.COMPLETE_TIME,'%Y-%m-%d %T') AS  completeTime,
+		DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T') AS  startTime,
+		DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')  AS  endTime,
+		m.TASK_STATUS  AS  taskStatus,
+		m.CHECK_FLAG  AS  checkFlag,
+		m.UPLOAD_PIC_FLAG  AS  uploadPicFlag,
+		m.TASK_IMG_URL AS taskImgUrl,
+		m.REMARK1  AS  remark1,
+		m.REMARK2  AS  remark2,
+		m.REMARK3  AS  remark3,
+		m.CREATE_EMP AS createEmp
+		FROM tb_task m
+		WHERE m.TASK_CODE  = #{taskCode}
+	</select>
+
+	<insert id="insertArrangeShift" parameterType="com.qcap.cac.entity.TbTaskArrangeShift" >
+    insert into tb_task_arrange_shift (ARRANGE_SHIFT_ID, SHIFT, POSITION_CODE,
+      POSITION_NAME, EMPLOYEE_CODE, EMPLOYEE_NAME,
+      CHANGE_DATE, EXTRA_EMPLOYEE_CODE, EXTRA_EMPLOYEE_NAME,
+      START_TIME, END_TIME, REMARK1,
+      REMARK2, REMARK3, CREATE_EMP,
+      CREATE_DATE, UPDATE_DATE, UPDATE_EMP,
+      VERSION)
+    values (#{arrangeShiftId}, #{shift}, #{positionCode},
+      #{positionName}, #{employeeCode}, #{employeeName},
+      #{changeDate,jdbcType=DATE}, #{extraEmployeeCode}, #{extraEmployeeName},
+      #{startTime}, #{endTime}, #{remark1},
+      #{remark2}, #{remark3}, #{createEmp},
+      #{createDate}, #{updateDate}, #{updateEmp},
+      #{version})
+  </insert>
+
+	<select id="selectArrangeShiftHistory" resultType="Map" parameterType="String">
+		SELECT
+		m.ARRANGE_SHIFT_ID  AS  arrangeShiftId,
+		m.SHIFT  AS  shift,
+		m.POSITION_CODE  AS  positionCode,
+		m.POSITION_NAME  AS  positionName,
+		m.EMPLOYEE_CODE  AS  employeeCode,
+		m.EMPLOYEE_NAME  AS  employeeName,
+		DATE_FORMAT(m.CHANGE_DATE,'%Y-%m-%d') AS  changeDate,
+		m.EXTRA_EMPLOYEE_CODE  AS  extraEmployeeCode,
+		m.EXTRA_EMPLOYEE_NAME  AS  extraEmployeeName,
+		DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T')  AS  startTime,
+		DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')  AS  endTime
+		FROM tb_task_arrange_shift m
+		WHERE m.CREATE_EMP = #{loginName}
+	</select>
+
+	<update id="updateCleanerTask" parameterType="com.qcap.cac.dto.AppTaskArrangeShiftRestReq">
+		UPDATE tb_task
+		SET
+		EMPLOYEE_CODE = #{extraEmployeeCode},
+		EMPLOYEE_NAME = #{extraEmployeeName},
+		EMPLOYEE_TEL =  #{extraEmployeeTel}
+		WHERE EMPLOYEE_CODE = #{employeeCode}
+		AND START_TIME &gt;= #{startTimeStr}
+		AND START_TIME &lt; #{endTimeStr}
+	</update>
 	
+	<select id="selectIfTaskExist" parameterType="com.qcap.cac.dto.AppTaskCheckTaskRestReq" resultType="String">
+	SELECT 
+	TASK_ID 
+	FROM tb_task 
+	where TASK_CODE =#{taskCode} 
+	AND  INSTR ((
+			SELECT AREA_CODE 
+			FROM tb_area_position 
+			where POSITION_CODE =#{positionCode}
+			<if test=" positionType != '3'">
+			AND POSITION_TYPE != 3 ) ,AREA_CODE)
+			</if>
+			<if test=" positionType eq '3' ">
+			AND position_type = 3 ) ,AREA_CODE)
+			</if>
+	</select>
+
 </mapper>

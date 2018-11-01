@@ -176,8 +176,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeCode(employeeCode);
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
-		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
-		task.setFeedbackImgUrl(taskDto.getFileUrl());
+		task.setTaskImgUrl(taskDto.getFileUrl());
 		
 		this.tempTaskMapper.insertTempTask(task);
 
@@ -364,7 +363,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeCode(employeeCode);
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
-		task.setFeedbackImgUrl(taskDto.getFileUrl());
+		task.setTaskImgUrl(taskDto.getFileUrl());
 		this.tempTaskMapper.updateTempTask(task);
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);

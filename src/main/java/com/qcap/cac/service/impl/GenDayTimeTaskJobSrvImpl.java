@@ -214,9 +214,6 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			task.setStandardName(standardName);
 			task.setCheckFlag(checkFlag);
 			task.setUploadPicFlag(uploadPicFlag);
-			//设置lineNo
-			task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
-
 			//设置任务编码
 			String taskCodePrefix = "";
 			if(CommonConstant.PLAN_TIME_TYPE_DAY.equals(planTimeType)){

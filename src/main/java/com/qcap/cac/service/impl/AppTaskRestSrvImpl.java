@@ -3,24 +3,32 @@ package com.qcap.cac.service.impl;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.AppTaskRestMapper;
-import com.qcap.cac.dto.AppTaskCheckRestReq;
-import com.qcap.cac.dto.AppTaskFinishReq;
-import com.qcap.cac.dto.AppTaskRestReq;
-import com.qcap.cac.dto.AppTaskUpdateReq;
+import com.qcap.cac.dao.TempTaskMapper;
+import com.qcap.cac.dto.*;
+import com.qcap.cac.entity.TbTask;
+import com.qcap.cac.entity.TbTaskArrangeShift;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AppTaskRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
+import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.model.ResParams;
 import com.qcap.core.utils.DateUtil;
+import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -41,6 +49,19 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 
 	@Resource
 	private TempTaskSrv tempTaskSrvImpl;
+
+	@Resource
+	private TempTaskMapper tempTaskMapper;
+
+	//获取FASTDFS客户端bean
+    @Resource
+	FastDFSClientWrapper fastDFSClientWrapper ;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+//    @Resource
+//    private TaskArrangeSrv taskArrangeSrvImpl;
 
 	@Override
 	public Map<String, Object> queryTaskItem(String employeeCode) {
@@ -139,8 +160,8 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		if(!StringUtils.isEmpty(checkImgUrl)) {
 			if(checkImgUrl.contains(",")) {
 				String [] checkFileArr = checkImgUrl.split(",");
-				for(String str: checkFileArr) {
-					str = addressPrefix + str;
+				for(int i = 0; i< checkFileArr.length; i++) {
+					checkFileArr[i] = addressPrefix + checkFileArr[i];
 				}
 				map.put(fileUrlName, checkFileArr);
 			}else {
@@ -149,6 +170,8 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 				fileArray[0]=checkFile;
 				map.put(fileUrlName, fileArray);
 			}
+		}else {
+			map.put(fileUrlName, new ArrayList<>());
 		}
 	}
 
@@ -186,14 +209,14 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
         	if(standardStep.indexOf(WINDOWS_REGEX) != -1) {
         		standardStepArr = standardStep.split(WINDOWS_REGEX);
         	}
-        	
+
         	if(standardStep.indexOf(LINUX_REGEX)  != -1) {
         		standardStepArr = standardStep.split(LINUX_REGEX);
         	}
-        	
+
         	map.put("standardStep", standardStepArr);
     	}
-    	
+
         return this.appTaskRestMapper.selectStandardDetailInfo(standardDetailId);
     }
 
@@ -206,12 +229,27 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
     }
 
     @Override
-    public void finishTask(AppTaskFinishReq appTaskFinishReq) throws InvocationTargetException, IllegalAccessException {
-        AppTaskUpdateReq appTaskUpdateReq = new AppTaskUpdateReq();
-        BeanUtils.copyProperties(appTaskUpdateReq , appTaskFinishReq);
+    public void finishTask(List<MultipartFile>list,AppTaskUpdateReq appTaskUpdateReq) throws IOException {
+		String imgUrl = uploadPicture(list);
 		appTaskUpdateReq.setTaskStatus(CommonConstant.TASK_STATUS_FINISH);
+		appTaskUpdateReq.setFeedbackImgUrl(imgUrl);
         this.appTaskRestMapper.updateTask(appTaskUpdateReq);
     }
+
+	private String uploadPicture(List<MultipartFile> list) throws IOException {
+		String imgUrl = "";
+		if(CollectionUtils.isNotEmpty(list)){
+			for(int i = 0;i<list.size();i++){
+				String path = fastDFSClientWrapper.uploadFile(list.get(i));
+				if(i != list.size() -1){
+					imgUrl += path + ",";
+				}else {
+					imgUrl += path;
+				}
+			}
+		}
+		return imgUrl;
+	}
 
 	/**
 	 * 从此处开始是检查人员的接口
@@ -271,8 +309,23 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 			//查询管理人员上班时间
 			Map<String, Object> param = getTaskQueryTime(appTaskCheckRestReq.getEmployeeCode(),QUERY_TASK_TIME_CHECK);
 			String startTime =Objects.toString(param.get("startTime"),"");
+			String selectAreaCode = appTaskCheckRestReq.getAreaCode();
+			String lineNo = appTaskCheckRestReq.getLineNo();
 			if(!StringUtils.isEmpty(startTime)){
 				param.put("areaCode",areaCode);
+				param.put("checkStatus",appTaskCheckRestReq.getCheckStatus());
+				param.put("taskStatus",CommonConstant.TASK_STATUS_FINISH);
+				param.put("taskStatus",CommonConstant.TASK_STATUS_FINISH);
+				/**
+				 * 选择区域后，将岗位默认区域覆盖
+				 */
+				if(!StringUtils.isEmpty(selectAreaCode)) {
+					param.put("areaCode",appTaskCheckRestReq.getAreaCode());
+				}
+				
+				if(!StringUtils.isEmpty(lineNo)) {
+					param.put("lineNo",appTaskCheckRestReq.getLineNo());
+				}
 				/**
 				 * 管理人员查询检查任务时，不根据employeeCode查询，而是根据其所管理的岗位对应的区域查询
 				 * 去掉查询条件中的employeeCode；
@@ -284,11 +337,358 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		return taskItemList;
 	};
 
-	/**
+	@Override
+	public void checkTask(List<MultipartFile>list,AppTaskUpdateReq appTaskUpdateReq) throws IOException{
+		String imgUrl = uploadPicture(list);
+		
+		//任务评价
+		if(CommonConstant.TASK_CHECK_STATUS_QUALIFIED.equals(appTaskUpdateReq.getCheckStatus())) {
+			appTaskUpdateReq.setCheckImgUrl(imgUrl);
+			this.appTaskRestMapper.updateTask(appTaskUpdateReq);
+		}
+		
+
+		//任务不合格
+		if(CommonConstant.TASK_CHECK_STATUS_DISQUALIFIED.equals(appTaskUpdateReq.getCheckStatus())){
+			appTaskUpdateReq.setFeedbackImgUrl(imgUrl);
+			this.appTaskRestMapper.updateTask(appTaskUpdateReq);
+			//1、查询任务  2、修改部分信息、重新新增到数据库
+			String taskCode = appTaskUpdateReq.getTaskCode();
+			if(StringUtils.isEmpty(taskCode)){
+				throw new BaseException(CommonCodeConstant.PARAM_EMPTY_CODE, "参数为空");
+			}
+
+			TbTask task = this.appTaskRestMapper.selectTaskByCode(taskCode);
+			String taskType = task.getTaskType();
+			String taskPrefix = "";
+
+			if(CommonConstant.TASK_TYPE_REGULAR.equals(taskType)){
+				taskPrefix = CommonConstant.TASK_PREFIX_R;
+			}
+
+			if(CommonConstant.TASK_TYPE_SPECIAL.equals(taskType)){
+				taskPrefix = CommonConstant.TASK_PREFIX_S;
+			}
+
+			if(CommonConstant.TASK_TYPE_TEMP.equals(taskType)){
+				taskPrefix = CommonConstant.TASK_PREFIX_T;
+			}
+
+			if(CommonConstant.TASK_TYPE_EVENT.equals(taskType)){
+				taskPrefix = CommonConstant.TASK_PREFIX_E;
+			}
+
+			String newTaskCode = taskPrefix + DateUtil.dateTimeToStringForLineNo(new Date());
+
+			task.setTaskId(UUIDUtils.getUUID());
+			task.setTaskCode(newTaskCode);
+			task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
+			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
+			task.setVersion(0);
+			task.setCreateDate(new Date());
+			task.setCreateEmp("由检查不合格任务生成,检查不合格任务编码："+taskCode);
+			task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
+			this.tempTaskMapper.insertTempTask(task);
+
+		}
+	}
+
+	@Override
+	public List<Map<String, Object>> listTempTask(String loginName) {
+		return this.appTaskRestMapper.listTempTask(loginName);
+	}
+
+	@Override
+	public Map<String,Object> selectDefaultEmployee(String startTime,String areaCode){
+		return tempTaskSrvImpl.selectDefaultEmployee(startTime, areaCode);
+	};
+
+	@Override
+	public void addTempTask (List<MultipartFile>list,AppTaskAddRestReq appTaskAddRestReq) throws IOException, InvocationTargetException, IllegalAccessException {
+		String imgUrl = uploadPicture(list);
+
+		// 查询岗位
+		String areaCode = appTaskAddRestReq.getAreaCode();
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
+		if (MapUtils.isEmpty(positionMap)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"当前区域未设置岗位");
+		}
+		String positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+		String positionName = ToolUtil.toStr(positionMap.get("positionName"));
+
+		// 查询班次
+		/**
+		 *   时间  ———待确认
+		 */
+		Calendar calendar = Calendar.getInstance();
+		Date now = calendar.getTime();
+		calendar.add(Calendar.MINUTE,30);
+		Date end = calendar.getTime();
+		String queryTime = DateUtil.dateToString(now);
+		Map<String, String> shiftMap = this.tempTaskMapper.selectShiftByTime(queryTime);
+		if (shiftMap == null || shiftMap.isEmpty()) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"根据计划时间未查询到班次，请先设置班次");
+		}
+		String shift = shiftMap.get("shift");
+
+		String taskCode = CommonConstant.TASK_PREFIX_T + DateUtil.dateTimeToStringForLineNo(now);
+
+		TbTask task = new TbTask();
+		BeanUtils.copyProperties(task,appTaskAddRestReq);
+		task.setTaskCode(taskCode);
+		task.setPositionCode(positionCode);
+		task.setPositionName(positionName);
+		task.setShift(shift);
+		task.setStartTime(now);
+		task.setEndTime(end);
+		task.setCreateDate(new Date());
+		task.setTaskImgUrl(imgUrl);
+		task.setTaskId(UUIDUtils.getUUID());
+		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
+		task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
+		task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
+		task.setTaskType(CommonConstant.TASK_TYPE_TEMP);
+		task.setVersion(0);
+
+		this.tempTaskMapper.insertTempTask(task);
+
+	};
+
+	@Override
+	public List<Map<String, Object>> queryPosition(AppTaskQueryArrangeRestReq appTaskQueryArrangeRestReq) {
+		String workingDate = appTaskQueryArrangeRestReq.getWorkingDate();
+		if(StringUtils.isEmpty(workingDate)){
+			throw new BaseException(CommonCodeConstant.PARAM_EMPTY_CODE,"调班时间不能为空");
+		}
+		// 封装查询条件
+		Map<String, Object> param = new HashMap<>();
+
+		// 处理日期
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(DateUtil.stringToDate(workingDate));
+
+		int dayNum = calendar.get(Calendar.DAY_OF_MONTH);
+		String queryDay = "day" + dayNum;
+		String month = DateUtil.dateToMonth(new Date());
+
+		param.put("shift", appTaskQueryArrangeRestReq.getShift());
+		param.put("month", month);
+		param.put("employeeCode", appTaskQueryArrangeRestReq.getEmployeeCode());
+		param.put(queryDay, queryDay);
+		// 查询当班人员
+		return this.tempTaskMapper.selectCurrountWorkingEmployee(param);
+	}
+
+	@Override
+	public Map<String, Object> selectShiftTime(AppTaskQueryArrangeRestReq appTaskQueryArrangeRestReq) {
+
+		String workingDate = appTaskQueryArrangeRestReq.getWorkingDate();
+		String shift = appTaskQueryArrangeRestReq.getShift();
+		Map<String,Object> map = this.appTaskRestMapper.selectShiftTime(shift);
+
+		if(MapUtils.isEmpty(map)){
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"该班次未设置上班开始、结束时间");
+		}
+
+		if(StringUtils.isEmpty(workingDate)){
+			throw new BaseException(CommonCodeConstant.PARAM_EMPTY_CODE,"调班日期不能为空");
+		}
+
+		String startTime = Objects.toString(map.get("startTime"),"");
+		String endTime = Objects.toString(map.get("endTime"),"");
+		if(CommonConstant.SHIFT_DAYTIME.equals(shift)){
+			startTime = workingDate +" "+ startTime;
+			endTime = workingDate +" "+ endTime;
+		}
+
+		//处理日期
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(DateUtil.stringToDate(workingDate));
+		calendar.add(Calendar.DAY_OF_MONTH,1);
+		Date nextDate = calendar.getTime();
+		String nextDateStr = DateUtil.dateToString(nextDate);
+
+		if(CommonConstant.SHIFT_NIGHT.equals(shift)){
+			startTime = workingDate +" "+ startTime;
+			endTime = nextDateStr +" "+ endTime;
+		}
+
+		map.put("startTime",startTime);
+		map.put("endTime",endTime);
+
+		return map;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectArrangeShiftHistory(String loginName) {
+		return this.appTaskRestMapper.selectArrangeShiftHistory(loginName);
+	}
+
+    @Override
+    public void changeShift(AppTaskArrangeShiftRestReq appTaskArrangeShiftRestReq) throws InvocationTargetException, IllegalAccessException {
+
+	    //校验传入的调班开始时间和结束时间
+         String startTime = appTaskArrangeShiftRestReq.getStartTimeStr();
+         String endTime = appTaskArrangeShiftRestReq.getEndTimeStr();
+         if(StringUtils.isEmpty(startTime) || StringUtils.isEmpty(endTime)){
+             throw new BaseException(CommonCodeConstant.PARAM_EMPTY_CODE,"开始时间或结束时间不能为空");
+         }
+         if(startTime.compareTo(endTime) >= 0){
+             throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"结束时间必须大于开始时间，请重新选择时间");
+         }
+
+        //获取班次设定中的上班开始、结束时间
+         AppTaskQueryArrangeRestReq appTaskQueryArrangeRestReq = new AppTaskQueryArrangeRestReq();
+         BeanUtils.copyProperties(appTaskQueryArrangeRestReq,appTaskArrangeShiftRestReq);
+
+         Map<String,Object> shiftTimeMap = selectShiftTime(appTaskQueryArrangeRestReq);
+         String shiftStartTime = Objects.toString(shiftTimeMap.get("startTime"));
+         String shiftEndTime = Objects.toString(shiftTimeMap.get("endTime"));
+
+         if(startTime.compareTo(shiftStartTime) < 0 || startTime.compareTo(shiftEndTime) >= 0){
+         	 System.out.println(startTime.compareTo(shiftStartTime));
+			 System.out.println(startTime.compareTo(shiftEndTime));
+             throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"调班的开始时间必须大于等于"+shiftStartTime+",并小于"+shiftEndTime);
+         }
+        if(endTime.compareTo(shiftStartTime) <= 0 || endTime.compareTo(shiftEndTime) > 0){
+			System.out.println(endTime.compareTo(shiftStartTime));
+			System.out.println(endTime.compareTo(shiftEndTime));
+            throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"调班的结束时间必须大于"+shiftStartTime+",并小于等于"+shiftEndTime);
+        }
+
+        String curTime = DateUtil.dateTimeToString(new Date());
+         //获取配置中设置的上班开始前不允许进行调班的时间设置
+        String forBidMinutes = RedisTools.getCommonConfig("ARRANGE_SHIFT_FORBID_TIME");
+        boolean forBidMinutesAvailable = true;
+        int forBidMins = 0;
+        if(StringUtils.isEmpty(forBidMinutes)){
+            forBidMinutesAvailable = false;
+        }
+        if(forBidMinutesAvailable){
+            forBidMins = Integer.valueOf(forBidMinutes.trim());
+        }
+
+        //调整计划
+        if(curTime.compareTo(shiftStartTime) < 0){
+            String newCurTime = curTime.substring(0,10);
+            String newShiftStartTime = shiftStartTime.substring(0,10);
+            if(forBidMinutesAvailable){
+            	//处理当前时间：当前时间加上禁止调班时间量
+            	Calendar cal = Calendar.getInstance();
+            	cal.setTime(DateUtil.stringToDateTime(curTime));
+            	cal.add(Calendar.MINUTE,Math.abs(forBidMins));
+            	String addCurTime = DateUtil.dateTimeToString(cal.getTime());
+
+                if(shiftStartTime.compareTo(curTime) > 0){
+                    //update排班表,并新增顶班数据到排班表
+                    changeArrangeShift(appTaskArrangeShiftRestReq);
+                }else{
+                    //提示快要生成任务了，不允许进行调班
+                    throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"即将批量生成任务了，不允许进行调班");
+                }
+            }else{
+                if(newShiftStartTime.compareTo(newCurTime) > 0){
+                    //update排班表,并新增顶班数据到排班表
+                    changeArrangeShift(appTaskArrangeShiftRestReq);
+                }
+            }
+
+        }
+
+        //调整任务
+        if(curTime.compareTo(shiftStartTime) >= 0 && curTime.compareTo(shiftEndTime) < 0){
+            this.appTaskRestMapper.updateCleanerTask(appTaskArrangeShiftRestReq);
+        }
+
+        //该班次已完成，不允许进行调班
+        if(curTime.compareTo(shiftEndTime) >= 0){
+            throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"该班次已完成，不允许进行调班");
+        }
+
+        //新增调班记录
+		TbTaskArrangeShift arrangeShift = new TbTaskArrangeShift();
+        BeanUtils.copyProperties(arrangeShift,appTaskArrangeShiftRestReq);
+
+		arrangeShift.setArrangeShiftId(UUIDUtils.getUUID());
+		arrangeShift.setChangeDate(DateUtil.stringToDate(appTaskArrangeShiftRestReq.getWorkingDate()));
+		arrangeShift.setStartTime(DateUtil.stringToDateTime(appTaskArrangeShiftRestReq.getStartTimeStr()));
+		arrangeShift.setEndTime(DateUtil.stringToDateTime(appTaskArrangeShiftRestReq.getEndTimeStr()));
+		EntityTools.setCreateEmpAndTime(arrangeShift);
+
+		this.appTaskRestMapper.insertArrangeShift(arrangeShift);
+
+    }
+    
+    @Override
+    public Object selectIfTaskExist (AppTaskCheckTaskRestReq appTaskCheckTaskRestReq) {
+		//检查扫码得到的岗位与是否有该任务
+		String taskId = this.appTaskRestMapper.selectIfTaskExist(appTaskCheckTaskRestReq);
+		if(StringUtils.isEmpty(taskId)) {
+			return ResParams.newInstance(CommonCodeConstant.ERROR_CODE_40402, "该任务不属于当前扫码的岗位");
+		}else {
+			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC);
+		}
+    }
+
+    private int changeArrangeShift(AppTaskArrangeShiftRestReq appTaskArrangeShiftRestReq) throws InvocationTargetException, IllegalAccessException {
+
+        String workingDateStr = appTaskArrangeShiftRestReq.getWorkingDate();
+        String month = workingDateStr.substring(0,7).replace("-","");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.stringToDate(workingDateStr));
+        int dayNum = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String sql = " UPDATE tb_task_arrangement " +
+                "SET DAY_"+ dayNum+" = '休' " +
+                "WHERE SHIFT = ? " +
+                "AND MONTH = ? " +
+                "AND EMPLOYEE_CODE = ? " +
+                "AND POSITION_CODE = ? " +
+                "AND DAY_"+ dayNum+" = '√' " +
+                "AND DELETE_FLAG ='NORMAL' ";
+
+        String shift = appTaskArrangeShiftRestReq.getShift();
+        String employeeCode = appTaskArrangeShiftRestReq.getEmployeeCode();
+        String positionCode = appTaskArrangeShiftRestReq.getPositionCode();
+        String [] args ={shift,month,employeeCode,positionCode};
+
+        int updateItem = jdbcTemplate.update(sql,args);
+
+        if(updateItem > 0){
+            String insertSql = "insert into tb_task_arrangement (" +
+                    "ARRANGEMENT_ID, SHIFT, EMPLOYEE_CODE, " +
+                    "EMPLOYEE_NAME, EMPLOYEE_TEL, POSITION_CODE, " +
+                    "POSITION_NAME, MONTH, DELETE_FLAG,DAY_"+ dayNum+"," +
+                    "CREATE_EMP,CREATE_DATE,VERSION)" +
+                    "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            String [] insertArgs = new String [13];
+            insertArgs[0] = UUIDUtils.getUUID();
+            insertArgs[1] = shift;
+            insertArgs[2] = appTaskArrangeShiftRestReq.getExtraEmployeeCode();
+            insertArgs[3] = appTaskArrangeShiftRestReq.getExtraEmployeeName();
+            insertArgs[4] = appTaskArrangeShiftRestReq.getExtraEmployeeTel();
+            insertArgs[5] = positionCode;
+            insertArgs[6] = appTaskArrangeShiftRestReq.getPositionName();
+            insertArgs[7] = month;
+            insertArgs[8] = CommonConstant.DELETE_FLAG_NORMAL;
+            insertArgs[9] = "√";
+            insertArgs[10] = appTaskArrangeShiftRestReq.getLoginName();
+            insertArgs[11] = DateUtil.dateTimeToString(new Date());
+            insertArgs[12] = "0";
+
+            jdbcTemplate.update(insertSql,insertArgs);
+        }
+
+        return updateItem;
+    }
+
+
+    /**
 	 * 查询任务、或统计任务时，
 	 * 对于白班和夜班的任务时间进行处理
 	 * @Title: getTaskQueryTime 
-	 * @Description: TODO
+	 * @Description: 对于白班和夜班的任务时间进行处理
 	 * @param employeeCode
 	 * @throws BaseException
 	 * @return: Map<String, Object>
@@ -305,7 +705,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		Map<String, Object> param = new HashMap<>();
 		param.put("employeeCode", employeeCode);
 		param.put("monthNo", monthNo);
-		String shift = this.appTaskRestMapper.selectshiftType(param);
+		String shift = this.appTaskRestMapper.selectShiftType(param);
 
 		if (StringUtils.isEmpty(shift)) {
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "未查询到该员工的班次");

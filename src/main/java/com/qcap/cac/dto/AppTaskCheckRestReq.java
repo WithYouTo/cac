@@ -17,6 +17,28 @@ public class AppTaskCheckRestReq {
 	@ApiModelProperty(value = "检查状态")
 	private String checkStatus;
 	
+	@ApiModelProperty(value = "区域编码")
+	private String areaCode;
+	
+	@ApiModelProperty(value = "分页号")
+	private String lineNo;
+	
+	public String getAreaCode() {
+		return areaCode;
+	}
+
+	public String getLineNo() {
+		return lineNo;
+	}
+
+	public void setAreaCode(String areaCode) {
+		this.areaCode = areaCode;
+	}
+
+	public void setLineNo(String lineNo) {
+		this.lineNo = lineNo;
+	}
+
 	public String getCheckStatus() {
 		return checkStatus;
 	}

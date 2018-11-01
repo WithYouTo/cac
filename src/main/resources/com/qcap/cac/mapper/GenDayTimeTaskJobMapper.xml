@@ -179,7 +179,7 @@
       COMPLETE_TIME, START_TIME, END_TIME, 
       TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
       CHECK_FLAG, TASK_ADVICE, REMARK1, 
-      TASK_FINISH_DESC, DISQUALIFIED_REASON, LINE_NO,
+      TASK_FINISH_DESC, DISQUALIFIED_REASON,
       REMARK2, REMARK3, CREATE_EMP, TASK_REMIND_TIME,
       CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
       VERSION,UPLOAD_PIC_FLAG)
@@ -193,7 +193,7 @@
       #{item.completeTime}, #{item.startTime}, #{item.endTime}, 
       #{item.taskStatus}, #{item.checkStatus}, #{item.taskScore}, 
       #{item.checkFlag}, #{item.taskAdvice}, #{item.remark1}, 
-      #{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.lineNo},
+      #{item.taskFinishDesc}, #{item.disqualifiedReason},
       #{item.remark2}, #{item.remark3}, #{item.createEmp}, #{item.taskRemindTime}, 
       #{item.createDate}, #{item.updateDate}, #{item.updateEmp}, 
       #{item.version},#{item.uploadPicFlag})

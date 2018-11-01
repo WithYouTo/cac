@@ -1,9 +1,9 @@
 package com.qcap.cac.service;
 
-import com.qcap.cac.dto.AppTaskCheckRestReq;
-import com.qcap.cac.dto.AppTaskFinishReq;
-import com.qcap.cac.dto.AppTaskRestReq;
+import com.qcap.cac.dto.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +24,30 @@ public interface AppTaskRestSrv {
 
     void workingTask(String taskCode);
 
-    void finishTask(AppTaskFinishReq appTaskFinishReq) throws InvocationTargetException, IllegalAccessException;
+    void finishTask(List<MultipartFile>list,AppTaskUpdateReq appTaskUpdateReq) throws IOException;
 
     //----------------检查人员接口
     Map<String, Object> queryCheckTaskItem (String employeeCode);
 
     List<Map<String, Object>> queryCheckTask(AppTaskCheckRestReq appTaskCheckRestReq);
+
+    void checkTask(List<MultipartFile>list, AppTaskUpdateReq appTaskUpdateReq) throws IOException;
+
+    List<Map<String,Object>> listTempTask(String loginName);
+
+    Map<String,Object> selectDefaultEmployee(String startTime,String areaCode);
+
+    void addTempTask (List<MultipartFile>list,AppTaskAddRestReq appTaskAddRestReq) throws IOException, InvocationTargetException, IllegalAccessException;
+
+    //--------------调班接口
+    List<Map<String,Object>> queryPosition(AppTaskQueryArrangeRestReq appTaskQueryArrangeRestReq);
+
+    Map<String,Object> selectShiftTime (AppTaskQueryArrangeRestReq appTaskQueryArrangeRestReq);
+
+    List<Map<String,Object>> selectArrangeShiftHistory (String loginName);
+
+    void changeShift (AppTaskArrangeShiftRestReq appTaskArrangeShiftRestReq) throws InvocationTargetException, IllegalAccessException;
+    
+    Object selectIfTaskExist (AppTaskCheckTaskRestReq appTaskCheckTaskRestReq);
 
 }

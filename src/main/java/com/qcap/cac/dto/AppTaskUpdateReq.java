@@ -21,6 +21,16 @@ public class AppTaskUpdateReq {
 	private String feedbackImgUrl;
 
 	private String checkImgUrl;
+	
+	private String positionCode;
+
+	public String getPositionCode() {
+		return positionCode;
+	}
+
+	public void setPositionCode(String positionCode) {
+		this.positionCode = positionCode;
+	}
 
 	public String getFeedbackImgUrl() {
 		return feedbackImgUrl;
