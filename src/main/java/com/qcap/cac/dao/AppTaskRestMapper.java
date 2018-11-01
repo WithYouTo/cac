@@ -44,4 +44,6 @@ public interface AppTaskRestMapper {
 	
 	String selectIfTaskExist (AppTaskCheckTaskRestReq appTaskCheckTaskRestReq);
 	
+	List<String> selectIfCleanerHaveTasks (Map<String, Object> map);
+	
 }

@@ -18,7 +18,7 @@ public interface AppTaskRestSrv {
 
     Map<String, Object> queryTaskDetail(String taskCode);
 
-    List<Map<String, Object>> queryFinishAndCheckTask(AppTaskCheckRestReq appTaskRestCheckReq);
+    List<Map<String, Object>> queryFinishAndCheckTask(AppTaskRestReq appTaskRestReq);
 
     Map<String, Object> selectStandardDetailInfo (String standardDetailId);
 

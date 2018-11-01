@@ -46,8 +46,10 @@ public class CommonRestSrvImpl implements CommonRestSrv {
 		} else if (StringUtils.isNotBlank(eventType)) {
 			req.setAreaType(CommonConstant.AREA_TYPE.get(eventType));
 			return commonRestMapper.getAreaList(req);
+		}else {
+			return commonRestMapper.getAreaList(req);	
 		}
-		return null;
+//		return null;
 	}
 
 	@Override

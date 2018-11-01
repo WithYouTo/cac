@@ -81,6 +81,7 @@
 		CASE WHEN m.CHECK_FLAG ='MUST' THEN '是'
 		WHEN m.CHECK_FLAG ='OPTIONAL' THEN '否'
 		END AS checkFlagName,
+		m.UPLOAD_PIC_FLAG AS uploadPicFlag,
 		m.LINE_NO  AS  lineNo
 		FROM tb_task m
 		WHERE 1=1
@@ -131,7 +132,7 @@
 	WHEN m.CHECK_STATUS ='QUALIFIED' THEN '合格'
 	WHEN m.CHECK_STATUS ='DISQUALIFIED' THEN '不合格'
 	END AS checkStatusName,
-	CONCAT(m.AREA_NAME,m.STANDARD_NAME) AS taskName,
+	CONCAT(m.AREA_NAME,IFNULL(m.STANDARD_NAME,"")) AS taskName,
 	CASE WHEN m.TASK_TYPE ='TEMP' THEN '临时'
 	WHEN m.TASK_TYPE ='REGULAR' THEN '周期'
 	WHEN m.TASK_TYPE ='EVENT' THEN '事件'
@@ -232,7 +233,7 @@
 
 	<select id="listTempTask" parameterType="String" resultType="Map">
 		SELECT
-		CONCAT(m.AREA_NAME,m.STANDARD_NAME) AS taskName,
+		m.AREA_NAME AS taskName,
 		m.TASK_CODE  AS  taskCode,
 		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
 		m.SPEC  AS  spec,
@@ -245,6 +246,7 @@
 		m.LINE_NO  AS  lineNo
 		FROM tb_task m
 		WHERE m.CREATE_EMP = #{loginName}
+		AND m.TASK_TYPE = 'TEMP'
 		AND TASK_STATUS !='CANCLE'
 		AND CHECK_STATUS !='DISQUALIFIED'
 	</select>
@@ -301,6 +303,8 @@
 		SELECT
 		m.ARRANGE_SHIFT_ID  AS  arrangeShiftId,
 		m.SHIFT  AS  shift,
+		(SELECT DESC1_ FROM tbpubcode01 
+			WHERE CONFIG_CODE_ ='SHIFT' AND DESC_ = m.SHIFT)AS shiftName,
 		m.POSITION_CODE  AS  positionCode,
 		m.POSITION_NAME  AS  positionName,
 		m.EMPLOYEE_CODE  AS  employeeCode,
@@ -340,6 +344,17 @@
 			<if test=" positionType eq '3' ">
 			AND position_type = 3 ) ,AREA_CODE)
 			</if>
+	</select>
+	
+	<select id="selectIfCleanerHaveTasks" parameterType="Map" resultType="String">
+	SELECT
+		TASK_CODE
+	FROM
+		tb_task
+	WHERE
+		INSTR(EMPLOYEE_CODE, #{employeeCode})
+	AND START_TIME &gt;= #{startTime}
+	AND START_TIME &lt; #{endTime}
 	</select>
 
 </mapper>

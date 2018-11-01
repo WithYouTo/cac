@@ -84,8 +84,8 @@ public class AppTaskRestController {
 	@RequestMapping(value = "/queryFinishAndCheckTask", method = RequestMethod.POST)
 	@ApiOperation(value = "已完成任务、检查任务、已检查任务列表", notes = "已完成任务、检查任务、已检查任务列表", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public Object queryFinishAndCheckTask(@Valid AppTaskCheckRestReq appTaskRestCheckReq) {
-		List<Map<String, Object>> list = this.appTaskRestSrv.queryFinishAndCheckTask(appTaskRestCheckReq);
+	public Object queryFinishAndCheckTask(@Valid AppTaskRestReq appTaskRestReq) {
+		List<Map<String, Object>> list = this.appTaskRestSrv.queryFinishAndCheckTask(appTaskRestReq);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
 
@@ -251,7 +251,9 @@ public class AppTaskRestController {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
+		} catch (BaseException e) {
+			throw e;
+		}catch (Exception e) {
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "调班失败");
 		}
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "调班成功");

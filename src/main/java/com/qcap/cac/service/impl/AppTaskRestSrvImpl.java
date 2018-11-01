@@ -106,7 +106,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		String employeeCode = ToolUtil.toStr(appTaskRestDto.getEmployeeCode());
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_HISTORY);
-		param.put("taskSatus", appTaskRestDto.getTaskStatus());
+		param.put("taskStatus", appTaskRestDto.getTaskStatus());
 		return this.appTaskRestMapper.selectTaskIntro(param);
 		
 	}
@@ -115,7 +115,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	public List<Map<String, Object>> queryUnfinishTask(AppTaskRestReq appTaskRestDto){
 		Map<String, Object> param = new HashMap<>();
 		param.put("employeeCode", appTaskRestDto.getEmployeeCode());
-		param.put("taskSatus", appTaskRestDto.getTaskStatus());
+		param.put("taskStatus", appTaskRestDto.getTaskStatus());
 		return this.appTaskRestMapper.selectTaskIntro(param);
 	}
 
@@ -176,11 +176,11 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	}
 
     @Override
-	public List<Map<String, Object>> queryFinishAndCheckTask (AppTaskCheckRestReq appTaskRestCheckReq){
-		String employeeCode = ToolUtil.toStr(appTaskRestCheckReq.getEmployeeCode());
+	public List<Map<String, Object>> queryFinishAndCheckTask (AppTaskRestReq appTaskRestReq){
+		String employeeCode = ToolUtil.toStr(appTaskRestReq.getEmployeeCode());
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_FINISH);
-		param.put("taskSatus", appTaskRestCheckReq.getTaskStatus());
+		param.put("taskStatus", appTaskRestReq.getTaskStatus());
 		String startTime = Objects.toString(param.get("startTime"),"");
 		if(!StringUtils.isEmpty(startTime)){
 			//在当班时间内，则查询已完成任务
@@ -597,6 +597,16 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 
         //调整任务
         if(curTime.compareTo(shiftStartTime) >= 0 && curTime.compareTo(shiftEndTime) < 0){
+        	//查询当前人员当天是否还有任务可以调
+        	Map<String, Object> map = new HashMap<>();
+        	String employeeCode = appTaskArrangeShiftRestReq.getEmployeeCode();
+        	map.put("employeeCode", employeeCode);
+        	map.put("startTime", startTime);
+        	map.put("endTime", endTime);
+        	List<String> taskList = this.appTaskRestMapper.selectIfCleanerHaveTasks(map);
+        	if(CollectionUtils.isEmpty(taskList)) {
+        		throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"该人员在当前时间段内没有任务，不能进行调班");
+        	}
             this.appTaskRestMapper.updateCleanerTask(appTaskArrangeShiftRestReq);
         }
 
