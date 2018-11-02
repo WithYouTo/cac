@@ -9,6 +9,7 @@ import com.qcap.cac.entity.TbEquipCharge;
 import com.qcap.cac.entity.TbEquipRepair;
 import com.qcap.cac.entity.TbEquipUse;
 import com.qcap.cac.service.EquipRestSrv;
+import com.qcap.cac.tools.JpushTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.common.CoreConstant;
@@ -333,8 +334,10 @@ public class EquipRestSrvImpl implements EquipRestSrv {
      */
     private void handlerWhenOperateCodeIsInDamage(TbEquip equip, TbManager manager, String employeeCode) {
         this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INDAMAGE);
-        //todo 推送消息给设备管理员
-
+        String responseNo = equip.getResponseNo();
+        String equipName = equip.getEquipName();
+        String equipNo = equip.getEquipNo();
+        JpushTools.pushSingle(responseNo,equipName+"("+equipNo+")"+"出现故障，请前往查看！");
     }
 
     /**

@@ -136,17 +136,23 @@ public class LoginRestSrvImpl implements LoginRestSrv {
         String positionCode = userListReq.getPositionCode();
         String roleNum = userListReq.getRoleNum();
 
-        Set<UserListResp> set = new HashSet<UserListResp>();
-        List<UserListResp> orgList = this.loginRestMapper.getUserListByOrgCode(orgCode);
-        List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s);
-        List<UserListResp> roleList = this.loginRestMapper.getUserListByOrgCode(roleNum);
+//        Set<UserListResp> set = new HashSet<UserListResp>();
+        if(!Objects.isNull(positionCode) && !("").equals(positionCode)){
+            List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s);
+            return poList;
+        }else if (!("").equals(roleNum) && !Objects.isNull(roleNum)){
+            List<UserListResp> roleList = this.loginRestMapper.getUserListByOrgCode(roleNum);
+            return roleList;
+        }else{
+            List<UserListResp> orgList = this.loginRestMapper.getUserListByOrgCode(orgCode);
+            return orgList;
+        }
 
+//        CollectionUtils.addAll(set, orgList);
+//        CollectionUtils.addAll(set, poList);
+//        CollectionUtils.addAll(set, roleList);
+//        List<UserListResp> result = new ArrayList(set);
 
-        CollectionUtils.addAll(set, orgList);
-        CollectionUtils.addAll(set, poList);
-        CollectionUtils.addAll(set, roleList);
-        List<UserListResp> result = new ArrayList(set);
-        return result;
     }
 
     @Override

@@ -213,8 +213,12 @@ public class EquipSrvImpl implements EquipSrv {
         List<Map<String, Object>> list = this.equipMapper.listEquip(page,equipSearchDto);
         for(Map<String,Object> map :list){
             String equipState = map.get("equipState").toString();
+            String equipWorkState = map.get("equipWorkState").toString();
+
             CommonConstant.EQUIP_STATUS.get(equipState);
             map.put("statusName", CommonConstant.EQUIP_STATUS.get(equipState));
+            map.put("workStatusName", CommonConstant.EQUIP_WORK_STATUS.get(equipWorkState));
+
             String imgUrl =  Objects.toString(map.get("imgUrl"));
             map.put("imgUrl",RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX")+imgUrl);
         }
