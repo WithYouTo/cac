@@ -126,6 +126,12 @@
 	m.TASK_CODE  AS  taskCode,
 	m.TASK_TYPE  AS  taskType,
 	m.TASK_STATUS  AS  taskStatus,
+	CASE WHEN m.TASK_STATUS ='WAIT' THEN '未开始'
+	WHEN m.TASK_STATUS ='WORKING' THEN '进行中'
+	WHEN m.TASK_STATUS ='FINISH' THEN '已完成'
+	WHEN m.TASK_STATUS ='CANCLE' THEN '已取消'
+	END AS taskStatusName,
+	m.EMPLOYEE_NAME AS employeeName,
 	m.CHECK_STATUS AS checkStatus,
 	m.TASK_IMG_URL AS taskImgUrl,
 	CASE WHEN m.CHECK_STATUS ='TOCHECK' THEN '待检查'
@@ -231,12 +237,13 @@
 		GROUP BY CHECK_STATUS
 	</select>
 
-	<select id="listTempTask" parameterType="String" resultType="Map">
+	<select id="listTempTask" parameterType="com.qcap.cac.dto.AppTaskShiftHistoryRestReq" resultType="Map">
 		SELECT
 		m.AREA_NAME AS taskName,
 		m.TASK_CODE  AS  taskCode,
 		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
 		m.SPEC  AS  spec,
+		m.EMPLOYEE_NAME AS employeeName,
 		m.TASK_STATUS AS taskStatus,
 		CASE WHEN m.TASK_STATUS ='WAIT' THEN '未开始'
 		WHEN m.TASK_STATUS ='WORKING' THEN '进行中'
@@ -249,6 +256,11 @@
 		AND m.TASK_TYPE = 'TEMP'
 		AND TASK_STATUS !='CANCLE'
 		AND CHECK_STATUS !='DISQUALIFIED'
+		<if test=" lineNo != null and lineNo !='' ">
+		AND m.LINE_NO &gt; #{lineNo}
+		</if>
+		ORDER BY m.LINE_NO
+		LIMIT 0,10
 	</select>
 
 	<select id="selectTaskByCode" parameterType="String" resultType="com.qcap.cac.entity.TbTask">
@@ -299,7 +311,7 @@
       #{version})
   </insert>
 
-	<select id="selectArrangeShiftHistory" resultType="Map" parameterType="String">
+	<select id="selectArrangeShiftHistory" resultType="Map" parameterType="com.qcap.cac.dto.AppTaskShiftHistoryRestReq">
 		SELECT
 		m.ARRANGE_SHIFT_ID  AS  arrangeShiftId,
 		m.SHIFT  AS  shift,
@@ -309,6 +321,7 @@
 		m.POSITION_NAME  AS  positionName,
 		m.EMPLOYEE_CODE  AS  employeeCode,
 		m.EMPLOYEE_NAME  AS  employeeName,
+		m.LINE_NO AS lineNo,
 		DATE_FORMAT(m.CHANGE_DATE,'%Y-%m-%d') AS  changeDate,
 		m.EXTRA_EMPLOYEE_CODE  AS  extraEmployeeCode,
 		m.EXTRA_EMPLOYEE_NAME  AS  extraEmployeeName,
@@ -316,6 +329,11 @@
 		DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')  AS  endTime
 		FROM tb_task_arrange_shift m
 		WHERE m.CREATE_EMP = #{loginName}
+		<if test=" lineNo != null and lineNo !='' ">
+		AND m.LINE_NO &gt; #{lineNo}
+		</if>
+		ORDER BY m.LINE_NO
+		LIMIT 0,10
 	</select>
 
 	<update id="updateCleanerTask" parameterType="com.qcap.cac.dto.AppTaskArrangeShiftRestReq">

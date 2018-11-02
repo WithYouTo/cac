@@ -4,7 +4,7 @@ server:
     context-path: /cac
 spring:
   datasource:
-    url: jdbc:mysql://10.10.0.12:3333/whxxerp
+    url: jdbc:mysql://10.10.0.12:3333/cac
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     password: root

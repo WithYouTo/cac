@@ -20,6 +20,7 @@ import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.ibatis.executor.loader.ResultLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -394,8 +395,8 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	}
 
 	@Override
-	public List<Map<String, Object>> listTempTask(String loginName) {
-		return this.appTaskRestMapper.listTempTask(loginName);
+	public List<Map<String, Object>> listTempTask(AppTaskShiftHistoryRestReq appTaskShiftHistoryRestReq) {
+		return this.appTaskRestMapper.listTempTask(appTaskShiftHistoryRestReq);
 	}
 
 	@Override
@@ -451,7 +452,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		task.setVersion(0);
 
 		this.tempTaskMapper.insertTempTask(task);
-
+		
 	};
 
 	@Override
@@ -520,8 +521,8 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectArrangeShiftHistory(String loginName) {
-		return this.appTaskRestMapper.selectArrangeShiftHistory(loginName);
+	public List<Map<String, Object>> selectArrangeShiftHistory(AppTaskShiftHistoryRestReq appTaskShiftHistoryRestReq) {
+		return this.appTaskRestMapper.selectArrangeShiftHistory(appTaskShiftHistoryRestReq);
 	}
 
     @Override
@@ -579,7 +580,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
             	cal.add(Calendar.MINUTE,Math.abs(forBidMins));
             	String addCurTime = DateUtil.dateTimeToString(cal.getTime());
 
-                if(shiftStartTime.compareTo(curTime) > 0){
+                if(shiftStartTime.compareTo(addCurTime) > 0){
                     //update排班表,并新增顶班数据到排班表
                     changeArrangeShift(appTaskArrangeShiftRestReq);
                 }else{
@@ -624,6 +625,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		arrangeShift.setStartTime(DateUtil.stringToDateTime(appTaskArrangeShiftRestReq.getStartTimeStr()));
 		arrangeShift.setEndTime(DateUtil.stringToDateTime(appTaskArrangeShiftRestReq.getEndTimeStr()));
 		EntityTools.setCreateEmpAndTime(arrangeShift);
+		arrangeShift.setCreateEmp(appTaskArrangeShiftRestReq.getLoginName());
 
 		this.appTaskRestMapper.insertArrangeShift(arrangeShift);
 

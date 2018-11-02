@@ -1,6 +1,8 @@
 package com.qcap.cac.service;
 
 import com.qcap.cac.dto.*;
+import com.qcap.core.model.ResParams;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -33,7 +35,7 @@ public interface AppTaskRestSrv {
 
     void checkTask(List<MultipartFile>list, AppTaskUpdateReq appTaskUpdateReq) throws IOException;
 
-    List<Map<String,Object>> listTempTask(String loginName);
+    List<Map<String,Object>> listTempTask(AppTaskShiftHistoryRestReq appTaskShiftHistoryRestReq);
 
     Map<String,Object> selectDefaultEmployee(String startTime,String areaCode);
 
@@ -44,7 +46,7 @@ public interface AppTaskRestSrv {
 
     Map<String,Object> selectShiftTime (AppTaskQueryArrangeRestReq appTaskQueryArrangeRestReq);
 
-    List<Map<String,Object>> selectArrangeShiftHistory (String loginName);
+    List<Map<String,Object>> selectArrangeShiftHistory (AppTaskShiftHistoryRestReq appTaskShiftHistoryRestReq);
 
     void changeShift (AppTaskArrangeShiftRestReq appTaskArrangeShiftRestReq) throws InvocationTargetException, IllegalAccessException;
     

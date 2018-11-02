@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 @Api(description = "app端任务模块接口")
 @Controller
@@ -176,9 +177,8 @@ public class AppTaskRestController {
 	@RequestMapping(value = "/listTempTask", method = RequestMethod.POST)
 	@ApiOperation(value = "临时任务-历史查询", notes = "临时任务-历史查询", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public Object listTempTask(
-			@ApiParam(value = "当前登录人", required = true) @RequestParam("loginName") String loginName) {
-		List<Map<String, Object>> list = this.appTaskRestSrv.listTempTask(loginName);
+	public Object listTempTask( @Valid AppTaskShiftHistoryRestReq appTaskShiftHistoryRestReq) {
+		List<Map<String, Object>> list = this.appTaskRestSrv.listTempTask(appTaskShiftHistoryRestReq);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
 
@@ -213,8 +213,6 @@ public class AppTaskRestController {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "临时任务发布失败");
 		}
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC);
 	}
@@ -263,9 +261,8 @@ public class AppTaskRestController {
 	@RequestMapping(value = "/selectArrangeShiftHistory", method = RequestMethod.POST)
 	@ApiOperation(value = "查询调班历史记录", notes = "查询调班历史记录", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public Object selectArrangeShiftHistory(
-			@ApiParam(value = "app登录人", required = true) @RequestParam("loginName") String loginName) {
-		List<Map<String, Object>> list = this.appTaskRestSrv.selectArrangeShiftHistory(loginName);
+	public Object selectArrangeShiftHistory( @Valid AppTaskShiftHistoryRestReq appTaskShiftHistoryRestReq) {
+		List<Map<String, Object>> list = this.appTaskRestSrv.selectArrangeShiftHistory(appTaskShiftHistoryRestReq);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
 

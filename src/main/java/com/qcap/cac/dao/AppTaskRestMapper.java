@@ -1,14 +1,16 @@
 package com.qcap.cac.dao;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.qcap.cac.dto.AppTaskArrangeShiftRestReq;
 import com.qcap.cac.dto.AppTaskCheckTaskRestReq;
+import com.qcap.cac.dto.AppTaskShiftHistoryRestReq;
 import com.qcap.cac.dto.AppTaskUpdateReq;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.entity.TbTaskArrangeShift;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Map;
 
 public interface AppTaskRestMapper {
 	
@@ -32,13 +34,13 @@ public interface AppTaskRestMapper {
 
 	List<Map<String, String>> queryCheckTaskItem(Map<String, Object> map);
 
-	List<Map<String, Object>> listTempTask (@Param("loginName")String loginName);
+	List<Map<String, Object>> listTempTask (AppTaskShiftHistoryRestReq appTaskShiftHistoryRestReq);
 
 	TbTask selectTaskByCode(@Param("taskCode") String taskCode);
 
 	void insertArrangeShift(TbTaskArrangeShift arrangeShift);
 
-	List<Map<String,Object>> selectArrangeShiftHistory (@Param("loginName")String loginName);
+	List<Map<String,Object>> selectArrangeShiftHistory (AppTaskShiftHistoryRestReq appTaskShiftHistoryRestReq);
 
 	int updateCleanerTask (AppTaskArrangeShiftRestReq appTaskArrangeShiftRestReq);
 	
