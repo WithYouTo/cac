@@ -3,6 +3,7 @@ package com.qcap.cac.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.dto.WarehouseDistruDto;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
@@ -42,13 +43,13 @@ public class WarehouseReqGoodsController {
     private WarehouseRequService warehouseRequService;
 
     /**
-     * 领用查询（已出库）
+     * 领用查询（已发放）
      */
     @ResponseBody
     @RequestMapping(value = "/requestedList", method = RequestMethod.POST)
-    public PageResParams getRequestedGoodsList(IPage<Map<String, Object>> page,@Valid  WarehouseReqDto warehouseReqDto) {
+    public PageResParams getRequestedGoodsList(IPage<Map<String, Object>> page,@Valid WarehouseDistruDto warehouseDistruDto) {
         try {
-            this.warehouseReqDetailService.getRequestedList(page,warehouseReqDto);
+            this.warehouseReqDetailService.getRequestedList(page,warehouseDistruDto);
         } catch (Exception e) {
             return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
         }

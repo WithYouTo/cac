@@ -23,7 +23,7 @@ import java.util.Map;
  * @author: 曾欣
  * @date: 2018年10月22日 上午9:16:00
  */
-@Api(description="物品领用")
+@Api(tags = "APP物品领用和物品发放")
 @RestController
 @RequestMapping(value="/rest/goodsApply",headers="api_version=v1")
 public class GoodsApplyRestController {

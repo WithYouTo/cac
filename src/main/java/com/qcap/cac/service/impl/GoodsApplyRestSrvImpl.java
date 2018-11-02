@@ -10,9 +10,11 @@ import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.GoodsApplyRestSrv;
+import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.*;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +47,10 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
     @Resource
     private LoginRestMapper loginRestMapper;
+
+
+    @Resource
+    private TempTaskSrv tempTaskSrv;
 
     @Override
     public List<GoodsReqRestReq> queryReqList(Map<String, String> paramMap) {
@@ -166,12 +172,20 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
                 throw new RuntimeException("物品编码【" + goodsNo + "】/物品名称【" + goodsName + "】待发放余量不足");
             }
 
+            //根据岗位查询当班人员
+            Map<String, Object> user =  this.tempTaskSrv.selectDefaultEmployee(DateUtil.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"),areaCode);
+
             //新增发放记录表
             TbWarehouseDistribution distribution = new TbWarehouseDistribution();
             BeanUtils.copyProperties(item,distribution);
+            distribution.setDistrDate(DateUtil.dateToString(new Date()));
             distribution.setWarehouseDistributionId(UUIDUtils.getUUID());
             distribution.setWarehouseReqdetailId(item.getWarehouseReqDetailId());
             EntityTools.setCreateEmpAndTime(distribution);
+            if(MapUtils.isNotEmpty(user) && "1".equals(ToolUtil.toStr(user.get("flag")))){
+                distribution.setUserCode(ToolUtil.toStr(user.get("employeeCode")));
+                distribution.setUserName(ToolUtil.toStr(user.get("employeeName")));
+            }
             this.warehouseDistributionMapper.insert(distribution);
 
         }

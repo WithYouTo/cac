@@ -28,7 +28,7 @@ import java.util.Map;
  * @author: 曾欣
  * @date: 2018年10月25日 上午9:16:00
  */
-@Api(description="请假申请")
+@Api(tags = "APP请假申请和请假审批")
 @RestController
 @RequestMapping(value="/rest/leave",headers="api_version=v1")
 public class LeaveRestController {

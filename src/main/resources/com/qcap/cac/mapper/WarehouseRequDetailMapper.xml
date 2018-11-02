@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.WarehouseReqDetailMapper">
 
-    <!--查詢已领用信息-->
-    <select id="getRequestedGoodsList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseReqDto">
-        select
+    <!--查詢已发放信息-->
+    <select id="getRequestedGoodsList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseDistruDto">
+        <!--select
         STOREROOM_ID,
         STOREROOM,
         WAREHOUSE_REQDETAIL_ID,
@@ -46,7 +46,49 @@
         <if test="obj.endDate!=null and obj.endDate!=''">
             and DATE(b.REQU_TIME) &lt;= #{obj.endDate}
         </if>
-        ORDER BY  b.REQU_TIME desc
+        ORDER BY  b.REQU_TIME desc-->
+        SELECT
+        WAREHOUSE_DISTRIBUTION_ID  warehouseDistributionId,
+        WAREHOUSE_REQDETAIL_ID  warehouseReqdetailId,
+        GOODS_NO goodsNo,
+        GOODS_NAME  goodsName,
+        AREA_ID areaId,
+        AREA_NAME areaName,
+        DISTR_NUM distrNum,
+        DATE_FORMAT(DISTR_DATE,'%Y-%m-%d') distrDate,
+        MIN_UNIT minUnit,
+        EMPLOYEE_CODE ,
+        b.`name` employeeName,
+        USER_CODE ,
+        USER_NAME ,
+        a.REMARK
+        FROM
+        tb_warehouse_distribution a LEFT JOIN tb_manager b
+        ON a.EMPLOYEE_CODE = b.account
+        <where>
+        <if test="obj.areaName!=null and obj.areaName!=''">
+            and a.AREA_NAME like concat('%',#{obj.areaName},'%')
+        </if>
+        <if test="obj.employeeName!=null and obj.employeeName!=''">
+            and  b.`name` like concat('%',#{obj.employeeName},'%')
+        </if>
+        <if test="obj.userName!=null and obj.userName!=''">
+            and  a.USER_NAME like concat('%',#{obj.userName},'%')
+        </if>
+        <if test="obj.goodsNo!=null and obj.goodsNo!=''">
+            and a.GOODS_NO like concat('%',#{obj.goodsNo},'%')
+        </if>
+        <if test="obj.goodsName!=null and obj.goodsName!=''">
+            and a.GOODS_NAME like  concat('%',#{obj.goodsName},'%')
+        </if>
+        <if test="obj.startDate!=null and obj.startDate!=''">
+            and DATE(a.DISTR_DATE) &gt;= #{obj.startDate}
+        </if>
+        <if test="obj.endDate!=null and obj.endDate!=''">
+            and DATE(a.DISTR_DATE) &lt;= #{obj.endDate}
+        </if>
+        </where>
+        ORDER BY a.DISTR_DATE desc
     </select>
 
     <!--查询领用明细-->

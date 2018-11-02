@@ -3,7 +3,7 @@ package com.qcap.cac.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcap.cac.dto.WarehouseReqDto;
+import com.qcap.cac.dto.WarehouseDistruDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 
 import java.util.List;
@@ -22,9 +22,9 @@ public interface WarehouseReqDetailService extends IService<TbWarehouseReqdetail
     /**
      * 查询领用明细
      * @param page
-     * @param warehouseReqDto
+     * @param warehouseDistruDto
      */
-    void getRequestedList(IPage<Map<String, Object>> page,WarehouseReqDto warehouseReqDto);
+    void getRequestedList(IPage<Map<String, Object>> page, WarehouseDistruDto warehouseDistruDto);
 
 
     /**

@@ -45,6 +45,11 @@ public class TbWarehouseDistribution implements Serializable {
      * 发放数量
      */
     private Integer distrNum;
+
+    /**
+     * 发放时间
+     */
+    private String distrDate;
     /**
      * 发放单位(和最小单位保持一致)
      */
@@ -53,6 +58,15 @@ public class TbWarehouseDistribution implements Serializable {
      * 发放人工号
      */
     private String employeeCode;
+
+    /**
+     * 使用人工号
+     */
+    private String userCode;
+    /**
+     * 使用人姓名
+     */
+    private String userName;
     /**
      * 备注
      */
@@ -78,6 +92,33 @@ public class TbWarehouseDistribution implements Serializable {
      */
     private Integer version;
 
+    public String getDistrDate() {
+        return distrDate;
+    }
+
+    public void setDistrDate(String distrDate) {
+        this.distrDate = distrDate;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getWarehouseDistributionId() {
         return warehouseDistributionId;

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseReqDetailMapper;
+import com.qcap.cac.dto.WarehouseDistruDto;
 import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.service.WarehouseReqDetailService;
@@ -34,8 +35,8 @@ public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetai
 
 
     @Override
-    public void  getRequestedList(IPage<Map<String, Object>> page, @Valid  WarehouseReqDto warehouseReqDto) {
-        List<Map<String, Object>> list = this.warehouseReqDetailMapper.getRequestedGoodsList(page,warehouseReqDto);
+    public void  getRequestedList(IPage<Map<String, Object>> page, @Valid WarehouseDistruDto warehouseDistruDto) {
+        List<Map<String, Object>> list = this.warehouseReqDetailMapper.getRequestedGoodsList(page,warehouseDistruDto);
         page.setRecords(list);
     }
 
