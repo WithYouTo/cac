@@ -100,6 +100,7 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
                     .eq("BUILDING_NAME", tbWarehousePosition.getBuildingName())
                     .eq("FLOOR_NAME", tbWarehousePosition.getFloorName())
                     .eq("ROOM_NAME", tbWarehousePosition.getRoomName())
+                    .eq("DELETE_FLAG", "N")
                     .eq("RANGE_SHELF", tbWarehousePosition.getRangeShelf()));
             count = this.warehousePositionMapper.selectCount(wrapper);
         }
