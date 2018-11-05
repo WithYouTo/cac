@@ -259,4 +259,22 @@ public class CommonConstant {
 		AREA_TYPE.put("LEAVE", "廊桥");
 	}
 
+	// 任务开始时是否必须扫码
+	public final static String START_SCAN_FLAG_MUST = "MUST";
+	public final static String START_SCAN_FLAG_OPTIONAL = "OPTIONAL";
+	public static Map<String, String> START_SCAN_FLAG = new LinkedHashMap<String, String>();
+	static {
+		START_SCAN_FLAG.put("MUST", "必须");
+		START_SCAN_FLAG.put("OPTIONAL", "非必须");
+	}
+
+	// 任务结束时是否必须扫码
+	public final static String END_SCAN_FLAG_MUST = "MUST";
+	public final static String END_SCAN_FLAG_OPTIONAL = "OPTIONAL";
+	public static Map<String, String> END_SCAN_FLAG = new LinkedHashMap<String, String>();
+	static {
+		END_SCAN_FLAG.put("MUST", "必须");
+		END_SCAN_FLAG.put("OPTIONAL", "非必须");
+	}
+
 }

@@ -62,72 +62,72 @@ public class TbProgram {
     /**
     *   合同约定人数
      */
-    private Integer promisedNum;
+    private String promisedNum;
 
     /**
     *   合同约定最低人数
      */
-    private Integer minNum;
+    private String minNum;
 
     /**
     *   实际投入人数
      */
-    private Integer realNum;
+    private String realNum;
 
     /**
     *   办公室数量
      */
-    private Integer officeRoomNum;
+    private String officeRoomNum;
 
     /**
     *   会议室数量
      */
-    private Integer meetingRoomNum;
+    private String meetingRoomNum;
 
     /**
     *   卫生间数量
      */
-    private Integer washroomNum;
+    private String washroomNum;
 
     /**
     *   母婴室数量
      */
-    private Integer babyCareRoomNum;
+    private String babyCareRoomNum;
 
     /**
     *   吸烟室数量
      */
-    private Integer smokingRoomNum;
+    private String smokingRoomNum;
 
     /**
     *   饮水机/饮水站数量
      */
-    private Integer drinkingFountainNum;
+    private String drinkingFountainNum;
 
     /**
     *   电梯数量
      */
-    private Integer elevatorNum;
+    private String elevatorNum;
 
     /**
     *   上下扶梯数量
      */
-    private Integer updownEscalatorNum;
+    private String updownEscalatorNum;
 
     /**
     *   平行扶梯数量
      */
-    private Integer parallelEscalatorNum;
+    private String parallelEscalatorNum;
 
     /**
     *   廊桥数量
      */
-    private Integer loungeBridgeNum;
+    private String loungeBridgeNum;
 
     /**
     *   出入口数量
      */
-    private Integer entranceNum;
+    private String entranceNum;
 
     /**
     *   考核标准
@@ -225,7 +225,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.PROGRAM_ID
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getProgramId() {
         return programId;
@@ -237,7 +237,7 @@ public class TbProgram {
      *
      * @param programId the value for tb_program.PROGRAM_ID
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setProgramId(String programId) {
         this.programId = programId == null ? null : programId.trim();
@@ -249,7 +249,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.PROGRAM_CODE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getProgramCode() {
         return programCode;
@@ -261,7 +261,7 @@ public class TbProgram {
      *
      * @param programCode the value for tb_program.PROGRAM_CODE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setProgramCode(String programCode) {
         this.programCode = programCode == null ? null : programCode.trim();
@@ -273,7 +273,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.PROGRAM_NAME
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getProgramName() {
         return programName;
@@ -285,7 +285,7 @@ public class TbProgram {
      *
      * @param programName the value for tb_program.PROGRAM_NAME
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setProgramName(String programName) {
         this.programName = programName == null ? null : programName.trim();
@@ -297,7 +297,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.COVERED_AREA
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public BigDecimal getCoveredArea() {
         return coveredArea;
@@ -309,7 +309,7 @@ public class TbProgram {
      *
      * @param coveredArea the value for tb_program.COVERED_AREA
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setCoveredArea(BigDecimal coveredArea) {
         this.coveredArea = coveredArea;
@@ -321,7 +321,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.PROGRAM_STATUS
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getProgramStatus() {
         return programStatus;
@@ -333,7 +333,7 @@ public class TbProgram {
      *
      * @param programStatus the value for tb_program.PROGRAM_STATUS
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setProgramStatus(String programStatus) {
         this.programStatus = programStatus == null ? null : programStatus.trim();
@@ -345,7 +345,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.PROGRAM_ADDRESS
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getProgramAddress() {
         return programAddress;
@@ -357,7 +357,7 @@ public class TbProgram {
      *
      * @param programAddress the value for tb_program.PROGRAM_ADDRESS
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setProgramAddress(String programAddress) {
         this.programAddress = programAddress == null ? null : programAddress.trim();
@@ -369,7 +369,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.ACCEPT_MODE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getAcceptMode() {
         return acceptMode;
@@ -381,7 +381,7 @@ public class TbProgram {
      *
      * @param acceptMode the value for tb_program.ACCEPT_MODE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setAcceptMode(String acceptMode) {
         this.acceptMode = acceptMode == null ? null : acceptMode.trim();
@@ -393,7 +393,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.MANAGEMENT_AREA
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public BigDecimal getManagementArea() {
         return managementArea;
@@ -405,7 +405,7 @@ public class TbProgram {
      *
      * @param managementArea the value for tb_program.MANAGEMENT_AREA
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setManagementArea(BigDecimal managementArea) {
         this.managementArea = managementArea;
@@ -417,7 +417,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.BUILDING_STRUCTURE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getBuildingStructure() {
         return buildingStructure;
@@ -429,7 +429,7 @@ public class TbProgram {
      *
      * @param buildingStructure the value for tb_program.BUILDING_STRUCTURE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setBuildingStructure(String buildingStructure) {
         this.buildingStructure = buildingStructure == null ? null : buildingStructure.trim();
@@ -441,7 +441,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.CONTRACT_MONEY
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public BigDecimal getContractMoney() {
         return contractMoney;
@@ -453,7 +453,7 @@ public class TbProgram {
      *
      * @param contractMoney the value for tb_program.CONTRACT_MONEY
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setContractMoney(BigDecimal contractMoney) {
         this.contractMoney = contractMoney;
@@ -465,7 +465,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.CONTRACT_DURATION
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getContractDuration() {
         return contractDuration;
@@ -477,7 +477,7 @@ public class TbProgram {
      *
      * @param contractDuration the value for tb_program.CONTRACT_DURATION
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setContractDuration(String contractDuration) {
         this.contractDuration = contractDuration == null ? null : contractDuration.trim();
@@ -489,9 +489,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.PROMISED_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getPromisedNum() {
+    public String getPromisedNum() {
         return promisedNum;
     }
 
@@ -501,10 +501,10 @@ public class TbProgram {
      *
      * @param promisedNum the value for tb_program.PROMISED_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setPromisedNum(Integer promisedNum) {
-        this.promisedNum = promisedNum;
+    public void setPromisedNum(String promisedNum) {
+        this.promisedNum = promisedNum == null ? null : promisedNum.trim();
     }
 
     /**
@@ -513,9 +513,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.MIN_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getMinNum() {
+    public String getMinNum() {
         return minNum;
     }
 
@@ -525,10 +525,10 @@ public class TbProgram {
      *
      * @param minNum the value for tb_program.MIN_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setMinNum(Integer minNum) {
-        this.minNum = minNum;
+    public void setMinNum(String minNum) {
+        this.minNum = minNum == null ? null : minNum.trim();
     }
 
     /**
@@ -537,9 +537,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.REAL_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getRealNum() {
+    public String getRealNum() {
         return realNum;
     }
 
@@ -549,10 +549,10 @@ public class TbProgram {
      *
      * @param realNum the value for tb_program.REAL_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setRealNum(Integer realNum) {
-        this.realNum = realNum;
+    public void setRealNum(String realNum) {
+        this.realNum = realNum == null ? null : realNum.trim();
     }
 
     /**
@@ -561,9 +561,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.OFFICE_ROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getOfficeRoomNum() {
+    public String getOfficeRoomNum() {
         return officeRoomNum;
     }
 
@@ -573,10 +573,10 @@ public class TbProgram {
      *
      * @param officeRoomNum the value for tb_program.OFFICE_ROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setOfficeRoomNum(Integer officeRoomNum) {
-        this.officeRoomNum = officeRoomNum;
+    public void setOfficeRoomNum(String officeRoomNum) {
+        this.officeRoomNum = officeRoomNum == null ? null : officeRoomNum.trim();
     }
 
     /**
@@ -585,9 +585,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.MEETING_ROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getMeetingRoomNum() {
+    public String getMeetingRoomNum() {
         return meetingRoomNum;
     }
 
@@ -597,10 +597,10 @@ public class TbProgram {
      *
      * @param meetingRoomNum the value for tb_program.MEETING_ROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setMeetingRoomNum(Integer meetingRoomNum) {
-        this.meetingRoomNum = meetingRoomNum;
+    public void setMeetingRoomNum(String meetingRoomNum) {
+        this.meetingRoomNum = meetingRoomNum == null ? null : meetingRoomNum.trim();
     }
 
     /**
@@ -609,9 +609,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.WASHROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getWashroomNum() {
+    public String getWashroomNum() {
         return washroomNum;
     }
 
@@ -621,10 +621,10 @@ public class TbProgram {
      *
      * @param washroomNum the value for tb_program.WASHROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setWashroomNum(Integer washroomNum) {
-        this.washroomNum = washroomNum;
+    public void setWashroomNum(String washroomNum) {
+        this.washroomNum = washroomNum == null ? null : washroomNum.trim();
     }
 
     /**
@@ -633,9 +633,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.BABY_CARE_ROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getBabyCareRoomNum() {
+    public String getBabyCareRoomNum() {
         return babyCareRoomNum;
     }
 
@@ -645,10 +645,10 @@ public class TbProgram {
      *
      * @param babyCareRoomNum the value for tb_program.BABY_CARE_ROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setBabyCareRoomNum(Integer babyCareRoomNum) {
-        this.babyCareRoomNum = babyCareRoomNum;
+    public void setBabyCareRoomNum(String babyCareRoomNum) {
+        this.babyCareRoomNum = babyCareRoomNum == null ? null : babyCareRoomNum.trim();
     }
 
     /**
@@ -657,9 +657,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.SMOKING_ROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getSmokingRoomNum() {
+    public String getSmokingRoomNum() {
         return smokingRoomNum;
     }
 
@@ -669,10 +669,10 @@ public class TbProgram {
      *
      * @param smokingRoomNum the value for tb_program.SMOKING_ROOM_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setSmokingRoomNum(Integer smokingRoomNum) {
-        this.smokingRoomNum = smokingRoomNum;
+    public void setSmokingRoomNum(String smokingRoomNum) {
+        this.smokingRoomNum = smokingRoomNum == null ? null : smokingRoomNum.trim();
     }
 
     /**
@@ -681,9 +681,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.DRINKING_FOUNTAIN_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getDrinkingFountainNum() {
+    public String getDrinkingFountainNum() {
         return drinkingFountainNum;
     }
 
@@ -693,10 +693,10 @@ public class TbProgram {
      *
      * @param drinkingFountainNum the value for tb_program.DRINKING_FOUNTAIN_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setDrinkingFountainNum(Integer drinkingFountainNum) {
-        this.drinkingFountainNum = drinkingFountainNum;
+    public void setDrinkingFountainNum(String drinkingFountainNum) {
+        this.drinkingFountainNum = drinkingFountainNum == null ? null : drinkingFountainNum.trim();
     }
 
     /**
@@ -705,9 +705,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.ELEVATOR_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getElevatorNum() {
+    public String getElevatorNum() {
         return elevatorNum;
     }
 
@@ -717,10 +717,10 @@ public class TbProgram {
      *
      * @param elevatorNum the value for tb_program.ELEVATOR_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setElevatorNum(Integer elevatorNum) {
-        this.elevatorNum = elevatorNum;
+    public void setElevatorNum(String elevatorNum) {
+        this.elevatorNum = elevatorNum == null ? null : elevatorNum.trim();
     }
 
     /**
@@ -729,9 +729,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.UPDOWN_ESCALATOR_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getUpdownEscalatorNum() {
+    public String getUpdownEscalatorNum() {
         return updownEscalatorNum;
     }
 
@@ -741,10 +741,10 @@ public class TbProgram {
      *
      * @param updownEscalatorNum the value for tb_program.UPDOWN_ESCALATOR_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setUpdownEscalatorNum(Integer updownEscalatorNum) {
-        this.updownEscalatorNum = updownEscalatorNum;
+    public void setUpdownEscalatorNum(String updownEscalatorNum) {
+        this.updownEscalatorNum = updownEscalatorNum == null ? null : updownEscalatorNum.trim();
     }
 
     /**
@@ -753,9 +753,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.PARALLEL_ESCALATOR_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getParallelEscalatorNum() {
+    public String getParallelEscalatorNum() {
         return parallelEscalatorNum;
     }
 
@@ -765,10 +765,10 @@ public class TbProgram {
      *
      * @param parallelEscalatorNum the value for tb_program.PARALLEL_ESCALATOR_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setParallelEscalatorNum(Integer parallelEscalatorNum) {
-        this.parallelEscalatorNum = parallelEscalatorNum;
+    public void setParallelEscalatorNum(String parallelEscalatorNum) {
+        this.parallelEscalatorNum = parallelEscalatorNum == null ? null : parallelEscalatorNum.trim();
     }
 
     /**
@@ -777,9 +777,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.LOUNGE_BRIDGE_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getLoungeBridgeNum() {
+    public String getLoungeBridgeNum() {
         return loungeBridgeNum;
     }
 
@@ -789,10 +789,10 @@ public class TbProgram {
      *
      * @param loungeBridgeNum the value for tb_program.LOUNGE_BRIDGE_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setLoungeBridgeNum(Integer loungeBridgeNum) {
-        this.loungeBridgeNum = loungeBridgeNum;
+    public void setLoungeBridgeNum(String loungeBridgeNum) {
+        this.loungeBridgeNum = loungeBridgeNum == null ? null : loungeBridgeNum.trim();
     }
 
     /**
@@ -801,9 +801,9 @@ public class TbProgram {
      *
      * @return the value of tb_program.ENTRANCE_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public Integer getEntranceNum() {
+    public String getEntranceNum() {
         return entranceNum;
     }
 
@@ -813,10 +813,10 @@ public class TbProgram {
      *
      * @param entranceNum the value for tb_program.ENTRANCE_NUM
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
-    public void setEntranceNum(Integer entranceNum) {
-        this.entranceNum = entranceNum;
+    public void setEntranceNum(String entranceNum) {
+        this.entranceNum = entranceNum == null ? null : entranceNum.trim();
     }
 
     /**
@@ -825,7 +825,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.CHECK_STANDARD
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getCheckStandard() {
         return checkStandard;
@@ -837,7 +837,7 @@ public class TbProgram {
      *
      * @param checkStandard the value for tb_program.CHECK_STANDARD
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setCheckStandard(String checkStandard) {
         this.checkStandard = checkStandard == null ? null : checkStandard.trim();
@@ -849,7 +849,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.CONTRACT_RESTRAIN
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getContractRestrain() {
         return contractRestrain;
@@ -861,7 +861,7 @@ public class TbProgram {
      *
      * @param contractRestrain the value for tb_program.CONTRACT_RESTRAIN
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setContractRestrain(String contractRestrain) {
         this.contractRestrain = contractRestrain == null ? null : contractRestrain.trim();
@@ -873,7 +873,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.CONTRACT_FILE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getContractFile() {
         return contractFile;
@@ -885,7 +885,7 @@ public class TbProgram {
      *
      * @param contractFile the value for tb_program.CONTRACT_FILE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setContractFile(String contractFile) {
         this.contractFile = contractFile == null ? null : contractFile.trim();
@@ -897,7 +897,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.ARCHITECTURAL_PIC
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getArchitecturalPic() {
         return architecturalPic;
@@ -909,7 +909,7 @@ public class TbProgram {
      *
      * @param architecturalPic the value for tb_program.ARCHITECTURAL_PIC
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setArchitecturalPic(String architecturalPic) {
         this.architecturalPic = architecturalPic == null ? null : architecturalPic.trim();
@@ -921,7 +921,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.REMARK
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getRemark() {
         return remark;
@@ -933,7 +933,7 @@ public class TbProgram {
      *
      * @param remark the value for tb_program.REMARK
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
@@ -945,7 +945,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.START_TIME
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public Date getStartTime() {
         return startTime;
@@ -957,7 +957,7 @@ public class TbProgram {
      *
      * @param startTime the value for tb_program.START_TIME
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
@@ -969,7 +969,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.END_TIME
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public Date getEndTime() {
         return endTime;
@@ -981,7 +981,7 @@ public class TbProgram {
      *
      * @param endTime the value for tb_program.END_TIME
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
@@ -993,7 +993,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.EFFECT_DATE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public Date getEffectDate() {
         return effectDate;
@@ -1005,7 +1005,7 @@ public class TbProgram {
      *
      * @param effectDate the value for tb_program.EFFECT_DATE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setEffectDate(Date effectDate) {
         this.effectDate = effectDate;
@@ -1017,7 +1017,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.AREA_CODE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getAreaCode() {
         return areaCode;
@@ -1029,7 +1029,7 @@ public class TbProgram {
      *
      * @param areaCode the value for tb_program.AREA_CODE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setAreaCode(String areaCode) {
         this.areaCode = areaCode == null ? null : areaCode.trim();
@@ -1041,7 +1041,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.AREA_NAME
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getAreaName() {
         return areaName;
@@ -1053,7 +1053,7 @@ public class TbProgram {
      *
      * @param areaName the value for tb_program.AREA_NAME
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setAreaName(String areaName) {
         this.areaName = areaName == null ? null : areaName.trim();
@@ -1065,7 +1065,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.REMARK1
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getRemark1() {
         return remark1;
@@ -1077,7 +1077,7 @@ public class TbProgram {
      *
      * @param remark1 the value for tb_program.REMARK1
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setRemark1(String remark1) {
         this.remark1 = remark1 == null ? null : remark1.trim();
@@ -1089,7 +1089,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.REMARK2
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getRemark2() {
         return remark2;
@@ -1101,7 +1101,7 @@ public class TbProgram {
      *
      * @param remark2 the value for tb_program.REMARK2
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setRemark2(String remark2) {
         this.remark2 = remark2 == null ? null : remark2.trim();
@@ -1113,7 +1113,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.REMARK3
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getRemark3() {
         return remark3;
@@ -1125,7 +1125,7 @@ public class TbProgram {
      *
      * @param remark3 the value for tb_program.REMARK3
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setRemark3(String remark3) {
         this.remark3 = remark3 == null ? null : remark3.trim();
@@ -1137,7 +1137,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.CREATE_EMP
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getCreateEmp() {
         return createEmp;
@@ -1149,7 +1149,7 @@ public class TbProgram {
      *
      * @param createEmp the value for tb_program.CREATE_EMP
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setCreateEmp(String createEmp) {
         this.createEmp = createEmp == null ? null : createEmp.trim();
@@ -1161,7 +1161,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.CREATE_DATE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public Date getCreateDate() {
         return createDate;
@@ -1173,7 +1173,7 @@ public class TbProgram {
      *
      * @param createDate the value for tb_program.CREATE_DATE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
@@ -1185,7 +1185,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.UPDATE_DATE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public Date getUpdateDate() {
         return updateDate;
@@ -1197,7 +1197,7 @@ public class TbProgram {
      *
      * @param updateDate the value for tb_program.UPDATE_DATE
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
@@ -1209,7 +1209,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.UPDATE_EMP
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public String getUpdateEmp() {
         return updateEmp;
@@ -1221,7 +1221,7 @@ public class TbProgram {
      *
      * @param updateEmp the value for tb_program.UPDATE_EMP
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setUpdateEmp(String updateEmp) {
         this.updateEmp = updateEmp == null ? null : updateEmp.trim();
@@ -1233,7 +1233,7 @@ public class TbProgram {
      *
      * @return the value of tb_program.VERSION
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public Integer getVersion() {
         return version;
@@ -1245,7 +1245,7 @@ public class TbProgram {
      *
      * @param version the value for tb_program.VERSION
      *
-     * @mbggenerated Sun Oct 21 11:16:47 CST 2018
+     * @mbggenerated Fri Nov 02 15:10:47 CST 2018
      */
     public void setVersion(Integer version) {
         this.version = version;

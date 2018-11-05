@@ -13,7 +13,9 @@
 		SELECT 
 		PLAN_ID AS planId,AREA_CODE AS areaCode,
 		STANDARD_CODE AS standardCode,START_TIME AS startTime,
-		END_TIME AS endTime,PLAN_TIME_TYPE AS planTimeType 
+		END_TIME AS endTime,PLAN_TIME_TYPE AS planTimeType,
+		CHECK_FLAG AS checkFlag,UPLOAD_PIC_FLAG AS uploadPicFlag,
+		START_SCAN_FLAG  AS  startScanFlag,END_SCAN_FLAG  AS  endScanFlag
 		FROM tb_plan 
 		WHERE PLAN_TIME_TYPE = 'DAY' 
 		AND START_TIME &gt;= #{startTime}
@@ -21,7 +23,7 @@
 		AND DATE(JOB_RUN_TIME) != DATE(#{curDate})
 		UNION
 		SELECT 
-		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE ,CHECK_FLAG,UPLOAD_PIC_FLAG,START_SCAN_FLAG,END_SCAN_FLAG
 		FROM tb_plan 
 		WHERE PLAN_TIME_TYPE = 'WEEK' 
 		AND WEEK= #{week} 
@@ -30,7 +32,7 @@
 		AND DATE(JOB_RUN_TIME) != DATE(#{curDate})
 		UNION
 		SELECT 
-		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE ,CHECK_FLAG,UPLOAD_PIC_FLAG,START_SCAN_FLAG,END_SCAN_FLAG
 		FROM tb_plan 
 		WHERE PLAN_TIME_TYPE = 'MONTH'  
 		AND DAY = #{day} 
@@ -39,7 +41,7 @@
 		AND DATE(JOB_RUN_TIME) != DATE(#{curDate})
 		UNION
 		SELECT 
-		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE 
+		PLAN_ID ,AREA_CODE,STANDARD_CODE,START_TIME,END_TIME,PLAN_TIME_TYPE ,CHECK_FLAG,UPLOAD_PIC_FLAG,START_SCAN_FLAG,END_SCAN_FLAG
 		FROM tb_plan 
 		WHERE PLAN_TIME_TYPE = 'YEAR' 
 		AND MONTH = #{month} 
@@ -169,35 +171,39 @@
 	AND POSITION_CODE=#{positionCode} 
 	<include refid="selectWorkIngItem"/>
 	</select>
-	
+
 	<insert id="insertTaskBatch" parameterType="java.util.List">
-	  insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID, 
-      TASK_TYPE, POSITION_CODE, POSITION_NAME, 
-      AREA_CODE, AREA_NAME, STANDARD_CODE, 
-      STANDARD_NAME, SHIFT, SPEC, 
-      EMPLOYEE_CODE, EMPLOYEE_NAME, EMPLOYEE_TEL, 
-      COMPLETE_TIME, START_TIME, END_TIME, 
-      TASK_STATUS, CHECK_STATUS, TASK_SCORE, 
-      CHECK_FLAG, TASK_ADVICE, REMARK1, 
-      TASK_FINISH_DESC, DISQUALIFIED_REASON,
-      REMARK2, REMARK3, CREATE_EMP, TASK_REMIND_TIME,
-      CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
-      VERSION,UPLOAD_PIC_FLAG)
-    values 
-    <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.taskId}, #{item.taskCode}, #{item.planId}, 
-      #{item.taskType}, #{item.positionCode}, #{item.positionName}, 
-      #{item.areaCode}, #{item.areaName}, #{item.standardCode}, 
-      #{item.standardName}, #{item.shift}, #{item.spec}, 
-      #{item.employeeCode}, #{item.employeeName}, #{item.employeeTel}, 
-      #{item.completeTime}, #{item.startTime}, #{item.endTime}, 
-      #{item.taskStatus}, #{item.checkStatus}, #{item.taskScore}, 
-      #{item.checkFlag}, #{item.taskAdvice}, #{item.remark1}, 
-      #{item.taskFinishDesc}, #{item.disqualifiedReason},
-      #{item.remark2}, #{item.remark3}, #{item.createEmp}, #{item.taskRemindTime}, 
-      #{item.createDate}, #{item.updateDate}, #{item.updateEmp}, 
-      #{item.version},#{item.uploadPicFlag})
-      </foreach>
+			insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID,
+			TASK_TYPE, POSITION_CODE, POSITION_NAME,
+			AREA_CODE, AREA_NAME, STANDARD_CODE,
+			STANDARD_NAME, SHIFT, SPEC,
+			EMPLOYEE_CODE, EMPLOYEE_NAME, EMPLOYEE_TEL,
+			COMPLETE_TIME, START_TIME, END_TIME,
+			TASK_STATUS, CHECK_STATUS, TASK_SCORE,
+			UPLOAD_PIC_FLAG, CHECK_FLAG, TASK_ADVICE,
+			REMARK1, REMARK2, REMARK3,
+			CREATE_EMP, CREATE_DATE, UPDATE_DATE,
+			UPDATE_EMP, VERSION,
+			TASK_FINISH_DESC, DISQUALIFIED_REASON, TASK_REMIND_TIME,
+			FEEDBACK_IMG_URL, CHECK_IMG_URL, TASK_IMG_URL,
+			START_SCAN_FLAG, END_SCAN_FLAG)
+			values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.taskId}, #{item.taskCode}, #{item.planId},
+			#{item.taskType}, #{item.positionCode}, #{item.positionName},
+			#{item.areaCode}, #{item.areaName}, #{item.standardCode},
+			#{item.standardName}, #{item.shift}, #{item.spec},
+			#{item.employeeCode}, #{item.employeeName}, #{item.employeeTel},
+			#{item.completeTime}, #{item.startTime}, #{item.endTime},
+			#{item.taskStatus}, #{item.checkStatus}, #{item.taskScore},
+			#{item.uploadPicFlag}, #{item.checkFlag}, #{item.taskAdvice},
+			#{item.remark1}, #{item.remark2}, #{item.remark3},
+			#{item.createEmp}, #{item.createDate}, #{item.updateDate},
+			#{item.updateEmp}, #{item.version},
+			#{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.taskRemindTime},
+			#{item.feedbackImgUrl}, #{item.checkImgUrl}, #{item.taskImgUrl},
+			#{item.startScanFlag}, #{item.endScanFlag})
+		</foreach>
 	</insert>
 	
 	<select id="selectAreaName" parameterType="String" resultType="String">

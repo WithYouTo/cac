@@ -74,7 +74,7 @@
 		WHEN m.TASK_TYPE ='EVENT' THEN '事件'
 		WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
 		END AS taskTypeName,
-		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
+		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %H:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %H:%i')) AS cleanTime,
 		IFNULL(m.SPEC,'') AS  spec,
 		m.TASK_SCORE  AS  taskScore,
 		m.CHECK_FLAG  AS  checkFlag,
@@ -82,6 +82,8 @@
 		WHEN m.CHECK_FLAG ='OPTIONAL' THEN '否'
 		END AS checkFlagName,
 		m.UPLOAD_PIC_FLAG AS uploadPicFlag,
+		m.START_SCAN_FLAG  AS  startScanFlag,
+		m.END_SCAN_FLAG  AS  endScanFlag,
 		m.LINE_NO  AS  lineNo
 		FROM tb_task m
 		WHERE 1=1
@@ -144,7 +146,7 @@
 	WHEN m.TASK_TYPE ='EVENT' THEN '事件'
 	WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
 	END AS taskTypeName,
-	CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
+	CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %H:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %H:%i')) AS cleanTime,
 	m.SPEC  AS  spec,
 	m.TASK_SCORE  AS  taskScore,
 	m.CHECK_FLAG  AS  checkFlag,
@@ -155,6 +157,8 @@
 	CASE WHEN n.UPLOAD_PIC_FLAG ='MUST' THEN '是'
 	WHEN m.UPLOAD_PIC_FLAG ='OPTIONAL' THEN '否'
 	END AS uploadPicFlagName,
+	m.START_SCAN_FLAG  AS  startScanFlag,
+    m.END_SCAN_FLAG  AS  endScanFlag,
 	m.TASK_FINISH_DESC AS taskFinishDesc,
 	m.TASK_ADVICE AS taskAdvice,
 	m.FEEDBACK_IMG_URL AS feedBackImgUrl,
@@ -241,7 +245,7 @@
 		SELECT
 		m.AREA_NAME AS taskName,
 		m.TASK_CODE  AS  taskCode,
-		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %h:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %h:%i')) AS cleanTime,
+		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %H:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %H:%i')) AS cleanTime,
 		m.SPEC  AS  spec,
 		m.EMPLOYEE_NAME AS employeeName,
 		m.TASK_STATUS AS taskStatus,
@@ -285,6 +289,8 @@
 		m.TASK_STATUS  AS  taskStatus,
 		m.CHECK_FLAG  AS  checkFlag,
 		m.UPLOAD_PIC_FLAG  AS  uploadPicFlag,
+		m.START_SCAN_FLAG  AS  startScanFlag,
+    	m.END_SCAN_FLAG  AS  endScanFlag,
 		m.TASK_IMG_URL AS taskImgUrl,
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,
@@ -356,11 +362,11 @@
 			SELECT AREA_CODE 
 			FROM tb_area_position 
 			where POSITION_CODE =#{positionCode}
-			<if test=" positionType != '3'">
+			<if test=' positionType != "3" '>
 			AND POSITION_TYPE != 3 ) ,AREA_CODE)
 			</if>
-			<if test=" positionType eq '3' ">
-			AND position_type = 3 ) ,AREA_CODE)
+			<if test=' positionType == "3" '>
+			AND POSITION_TYPE = 3 ) ,AREA_CODE)
 			</if>
 	</select>
 	

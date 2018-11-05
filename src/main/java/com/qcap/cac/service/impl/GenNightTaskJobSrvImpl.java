@@ -119,6 +119,10 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			String planStartTime = ToolUtil.toStr(map.get("startTime"));
 			String planEndTime = ToolUtil.toStr(map.get("endTime"));
 			String planTimeType = ToolUtil.toStr(map.get("planTimeType"));
+			String uploadPicFlag = ToolUtil.toStr(map.get("uploadPicFlag"));
+			String checkFlag = ToolUtil.toStr(map.get("checkFlag"));
+			String startScanFlag = ToolUtil.toStr(map.get("startScanFlag"));
+			String endScanFlag = ToolUtil.toStr(map.get("endScanFlag"));
 
 			// 参数校验
 			if (StringUtils.isEmpty(areaCode)) {
@@ -191,8 +195,6 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 				continue;
 			}
 
-			String uploadPicFlag = ToolUtil.toStr(standardMap.get("uploadPicFlag"));
-			String checkFlag = ToolUtil.toStr(standardMap.get("checkFlag"));
 			String standardName = ToolUtil.toStr(standardMap.get("standardName"));
 			
 			String areaName=this.dayTimeTaskMapper.selectAreaName(areaCode);
@@ -250,7 +252,8 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			task.setStandardName(standardName);
 			task.setCheckFlag(checkFlag);
 			task.setUploadPicFlag(uploadPicFlag);
-
+			task.setEndScanFlag(endScanFlag);
+			task.setStartScanFlag(startScanFlag);
             //设置任务编码
             String taskCodePrefix = "";
             if(CommonConstant.PLAN_TIME_TYPE_DAY.equals(planTimeType)){

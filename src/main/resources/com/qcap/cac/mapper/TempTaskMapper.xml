@@ -58,7 +58,7 @@
 	</select>
 	
 	<insert id="insertTempTask" parameterType="com.qcap.cac.entity.TbTask">
-    insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID,
+   insert into tb_task (TASK_ID, TASK_CODE, PLAN_ID,
       TASK_TYPE, POSITION_CODE, POSITION_NAME,
       AREA_CODE, AREA_NAME, STANDARD_CODE,
       STANDARD_NAME, SHIFT, SPEC,
@@ -66,12 +66,12 @@
       COMPLETE_TIME, START_TIME, END_TIME,
       TASK_STATUS, CHECK_STATUS, TASK_SCORE,
       UPLOAD_PIC_FLAG, CHECK_FLAG, TASK_ADVICE,
+      REMARK1, REMARK2, REMARK3,
+      CREATE_EMP, CREATE_DATE, UPDATE_DATE,
+      UPDATE_EMP, VERSION,
       TASK_FINISH_DESC, DISQUALIFIED_REASON, TASK_REMIND_TIME,
       FEEDBACK_IMG_URL, CHECK_IMG_URL, TASK_IMG_URL,
-      REMARK1, REMARK2,
-      REMARK3, CREATE_EMP, CREATE_DATE,
-      UPDATE_DATE, UPDATE_EMP, VERSION
-      )
+      START_SCAN_FLAG, END_SCAN_FLAG)
     values (#{taskId}, #{taskCode}, #{planId},
       #{taskType}, #{positionCode}, #{positionName},
       #{areaCode}, #{areaName}, #{standardCode},
@@ -80,12 +80,12 @@
       #{completeTime}, #{startTime}, #{endTime},
       #{taskStatus}, #{checkStatus}, #{taskScore},
       #{uploadPicFlag}, #{checkFlag}, #{taskAdvice},
+      #{remark1}, #{remark2}, #{remark3},
+      #{createEmp}, #{createDate}, #{updateDate},
+      #{updateEmp}, #{version},
       #{taskFinishDesc}, #{disqualifiedReason}, #{taskRemindTime},
       #{feedbackImgUrl}, #{checkImgUrl}, #{taskImgUrl},
-      #{remark1}, #{remark2},
-      #{remark3}, #{createEmp}, #{createDate},
-      #{updateDate}, #{updateEmp}, #{version}
-      )
+      #{startScanFlag}, #{endScanFlag})
 	</insert>
 	
 	<insert id="insertTaskBatch" parameterType="java.util.List">
@@ -97,12 +97,13 @@
 		COMPLETE_TIME, START_TIME, END_TIME,
 		TASK_STATUS, CHECK_STATUS, TASK_SCORE,
 		UPLOAD_PIC_FLAG, CHECK_FLAG, TASK_ADVICE,
+		REMARK1, REMARK2, REMARK3,
+		CREATE_EMP, CREATE_DATE, UPDATE_DATE,
+		UPDATE_EMP, VERSION,
 		TASK_FINISH_DESC, DISQUALIFIED_REASON, TASK_REMIND_TIME,
 		FEEDBACK_IMG_URL, CHECK_IMG_URL, TASK_IMG_URL,
-		REMARK1, REMARK2,
-		REMARK3, CREATE_EMP, CREATE_DATE,
-		UPDATE_DATE, UPDATE_EMP, VERSION)
-    values 
+		START_SCAN_FLAG, END_SCAN_FLAG)
+		values
     <foreach collection="list" item="item" index="index" separator=",">
 		(#{item.taskId}, #{item.taskCode}, #{item.planId},
 		#{item.taskType}, #{item.positionCode}, #{item.positionName},
@@ -112,11 +113,12 @@
 		#{item.completeTime}, #{item.startTime}, #{item.endTime},
 		#{item.taskStatus}, #{item.checkStatus}, #{item.taskScore},
 		#{item.uploadPicFlag}, #{item.checkFlag}, #{item.taskAdvice},
+		#{item.remark1}, #{item.remark2}, #{item.remark3},
+		#{item.createEmp}, #{item.createDate}, #{item.updateDate},
+		#{item.updateEmp}, #{item.version},
 		#{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.taskRemindTime},
 		#{item.feedbackImgUrl}, #{item.checkImgUrl}, #{item.taskImgUrl},
-		#{item.remark1}, #{item.remark2},
-		#{item.remark3}, #{item.createEmp}, #{item.createDate},
-		#{item.updateDate}, #{item.updateEmp}, #{item.version})
+		#{item.startScanFlag}, #{item.endScanFlag})
       </foreach>
 	</insert>
 	

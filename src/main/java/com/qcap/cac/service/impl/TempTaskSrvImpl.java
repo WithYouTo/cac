@@ -8,6 +8,7 @@ import com.qcap.cac.dto.TempTaskSearchParam;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.EntityTools;
+import com.qcap.cac.tools.JpushTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
@@ -177,8 +178,18 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setEmployeeName(employeeName);
 		task.setEmployeeTel(employeeTel);
 		task.setTaskImgUrl(taskDto.getFileUrl());
+		//是否检查、是否上传图片和扫码设置
+		 task.setCheckFlag(CommonConstant.TASK_CHECK_FLAG_MUST);
+		task.setUploadPicFlag(CommonConstant.UPLOAD_PIC_FLAG_MUST);
+		task.setStartScanFlag(CommonConstant.START_SCAN_FLAG_OPTIONAL);
+		task.setEndScanFlag(CommonConstant.END_SCAN_FLAG_OPTIONAL);
 		
 		this.tempTaskMapper.insertTempTask(task);
+
+		// 根据工号推送任务通知
+		String [] employeeCodeArr = employeeCode.split(",");
+		List<String> employeeCodeList = Arrays.asList(employeeCodeArr);
+		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
 		map.put(CommonConstant.BACK_MESSAGE, "新增临时任务成功");

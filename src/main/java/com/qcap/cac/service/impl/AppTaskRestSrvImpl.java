@@ -10,17 +10,13 @@ import com.qcap.cac.entity.TbTaskArrangeShift;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AppTaskRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
-import com.qcap.cac.tools.EntityTools;
-import com.qcap.cac.tools.RedisTools;
-import com.qcap.cac.tools.ToolUtil;
-import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.cac.tools.*;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.utils.DateUtil;
 import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.ibatis.executor.loader.ResultLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -388,7 +384,6 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 			task.setVersion(0);
 			task.setCreateDate(new Date());
 			task.setCreateEmp("由检查不合格任务生成,检查不合格任务编码："+taskCode);
-			task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
 			this.tempTaskMapper.insertTempTask(task);
 
 		}
@@ -445,13 +440,22 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		task.setCreateDate(new Date());
 		task.setTaskImgUrl(imgUrl);
 		task.setTaskId(UUIDUtils.getUUID());
-		task.setLineNo(DateUtil.dateTimeToStringForLineNo(new Date()));
 		task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
 		task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
 		task.setTaskType(CommonConstant.TASK_TYPE_TEMP);
 		task.setVersion(0);
+		//是否检查、是否上传图片和扫码设置
+		task.setCheckFlag(CommonConstant.TASK_CHECK_FLAG_MUST);
+		task.setUploadPicFlag(CommonConstant.UPLOAD_PIC_FLAG_MUST);
+		task.setStartScanFlag(CommonConstant.START_SCAN_FLAG_OPTIONAL);
+		task.setEndScanFlag(CommonConstant.END_SCAN_FLAG_OPTIONAL);
 
 		this.tempTaskMapper.insertTempTask(task);
+
+		// 根据工号推送任务通知
+		String [] employeeCodeArr = appTaskAddRestReq.getEmployeeCode().split(",");
+		List<String> employeeCodeList = Arrays.asList(employeeCodeArr);
+		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
 		
 	};
 

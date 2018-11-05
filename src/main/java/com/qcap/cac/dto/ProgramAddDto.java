@@ -56,72 +56,72 @@ public class ProgramAddDto {
 	    /**
 	    *   合同约定人数
 	     */
-	    private int promisedNum;
+	    private String promisedNum;
 
 	    /**
 	    *   合同约定最低人数
 	     */
-	    private int minNum;
+	    private String minNum;
 
 	    /**
 	    *   实际投入人数
 	     */
-	    private int realNum;
+	    private String realNum;
 
 	    /**
 	    *   办公室数量
 	     */
-	    private int officeRoomNum;
+	    private String officeRoomNum;
 
 	    /**
 	    *   会议室数量
 	     */
-	    private int meetingRoomNum;
+	    private String meetingRoomNum;
 
 	    /**
 	    *   卫生间数量
 	     */
-	    private int washroomNum;
+	    private String washroomNum;
 
 	    /**
 	    *   母婴室数量
 	     */
-	    private int babyCareRoomNum;
+	    private String babyCareRoomNum;
 
 	    /**
 	    *   吸烟室数量
 	     */
-	    private int smokingRoomNum;
+	    private String smokingRoomNum;
 
 	    /**
 	    *   饮水机/饮水站数量
 	     */
-	    private int drinkingFountainNum;
+	    private String drinkingFountainNum;
 
 	    /**
 	    *   电梯数量
 	     */
-	    private int elevatorNum;
+	    private String elevatorNum;
 
 	    /**
 	    *   上下扶梯数量
 	     */
-	    private int updownEscalatorNum;
+	    private String updownEscalatorNum;
 
 	    /**
 	    *   平行扶梯数量
 	     */
-	    private int parallelEscalatorNum;
+	    private String parallelEscalatorNum;
 
 	    /**
 	    *   廊桥数量
 	     */
-	    private int loungeBridgeNum;
+	    private String loungeBridgeNum;
 
 	    /**
 	    *   出入口数量
 	     */
-	    private int entranceNum;
+	    private String entranceNum;
 
 	    /**
 	    *   考核标准
@@ -222,59 +222,59 @@ public class ProgramAddDto {
 			return contractDuration;
 		}
 
-		public int getPromisedNum() {
+		public String getPromisedNum() {
 			return promisedNum;
 		}
 
-		public int getMinNum() {
+		public String getMinNum() {
 			return minNum;
 		}
 
-		public int getRealNum() {
+		public String getRealNum() {
 			return realNum;
 		}
 
-		public int getOfficeRoomNum() {
+		public String getOfficeRoomNum() {
 			return officeRoomNum;
 		}
 
-		public int getMeetingRoomNum() {
+		public String getMeetingRoomNum() {
 			return meetingRoomNum;
 		}
 
-		public int getWashroomNum() {
+		public String getWashroomNum() {
 			return washroomNum;
 		}
 
-		public int getBabyCareRoomNum() {
+		public String getBabyCareRoomNum() {
 			return babyCareRoomNum;
 		}
 
-		public int getSmokingRoomNum() {
+		public String getSmokingRoomNum() {
 			return smokingRoomNum;
 		}
 
-		public int getDrinkingFountainNum() {
+		public String getDrinkingFountainNum() {
 			return drinkingFountainNum;
 		}
 
-		public int getElevatorNum() {
+		public String getElevatorNum() {
 			return elevatorNum;
 		}
 
-		public int getUpdownEscalatorNum() {
+		public String getUpdownEscalatorNum() {
 			return updownEscalatorNum;
 		}
 
-		public int getParallelEscalatorNum() {
+		public String getParallelEscalatorNum() {
 			return parallelEscalatorNum;
 		}
 
-		public int getLoungeBridgeNum() {
+		public String getLoungeBridgeNum() {
 			return loungeBridgeNum;
 		}
 
-		public int getEntranceNum() {
+		public String getEntranceNum() {
 			return entranceNum;
 		}
 
@@ -358,59 +358,59 @@ public class ProgramAddDto {
 			this.contractDuration = contractDuration;
 		}
 
-		public void setPromisedNum(int promisedNum) {
+		public void setPromisedNum(String promisedNum) {
 			this.promisedNum = promisedNum;
 		}
 
-		public void setMinNum(int minNum) {
+		public void setMinNum(String minNum) {
 			this.minNum = minNum;
 		}
 
-		public void setRealNum(int realNum) {
+		public void setRealNum(String realNum) {
 			this.realNum = realNum;
 		}
 
-		public void setOfficeRoomNum(int officeRoomNum) {
+		public void setOfficeRoomNum(String officeRoomNum) {
 			this.officeRoomNum = officeRoomNum;
 		}
 
-		public void setMeetingRoomNum(int meetingRoomNum) {
+		public void setMeetingRoomNum(String meetingRoomNum) {
 			this.meetingRoomNum = meetingRoomNum;
 		}
 
-		public void setWashroomNum(int washroomNum) {
+		public void setWashroomNum(String washroomNum) {
 			this.washroomNum = washroomNum;
 		}
 
-		public void setBabyCareRoomNum(int babyCareRoomNum) {
+		public void setBabyCareRoomNum(String babyCareRoomNum) {
 			this.babyCareRoomNum = babyCareRoomNum;
 		}
 
-		public void setSmokingRoomNum(int smokingRoomNum) {
+		public void setSmokingRoomNum(String smokingRoomNum) {
 			this.smokingRoomNum = smokingRoomNum;
 		}
 
-		public void setDrinkingFountainNum(int drinkingFountainNum) {
+		public void setDrinkingFountainNum(String drinkingFountainNum) {
 			this.drinkingFountainNum = drinkingFountainNum;
 		}
 
-		public void setElevatorNum(int elevatorNum) {
+		public void setElevatorNum(String elevatorNum) {
 			this.elevatorNum = elevatorNum;
 		}
 
-		public void setUpdownEscalatorNum(int updownEscalatorNum) {
+		public void setUpdownEscalatorNum(String updownEscalatorNum) {
 			this.updownEscalatorNum = updownEscalatorNum;
 		}
 
-		public void setParallelEscalatorNum(int parallelEscalatorNum) {
+		public void setParallelEscalatorNum(String parallelEscalatorNum) {
 			this.parallelEscalatorNum = parallelEscalatorNum;
 		}
 
-		public void setLoungeBridgeNum(int loungeBridgeNum) {
+		public void setLoungeBridgeNum(String loungeBridgeNum) {
 			this.loungeBridgeNum = loungeBridgeNum;
 		}
 
-		public void setEntranceNum(int entranceNum) {
+		public void setEntranceNum(String entranceNum) {
 			this.entranceNum = entranceNum;
 		}
 
