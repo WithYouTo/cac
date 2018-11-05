@@ -47,8 +47,14 @@ public class AttenceRestController {
 			}
 		}
 		attenceRestSrv.attence(req, fileList);
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC);
 	}
+	// public ResParams attence(@Valid AttenceReq req) throws Exception {
+	// List<MultipartFile> fileList = new ArrayList<MultipartFile>();
+	// attenceRestSrv.attence(req, fileList);
+	// return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,
+	// CommonCodeConstant.SUCCESS_PROCCESS_DESC);
+	// }
 
 	@RequestMapping(value = "/getAttenceList", method = RequestMethod.POST)
 	@ApiOperation(value = "获取签到列表", notes = "获取签到列表", response = Map.class, httpMethod = "POST")

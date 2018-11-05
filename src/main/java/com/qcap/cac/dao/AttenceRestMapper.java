@@ -14,4 +14,6 @@ public interface AttenceRestMapper extends BaseMapper<TbManager> {
 
 	List<Map<String, String>> getAttenceList(GetAttenceDetailsReq req);
 
+	int checkPositionCode(String positionCode);
+
 }

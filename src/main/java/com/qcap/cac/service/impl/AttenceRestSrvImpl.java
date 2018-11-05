@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.AttenceMapper;
 import com.qcap.cac.dao.AttenceRestMapper;
@@ -26,6 +27,7 @@ import com.qcap.cac.dto.GetAttenceDetailsResp;
 import com.qcap.cac.dto.GetAttenceReq;
 import com.qcap.cac.dto.GetAttenceResp;
 import com.qcap.cac.entity.TbAttence;
+import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AttenceRestSrv;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.tools.DateTool;
@@ -61,7 +63,11 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 
 		TbAttence attence = new TbAttence();
 		attence.setAttenceId(UUIDUtils.getUUID());
-		attence.setAttencePlace(req.getAttencePlace());
+		if (checkPositionCode(req.getAttencePlace())) {
+			attence.setAttencePlace(req.getAttencePlace());
+		} else {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_50501, CommonCodeConstant.ERROR_CODE_50501_MSG);
+		}
 		attence.setWorkNo(req.getEmployeeCode());
 		attence.setAttenceTime(StringUtils.isNotBlank(req.getAttenceTime())
 				? CommonConstant.sdf_YMDHMS.parse(req.getAttenceTime()) : new Date());
@@ -245,6 +251,11 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 				+ "CASE DAY_31 WHEN '√' THEN SHIFT ELSE 0 END  shift_31 "
 				+ "FROM tb_task_arrangement WHERE EMPLOYEE_CODE = ? AND DELETE_FLAG = ? AND MONTH = ? GROUP BY SHIFT,EMPLOYEE_CODE,MONTH)A");
 		return jdbcTemplate.queryForMap(sql.toString(),
-				new Object[] { req.getEmployeeCode(), CommonConstant.DELETE_FLAG_DELETE, req.getMonth() });
+				new Object[] { req.getEmployeeCode(), CommonConstant.DELETE_FLAG_NORMAL, req.getMonth() });
+	}
+
+	public boolean checkPositionCode(String positionCode) throws Exception {
+		int i = attenceRestMapper.checkPositionCode(positionCode);
+		return i > 0;
 	}
 }

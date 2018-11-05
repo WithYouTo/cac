@@ -22,5 +22,14 @@
        		WORK_NO = #{employeeCode} AND DATE_FORMAT(ATTENCE_TIME,'%Y-%m-%d') = #{date}
         ORDER BY ATTENCE_TIME
     </select>
+    
+    <select id="checkPositionCode" resultType="java.lang.Integer" parameterType="String">
+        SELECT
+        	COUNT(POSITION_CODE) count
+        FROM
+        	tb_area_position A
+       	WHERE
+       		POSITION_CODE = #{position}
+    </select>
 	
 </mapper>

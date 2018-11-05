@@ -39,6 +39,10 @@ public class CommonCodeConstant {
 	public static final int ERROR_CODE_40403 = 40403;
 	public static final String ERROR_CODE_40403_MSG = "未找到对应岗位";
 
+	// 岗位编码验证失败
+	public static final int ERROR_CODE_50501 = 50501;
+	public static final String ERROR_CODE_50501_MSG = "岗位编码验证失败";
+
 	// 通用代码档查询字段
 	public static final String INIT_GENDER_SELECT = "GENDER";
 
@@ -46,5 +50,5 @@ public class CommonCodeConstant {
 
 	public static final String INIT_MARRIAGE_SIT_SELECT = "MARRIAGE_SIT";
 
-    public static final String USER_ALREADY_REG = "用户已存在！";
+	public static final String USER_ALREADY_REG = "用户已存在！";
 }
