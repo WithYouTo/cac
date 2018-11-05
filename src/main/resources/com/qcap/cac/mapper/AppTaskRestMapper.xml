@@ -96,16 +96,16 @@
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkStatus)">
 		AND m.CHECK_STATUS = #{checkStatus}
 		</if>
-        <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'HISTORY' ">
+        <if test=' @com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == "HISTORY" '>
         AND m.END_TIME &lt;= #{endTime}
         </if>
-        <if test=" type == 'ITEM' or type == 'FINISH'">
+        <if test=' type == "ITEM" or type == "FINISH" '>
         	 <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTime) and @com.qcap.cac.tools.Ognl@isNotEmpty(endTime) ">
 		        AND m.START_TIME &gt;= #{startTime}
 		        AND m.END_TIME &lt; #{endTime}
 	        </if>
         </if>
-		 <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == 'CHECK' ">
+		 <if test=' @com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == "CHECK" '>
 		AND INSTR(#{areaCode},m.AREA_CODE)
         AND m.START_TIME &gt;= #{startTime}
         AND m.END_TIME &lt; #{endTime}
@@ -260,7 +260,7 @@
 		AND m.TASK_TYPE = 'TEMP'
 		AND TASK_STATUS !='CANCLE'
 		AND CHECK_STATUS !='DISQUALIFIED'
-		<if test=" lineNo != null and lineNo !='' ">
+		<if test=' lineNo != null and lineNo !="" '>
 		AND m.LINE_NO &gt; #{lineNo}
 		</if>
 		ORDER BY m.LINE_NO
@@ -335,7 +335,7 @@
 		DATE_FORMAT(m.END_TIME,'%Y-%m-%d %T')  AS  endTime
 		FROM tb_task_arrange_shift m
 		WHERE m.CREATE_EMP = #{loginName}
-		<if test=" lineNo != null and lineNo !='' ">
+		<if test=' lineNo != null and lineNo !="" '>
 		AND m.LINE_NO &gt; #{lineNo}
 		</if>
 		ORDER BY m.LINE_NO

@@ -87,7 +87,7 @@
 		FROM 
 			tb_flight_info A 
 		<where>
-			<if test="lineNo != null and lineNo != ''">
+			<if test=' lineNo != null and lineNo !="" '>
 				AND LINE_NO &gt;= #{lineNo}
 			</if>
 		</where>
