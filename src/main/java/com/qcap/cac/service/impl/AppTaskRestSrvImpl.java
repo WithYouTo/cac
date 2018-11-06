@@ -743,7 +743,7 @@ private String dealWithSpecialTaskTime(String startTime) {
     	/**
     	 * 调整推迟清洁的专项任务
     	 */
-    	 this.appTaskRestMapper.updateCleanerTask(appTaskArrangeShiftRestReq);
+    	// this.appTaskRestMapper.updateCleanerTask(appTaskArrangeShiftRestReq);
 
         String workingDateStr = appTaskArrangeShiftRestReq.getWorkingDate();
         String month = workingDateStr.substring(0,7).replace("-","");
