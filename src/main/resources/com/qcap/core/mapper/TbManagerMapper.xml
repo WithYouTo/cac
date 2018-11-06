@@ -58,7 +58,8 @@
 		SET
 		password = #{password},
 		salt = #{salt},
-
+		update_date = #{updateDate},
+		update_emp = #{updateEmp}
 		WHERE
 		id = #{id}
     </update>

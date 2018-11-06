@@ -263,6 +263,8 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		mgr.setAccount(account);
 		mgr.setSalt(newSalt);
 		mgr.setPassword(newMd5);
+		mgr.setUpdateEmp(AppUtils.getLoginUserAccount());
+		mgr.setUpdateDate(new Date());
 		this.tbManagerMapper.updateManagerPwd(mgr);
 	}
 
