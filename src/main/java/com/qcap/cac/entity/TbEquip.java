@@ -112,6 +112,14 @@ public class TbEquip implements Serializable {
      */
     private String manufact;
     /**
+     * 设备维保提醒的提前时间
+     */
+    private String advanceTime;
+    /**
+     * 设备维保提醒时间
+     */
+    private String noticeDate;
+    /**
      * 经销商编号
      */
     private String agenceNo;
@@ -405,6 +413,22 @@ public class TbEquip implements Serializable {
         this.manufact = manufact;
     }
 
+    public String getAdvanceTime() {
+        return advanceTime;
+    }
+
+    public void setAdvanceTime(String advanceTime) {
+        this.advanceTime = advanceTime;
+    }
+
+    public String getNoticeDate() {
+        return noticeDate;
+    }
+
+    public void setNoticeDate(String noticeDate) {
+        this.noticeDate = noticeDate;
+    }
+
     public String getAgenceNo() {
         return agenceNo;
     }
@@ -621,59 +645,5 @@ public class TbEquip implements Serializable {
         this.version = version;
     }
 
-    @Override
-    public String toString() {
-        return "TbEquip{" +
-                "equipId='" + equipId + '\'' +
-                ", projectCode='" + projectCode + '\'' +
-                ", equipNo='" + equipNo + '\'' +
-                ", equipCodeUrl='" + equipCodeUrl + '\'' +
-                ", equipName='" + equipName + '\'' +
-                ", equipType='" + equipType + '\'' +
-                ", equipFullName='" + equipFullName + '\'' +
-                ", equipModel='" + equipModel + '\'' +
-                ", equipParams='" + equipParams + '\'' +
-                ", responseNo='" + responseNo + '\'' +
-                ", responseName='" + responseName + '\'' +
-                ", buliding='" + buliding + '\'' +
-                ", floor='" + floor + '\'' +
-                ", area='" + area + '\'' +
-                ", room='" + room + '\'' +
-                ", roomArea='" + roomArea + '\'' +
-                ", equipUse='" + equipUse + '\'' +
-                ", useArea='" + useArea + '\'' +
-                ", stopPlace='" + stopPlace + '\'' +
-                ", storeArea='" + storeArea + '\'' +
-                ", chargePlace='" + chargePlace + '\'' +
-                ", chargeArea='" + chargeArea + '\'' +
-                ", manufact='" + manufact + '\'' +
-                ", agenceNo='" + agenceNo + '\'' +
-                ", agenceName='" + agenceName + '\'' +
-                ", relateName='" + relateName + '\'' +
-                ", relateMobile='" + relateMobile + '\'' +
-                ", lifeCycle='" + lifeCycle + '\'' +
-                ", dailyMaint='" + dailyMaint + '\'' +
-                ", maintCycle='" + maintCycle + '\'' +
-                ", latestMaintTime=" + latestMaintTime +
-                ", nextMaintTime=" + nextMaintTime +
-                ", warranty='" + warranty + '\'' +
-                ", buyTime=" + buyTime +
-                ", startUseTime=" + startUseTime +
-                ", scrapTime=" + scrapTime +
-                ", scrapReason='" + scrapReason + '\'' +
-                ", baseRequire='" + baseRequire + '\'' +
-                ", attention='" + attention + '\'' +
-                ", imgUrl='" + imgUrl + '\'' +
-                ", fileUrls='" + fileUrls + '\'' +
-                ", fileNames='" + fileNames + '\'' +
-                ", equipState='" + equipState + '\'' +
-                ", equipWorkState='" + equipWorkState + '\'' +
-                ", remark='" + remark + '\'' +
-                ", createEmp='" + createEmp + '\'' +
-                ", createDate=" + createDate +
-                ", updateEmp='" + updateEmp + '\'' +
-                ", updateDate=" + updateDate +
-                ", version=" + version +
-                '}';
-    }
+
 }

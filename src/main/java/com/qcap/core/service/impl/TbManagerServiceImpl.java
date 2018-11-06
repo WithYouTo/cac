@@ -255,6 +255,19 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		}
 	}
 
+	@Override
+	public void resetPassword(String account) {
+		TbManager mgr = new TbManager();
+		String newSalt = Md5Util.getSalt();
+		String newMd5 = Md5Util.encrypt(CoreConstant.SYS_DEFAULT_PASSWORD, newSalt);
+		mgr.setAccount(account);
+		mgr.setSalt(newSalt);
+		mgr.setPassword(newMd5);
+		mgr.setUpdateEmp(AppUtils.getLoginUserAccount());
+		mgr.setUpdateDate(new Date());
+		this.tbManagerMapper.updateManagerPwd(mgr);
+	}
+
 	private boolean checkPassword(String encryptPassword, String password, String salt) {
 		return Objects.equals(encryptPassword, Md5Util.encrypt(password, salt));
 	}

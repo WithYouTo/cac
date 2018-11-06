@@ -63,11 +63,14 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 
 		TbAttence attence = new TbAttence();
 		attence.setAttenceId(UUIDUtils.getUUID());
-		if (checkPositionCode(req.getAttencePlace())) {
-			attence.setAttencePlace(req.getAttencePlace());
-		} else {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_50501, CommonCodeConstant.ERROR_CODE_50501_MSG);
+		if (StringUtils.isNotBlank(req.getAttencePlace())) {
+			if (checkPositionCode(req.getAttencePlace())) {
+				attence.setAttencePlace(req.getAttencePlace());
+			} else {
+				throw new BaseException(CommonCodeConstant.ERROR_CODE_50501, CommonCodeConstant.ERROR_CODE_50501_MSG);
+			}
 		}
+
 		attence.setWorkNo(req.getEmployeeCode());
 		attence.setAttenceTime(StringUtils.isNotBlank(req.getAttenceTime())
 				? CommonConstant.sdf_YMDHMS.parse(req.getAttenceTime()) : new Date());

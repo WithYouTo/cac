@@ -63,6 +63,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
 
     @Override
     public GetEquipStatusResp getEquipStatus(String equipNo) {
+        //todo 获取当前设备类型，判断是否一致
         String url = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
         GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
         String status = Objects.toString(esr.getStatus());

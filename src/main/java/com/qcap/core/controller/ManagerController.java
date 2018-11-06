@@ -151,8 +151,26 @@ public class ManagerController {
 
 		 this.managerService.changePassword(mgr,newPass,oldPass);
 
-		 return null;
+		 return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.MANAGER_CHANGE_PASS_SUCCESS, null);
 	 }
+
+	 /**
+	  *
+	  * @Description: 重置用户密码
+	  *
+	  *
+	  * @MethodName: resetPass
+	  * @Parameters: [account] 
+	  * @ReturnType: java.lang.Object
+	  *
+	  * @author huangxiang
+	  * @date 2018/11/6 9:59
+	  */
+	@PostMapping("/resetPass")
+	public Object resetPass(String account) {
+		this.managerService.resetPassword(account);
+		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CoreConstant.MANAGER_RESET_PASS_SUCCESS, null);
+	}
 
 
 	// /**

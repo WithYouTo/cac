@@ -29,6 +29,8 @@
         a.STORE_AREA storeArea,
         a.CHARGE_PLACE chargePlace,
         a.CHARGE_AREA chargeArea,
+        a.ADVANCE_TIME advanceTime,
+        a.NOTICE_DATE noticeDate,
         DATE_FORMAT(a.BUY_TIME,'%Y-%m-%d') buyTime,
         DATE_FORMAT(a.START_USE_TIME,'%Y-%m-%d') startUseTime,
         a.ATTENTION attention,
@@ -52,58 +54,90 @@
         <if test="obj.equipType != null and obj.equipType != ''">
           AND a.EQUIP_TYPE = #{obj.equipType}
         </if>
+        <if test="obj.equipWorkState != null and obj.equipWorkState != ''">
+            AND a.EQUIP_WORK_STATE = #{obj.equipWorkState}
+        </if>
         ORDER BY a.EQUIP_NO
     </select>
 
     <select id="selectEquipByEquipId"  resultType="com.qcap.cac.entity.TbEquip" parameterType="com.qcap.cac.dto.EquipInsertDto">
         select
-        EQUIP_ID equipId,
-        PROJECT_CODE projectCode,
-        EQUIP_NO equipNo,
-        EQUIP_CODE_URL equipCodeUrl,
-        EQUIP_NAME equipName,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        RESPONSE_NO responseNo,
-        RESPONSE_NAME responseName,
-        MANUFACT manufact,
-        AGENCE_NO agenceNo,
-        AGENCE_NAME agenceName,
-        RELATE_NAME relateName,
-        RELATE_MOBILE relateMobile,
-        DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
-        ATTENTION attention,
-        EQUIP_STATE equipState,
-        EQUIP_WORK_STATE equipWorkState
+            EQUIP_ID equipId,
+            PROJECT_CODE projectCode,
+            EQUIP_NO equipNo,
+            EQUIP_CODE_URL equipCodeUrl,
+            EQUIP_NAME equipName,
+            EQUIP_TYPE equipType,
+            EQUIP_MODEL equipModel,
+            RESPONSE_NO responseNo,
+            RESPONSE_NAME responseName,
+            MANUFACT manufact,
+            ADVANCE_TIME advanceTime,
+            NOTICE_DATE noticeDate,
+            AGENCE_NO agenceNo,
+            AGENCE_NAME agenceName,
+            RELATE_NAME relateName,
+            RELATE_MOBILE relateMobile,
+            DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
+            DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+            ATTENTION attention,
+            EQUIP_STATE equipState,
+            EQUIP_WORK_STATE equipWorkState
         FROM TB_EQUIP
         WHERE
-        DEL_FLAG = 'NORMAL'
+          DEL_FLAG = 'NORMAL'
         AND
-        EQUIP_ID = #{equipId}
+          EQUIP_ID = #{equipId}
+    </select>
+
+    <select id="selectEquipByNoticeDate"  resultType="com.qcap.cac.entity.TbEquip" parameterType="String">
+         select
+            EQUIP_ID equipId,
+            PROJECT_CODE projectCode,
+            EQUIP_NO equipNo,
+            EQUIP_NAME equipName,
+            EQUIP_TYPE equipType,
+            EQUIP_MODEL equipModel,
+            RESPONSE_NO responseNo,
+            RESPONSE_NAME responseName,
+            MANUFACT manufact,
+            ADVANCE_TIME advanceTime,
+            NOTICE_DATE noticeDate,
+            AGENCE_NO agenceNo,
+            DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+            ATTENTION attention,
+            EQUIP_STATE equipState,
+            EQUIP_WORK_STATE equipWorkState
+        FROM TB_EQUIP
+        WHERE
+          DEL_FLAG = 'NORMAL'
+        AND
+          NOTICE_DATE = #{noticeDate}
     </select>
 
     <select id="selectEquipByEquipNo" resultType="com.qcap.cac.entity.TbEquip" parameterType="String">
         select
-        EQUIP_ID equipId,
-        PROJECT_CODE projectCode,
-        EQUIP_NO equipNo,
-        EQUIP_CODE_URL equipCodeUrl,
-        EQUIP_NAME equipName,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        RESPONSE_NO responseNo,
-        RESPONSE_NAME responseName,
-        MANUFACT manufact,
-        AGENCE_NO agenceNo,
-        AGENCE_NAME agenceName,
-        RELATE_NAME relateName,
-        RELATE_MOBILE relateMobile,
-        DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
-        ATTENTION attention,
-        EQUIP_STATE equipState,
-        EQUIP_WORK_STATE equipWorkState
+            EQUIP_ID equipId,
+            PROJECT_CODE projectCode,
+            EQUIP_NO equipNo,
+            EQUIP_CODE_URL equipCodeUrl,
+            EQUIP_NAME equipName,
+            EQUIP_TYPE equipType,
+            EQUIP_MODEL equipModel,
+            RESPONSE_NO responseNo,
+            RESPONSE_NAME responseName,
+            MANUFACT manufact,
+            ADVANCE_TIME advanceTime,
+            NOTICE_DATE noticeDate,
+            AGENCE_NO agenceNo,
+            AGENCE_NAME agenceName,
+            RELATE_NAME relateName,
+            RELATE_MOBILE relateMobile,
+            DATE_FORMAT(BUY_TIME,'%Y-%m-%d') buyTime,
+            DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+            ATTENTION attention,
+            EQUIP_STATE equipState,
+            EQUIP_WORK_STATE equipWorkState
         FROM TB_EQUIP
         WHERE
         DEL_FLAG = 'NORMAL'
@@ -116,6 +150,35 @@
         count(EQUIP_ID)+1 num
         FROM TB_EQUIP
         WHERE EQUIP_TYPE = #{equipType}
+    </select>
+
+    <select id="getEquipOperateRecordByEquipId" parameterType="String" resultType="map">
+        SELECT
+            *
+        FROM
+        (SELECT
+          c.EQUIP_ID id,
+          c.EQUIP_NAME equipName,
+          c.EQUIP_NO equipNo,
+          c.PERSON_NAME personName,
+          DATE_FORMAT(c.START_CHARGE_TIME,'%Y-%m-%d %H:%i:%S') startTime,
+          DATE_FORMAT(c.END_CHARGE_TIME,'%Y-%m-%d %H:%i:%S') endTime,
+          c.STATUS status
+         FROM tb_equip_charge c
+         WHERE c.EQUIP_ID = #{equipId}
+        UNION
+         SELECT
+          u.EQUIP_ID id,
+          u.EQUIP_NAME equipName,
+          u.EQUIP_NO equipNo,
+          u.PERSON_NAME personName,
+          DATE_FORMAT(u.START_USE_TIME,'%Y-%m-%d %H:%i:%S') startTime,
+          DATE_FORMAT(u.END_USE_TIME,'%Y-%m-%d %H:%i:%S') endTime,
+          u.STATUS status
+        FROM tb_equip_use u
+        WHERE u.EQUIP_ID = #{equipId}
+        ) temp
+        ORDER BY temp.startTime DESC
     </select>
 
     <update id="updateEquip" parameterType="com.qcap.cac.entity.TbEquip">
@@ -172,6 +235,12 @@
         <if test="maintCycle != null and maintCycle != ''">
             MAINT_CYCLE = #{maintCycle},
         </if>
+        <if test="advanceTime != null and advanceTime != ''">
+            ADVANCE_TIME = #{advanceTime},
+        </if>
+        <if test="noticeDate != null and noticeDate != ''">
+            NOTICE_DATE = #{noticeDate},
+        </if>
         <if test="warranty != null and warranty != ''">
             WARRANTY = #{warranty},
         </if>
@@ -194,25 +263,25 @@
     <update id="deleteEquipByEquipId" parameterType="String" >
         UPDATE  tb_equip
         SET
-        DEL_FLAG = 'DEL'
+          DEL_FLAG = 'DEL'
         WHERE
-        EQUIP_ID = #{equipId}
+          EQUIP_ID = #{equipId}
     </update>
 
     <update id="updateEquipWorkStatusByEquipNoAndStatus">
         UPDATE  tb_equip
         SET
-        EQUIP_WORK_STATE = #{status}
+          EQUIP_WORK_STATE = #{status}
         WHERE
-        EQUIP_NO = #{equipNo}
+          EQUIP_NO = #{equipNo}
     </update>
 
     <update id="updateEquipStatusAndWorkStatusByEquipNoAndStatus">
         UPDATE  tb_equip
         SET
-        EQUIP_STATE = #{status},
-        EQUIP_WORK_STATE = #{workStatus}
+          EQUIP_STATE = #{status},
+          EQUIP_WORK_STATE = #{workStatus}
         WHERE
-        EQUIP_NO = #{equipNo}
+          EQUIP_NO = #{equipNo}
     </update>
 </mapper>

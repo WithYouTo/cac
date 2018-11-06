@@ -90,6 +90,11 @@ public class CoreConstant {
 
 	public static final String MANAGER_SET_ORG_SUCCESS = "组织分配成功";
 
+	public static final String MANAGER_RESET_PASS_SUCCESS = "重置密码成功";
+
+	public static final String MANAGER_CHANGE_PASS_SUCCESS = "修改密码成功";
+
+
 
 	// 角色
 	public static final int ROLE_IS_ROOT_CODE = 3001;

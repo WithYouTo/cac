@@ -6,6 +6,24 @@ import java.util.Map;
 
 public class CommonConstant {
 
+	// 任务开始时是否必须扫码
+	public final static String START_SCAN_FLAG_MUST = "MUST";
+	public final static String START_SCAN_FLAG_OPTIONAL = "OPTIONAL";
+	public static Map<String, String> START_SCAN_FLAG = new LinkedHashMap<String, String>();
+	static {
+		START_SCAN_FLAG.put("MUST", "必须");
+		START_SCAN_FLAG.put("OPTIONAL", "非必须");
+	}
+
+	// 任务结束时是否必须扫码
+	public final static String END_SCAN_FLAG_MUST = "MUST";
+	public final static String END_SCAN_FLAG_OPTIONAL = "OPTIONAL";
+	public static Map<String, String> END_SCAN_FLAG = new LinkedHashMap<String, String>();
+	static {
+		END_SCAN_FLAG.put("MUST", "必须");
+		END_SCAN_FLAG.put("OPTIONAL", "非必须");
+	}
+
 	public final static SimpleDateFormat sdf_YMDHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	// 设备状态
@@ -271,27 +289,9 @@ public class CommonConstant {
 		AREA_TYPE.put("ARRIVE", "登机口");
 		AREA_TYPE.put("LEAVE", "廊桥");
 	}
-
-	// 任务开始时是否必须扫码
-	public final static String START_SCAN_FLAG_MUST = "MUST";
-	public final static String START_SCAN_FLAG_OPTIONAL = "OPTIONAL";
-	public static Map<String, String> START_SCAN_FLAG = new LinkedHashMap<String, String>();
-	static {
-		START_SCAN_FLAG.put("MUST", "必须");
-		START_SCAN_FLAG.put("OPTIONAL", "非必须");
-	}
-
-	// 任务结束时是否必须扫码
-	public final static String END_SCAN_FLAG_MUST = "MUST";
-	public final static String END_SCAN_FLAG_OPTIONAL = "OPTIONAL";
-	public static Map<String, String> END_SCAN_FLAG = new LinkedHashMap<String, String>();
-	static {
-		END_SCAN_FLAG.put("MUST", "必须");
-		END_SCAN_FLAG.put("OPTIONAL", "非必须");
-	}
 	
 	//专项任务每次延迟天数
 	public final static int SPECIAL_TASK_DELAY_DAYS_1 =1;
 	public final static int SPECIAL_TASK_DELAY_DAYS_7 =7;
-	
+
 }
