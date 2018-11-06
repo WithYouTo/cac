@@ -30,4 +30,8 @@ public interface EquipMapper extends BaseMapper<TbEquip>{
     void updateEquipWorkStatusByEquipNoAndStatus(@Param("equipNo")String equipNo, @Param("status")String status);
 
     void updateEquipStatusAndWorkStatusByEquipNoAndStatus(@Param("equipNo")String equipNo,  @Param("status")String status, @Param("workStatus")String workStatus);
+
+    List<Map<String,Object>> getEquipOperateRecordByEquipId(IPage<Map<String, Object>> page, @Param("equipId")String equipId);
+
+    List<TbEquip> selectEquipByNoticeDate(@Param("noticeDate")String noticeDate);
 }

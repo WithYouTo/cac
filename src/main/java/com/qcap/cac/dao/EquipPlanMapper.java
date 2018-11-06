@@ -20,7 +20,9 @@ public interface EquipPlanMapper extends BaseMapper<TbEquipPlan>{
 
     void updateEquipPlan(TbEquipPlan equipPlan);
 
-    TbEquipPlan selectPartsPlanByPartsId(String partsId);
+    TbEquipPlan selectPartsPlanByPartsId(@Param("partsId") String partsId);
+
+    TbEquipPlan selectEquipPlanByEquipId(@Param("equipId") String equipId);
 
     void updateNextMaintTime(TbEquipPlan parts);
 
@@ -31,4 +33,6 @@ public interface EquipPlanMapper extends BaseMapper<TbEquipPlan>{
     String selectPlanIdByEquipIdAndPartsId(TbEquipPlan equipPlan);
 
     String selectPlanIdByEquipId(TbEquipPlan equipPlan);
+
+    List<TbEquipPlan> selectEquipByNoticeDate(@Param("noticeDate")String noticeDate);
 }

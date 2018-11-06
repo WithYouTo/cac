@@ -17,6 +17,7 @@ import com.qcap.cac.entity.TbEquipParts;
 import com.qcap.cac.entity.TbEquipPlan;
 import com.qcap.cac.service.EquipSrv;
 import com.qcap.cac.tools.EntityTools;
+import com.qcap.cac.tools.JpushTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.AppUtils;
@@ -104,19 +105,22 @@ public class EquipSrvImpl implements EquipSrv {
             Date startUseTime = format.parse(equipInsertDto.getStartUseTime());
             Date buyTime = format.parse(equipInsertDto.getBuyTime());
             Date nextPlanTime = getNewPlanDate(startUseTime, equip.getMaintCycle());
-
+            //5、通过下次维保时间和维保提醒提前时间生成下次维保提醒时间
+            String noticeDateStr = format.format(getNoticeDate(nextPlanTime,equip.getAdvanceTime()));
+            //6、重组equip对象
+            equip.setNoticeDate(noticeDateStr);
             equip.setStartUseTime(startUseTime);
             equip.setBuyTime(buyTime);
             equip.setNextMaintTime(nextPlanTime);
             equip.setEquipCodeUrl(url);
             equip.setEquipNo(equipNo);
             equip.setEquipState(CommonConstant.EQUIP_STATUS_NORMAL);
-
             EntityTools.setCreateEmpAndTime(equip);
+            //在设备表中新增一条equip数据
             this.equipMapper.insert(equip);
-            // 5、根据设备信息生成设备维保计划
+            // 8、根据设备信息生成设备维保计划
             insertMaintPlan(equip);
-            // 6、更新配件信息，并生成维保计划
+            // 9、更新配件信息，并生成维保计划
             updatePartsInfo(equip);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -131,18 +135,27 @@ public class EquipSrvImpl implements EquipSrv {
         TbEquip equip = new TbEquip();
         BeanUtils.copyProperties(equipInsertDto,equip);
 
-        TbEquipPlan partsPlan = this.equipPlanMapper.selectPartsPlanByPartsId(equip.getEquipId());
-        if(partsPlan != null){
-            if(partsPlan.getLatestMaintTime() != null){
-                nextPlanTime = getNewPlanDate(partsPlan.getLatestMaintTime(),equip.getMaintCycle());
+        TbEquipPlan equipPlan = this.equipPlanMapper.selectEquipPlanByEquipId(equip.getEquipId());
+        if(equipPlan != null){
+            if(equipPlan.getLatestMaintTime() != null){
+                nextPlanTime = getNewPlanDate(equipPlan.getLatestMaintTime(),equip.getMaintCycle());
             }else{
-                nextPlanTime = getNewPlanDate(partsPlan.getStartUseTime(),equip.getMaintCycle());
+                nextPlanTime = getNewPlanDate(equipPlan.getStartUseTime(),equip.getMaintCycle());
             }
-            EntityTools.setUpdateEmpAndTime(partsPlan);
-            partsPlan.setNextMaintTime(nextPlanTime);
-            this.equipPlanMapper.updateNextMaintTime(partsPlan);
+            String noticeDateStr = format.format(getNoticeDate(nextPlanTime,equip.getAdvanceTime()));
+            equipPlan.setNoticeDate(noticeDateStr);
+            EntityTools.setUpdateEmpAndTime(equipPlan);
+            equipPlan.setNextMaintTime(nextPlanTime);
+            this.equipPlanMapper.updateNextMaintTime(equipPlan);
+        }else{
+            TbEquip tempEquip = this.equipMapper.selectEquipByEquipId(equip.getEquipId());
+            nextPlanTime = getNewPlanDate(tempEquip.getNextMaintTime(),equip.getMaintCycle());
         }
 
+        String noticeDateStr = format.format(getNoticeDate(nextPlanTime,equip.getAdvanceTime()));
+        //重组equip对象
+        equip.setNextMaintTime(nextPlanTime);
+        equip.setNoticeDate(noticeDateStr);
         EntityTools.setUpdateEmpAndTime(equip);
         this.equipMapper.updateEquip(equip);
     }
@@ -205,6 +218,31 @@ public class EquipSrvImpl implements EquipSrv {
         for (int i = 0; i < ids.length; i++) {
             this.equipMapper.deleteEquipByEquipId(ids[i]);
             this.equipPlanMapper.deletePlanByEquipId(ids[i]);
+        }
+    }
+
+    @Override
+    public void getEquipOperateRecordByEquipId(IPage<Map<String, Object>> page,String equipId) {
+        List<Map<String, Object>> list = this.equipMapper.getEquipOperateRecordByEquipId(page,equipId);
+        for(Map<String,Object> map :list){
+            String equipState = map.get("status").toString();
+            CommonConstant.EQUIP_OPERATE_STATUS.get(equipState);
+            map.put("statusName", CommonConstant.EQUIP_OPERATE_STATUS.get(equipState));
+        }
+        page.setRecords(list);
+    }
+
+    @Override
+    public void tempEquipNoticeJob() {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String noticeDate = format.format(date);
+        List<TbEquip> list = this.equipMapper.selectEquipByNoticeDate(noticeDate);
+        for (TbEquip equip : list){
+            String employeeNo = equip.getResponseNo();
+            String equipNo = equip.getEquipNo();
+            String maintDate = format.format(equip.getNextMaintTime());
+            JpushTools.pushSingle(employeeNo,"编号为"+equipNo+"的设备将于"+maintDate+"进行整机维保！");
         }
     }
 
@@ -313,6 +351,31 @@ public class EquipSrvImpl implements EquipSrv {
         c.setTime(time);
         //日期分钟加1,Calendar.DATE(天),Calendar.HOUR(小时)
         c.add(Calendar.HOUR, Integer.parseInt(maintCycle));
+        //结果
+        Date date = c.getTime();
+        return date;
+    }
+
+
+    /**
+     *
+     * @Description: 获取下次维保提前提醒时间
+     *
+     *
+     * @MethodName: getNoticeDate
+     * @Parameters: [time, maintCycle] 
+     * @ReturnType: java.util.Date
+     *
+     * @author huangxiang
+     * @date 2018/11/5 10:30
+     */
+    private Date getNoticeDate(Date time, String advanceTime){
+        Calendar c = Calendar.getInstance();
+        //设置时间
+        c.setTime(time);
+        Integer days = Integer.parseInt(advanceTime);
+        //日期分钟加1,Calendar.DATE(天),Calendar.HOUR(小时)
+        c.add(Calendar.DATE, -days);
         //结果
         Date date = c.getTime();
         return date;

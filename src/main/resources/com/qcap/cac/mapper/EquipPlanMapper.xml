@@ -4,27 +4,27 @@
 
     <select id="listEquipPlan" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipPlanSearchDto">
         SELECT
-        a.PLAN_ID planId,
-        a.EQUIP_ID equipId,
-        a.EQUIP_NO equipNo,
-        a.EQUIP_NAME equipName,
-        b.DESC1_ equipType,
-        a.EQUIP_MODEL equipModel,
-        DATE_FORMAT( a.START_USE_TIME,'%Y-%m-%d') startUseTime,
-        a.LIFE_CYCLE lifeCycle,
-        a.PARTS_ID partsId,
-        a.PARTS_NO partsNo,
-        a.PARTS_NAME partsName,
-        a.PARTS_MODEL partsModel,
-        a.MAINT_CYCLE maintCycle,
-        DATE_FORMAT(a.LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
-        DATE_FORMAT(a.NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
-        a.REMARK remark
+            a.PLAN_ID planId,
+            a.EQUIP_ID equipId,
+            a.EQUIP_NO equipNo,
+            a.EQUIP_NAME equipName,
+            b.DESC1_ equipType,
+            a.EQUIP_MODEL equipModel,
+            DATE_FORMAT( a.START_USE_TIME,'%Y-%m-%d') startUseTime,
+            a.LIFE_CYCLE lifeCycle,
+            a.PARTS_ID partsId,
+            a.PARTS_NO partsNo,
+            a.PARTS_NAME partsName,
+            a.PARTS_MODEL partsModel,
+            a.MAINT_CYCLE maintCycle,
+            DATE_FORMAT(a.LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
+            DATE_FORMAT(a.NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+            a.REMARK remark
         FROM TB_EQUIP_PLAN a
         LEFT JOIN tbpubcode01 b
         ON a.EQUIP_TYPE = b.DESC_
         where
-        b.CONFIG_CODE_ = 'EQUIP_TYPE'
+            b.CONFIG_CODE_ = 'EQUIP_TYPE'
         <if test="map.equipType != null and map.equipType != ''">
             and a.EQUIP_TYPE = #{map.equipType}
         </if>
@@ -47,73 +47,96 @@
 
     <select id="listPartsPlanByEquipId" parameterType="java.lang.String"  resultType="java.util.Map">
         SELECT
-        PLAN_ID planId,
-        EQUIP_ID equipId,
-        EQUIP_NAME equipName,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
-        PARTS_ID partsId,
-        PARTS_NO partsNo,
-        PARTS_NAME partsName,
-        PARTS_MODEL partsModel,
-        MAINT_CYCLE maintCycle,
-        DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
-        DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
-        REMARK remark
+            PLAN_ID planId,
+            EQUIP_ID equipId,
+            EQUIP_NAME equipName,
+            EQUIP_TYPE equipType,
+            EQUIP_MODEL equipModel,
+            DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+            PARTS_ID partsId,
+            PARTS_NO partsNo,
+            PARTS_NAME partsName,
+            PARTS_MODEL partsModel,
+            MAINT_CYCLE maintCycle,
+            DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
+            DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+            REMARK remark
         FROM TB_EQUIP_PLAN
         WHERE
-        EQUIP_ID = #{equipId}
+            EQUIP_ID = #{equipId}
         AND PARTS_NO is not null
         ORDER BY NEXT_MAINT_TIME
     </select>
 
     <select id="selectPartsPlanByPartsId" parameterType="java.lang.String" resultType="com.qcap.cac.entity.TbEquipPlan">
-         SELECT
-        PLAN_ID planId,
-        EQUIP_ID equipId,
-        EQUIP_NAME equipName,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
-        PARTS_ID partsId,
-        PARTS_NO partsNo,
-        PARTS_NAME partsName,
-        PARTS_MODEL partsModel,
-        MAINT_CYCLE maintCycle,
-        DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
-        DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
-        REMARK remark
+        SELECT
+            PLAN_ID planId,
+            EQUIP_ID equipId,
+            EQUIP_NAME equipName,
+            EQUIP_TYPE equipType,
+            EQUIP_MODEL equipModel,
+            DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+            PARTS_ID partsId,
+            PARTS_NO partsNo,
+            PARTS_NAME partsName,
+            PARTS_MODEL partsModel,
+            MAINT_CYCLE maintCycle,
+            DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
+            DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+            REMARK remark
         FROM TB_EQUIP_PLAN
         WHERE
-        PARTS_ID = #{partsId}
-        ORDER BY NEXT_MAINT_TIME
+            PARTS_ID = #{partsId}
+    </select>
+
+    <select id="selectPartsPlanByEquipId" parameterType="java.lang.String" resultType="com.qcap.cac.entity.TbEquipPlan">
+        SELECT
+            PLAN_ID planId,
+            EQUIP_ID equipId,
+            EQUIP_NAME equipName,
+            EQUIP_TYPE equipType,
+            EQUIP_MODEL equipModel,
+            DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+            PARTS_ID partsId,
+            PARTS_NO partsNo,
+            PARTS_NAME partsName,
+            PARTS_MODEL partsModel,
+            MAINT_CYCLE maintCycle,
+            DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
+            DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+            REMARK remark
+        FROM TB_EQUIP_PLAN
+        WHERE
+            EQUIP_ID = #{equipId}
+        AND PARTS_NO is null
     </select>
 
     <update id="updateNextMaintTime"  parameterType="com.qcap.cac.entity.TbEquipPlan">
         UPDATE TB_EQUIP_PLAN
         SET
-        MAINT_CYCLE = #{maintCycle},
-        NEXT_MAINT_TIME = #{nextMaintTime},
-        CREATE_EMP = #{createEmp},
-        CREATE_DATE = #{createDate},
-        UPDATE_EMP = #{updateEmp},
-        UPDATE_DATE = #{updateDate}
+            NOTICE_DATE = #{noticeDate},
+            MAINT_CYCLE = #{maintCycle},
+            NEXT_MAINT_TIME = #{nextMaintTime},
+            CREATE_EMP = #{createEmp},
+            CREATE_DATE = #{createDate},
+            UPDATE_EMP = #{updateEmp},
+            UPDATE_DATE = #{updateDate}
         WHERE
-        PLAN_ID = #{planId}
+            PLAN_ID = #{planId}
     </update>
 
     <update id="updateEquipPlan"  parameterType="com.qcap.cac.entity.TbEquipPlan">
         UPDATE TB_EQUIP_PLAN
         SET
-        NEXT_MAINT_TIME = #{nextMaintTime},
-        LATEST_MAINT_TIME = #{latestMaintTime},
-        CREATE_EMP = #{createEmp},
-        CREATE_DATE = #{createDate},
-        UPDATE_EMP = #{updateEmp},
-        UPDATE_DATE = #{updateDate}
+            NOTICE_DATE = #{noticeDate},
+            NEXT_MAINT_TIME = #{nextMaintTime},
+            LATEST_MAINT_TIME = #{latestMaintTime},
+            CREATE_EMP = #{createEmp},
+            CREATE_DATE = #{createDate},
+            UPDATE_EMP = #{updateEmp},
+            UPDATE_DATE = #{updateDate}
         WHERE
-        PLAN_ID = #{planId}
+            PLAN_ID = #{planId}
     </update>
 
     <update id="deletePlanByEquipId">

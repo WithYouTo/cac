@@ -80,4 +80,18 @@ public interface ITbManagerService {
 	 * @date 2018/10/23 9:25
 	 */
 	void changePassword(TbManager mgr, String newPwd, String oldPwd);
+
+	/**
+	 *
+	 * @Description: 重置用户密码
+	 *
+	 *
+	 * @MethodName: resetPassword
+	 * @Parameters: [userId]
+	 * @ReturnType: void
+	 *
+	 * @author huangxiang
+	 * @date 2018/11/6 9:54
+	 */
+    void resetPassword(String userId);
 }

@@ -57,7 +57,8 @@
         UPDATE TB_MANAGER
 		SET
 		password = #{password},
-		salt = #{salt}
+		salt = #{salt},
+
 		WHERE
 		id = #{id}
     </update>

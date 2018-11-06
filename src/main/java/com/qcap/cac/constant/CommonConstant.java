@@ -6,6 +6,26 @@ import java.util.Map;
 
 public class CommonConstant {
 
+	// 任务开始时是否必须扫码
+	public final static String START_SCAN_FLAG_MUST = "MUST";
+	public final static String START_SCAN_FLAG_OPTIONAL = "OPTIONAL";
+	public static Map<String, String> START_SCAN_FLAG = new LinkedHashMap<String, String>();
+	static {
+		START_SCAN_FLAG.put("MUST", "必须");
+		START_SCAN_FLAG.put("OPTIONAL", "非必须");
+	}
+
+	// 任务结束时是否必须扫码
+	public final static String END_SCAN_FLAG_MUST = "MUST";
+	public final static String END_SCAN_FLAG_OPTIONAL = "OPTIONAL";
+	public static Map<String, String> END_SCAN_FLAG = new LinkedHashMap<String, String>();
+	static {
+		END_SCAN_FLAG.put("MUST", "必须");
+		END_SCAN_FLAG.put("OPTIONAL", "非必须");
+	}
+
+
+
 	public final static SimpleDateFormat sdf_YMDHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	// 设备状态
@@ -55,6 +75,19 @@ public class CommonConstant {
 	static {
 		EQUIP_STATUS.put("NORMAL", "正常");
 		EQUIP_STATUS.put("ABORT", "损坏");
+	}
+
+	//设备操作状态，用于在设备信息中显示设备操作记录，设备充电状态与设备使用状态的合集
+	public final static String EQUIP_OPERATE_STATUS_INCHARGE = "INCHARGE";
+	public final static String EQUIP_OPERATE_STATUS_CHARGED = "CHARGED";
+	public final static String EQUIP_OPERATE_STATUS_INUSE = "INUSE";
+	public final static String EQUIP_OPERATE_STATUS_USED = "USED";
+	public static Map<String, String> EQUIP_OPERATE_STATUS = new LinkedHashMap<String, String>();
+	static {
+		EQUIP_OPERATE_STATUS.put("INCHARGE", "充电中");
+		EQUIP_OPERATE_STATUS.put("CHARGED", "充电完成");
+		EQUIP_OPERATE_STATUS.put("INUSE", "使用中");
+		EQUIP_OPERATE_STATUS.put("USED", "使用完毕");
 	}
 
 	// 设备充电状态
@@ -257,24 +290,6 @@ public class CommonConstant {
 	static {
 		AREA_TYPE.put("ARRIVE", "登机口");
 		AREA_TYPE.put("LEAVE", "廊桥");
-	}
-
-	// 任务开始时是否必须扫码
-	public final static String START_SCAN_FLAG_MUST = "MUST";
-	public final static String START_SCAN_FLAG_OPTIONAL = "OPTIONAL";
-	public static Map<String, String> START_SCAN_FLAG = new LinkedHashMap<String, String>();
-	static {
-		START_SCAN_FLAG.put("MUST", "必须");
-		START_SCAN_FLAG.put("OPTIONAL", "非必须");
-	}
-
-	// 任务结束时是否必须扫码
-	public final static String END_SCAN_FLAG_MUST = "MUST";
-	public final static String END_SCAN_FLAG_OPTIONAL = "OPTIONAL";
-	public static Map<String, String> END_SCAN_FLAG = new LinkedHashMap<String, String>();
-	static {
-		END_SCAN_FLAG.put("MUST", "必须");
-		END_SCAN_FLAG.put("OPTIONAL", "非必须");
 	}
 
 }
