@@ -7,6 +7,7 @@ import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.*;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.entity.TbTaskArrangeShift;
+import com.qcap.cac.entity.TbTaskDelay;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AppTaskRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
@@ -104,15 +105,23 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_HISTORY);
 		param.put("taskStatus", appTaskRestDto.getTaskStatus());
+		param.put("startTimePage", appTaskRestDto.getStartTime());
+		param.put("lineNo", appTaskRestDto.getLineNo());
+		//历史记录分页标识
+		param.put("pageType", "queryHistory");
 		return this.appTaskRestMapper.selectTaskIntro(param);
 		
 	}
 	
 	@Override
 	public List<Map<String, Object>> queryUnfinishTask(AppTaskRestReq appTaskRestDto){
-		Map<String, Object> param = new HashMap<>();
-		param.put("employeeCode", appTaskRestDto.getEmployeeCode());
+		//根据查询时间分白班和夜班进行统计
+		String employeeCode = appTaskRestDto.getEmployeeCode();
+		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_FINISH);
+		param.put("employeeCode", employeeCode);
 		param.put("taskStatus", appTaskRestDto.getTaskStatus());
+		param.put("startTimePage", appTaskRestDto.getStartTime());
+		param.put("lineNo", appTaskRestDto.getLineNo());
 		return this.appTaskRestMapper.selectTaskIntro(param);
 	}
 
@@ -144,6 +153,85 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 
 		return map;
 	}
+    
+   @Override
+   public Object  delaySpecialTask(String taskCode) {
+	   String taskTimeType = this.appTaskRestMapper.selectSpecialTaskTimeType(taskCode);
+	   
+	 //更改专项任务时间
+	  Map<String, String> map = this.appTaskRestMapper.selectTaskTime(taskCode);
+	  String startTime =map.get("startTime");
+	  String endTime =map.get("endTime");
+	  String taskPlanTime =map.get("taskPlanTime");
+	  
+	  String newTaskPlanTIme = getNewTaskPlanTime(taskTimeType, taskPlanTime);
+	   
+	  if(startTime.compareTo(newTaskPlanTIme) < 0) {
+		   //新增专项任务延迟记录
+		   TbTaskDelay taskDelay = new TbTaskDelay();
+		   taskDelay.setTaskDelayId(UUIDUtils.getUUID());
+		   taskDelay.setTaskCode(taskCode);
+		   taskDelay.setDelayDays(""+CommonConstant.SPECIAL_TASK_DELAY_DAYS_1);
+		   taskDelay.setOperationDate(new Date());
+		   EntityTools.setCreateEmpAndTime(taskDelay);
+		   this.appTaskRestMapper.insertTaskDelay(taskDelay);
+		   
+		  //处理开始时间
+		  String newStartTime =  dealWithSpecialTaskTime(startTime);
+		  //处理结束时间
+		  String newEndTime =  dealWithSpecialTaskTime(endTime);
+		  
+		  Map<String, Object> param = new HashMap<>();
+		  param.put("startTime", newStartTime);
+		  param.put("endTime", newEndTime);
+		  param.put("taskCode", taskCode);
+		  //推迟任务时间
+		  this.appTaskRestMapper.updateSpecialTask(param);
+		  return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "将该专项任务进行延迟一天清洁");
+	  }else {
+		  return ResParams.newInstance(CommonCodeConstant.ERROR_CODE_40402, "该任务已无法延迟，请开始清洁");
+		  
+	  }
+	   
+   }
+
+/** 
+ * @Title: getNewTaskPlanTime 
+ * @Description: TODO
+ * @param taskTimeType
+ * @param taskPlanTime
+ * @return: String
+ */
+private String getNewTaskPlanTime(String taskTimeType, String taskPlanTime) {
+	Calendar calendar = Calendar.getInstance();
+	  calendar.setTime(DateUtil.stringToDateTime(taskPlanTime));
+	  if(CommonConstant.PLAN_TIME_TYPE_WEEK.equals(taskTimeType)) {
+		  calendar.add(Calendar.DAY_OF_MONTH, CommonConstant.SPECIAL_TASK_DELAY_DAYS_7);
+	  }
+	  
+	  if(CommonConstant.PLAN_TIME_TYPE_MONTH.equals(taskTimeType)) {
+		  calendar.add(Calendar.MONTH, 1);
+	  }
+	  
+	  if(CommonConstant.PLAN_TIME_TYPE_YEAR.equals(taskTimeType)) {
+		  calendar.add(Calendar.YEAR, 1);
+	  }
+	  
+	  return DateUtil.dateTimeToString(calendar.getTime());
+}
+
+/** 
+ * @Title: dealWithSpecialTaskTime 
+ * @Description: TODO
+ * @param startTime
+ * @return: String
+ */
+private String dealWithSpecialTaskTime(String startTime) {
+	Calendar calendar = Calendar.getInstance();
+	  calendar.setTime(DateUtil.stringToDateTime(startTime));
+	  calendar.add(Calendar.DAY_OF_MONTH, CommonConstant.SPECIAL_TASK_DELAY_DAYS_1);
+	  return DateUtil.dateTimeToString(calendar.getTime());
+}
 
 	/** 
 	 * @Title: dealWithPicUrl 
@@ -178,6 +266,8 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_FINISH);
 		param.put("taskStatus", appTaskRestReq.getTaskStatus());
+		param.put("startTimePage", appTaskRestReq.getStartTime());
+		param.put("lineNo", appTaskRestReq.getLineNo());
 		String startTime = Objects.toString(param.get("startTime"),"");
 		if(!StringUtils.isEmpty(startTime)){
 			//在当班时间内，则查询已完成任务
@@ -313,6 +403,8 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 				param.put("checkStatus",appTaskCheckRestReq.getCheckStatus());
 				param.put("taskStatus",CommonConstant.TASK_STATUS_FINISH);
 				param.put("taskStatus",CommonConstant.TASK_STATUS_FINISH);
+				param.put("startTimePage", appTaskCheckRestReq.getStartTime());
+				param.put("lineNo", appTaskCheckRestReq.getLineNo());
 				/**
 				 * 选择区域后，将岗位默认区域覆盖
 				 */
@@ -455,7 +547,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		// 根据工号推送任务通知
 		String [] employeeCodeArr = appTaskAddRestReq.getEmployeeCode().split(",");
 		List<String> employeeCodeList = Arrays.asList(employeeCodeArr);
-		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
+//		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
 		
 	};
 
@@ -647,6 +739,11 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
     }
 
     private int changeArrangeShift(AppTaskArrangeShiftRestReq appTaskArrangeShiftRestReq) throws InvocationTargetException, IllegalAccessException {
+    	
+    	/**
+    	 * 调整推迟清洁的专项任务
+    	 */
+    	 this.appTaskRestMapper.updateCleanerTask(appTaskArrangeShiftRestReq);
 
         String workingDateStr = appTaskArrangeShiftRestReq.getWorkingDate();
         String month = workingDateStr.substring(0,7).replace("-","");

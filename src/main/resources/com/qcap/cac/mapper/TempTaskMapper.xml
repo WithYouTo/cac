@@ -238,7 +238,7 @@
 	</update>
 	
 	<select id="selectStandardItem" parameterType="String" resultType="Map">
-	SELECT STANDARD_CODE standardCode,STANDARD_NAME standardName ,UPLOAD_PIC_FLAG AS uploadPicFlag,CHECK_FLAG As checkFlag
+	SELECT STANDARD_CODE standardCode,STANDARD_NAME standardName
 	FROM tb_area_standard 
 	WHERE 1=1
 	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardCode)">

@@ -20,9 +20,20 @@ public class AppTaskCheckRestReq {
 	@ApiModelProperty(value = "区域编码")
 	private String areaCode;
 	
-	@ApiModelProperty(value = "分页号")
+	@ApiModelProperty(value = "分页号：联合排序用")
 	private String lineNo;
 	
+	@ApiModelProperty(value = "任务开始时间：联合排序用")
+	private String startTime;
+	
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
 	public String getAreaCode() {
 		return areaCode;
 	}

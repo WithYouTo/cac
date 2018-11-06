@@ -75,6 +75,7 @@
 		WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
 		END AS taskTypeName,
 		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %H:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %H:%i')) AS cleanTime,
+		DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T') AS startTime,
 		IFNULL(m.SPEC,'') AS  spec,
 		m.TASK_SCORE  AS  taskScore,
 		m.CHECK_FLAG  AS  checkFlag,
@@ -84,6 +85,7 @@
 		m.UPLOAD_PIC_FLAG AS uploadPicFlag,
 		m.START_SCAN_FLAG  AS  startScanFlag,
 		m.END_SCAN_FLAG  AS  endScanFlag,
+		m.TASK_PLAN_TIME AS taskPlanTime,
 		m.LINE_NO  AS  lineNo
 		FROM tb_task m
 		WHERE 1=1
@@ -102,20 +104,28 @@
         <if test=' type == "ITEM" or type == "FINISH" '>
         	 <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startTime) and @com.qcap.cac.tools.Ognl@isNotEmpty(endTime) ">
 		        AND m.START_TIME &gt;= #{startTime}
-		        AND m.END_TIME &lt; #{endTime}
+		        AND m.START_TIME &lt; #{endTime}
 	        </if>
         </if>
 		 <if test=' @com.qcap.cac.tools.Ognl@isNotEmpty(type) and type == "CHECK" '>
 		AND INSTR(#{areaCode},m.AREA_CODE)
         AND m.START_TIME &gt;= #{startTime}
-        AND m.END_TIME &lt; #{endTime}
+        AND m.START_TIME &lt; #{endTime}
 		AND m.CHECK_STATUS != 'DISQUALIFIED'
 		AND m.TASK_STATUS !='CANCLE'
         </if>
-        <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)">
-        AND m.LINE_NO &gt; #{lineNo}
+        <if test='pageType == null or pageType =="" '>
+	        <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)  and  @com.qcap.cac.tools.Ognl@isNotEmpty(startTimePage) ">
+		        AND CONCAT(UNIX_TIMESTAMP(m.START_TIME),m.LINE_NO) &gt;CONCAT(UNIX_TIMESTAMP(#{startTimePage}),#{lineNo})
+	        </if>
+        ORDER BY m.START_TIME,m.LINE_NO 
         </if>
-        ORDER BY m.LINE_NO 
+        <if test=' pageType =="queryHistory" '>
+        	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)  and  @com.qcap.cac.tools.Ognl@isNotEmpty(startTimePage) ">
+		        AND CONCAT(UNIX_TIMESTAMP(m.START_TIME),m.LINE_NO) &lt;CONCAT(UNIX_TIMESTAMP(#{startTimePage}),#{lineNo})
+	        </if>
+        ORDER BY m.START_TIME DESC ,m.LINE_NO DESC
+        </if>
         LIMIT 0,10
 	</select>
 	
@@ -380,5 +390,41 @@
 	AND START_TIME &gt;= #{startTime}
 	AND START_TIME &lt; #{endTime}
 	</select>
+	
+	  <insert id="insertTaskDelay" parameterType="com.qcap.cac.entity.TbTaskDelay" >
+    insert into tb_task_delay (TASK_DELAY_ID, TASK_CODE, DELAY_DAYS, 
+      OPERATION_DATE, REMARK1, REMARK2, 
+      REMARK3, CREATE_EMP, CREATE_DATE, 
+      UPDATE_DATE, UPDATE_EMP, VERSION
+      )
+    values (#{taskDelayId}, #{taskCode}, #{delayDays}, 
+      #{operationDate}, #{remark1}, #{remark2}, 
+      #{remark3}, #{createEmp}, #{createDate}, 
+      #{updateDate}, #{updateEmp}, #{version}
+      )
+  </insert>
+  
+  <update id="updateSpecialTask" parameterType="Map">
+  UPDATE tb_task SET
+	START_TIME =#{startTime},
+	END_TIME =#{endTime}
+	WHERE TASK_TYPE ='SPECIAL'
+	AND TASK_CODE =#{taskCode}
+  </update>
+  
+  <select id="selectTaskTime" parameterType="String" resultType="Map">
+	SELECT 
+	DATE_FORMAT(START_TIME,'%Y-%m-%d %T') AS startTime,
+	DATE_FORMAT(END_TIME,'%Y-%m-%d %T') AS endTime ,
+	DATE_FORMAT(TASK_PLAN_TIME,'%Y-%m-%d %T') AS taskPlanTime 
+	FROM tb_task 
+	WHERE TASK_CODE =#{taskCode}
+  </select>
+  
+  <select id="selectSpecialTaskTimeType" parameterType="String" resultType="String">
+  SELECT n.PLAN_TIME_TYPE AS planTimeType FROM tb_task m LEFT JOIN tb_plan n
+	ON m.PLAN_ID = n.PLAN_ID
+	where TASK_CODE =#{taskCode}
+  </select>
 
 </mapper>

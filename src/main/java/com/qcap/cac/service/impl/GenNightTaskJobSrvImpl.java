@@ -263,6 +263,11 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
             }
             String taskCode = taskCodePrefix + DateUtil.dateTimeToStringForLineNo(new Date());
             task.setTaskCode(taskCode);
+            
+			//设置专项任务的计划时间，以便app端推迟专项任务
+			if(!CommonConstant.PLAN_TIME_TYPE_DAY.equals(planTimeType)) {
+				task.setTaskPlanTime(planStartDate);
+			}
 			
 			//5.5设置提醒时间
 			//如果是专项任务，则设置提醒时间

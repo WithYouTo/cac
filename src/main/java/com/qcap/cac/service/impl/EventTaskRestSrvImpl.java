@@ -136,17 +136,20 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 			task.setCreateEmp(eventTaskDto.getEmployeeCode());
 			task.setVersion(0);
 			task.setTaskCode(CommonConstant.TASK_PREFIX_E + DateUtil.dateTimeToStringForLineNo(now));
-
-			// 查询标准详细信息
-			Map<String, Object> standardMap = this.getStandard(eventPlanMap.get("standardCode"));
-			String uploadPicFlag = ToolUtil.toStr(standardMap.get("uploadPicFlag"));
-			String checkFlag = ToolUtil.toStr(standardMap.get("checkFlag"));
-			String standardName = ToolUtil.toStr(standardMap.get("standardName"));
-
-			task.setStandardCode(eventPlanMap.get("standardCode"));
-			task.setStandardName(standardName);
+			
+			String uploadPicFlag = ToolUtil.toStr(eventPlanMap.get("uploadPicFlag"));
+			String checkFlag = ToolUtil.toStr(eventPlanMap.get("checkFlag"));
+			String startScanFlag = ToolUtil.toStr(eventPlanMap.get("startScanFlag"));
+			String endScanFlag = ToolUtil.toStr(eventPlanMap.get("endScanFlag"));
 			task.setCheckFlag(checkFlag);
 			task.setUploadPicFlag(uploadPicFlag);
+			task.setStartScanFlag(startScanFlag);
+			task.setEndScanFlag(endScanFlag);
+			// 查询标准详细信息
+			Map<String, Object> standardMap = this.getStandard(eventPlanMap.get("standardCode"));
+			String standardName = ToolUtil.toStr(standardMap.get("standardName"));
+			task.setStandardCode(eventPlanMap.get("standardCode"));
+			task.setStandardName(standardName);
 			taskList.add(task);
 		}
 		tempTaskMapper.insertTaskBatch(taskList);

@@ -114,9 +114,7 @@
 	m.EQUITMET_TYPE  AS  equitmetType,
 	m.CLEAN_TOOLS  AS  cleanTools,
 	m.STANDARD_REQUIREMENT  AS  standardRequirement,
-	m.MARK_SCALE  AS  markScale,
-	m.CHECK_FLAG  AS  checkFlag,
-	m.UPLOAD_PIC_FLAG  AS  uploadPicFlag
+	m.MARK_SCALE  AS  markScale
 	FROM tb_area_standard m
 	WHERE STANDARD_CODE =#{standardCode}
 	</select>

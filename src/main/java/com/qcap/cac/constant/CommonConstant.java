@@ -57,6 +57,19 @@ public class CommonConstant {
 		EQUIP_STATUS.put("ABORT", "损坏");
 	}
 
+	//设备操作状态，用于在设备信息中显示设备操作记录，设备充电状态与设备使用状态的合集
+	public final static String EQUIP_OPERATE_STATUS_INCHARGE = "INCHARGE";
+	public final static String EQUIP_OPERATE_STATUS_CHARGED = "CHARGED";
+	public final static String EQUIP_OPERATE_STATUS_INUSE = "INUSE";
+	public final static String EQUIP_OPERATE_STATUS_USED = "USED";
+	public static Map<String, String> EQUIP_OPERATE_STATUS = new LinkedHashMap<String, String>();
+	static {
+		EQUIP_OPERATE_STATUS.put("INCHARGE", "充电中");
+		EQUIP_OPERATE_STATUS.put("CHARGED", "充电完成");
+		EQUIP_OPERATE_STATUS.put("INUSE", "使用中");
+		EQUIP_OPERATE_STATUS.put("USED", "使用完毕");
+	}
+
 	// 设备充电状态
 	public final static String EQUIP_CHARGE_STATUS_INCHARGE = "INCHARGE";
 	public final static String EQUIP_CHARGE_STATUS_CHARGED = "CHARGED";
@@ -276,5 +289,9 @@ public class CommonConstant {
 		END_SCAN_FLAG.put("MUST", "必须");
 		END_SCAN_FLAG.put("OPTIONAL", "非必须");
 	}
-
+	
+	//专项任务每次延迟天数
+	public final static int SPECIAL_TASK_DELAY_DAYS_1 =1;
+	public final static int SPECIAL_TASK_DELAY_DAYS_7 =7;
+	
 }

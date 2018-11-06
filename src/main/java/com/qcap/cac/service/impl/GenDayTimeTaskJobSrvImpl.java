@@ -229,6 +229,11 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			String taskCode = taskCodePrefix + DateUtil.dateTimeToStringForLineNo(new Date());
 			task.setTaskCode(taskCode);
 			
+			//设置专项任务的计划时间，以便app端推迟专项任务
+			if(!CommonConstant.PLAN_TIME_TYPE_DAY.equals(planTimeType)) {
+				task.setTaskPlanTime(planStartDate);
+			}
+			
 			//如果是专项任务，则设置提醒时间
 			//计划时间类型为周
 			if(CommonConstant.PLAN_TIME_TYPE_WEEK.equals(planTimeType)) {
@@ -245,6 +250,7 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 				Date taskRemindTime = cal.getTime();
 				task.setTaskRemindTime(taskRemindTime);
 				log.info("------------------------专项任务提醒时间设置完毕----------------");
+				
 			}
 			
 			//计划时间类型为月
