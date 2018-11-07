@@ -23,15 +23,19 @@
 			CREATE_DATE createDate,
 			UPDATE_EMP updateEmp,
 			UPDATE_DATE updateDate,
-			VERSION version
+			VERSION version,
+			CHECK_FLAG checkFlag,
+			UPLOAD_PIC_FLAG uploadPicFlag,
+			START_SCAN_FLAG startScanFlag,
+			END_SCAN_FLAG endScanFlag
 		FROM
 			tb_plan T
 		<where>
-			<if test="areaCode != null and areaCode != ''">
-				AND AREA_CODE = #{areaCode}
+			<if test="param.areaCode != null and param.areaCode != ''">
+				AND AREA_CODE = #{param.areaCode}
 			</if>
-			<if test="standardCode != null and standardCode != ''">
-				AND STANDARD_CODE = #{standardCode}
+			<if test="param.standardCode != null and param.standardCode != ''">
+				AND STANDARD_CODE = #{param.standardCode}
 			</if>
 		</where>
 	</select>
@@ -55,7 +59,11 @@
 			CREATE_DATE createDate,
 			UPDATE_EMP updateEmp,
 			UPDATE_DATE updateDate,
-			VERSION version
+			VERSION version,
+			CHECK_FLAG checkFlag,
+			UPLOAD_PIC_FLAG uploadPicFlag,
+			START_SCAN_FLAG startScanFlag,
+			END_SCAN_FLAG endScanFlag
 		FROM
 			tb_plan T
 		WHERE 
@@ -74,6 +82,10 @@
 			START_TIME = #{startTime},
 			END_TIME = #{endTime},
 			PREV_TASK_DONE_DATE = #{prevTaskDoneDate},
+			CHECK_FLAG = #{checkFlag},
+			UPLOAD_PIC_FLAG = #{uploadPicFlag},
+			START_SCAN_FLAG = #{startScanFlag},
+			END_SCAN_FLAG = #{endScanFlag},
 			REMARK1 = #{remark1},
 			REMARK2 = #{remark2},
 			REMARK3 = #{remark3},

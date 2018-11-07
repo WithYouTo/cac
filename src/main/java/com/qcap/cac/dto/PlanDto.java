@@ -42,6 +42,18 @@ public class PlanDto {
 	@ApiModelProperty(value = "备注")
 	private String remark1;
 
+	@ApiModelProperty(value = "是否检查")
+	private String checkFlag;
+
+	@ApiModelProperty(value = "是否上传图片")
+	private String uploadPicFlag;
+
+	@ApiModelProperty(value = "任务开始是否扫码")
+	private String startScanFlag;
+
+	@ApiModelProperty(value = "任务结束是否扫码")
+	private String endScanFlag;
+
 	public String getPlanId() {
 		return planId;
 	}
@@ -138,12 +150,45 @@ public class PlanDto {
 		this.remark1 = remark1;
 	}
 
+	public String getCheckFlag() {
+		return checkFlag;
+	}
+
+	public void setCheckFlag(String checkFlag) {
+		this.checkFlag = checkFlag;
+	}
+
+	public String getUploadPicFlag() {
+		return uploadPicFlag;
+	}
+
+	public void setUploadPicFlag(String uploadPicFlag) {
+		this.uploadPicFlag = uploadPicFlag;
+	}
+
+	public String getStartScanFlag() {
+		return startScanFlag;
+	}
+
+	public void setStartScanFlag(String startScanFlag) {
+		this.startScanFlag = startScanFlag;
+	}
+
+	public String getEndScanFlag() {
+		return endScanFlag;
+	}
+
+	public void setEndScanFlag(String endScanFlag) {
+		this.endScanFlag = endScanFlag;
+	}
+
 	@Override
 	public String toString() {
 		return "PlanDto [planId=" + planId + ", areaCode=" + areaCode + ", areaName=" + areaName + ", areaType="
 				+ areaType + ", standardCode=" + standardCode + ", planTimeType=" + planTimeType + ", month=" + month
 				+ ", day=" + day + ", week=" + week + ", planStartTime=" + planStartTime + ", planEndTime="
-				+ planEndTime + ", remark1=" + remark1 + "]";
+				+ planEndTime + ", remark1=" + remark1 + ", checkFlag=" + checkFlag + ", uploadPicFlag=" + uploadPicFlag
+				+ ", startScanFlag=" + startScanFlag + ", endScanFlag=" + endScanFlag + "]";
 	}
 
 }

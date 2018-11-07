@@ -37,4 +37,6 @@ public interface TbMenuMapper extends BaseMapper<TbMenu> {
 	@Select("select max(t.seq) from tb_menu t where t.parent_code=#{parentCode}")
 	Integer selectMaxSeqByParentCode(@Param("parentCode") String parentCode);
 
+	List<Map<String, String>> getButtonListByManagerId(@Param("managerId") String managerId);
+
 }

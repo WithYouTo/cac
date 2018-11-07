@@ -44,8 +44,10 @@ public class LoginController {
 		username = StringUtils.trimToEmpty(username);
 		try {
 			String token = tbManagerService.login(username, password);
+			Map<String, Object> buttonAuthMap = tbMenuService.getButtonAuthFromToken(token);
 			Map<String, Object> data = new HashMap<>(2);
 			data.put("access_token", token);
+			data.put("button_auth", buttonAuthMap);
 			return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "登录成功！", data);
 		} catch (Exception e) {
 			return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);

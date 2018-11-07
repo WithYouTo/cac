@@ -9,28 +9,23 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dto.PlanDto;
 import com.qcap.cac.dto.QueryPlanListDto;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.PlanSrv;
-import com.qcap.cac.tools.ToolUtil;
 import com.qcap.core.common.CoreConstant;
-import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
 
-@SuppressWarnings("deprecation")
 @RestController
 @RequestMapping("/plan")
 public class PlanController {
@@ -42,40 +37,15 @@ public class PlanController {
 	private CommonSrv commonSrv;
 
 	@RequestMapping(value = "/queryPlanListByPage", method = RequestMethod.POST)
-	public PageResParams queryPlanListByPage(@Valid QueryPlanListDto queryPlanListDto) {
-		new PageFactory<Map<String, Object>>().defaultPage();
-		List<Map<String, Object>> list = this.planSrv.queryPlanListByPage(queryPlanListDto);
-		for (Map<String, Object> map : list) {
-			String planTimeType = ObjectUtils.toString(map.get("planTimeType"));
-			String startTime = ObjectUtils.toString(map.get("startTime"));
-			String endTime = ObjectUtils.toString(map.get("endTime"));
-			String month = ObjectUtils.toString(map.get("month"));
-			String day = ObjectUtils.toString(map.get("day"));
-			String week = ObjectUtils.toString(map.get("week"));
-			map.put("planTimeTypeName", CommonConstant.PLAN_TIME_TYPE.get(planTimeType));
-			map.put("time", startTime + "-" + endTime);
-			if (StringUtils.isNotBlank(month)) {
-				map.put("monthName", month + "月");
-			}
-			if (StringUtils.isNotBlank(day)) {
-				if ("ALL".equals(day)) {
-					map.put("dayName", "全部");
-				} else {
-					map.put("dayName", day + "号");
-				}
-			}
-			if (StringUtils.isNotBlank(week)) {
-				map.put("weekName", "周" + ToolUtil.toChinese(week));
-			}
-		}
-
-		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
-		return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,
-				pageInfo.getTotal(), pageInfo.getList());
+	public PageResParams queryPlanListByPage(IPage<Map<String, String>> page,
+			@Valid QueryPlanListDto queryPlanListDto) {
+		this.planSrv.queryPlanListByPage(page, queryPlanListDto);
+		return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,
+				page.getTotal(), page.getRecords());
 	}
 
 	@RequestMapping(value = "/addPlan", method = RequestMethod.POST)
-	public ResParams addPlan(HttpServletRequest request, @Valid PlanDto planDto) throws Exception {
+	public ResParams addPlan(@Valid PlanDto planDto) throws Exception {
 		this.planSrv.addPlan(planDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC);
 	}
@@ -118,6 +88,62 @@ public class PlanController {
 	public Object selectAreaItem() {
 		List<ZTreeNode> list = this.commonSrv.selectAreaItem();
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询区域成功", list);
+	}
+
+	@RequestMapping(value = "/selectCheckFlagList", method = RequestMethod.POST)
+	public ResParams selectCheckFlagList() {
+		Map<String, String> map = CommonConstant.TASK_CHECK_FLAG;
+		List<Map<String, String>> ls = new ArrayList<>();
+		for (String key : map.keySet()) {
+			Map<String, String> mapTmp = new HashMap<>();
+			mapTmp.put("id", key);
+			mapTmp.put("text", map.get(key));
+			ls.add(mapTmp);
+		}
+
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
+	}
+
+	@RequestMapping(value = "/selectUploadPicFlagList", method = RequestMethod.POST)
+	public ResParams selectUploadPicFlagList() {
+		Map<String, String> map = CommonConstant.UPLOAD_PIC_FLAG;
+		List<Map<String, String>> ls = new ArrayList<>();
+		for (String key : map.keySet()) {
+			Map<String, String> mapTmp = new HashMap<>();
+			mapTmp.put("id", key);
+			mapTmp.put("text", map.get(key));
+			ls.add(mapTmp);
+		}
+
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
+	}
+
+	@RequestMapping(value = "/selectStartScanFlagList", method = RequestMethod.POST)
+	public ResParams selectStartScanFlagList() {
+		Map<String, String> map = CommonConstant.START_SCAN_FLAG;
+		List<Map<String, String>> ls = new ArrayList<>();
+		for (String key : map.keySet()) {
+			Map<String, String> mapTmp = new HashMap<>();
+			mapTmp.put("id", key);
+			mapTmp.put("text", map.get(key));
+			ls.add(mapTmp);
+		}
+
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
+	}
+
+	@RequestMapping(value = "/selectEndScanFlagList", method = RequestMethod.POST)
+	public ResParams selectEndScanFlagList() {
+		Map<String, String> map = CommonConstant.END_SCAN_FLAG;
+		List<Map<String, String>> ls = new ArrayList<>();
+		for (String key : map.keySet()) {
+			Map<String, String> mapTmp = new HashMap<>();
+			mapTmp.put("id", key);
+			mapTmp.put("text", map.get(key));
+			ls.add(mapTmp);
+		}
+
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
 	}
 
 }

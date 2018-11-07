@@ -7,10 +7,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.PlanEventMapper;
 import com.qcap.cac.dto.PlanEventDto;
 import com.qcap.cac.dto.QueryPlanEventListDto;
@@ -27,8 +30,18 @@ public class PlanEventSrvImpl implements PlanEventSrv {
 	private PlanEventMapper planEventMapper;
 
 	@Override
-	public List<Map<String, Object>> queryPlanEventListByPage(QueryPlanEventListDto queryPlanEventListDto) {
-		return planEventMapper.selectPlanEventByPage(queryPlanEventListDto);
+	public void queryPlanEventListByPage(IPage<Map<String, String>> page, QueryPlanEventListDto queryPlanEventListDto) {
+		List<Map<String, String>> ls = planEventMapper.selectPlanEventByPage(page, queryPlanEventListDto);
+		if (CollectionUtils.isNotEmpty(ls)) {
+			for (Map<String, String> map : ls) {
+				String eventType = map.get("eventType");
+				String guaranteeType = map.get("guaranteeType");
+				map.put("eventTypeName", CommonConstant.EVENT_TYPE.get(eventType));
+				map.put("guaranteeTypeName", CommonConstant.GUARANTEE_TYPE.get(guaranteeType));
+				map.put("remark", map.get("remark1"));
+			}
+		}
+		page.setRecords(ls);
 	}
 
 	@Override

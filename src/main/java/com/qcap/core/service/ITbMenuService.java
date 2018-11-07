@@ -1,6 +1,7 @@
 package com.qcap.core.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.core.entity.TbMenu;
@@ -86,4 +87,6 @@ public interface ITbMenuService {
 	 *            主键id
 	 */
 	void deleteMenuAndSubMenu(String tbMenuId);
+
+	Map<String, Object> getButtonAuthFromToken(String token);
 }

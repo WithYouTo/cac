@@ -58,7 +58,9 @@ public class MenuController {
 			for (TbMenu menuTemp : ls) {
 				Map<String, String> map = BeanUtils.describe(menuTemp);
 				String isMenu = map.get("isMenu");
-				if ("1".equals(isMenu)) {
+				if ("0".equals(isMenu)) {
+					map.put("isMenuName", "按钮");
+				} else if ("1".equals(isMenu)) {
 					map.put("isMenuName", "PC菜单");
 				} else if ("2".equals(isMenu)) {
 					map.put("isMenuName", "APP菜单");
