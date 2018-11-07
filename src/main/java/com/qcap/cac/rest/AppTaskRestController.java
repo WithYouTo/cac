@@ -273,5 +273,14 @@ public class AppTaskRestController {
 	public Object selectIfTaskExist(@Valid AppTaskCheckTaskRestReq appTaskCheckTaskRestReq) {
 		return this.appTaskRestSrv.selectIfTaskExist(appTaskCheckTaskRestReq);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/delaySpecialTask", method = RequestMethod.POST)
+	@ApiOperation(value = "专项任务推迟进行", notes = "专项任务推迟进行", response = Map.class, httpMethod = "POST")
+	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
+	public Object delaySpecialTask(
+			@ApiParam(value = "任务编号", required = true) @RequestParam("taskCode") String taskCode) {
+		 return this.appTaskRestSrv.delaySpecialTask(taskCode);
+	}
 
 }

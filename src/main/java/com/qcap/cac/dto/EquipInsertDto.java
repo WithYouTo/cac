@@ -30,6 +30,8 @@ public class EquipInsertDto {
 
     private String maintCycle;
 
+    private String advanceTime;
+
     private String manufact;
 
     private String agenceNo;
@@ -178,6 +180,14 @@ public class EquipInsertDto {
         this.manufact = manufact;
     }
 
+    public String getAdvanceTime() {
+        return advanceTime;
+    }
+
+    public void setAdvanceTime(String advanceTime) {
+        this.advanceTime = advanceTime;
+    }
+
     public String getAgenceNo() {
         return agenceNo;
     }
@@ -299,6 +309,7 @@ public class EquipInsertDto {
                 ", warranty='" + warranty + '\'' +
                 ", dailyMaint='" + dailyMaint + '\'' +
                 ", maintCycle='" + maintCycle + '\'' +
+                ", advanceTime='" + advanceTime + '\'' +
                 ", manufact='" + manufact + '\'' +
                 ", agenceNo='" + agenceNo + '\'' +
                 ", agenceName='" + agenceName + '\'' +

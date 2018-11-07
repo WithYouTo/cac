@@ -30,4 +30,8 @@ public interface EquipSrv {
     void insertPartsAndMaintTime(@Valid PartsInsertDto partsInsertDto);
 
     void deleteEquipByEquipId(String equipId);
+
+    void getEquipOperateRecordByEquipId(IPage<Map<String, Object>> page,String equipId);
+
+    void tempEquipNoticeJob();
 }

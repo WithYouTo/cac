@@ -81,6 +81,10 @@ public class TbEquipPlan implements Serializable {
      */
     private Date nextMaintTime;
     /**
+     * 设备维保提醒时间
+     */
+    private String noticeDate;
+    /**
      * 备注
      */
     private String remark;
@@ -273,6 +277,14 @@ public class TbEquipPlan implements Serializable {
         this.version = version;
     }
 
+    public String getNoticeDate() {
+        return noticeDate;
+    }
+
+    public void setNoticeDate(String noticeDate) {
+        this.noticeDate = noticeDate;
+    }
+
     @Override
     public String toString() {
         return "TbEquipPlan{" +
@@ -291,6 +303,7 @@ public class TbEquipPlan implements Serializable {
                 ", maintCycle='" + maintCycle + '\'' +
                 ", latestMaintTime=" + latestMaintTime +
                 ", nextMaintTime=" + nextMaintTime +
+                ", noticeDate='" + noticeDate + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createEmp='" + createEmp + '\'' +
                 ", createDate=" + createDate +

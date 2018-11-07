@@ -11,6 +11,7 @@ import com.qcap.cac.dto.AppTaskShiftHistoryRestReq;
 import com.qcap.cac.dto.AppTaskUpdateReq;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.entity.TbTaskArrangeShift;
+import com.qcap.cac.entity.TbTaskDelay;
 
 public interface AppTaskRestMapper {
 	
@@ -47,5 +48,13 @@ public interface AppTaskRestMapper {
 	String selectIfTaskExist (AppTaskCheckTaskRestReq appTaskCheckTaskRestReq);
 	
 	List<String> selectIfCleanerHaveTasks (Map<String, Object> map);
+	
+	void insertTaskDelay(TbTaskDelay taskDelay);
+	
+	void updateSpecialTask(Map<String, Object> map);
+	
+	Map<String, String> selectTaskTime (@Param("taskCode") String taskCode);
+	
+	String selectSpecialTaskTimeType (@Param("taskCode") String taskCode);
 	
 }

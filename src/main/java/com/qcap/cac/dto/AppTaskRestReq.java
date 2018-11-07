@@ -14,6 +14,28 @@ public class AppTaskRestReq {
 	@ApiModelProperty(value = "任务状态")
 	private String taskStatus;
 	
+	@ApiModelProperty(value = "分页号：联合排序用")
+	private String lineNo;
+	
+	@ApiModelProperty(value = "任务开始时间：联合排序用")
+	private String startTime;
+	
+	public String getLineNo() {
+		return lineNo;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setLineNo(String lineNo) {
+		this.lineNo = lineNo;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
 	public String getEmployeeCode() {
 		return employeeCode;
 	}

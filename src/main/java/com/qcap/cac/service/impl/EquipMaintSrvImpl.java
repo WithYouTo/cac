@@ -93,7 +93,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
                 this.equipMaintMapper.insert(equipMaint);
 
                 //3、更新维保计划
-                updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan);
+                updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan,equipInfo);
             }
         } catch (ParseException e) {
 //                e.printStackTrace();
@@ -113,12 +113,16 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
      * @author huangxiang
      * @date 2018/10/14 17:07
      */
-    private void updateEquipPlanTime(String maintTime,TbEquipPlan equipPlan) {
+    private void updateEquipPlanTime(String maintTime,TbEquipPlan equipPlan,TbEquip equipInfo) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date time = DateUtil.parseDate(maintTime);
         Date nextTime = getNewPlanDate(time,equipPlan.getMaintCycle());
         equipPlan.setNextMaintTime(nextTime);
         equipPlan.setLatestMaintTime(time);
 
+        //根据下次维保时间和提前提醒时间更新维保提醒时间
+        String noticeDateStr = format.format(getNoticeDate(nextTime,equipInfo.getAdvanceTime()));
+        equipPlan.setNoticeDate(noticeDateStr);
 
         if(StringUtils.isEmpty(equipPlan.getPartsId())){
             String planId = this.equipPlanMapper.selectPlanIdByEquipId(equipPlan);
@@ -148,6 +152,30 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
         c.setTime(time);
         //日期分钟加1,Calendar.DATE(天),Calendar.HOUR(小时)
         c.add(Calendar.HOUR, Integer.parseInt(maintCycle));
+        //结果
+        Date date = c.getTime();
+        return date;
+    }
+
+    /**
+     *
+     * @Description: 获取下次维保提前提醒时间
+     *
+     *
+     * @MethodName: getNoticeDate
+     * @Parameters: [time, maintCycle]
+     * @ReturnType: java.util.Date
+     *
+     * @author huangxiang
+     * @date 2018/11/5 10:30
+     */
+    private Date getNoticeDate(Date time, String advanceTime){
+        Calendar c = Calendar.getInstance();
+        //设置时间
+        c.setTime(time);
+        Integer days = Integer.parseInt(advanceTime);
+        //日期分钟加1,Calendar.DATE(天),Calendar.HOUR(小时)
+        c.add(Calendar.DATE, -days);
         //结果
         Date date = c.getTime();
         return date;

@@ -60,9 +60,7 @@
 	<select id="selectStandardInfo" parameterType="String" resultType="Map">
 	SELECT 
 	m.STANDARD_CODE  AS  standardCode,
-	m.STANDARD_NAME  AS  standardName,
-	m.CHECK_FLAG  AS  checkFlag,
-	m.UPLOAD_PIC_FLAG  AS  uploadPicFlag
+	m.STANDARD_NAME  AS  standardName
 	FROM tb_area_standard m
 	WHERE STANDARD_CODE =#{standardCode}
 	</select>
@@ -186,7 +184,7 @@
 			UPDATE_EMP, VERSION,
 			TASK_FINISH_DESC, DISQUALIFIED_REASON, TASK_REMIND_TIME,
 			FEEDBACK_IMG_URL, CHECK_IMG_URL, TASK_IMG_URL,
-			START_SCAN_FLAG, END_SCAN_FLAG)
+			START_SCAN_FLAG, END_SCAN_FLAG,TASK_PLAN_TIME)
 			values
 		<foreach collection="list" item="item" index="index" separator=",">
 			(#{item.taskId}, #{item.taskCode}, #{item.planId},
@@ -202,7 +200,7 @@
 			#{item.updateEmp}, #{item.version},
 			#{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.taskRemindTime},
 			#{item.feedbackImgUrl}, #{item.checkImgUrl}, #{item.taskImgUrl},
-			#{item.startScanFlag}, #{item.endScanFlag})
+			#{item.startScanFlag}, #{item.endScanFlag},#{item.taskPlanTime})
 		</foreach>
 	</insert>
 	

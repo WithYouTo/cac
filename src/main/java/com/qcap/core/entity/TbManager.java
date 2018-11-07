@@ -2,6 +2,7 @@ package com.qcap.core.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -49,7 +50,7 @@ public class TbManager implements Serializable {
 	 * 创建时间
 	 */
 	@TableField(fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+	private Date createDate;
 	/**
 	 * 创建人
 	 */
@@ -59,7 +60,7 @@ public class TbManager implements Serializable {
 	 * 更新时间
 	 */
 	@TableField(fill = FieldFill.UPDATE)
-	private LocalDateTime updateTime;
+	private Date updateDate;
 	/**
 	 * 更新人
 	 */
@@ -143,13 +144,6 @@ public class TbManager implements Serializable {
 		this.mail = mail;
 	}
 
-	public LocalDateTime getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(LocalDateTime createTime) {
-		this.createTime = createTime;
-	}
 
 	public String getCreateEmp() {
 		return createEmp;
@@ -159,12 +153,20 @@ public class TbManager implements Serializable {
 		this.createEmp = createEmp;
 	}
 
-	public LocalDateTime getUpdateTime() {
-		return updateTime;
+	public Date getCreateDate() {
+		return createDate;
 	}
 
-	public void setUpdateTime(LocalDateTime updateTime) {
-		this.updateTime = updateTime;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public String getUpdateEmp() {
@@ -203,11 +205,5 @@ public class TbManager implements Serializable {
 		return id.hashCode();
 	}
 
-	@Override
-	public String toString() {
-		return "TbManager{" + ", id=" + id + ", account=" + account + ", password=" + password + ", salt=" + salt
-				+ ", name=" + name + ", status=" + status + ", remark=" + remark + ", phone=" + phone + ", mail=" + mail
-				+ ", createTime=" + createTime + ", createEmp=" + createEmp + ", updateTime=" + updateTime
-				+ ", updateEmp=" + updateEmp + ", version=" + version + "}";
-	}
+
 }

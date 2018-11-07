@@ -51,5 +51,7 @@ public interface AppTaskRestSrv {
     void changeShift (AppTaskArrangeShiftRestReq appTaskArrangeShiftRestReq) throws InvocationTargetException, IllegalAccessException;
     
     Object selectIfTaskExist (AppTaskCheckTaskRestReq appTaskCheckTaskRestReq);
+    
+    Object delaySpecialTask(String taskCode) ;
 
 }

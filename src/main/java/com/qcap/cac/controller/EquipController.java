@@ -247,4 +247,42 @@ public class EquipController {
         this.equipSrv.deleteEquipByEquipId(equipId);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
     }
+
+    /**
+     *
+     * @Description: 根据设备ID获取设备操作记录
+     *
+     *
+     * @MethodName: getEquipOperateRecordByEquipId
+     * @Parameters: [equipId] 
+     * @ReturnType: com.qcap.core.model.PageResParams
+     *
+     * @author huangxiang
+     * @date 2018/11/2 15:00
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getEquipOperateRecordByEquipId", method = RequestMethod.POST)
+    public PageResParams getEquipOperateRecordByEquipId(IPage<Map<String, Object>> page, String equipId){
+        this.equipSrv.getEquipOperateRecordByEquipId(page,equipId);
+        return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC, page.getTotal(), page.getRecords());
+    }
+
+    /**
+     *
+     * @Description: 设备维保提醒JOB的临时方法
+     *
+     *
+     * @MethodName: tempEquipNoticeJob
+     * @Parameters: [] 
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/11/5 16:34
+     */
+    @ResponseBody
+    @RequestMapping(value = "/tempEquipNoticeJob", method = RequestMethod.POST)
+    public ResParams tempEquipNoticeJob(){
+        this.equipSrv.tempEquipNoticeJob();
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC,null);
+    }
 }

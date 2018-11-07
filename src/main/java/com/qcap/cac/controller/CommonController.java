@@ -60,6 +60,24 @@ public class CommonController {
 
     /**
      *
+     * @Description: 获取设备工作状态下拉框
+     *
+     *
+     * @MethodName: initEquipWorkState
+     * @Parameters: [] 
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/11/2 14:39
+     */
+    @ResponseBody
+    @RequestMapping(value = "/initEquipWorkState", method = RequestMethod.POST)
+    public Object initEquipWorkState(){
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, CommonConstant.EQUIP_WORK_STATUS);
+    }
+
+    /**
+     *
      * @Description: 获取设备充电状态下拉框
      *
      *
