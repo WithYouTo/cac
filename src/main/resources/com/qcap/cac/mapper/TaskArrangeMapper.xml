@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.TaskArrangeMapper">
 
-	<select id="listTaskArrange"  parameterType="com.qcap.cac.dto.TaskArrangeDto" resultType="Map">
+	<select id="listTaskArrange"  parameterType="com.qcap.cac.dto.TaskArrangeSearchDto" resultType="Map">
 		SELECT
 		m.ARRANGEMENT_ID  AS  arrangementId,
 		m.SHIFT  AS  shift,
@@ -46,6 +46,12 @@
 		FROM tb_task_arrangement m
 		WHERE m.SHIFT =#{shift}
 		AND m.MONTH=#{month}
+		<if test=' positionCode !=null and positionCode !="" '>
+		AND m.POSITION_CODE  =#{positionCode}
+		</if>
+		<if test=' employeeCode !=null and employeeCode !="" '>
+			AND m.EMPLOYEE_CODE  =#{employeeCode}
+		</if>
 		AND m.DELETE_FLAG !='DELETE'
 	</select>
 	
@@ -94,5 +100,9 @@
 	AND `MONTH`=#{month} 
 	AND CREATE_EMP =#{createEmp}
 	</update>
-	
+
+	<select id="selectPositionItem" resultType="Map">
+		SELECT POSITION_CODE AS id,POSITION_NAME AS text FROM tb_area_position
+	</select>
+
 </mapper>

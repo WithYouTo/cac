@@ -1,27 +1,25 @@
 package com.qcap.cac.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TaskArrangeMapper;
 import com.qcap.cac.dto.TaskArrangeDto;
+import com.qcap.cac.dto.TaskArrangeSearchDto;
 import com.qcap.cac.entity.TbTaskArrangement;
 import com.qcap.cac.poiEntity.TaskArrangeUploadEntity;
 import com.qcap.cac.service.TaskArrangeSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -68,9 +66,13 @@ public class TaskArrangeSrvImpl implements TaskArrangeSrv{
 	}
 
 	@Override
-	public List<Map<String, Object>> listTaskArrange(TaskArrangeDto taskArrangeDto) {
+	public List<Map<String, Object>> listTaskArrange(TaskArrangeSearchDto taskArrangeSearchDto) {
 		// TODO Auto-generated method stub
-		return taskArrangeMapper.listTaskArrange(taskArrangeDto);
+		return taskArrangeMapper.listTaskArrange(taskArrangeSearchDto);
 	}
 
+	@Override
+	public List<Map<String, String>> selectPositionItem() {
+		return this.taskArrangeMapper.selectPositionItem();
+	}
 }

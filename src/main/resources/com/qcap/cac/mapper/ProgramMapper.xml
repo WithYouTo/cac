@@ -37,6 +37,8 @@
 		DATE_FORMAT(m.START_TIME,'%Y-%m-%d')  AS  startTime,
 		DATE_FORMAT(m.END_TIME,'%Y-%m-%d')  AS  endTime,
 		DATE_FORMAT(m.EFFECT_DATE,'%Y-%m-%d')  AS  effectDate,
+        m.STORE_NUM  AS  storeNum,
+        m.VIP_ROOM_NUM  AS  vipRoomNum,
 		m.AREA_CODE  AS  areaCode,
 		m.AREA_NAME  AS  areaName
 		FROM tb_program m
@@ -79,7 +81,7 @@
       EFFECT_DATE, AREA_CODE,AREA_NAME, REMARK1, 
       REMARK2, REMARK3, CREATE_EMP, 
       CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
-      VERSION)
+      VERSION,STORE_NUM,VIP_ROOM_NUM)
     values (#{programId}, #{programCode}, #{programName}, 
       #{coveredArea}, #{programStatus}, #{programAddress}, 
       #{acceptMode}, #{managementArea}, #{buildingStructure}, 
@@ -94,7 +96,7 @@
       #{effectDate}, #{areaCode},#{areaName}, #{remark1}, 
       #{remark2}, #{remark3}, #{createEmp}, 
       #{createDate}, #{updateDate}, #{updateEmp}, 
-      #{version})
+      #{version},#{storeNum},#{vipRoomNum})
   </insert>
   
   <update id="updateProgramByKey" parameterType="com.qcap.cac.entity.TbProgram" >
@@ -222,6 +224,12 @@
       </if>
       <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(updateEmp)">
         UPDATE_EMP = #{updateEmp},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(storeNum)">
+        STORE_NUM = #{storeNum},
+      </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(vipRoomNum)">
+        VIP_ROOM_NUM = #{vipRoomNum},
       </if>
       VERSION = VERSION +1
     </set>
