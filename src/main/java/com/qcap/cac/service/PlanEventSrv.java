@@ -1,14 +1,14 @@
 package com.qcap.cac.service;
 
-import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dto.PlanEventDto;
 import com.qcap.cac.dto.QueryPlanEventListDto;
 
 public interface PlanEventSrv {
 
-	List<Map<String, Object>> queryPlanEventListByPage(QueryPlanEventListDto queryPlanEventListDto);
+	void queryPlanEventListByPage(IPage<Map<String, String>> page, QueryPlanEventListDto queryPlanEventListDto);
 
 	void addPlanEvent(PlanEventDto planEventDto, String userId) throws Exception;
 

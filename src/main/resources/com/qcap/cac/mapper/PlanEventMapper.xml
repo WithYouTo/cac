@@ -18,21 +18,25 @@
 			CREATE_DATE createDate,
 			UPDATE_EMP updateEmp,
 			UPDATE_DATE updateDate,
-			VERSION version
+			VERSION version,
+			CHECK_FLAG checkFlag,
+			UPLOAD_PIC_FLAG uploadPicFlag,
+			START_SCAN_FLAG startScanFlag,
+			END_SCAN_FLAG endScanFlag
 		FROM
 			tb_plan_event T
 		<where>
-			<if test="areaCode != null and areaCode != ''">
-				AND AREA_CODE = #{areaCode}
+			<if test="param.areaCode != null and param.areaCode != ''">
+				AND AREA_CODE = #{param.areaCode}
 			</if>
-			<if test="standardCode != null and standardCode != ''">
-				AND STANDARD_CODE = #{standardCode}
+			<if test="param.standardCode != null and param.standardCode != ''">
+				AND STANDARD_CODE = #{param.standardCode}
 			</if>
-			<if test="eventType != null and eventType != ''">
-				AND EVENT_TYPE = #{eventType}
+			<if test="param.eventType != null and param.eventType != ''">
+				AND EVENT_TYPE = #{param.eventType}
 			</if>
-			<if test="guaranteeType != null and guaranteeType != ''">
-				AND GUARANTEE_TYPE = #{guaranteeType}
+			<if test="param.guaranteeType != null and param.guaranteeType != ''">
+				AND GUARANTEE_TYPE = #{param.guaranteeType}
 			</if>
 		</where>
 	</select>
@@ -51,7 +55,11 @@
 			CREATE_DATE createDate,
 			UPDATE_EMP updateEmp,
 			UPDATE_DATE updateDate,
-			VERSION version
+			VERSION version,
+			CHECK_FLAG checkFlag,
+			UPLOAD_PIC_FLAG uploadPicFlag,
+			START_SCAN_FLAG startScanFlag,
+			END_SCAN_FLAG endScanFlag
 		FROM
 			tb_plan_event T
 		WHERE 
@@ -65,6 +73,10 @@
 			STANDARD_CODE = #{standardCode},
 			EVENT_TYPE = #{eventType},
 			GUARANTEE_TYPE = #{guaranteeType},
+			CHECK_FLAG = #{checkFlag},
+			UPLOAD_PIC_FLAG = #{uploadPicFlag},
+			START_SCAN_FLAG = #{startScanFlag},
+			END_SCAN_FLAG = #{endScanFlag},
 			REMARK1 = #{remark1},
 			REMARK2 = #{remark2},
 			REMARK3 = #{remark3},
