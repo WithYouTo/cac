@@ -4,8 +4,11 @@ import static com.qcap.core.common.CoreConstant.ORG_FULLCODES_SEPARATE;
 import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -299,6 +302,36 @@ public class TbMenuServiceImpl implements ITbMenuService {
 		menu.setParentCode(parentCode);
 		menu.setLevel(level);
 		menu.setFullCodes(fullCodes);
+	}
+
+	@Override
+	public Map<String, Object> getButtonAuthFromToken(String token) {
+		String pattern = "^/.*";
+		Map<String, Object> buttonMap = new HashMap<>();
+		String userId = jwtTokenUtil.getUsernameFromToken(token);
+		List<Map<String, String>> ls = tbMenuMapper.getButtonListByManagerId(userId);
+		if (CollectionUtils.isNotEmpty(ls)) {
+			List<String> buttonList = null;
+			String key = "";
+			for (Map<String, String> map : ls) {
+				String keyTmp = map.get("url");
+				if (!Pattern.matches(pattern, keyTmp)) {
+					keyTmp = "/" + keyTmp;
+				}
+				if (StringUtils.isNotBlank(keyTmp) && !key.equals(keyTmp)) {
+					if (CollectionUtils.isNotEmpty(buttonList)) {
+						buttonMap.put(key, buttonList);
+					}
+					key = keyTmp;
+					buttonList = new ArrayList<>();
+					buttonList.add(map.get("elementId"));
+				} else if (StringUtils.isNotBlank(keyTmp) && key.equals(keyTmp)) {
+					buttonList.add(map.get("elementId"));
+				}
+			}
+			buttonMap.put(key, buttonList);
+		}
+		return buttonMap;
 	}
 
 }

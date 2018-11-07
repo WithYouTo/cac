@@ -40,6 +40,37 @@
         </foreach>
         ) m3 on m1.code = m3.code ORDER BY m1.seq ASC
     </select>
+    
+    <select id="getButtonListByManagerId" resultType="java.util.Map">
+        SELECT 
+        	n.url,
+        	m.* 
+        FROM
+			(SELECT DISTINCT 
+        		c.url elementId, 
+        		c.code, 
+        		c.parent_code pcode, 
+        		c.name title, 
+        		c.icon, 
+        		c.name
+        	FROM 
+        		tb_manager_role a
+			LEFT JOIN 
+				tb_role_menu b 
+			ON 
+				a.role_id = b.role_num
+			LEFT JOIN 
+				tb_menu c 
+			ON 
+				c.code = b.menu_code
+        	WHERE 
+        		c.is_menu = '0'
+			AND a.manager_id = #{managerId}
+        	ORDER BY c.level, c.seq
+			) M, tb_menu N 
+		WHERE 
+			M.pcode = N.`code`
+    </select>
 
 
 </mapper>
