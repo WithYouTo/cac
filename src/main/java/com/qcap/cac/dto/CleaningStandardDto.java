@@ -24,10 +24,6 @@ public class CleaningStandardDto {
 
     private String markScale;
 
-    private String checkFlag;
-
-    private String uploadPicFlag;
-
     private String remark1;
 
     private String remark2;
@@ -58,22 +54,6 @@ public class CleaningStandardDto {
 		this.markScale = markScale;
 	}
 
-	public String getCheckFlag() {
-		return checkFlag;
-	}
-
-	public void setCheckFlag(String checkFlag) {
-		this.checkFlag = checkFlag;
-	}
-
-	public String getUploadPicFlag() {
-		return uploadPicFlag;
-	}
-
-	public void setUploadPicFlag(String uploadPicFlag) {
-		this.uploadPicFlag = uploadPicFlag;
-	}
-
 	public String getRemark1() {
 		return remark1;
 	}
@@ -101,9 +81,9 @@ public class CleaningStandardDto {
 	@Override
 	public String toString() {
 		return "CleaningStandardDto [standardCode=" + standardCode + ", standardName=" + standardName + ", markScale="
-				+ markScale + ", checkFlag=" + checkFlag + ", uploadPicFlag=" + uploadPicFlag + ", remark1=" + remark1
-				+ ", remark2=" + remark2 + ", remark3=" + remark3 + "]";
+				+ markScale + ", remark1=" + remark1 + ", remark2=" + remark2 + ", remark3=" + remark3 + "]";
 	}
+
 
     
     

@@ -9,8 +9,6 @@
 	    STANDARD_CODE standardCode, 
 	    STANDARD_NAME standardName, 
 	    MARK_SCALE markScale,
-	    CHECK_FLAG checkFlag, 
-	    UPLOAD_PIC_FLAG uploadPicFlag, 
 	    REMARK1 remark1, 
 	    REMARK2 remark2,
 	    REMARK3 remark3, 
@@ -23,12 +21,6 @@
     where 1=1
 	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(standardName)">
 		AND STANDARD_NAME LIKE CONCAT('%',#{standardName},'%')
-	</if>
-	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkFlag)">
-		AND CHECK_FLAG=#{checkFlag}
-	</if>
-	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(uploadPicFlag)">
-		AND UPLOAD_PIC_FLAG=#{uploadPicFlag}
 	</if>
 	ORDER BY standardCode
   </select>
@@ -60,12 +52,12 @@
   <insert id="addTbAreaStandard" parameterType="com.qcap.cac.entity.TbAreaStandard" >
     insert into tb_area_standard 
      (STANDARD_ID, STANDARD_CODE, STANDARD_NAME, 
-      MARK_SCALE, CHECK_FLAG, UPLOAD_PIC_FLAG, 
+      MARK_SCALE, 
       REMARK1, REMARK2, REMARK3, 
       CREATE_EMP, CREATE_DATE, UPDATE_DATE, 
       UPDATE_EMP, VERSION)
     values (#{standardId}, #{standardCode}, #{standardName}, 
-      #{markScale}, #{checkFlag}, #{uploadPicFlag}, 
+      #{markScale}, 
       #{remark1}, #{remark2}, #{remark3}, 
       #{createEmp}, #{createDate}, #{updateDate}, 
       #{updateEmp}, #{version}
@@ -96,12 +88,6 @@
       </if>
       <if test="markScale != null" >
         MARK_SCALE = #{markScale},
-      </if>
-      <if test="checkFlag != null" >
-        CHECK_FLAG = #{checkFlag},
-      </if>
-      <if test="uploadPicFlag != null" >
-        UPLOAD_PIC_FLAG = #{uploadPicFlag},
       </if>
       <if test="remark1 != null" >
         REMARK1 = #{remark1},

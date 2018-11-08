@@ -31,6 +31,7 @@ import com.qcap.cac.dto.CleaningStandardDto;
 import com.qcap.cac.entity.TbAreaStandard;
 import com.qcap.cac.entity.TbAreaStandardDetail;
 import com.qcap.cac.service.CleaningStandardSrv;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
 
@@ -85,7 +86,8 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 	 */
 	@Override
 	public Object add(@Valid CleaningStandardDto cleaningStandardDto,String list) {
-		
+		//查询配置管理中存放的文件访问地址前缀
+		String addressPrefix = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
 		int count = this.selectStandardName(cleaningStandardDto.getStandardName());
 		
 		if(count > 0){
@@ -117,7 +119,14 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 				tbAreaStandardDetail.setMaterial(map.get("material").toString());
 				tbAreaStandardDetail.setStandardRequirement(map.get("standardRequirement").toString());
 				tbAreaStandardDetail.setStandardStep(map.get("standardStep").toString());
-				tbAreaStandardDetail.setImgUrl(map.get("imgUrl").toString());
+				String imgUrl=map.get("imgUrl").toString();
+				if(!StringUtils.isEmpty(imgUrl)){
+					if(imgUrl.indexOf(addressPrefix)!=-1){
+						tbAreaStandardDetail.setImgUrl(imgUrl);
+					}else {
+						tbAreaStandardDetail.setImgUrl(addressPrefix+imgUrl);
+					}
+				}
 				
 				tbAreaStandardDetail.setCreateEmp("sys");
 				tbAreaStandardDetail.setCreateDate(date);
@@ -157,6 +166,7 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 		//3.修改清洁标准
 		TbAreaStandard tbAreaStandard = new TbAreaStandard();
 		BeanUtils.copyProperties(cleaningStandardDto, tbAreaStandard);
+		
 		
 		this.cleaningStandardMapper.editTbAreaStandard(tbAreaStandard);
 		
@@ -226,11 +236,19 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 	 */
 	@Override
 	public Object editStandardDetail(@Valid CleaningStandardDetailDto cleaningStandardDetailDto) {
-		
+		//查询配置管理中存放的文件访问地址前缀
+		String addressPrefix = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
 		String material = cleaningStandardDetailDto.getMaterial();
 		String standardCode = cleaningStandardDetailDto.getStandardCode();
 		String standardDetailId=cleaningStandardDetailDto.getStandardDetailId();
-		
+		String imgUrl=cleaningStandardDetailDto.getImgUrl();
+		if(!StringUtils.isEmpty(imgUrl)){
+			if(imgUrl.indexOf(addressPrefix)!=-1){
+				cleaningStandardDetailDto.setImgUrl(imgUrl);
+			}else {
+				cleaningStandardDetailDto.setImgUrl(addressPrefix+imgUrl);
+			}
+		}
 		Map<String ,String> map=new HashMap<String,String>();
 		map.put("material", material);
 		map.put("standardCode", standardCode);
@@ -277,12 +295,20 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 	 */
 	@Override
 	public Object addStandardDetail(@Valid CleaningStandardDetailDto cleaningStandardDetailDto) {
-		
+		//查询配置管理中存放的文件访问地址前缀
+		String addressPrefix = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
 		Date date = new Date();
 		String material = cleaningStandardDetailDto.getMaterial();
 		String standardCode = cleaningStandardDetailDto.getStandardCode();
 		String standardDetailId=cleaningStandardDetailDto.getStandardDetailId();
-		
+		String imgUrl=cleaningStandardDetailDto.getImgUrl();
+		if(!StringUtils.isEmpty(imgUrl)){
+			if(imgUrl.indexOf(addressPrefix)!=-1){
+				cleaningStandardDetailDto.setImgUrl(imgUrl);
+			}else {
+				cleaningStandardDetailDto.setImgUrl(addressPrefix+imgUrl);
+			}
+		}
 		Map<String ,String> map=new HashMap<String,String>();
 		map.put("material", material);
 		map.put("standardCode", standardCode);
