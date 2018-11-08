@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.PlanMapper;
+import com.qcap.cac.dto.BatchUpdatePlanDto;
 import com.qcap.cac.dto.PlanDto;
 import com.qcap.cac.dto.QueryPlanListDto;
 import com.qcap.cac.entity.TbPlan;
@@ -131,5 +133,21 @@ public class PlanSrvImpl implements PlanSrv {
 	@Override
 	public void deletePlan(PlanDto planDto) {
 		planMapper.deletePlanById(planDto.getPlanId());
+	}
+
+	@Override
+	public void batchUpdatePlan(BatchUpdatePlanDto batchUpdatePlanDto) throws Exception {
+		List<PlanDto> ls = batchUpdatePlanDto.getPlanList();
+		if (CollectionUtils.isNotEmpty(ls)) {
+			List<TbPlan> planList = new ArrayList<>();
+			for (PlanDto planDto : ls) {
+				TbPlan plan = new TbPlan();
+				BeanUtils.copyProperties(plan, planDto);
+
+				plan = EntityTools.setUpdateEmpAndTime(plan);
+				planList.add(plan);
+			}
+			planMapper.batchUpdatePlan(planList);
+		}
 	}
 }

@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
+import com.qcap.cac.dto.BatchUpdatePlanDto;
 import com.qcap.cac.dto.PlanDto;
 import com.qcap.cac.dto.QueryPlanListDto;
 import com.qcap.cac.service.CommonSrv;
@@ -60,6 +62,12 @@ public class PlanController {
 	public ResParams deletePlan(@Valid PlanDto planDto) throws Exception {
 		this.planSrv.deletePlan(planDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
+	}
+
+	@RequestMapping(value = "/batchUpdatePlan", method = RequestMethod.POST)
+	public ResParams batchUpdatePlan(@RequestBody BatchUpdatePlanDto batchUpdatePlanDto) throws Exception {
+		this.planSrv.batchUpdatePlan(batchUpdatePlanDto);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC);
 	}
 
 	@RequestMapping(value = "/selectPlanTimeTypeList", method = RequestMethod.POST)

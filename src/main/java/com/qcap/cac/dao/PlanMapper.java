@@ -22,4 +22,6 @@ public interface PlanMapper extends BaseMapper<TbPlan> {
 	int updatePlan(TbPlan plan);
 
 	int deletePlanById(String planId);
+
+	void batchUpdatePlan(List<TbPlan> planList);
 }
