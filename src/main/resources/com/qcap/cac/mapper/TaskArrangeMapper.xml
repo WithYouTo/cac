@@ -105,4 +105,25 @@
 		SELECT POSITION_CODE AS id,POSITION_NAME AS text FROM tb_area_position
 	</select>
 
+	<select id="queryIfPositionExist" parameterType="Map" resultType="String">
+		SELECT
+			POSITION_ID AS positionId
+		FROM
+			tb_area_position
+		WHERE
+			POSITION_CODE = #{positionCode}
+		AND POSITION_NAME = #{positionName}
+	</select>
+
+	<select id="queryIfEmployeeExist" parameterType="Map" resultType="String">
+		SELECT
+			account
+		FROM
+			tb_manager
+		WHERE
+			account = #{employeeCode}
+		AND `name` = #{employeeName}
+		AND `status` = '1'
+	</select>
+
 </mapper>

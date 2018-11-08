@@ -19,4 +19,8 @@ public interface TaskArrangeMapper {
 
 	List<Map<String,String>> selectPositionItem();
 
+	String queryIfPositionExist (Map<String,String> map);
+
+	String queryIfEmployeeExist (Map<String,String> map);
+
 }

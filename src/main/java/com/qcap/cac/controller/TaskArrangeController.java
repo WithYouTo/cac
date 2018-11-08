@@ -55,8 +55,6 @@ public class TaskArrangeController {
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}catch (Exception e) {
-			e.printStackTrace();
 		}
 		return resParams;
 		
