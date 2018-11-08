@@ -44,6 +44,15 @@ public class CommonConstant {
 		EQUIP_WORK_STATUS.put("INABORT", "已停用");
 	}
 
+	//员工状态：在职，离职
+	public final static String USER_WORK_STATUS_INPOSITION = "INPOSITION";
+	public final static String USER_WORK_STATUS_LEAVE = "LEAVE";
+	public static Map<String, String> USER_WORK_STATUS = new LinkedHashMap<String, String>();
+	static {
+		USER_WORK_STATUS.put("INPOSITION", "在职");
+		USER_WORK_STATUS.put("LEAVE", "离职");
+	}
+
 	// APP端设备领用选项
 	public static Map<String, String> EQUIP_INUSE_OPTION = new LinkedHashMap<String, String>();
 	static {

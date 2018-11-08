@@ -49,6 +49,9 @@ public class TbUserInfo implements Serializable {
     private String address;
     private String emerMobile;
     private String emerPerson;
+    private String workStatus;
+    private String passExpiryDate;
+    private String enterExpiryDate;
     private String remark;
     private String createEmp;
     private Date createDate;
@@ -335,6 +338,30 @@ public class TbUserInfo implements Serializable {
         this.version = version;
     }
 
+    public String getWorkStatus() {
+        return workStatus;
+    }
+
+    public void setWorkStatus(String workStatus) {
+        this.workStatus = workStatus;
+    }
+
+    public String getPassExpiryDate() {
+        return passExpiryDate;
+    }
+
+    public void setPassExpiryDate(String passExpiryDate) {
+        this.passExpiryDate = passExpiryDate;
+    }
+
+    public String getEnterExpiryDate() {
+        return enterExpiryDate;
+    }
+
+    public void setEnterExpiryDate(String enterExpiryDate) {
+        this.enterExpiryDate = enterExpiryDate;
+    }
+
     @Override
     public String toString() {
         return "TbUserInfo{" +
@@ -366,6 +393,9 @@ public class TbUserInfo implements Serializable {
                 ", address='" + address + '\'' +
                 ", emerMobile='" + emerMobile + '\'' +
                 ", emerPerson='" + emerPerson + '\'' +
+                ", workStatus='" + workStatus + '\'' +
+                ", passExpiryDate='" + passExpiryDate + '\'' +
+                ", enterExpiryDate='" + enterExpiryDate + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createEmp='" + createEmp + '\'' +
                 ", createDate=" + createDate +

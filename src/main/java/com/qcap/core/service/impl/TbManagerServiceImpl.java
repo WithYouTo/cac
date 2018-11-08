@@ -17,6 +17,7 @@ import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.dao.*;
 import com.qcap.core.entity.*;
 import com.qcap.core.common.CoreConstant;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,12 +69,7 @@ public class TbManagerServiceImpl implements ITbManagerService {
 	public String login(String account, String password) throws Exception {
 		String ip = AppUtils.getCurrentRequest() == null ? "" : AppUtils.getCurrentRequest().getRemoteAddr();
 		TbManager tbManager = tbManagerMapper.selectOne(new QueryWrapper<TbManager>().eq("account", account));
-		// Optional<TbManager> op = Optional.ofNullable(
-		// tbManagerMapper.selectOne((new
-		// QueryWrapper<TbManager>().lambda().eq(TbManager::getAccount,
-		// account))));
-		// if (op.isPresent()) {
-		// TbManager tbManager = op.get();
+
 		if (tbManager != null) {
 			if (checkPassword(tbManager.getPassword(), password, tbManager.getSalt())) {
 				String managerId = tbManager.getId();
@@ -81,10 +77,13 @@ public class TbManagerServiceImpl implements ITbManagerService {
 				tbManager.setSalt("");
 
 				String str= JSONObject.toJSONString(tbManager);
+				List<String> projectCodes = this.tbManagerMapper.getprojectCodesByManagerId(managerId);
 
+//				String projectCodestr = StringUtils.join(projectCodes, ",");
 				// 存储token的过期时间和用户ID
 //				redisUtil.set(AppUtils.getApplicationName() + ":manager:" + managerId, tbManager);
 				redisUtil.set(AppUtils.getApplicationName() + ":manager:" + managerId, str);
+				redisUtil.set(AppUtils.getApplicationName() + ":programCodes:" + managerId, projectCodes);
 
 //				redisUtil.set(AppUtils.getApplicationName()+"managerName:" + managerId, tbManager.getName());
 				LogManager.me().executeLog(LogTaskFactory.loginLog(tbManager.getAccount(), ip));
@@ -111,8 +110,10 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		List<Map<String, Object>> list = tbManagerMapper.getTbMangerList(page, params);
 		for (Map<String, Object> map : list) {
 			String id = Objects.toString(map.get("id"));
+			String workStatus = Objects.toString(map.get("workStatus"));
 			String roleName = tbRoleMapper.getRoleListByManagerId(id).stream().map(TbRole::getName)
 					.collect(Collectors.joining(","));
+			map.put("workStatusName",CommonConstant.USER_WORK_STATUS.get(workStatus));
 			map.put("roleName", roleName);
 		}
 		page.setRecords(list);
@@ -181,13 +182,9 @@ public class TbManagerServiceImpl implements ITbManagerService {
 			Date birth = format.parse(userInsertDto.getBirth());
 			Date workDate = format.parse(userInsertDto.getWorkDate());
 
-
 			userInfo.setBirth(birth);
 			userInfo.setWorkDate(workDate);
-			userInfo.setCreateDate(new Date());
-			userInfo.setUpdateDate(new Date());
-			userInfo.setCreateEmp("sys");
-			userInfo.setUpdateEmp("sys");
+			EntityTools.setUpdateEmpAndTime(userInfo);
 
 			tbManagerMapper.updateById(manager);
 			this.tbUserInfoMapper.updateById(userInfo);
@@ -263,8 +260,8 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		mgr.setAccount(account);
 		mgr.setSalt(newSalt);
 		mgr.setPassword(newMd5);
-		mgr.setUpdateEmp(AppUtils.getLoginUserAccount());
-		mgr.setUpdateDate(new Date());
+
+		EntityTools.setUpdateEmpAndTime(mgr);
 		this.tbManagerMapper.updateManagerPwd(mgr);
 	}
 

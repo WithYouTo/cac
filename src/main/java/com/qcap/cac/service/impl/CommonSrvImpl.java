@@ -125,4 +125,11 @@ public class CommonSrvImpl implements CommonSrv {
 		}
 		return null;
 	}
+
+	@Override
+	public List<Map<String, String>> getProgramCodes(List<String> programCodes) {
+		List<Map<String, String>> ls = commonMapper.getProgramCodes(programCodes);
+
+		return ls;
+	}
 }

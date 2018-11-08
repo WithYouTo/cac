@@ -36,8 +36,10 @@ public class EquipMaintController {
         List<Map<String, Object>> list = page.getRecords();
         for(Map<String,Object> map:list){
             String status = map.get("maintType").toString();
+            String equipCycle = map.get("equipCycle").toString();
             CommonConstant.MAINT_TYPE.get(status);
             map.put("maintTypeName", CommonConstant.MAINT_TYPE.get(status));
+            map.put("equipCycle", equipCycle+"小时");
         }
         return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, page.getTotal(),list);
     }

@@ -32,4 +32,6 @@ public interface CommonSrv {
 	TbOrg getOrgByWorkNo(String workNo);
 
 	TbUserInfo getUserInfoByWorkNo(String workNo);
+
+    List<Map<String,String>> getProgramCodes(List<String> programCodes);
 }

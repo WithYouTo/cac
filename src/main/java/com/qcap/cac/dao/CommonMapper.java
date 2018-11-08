@@ -38,4 +38,6 @@ public interface CommonMapper extends BaseMapper<TbManager> {
 	List<TbOrg> getOrgByWorkNo(String workNo);
 
 	List<TbUserInfo> getUserInfoByWorkNo(String workNo);
+
+    List<Map<String,String>> getProgramCodes(@Param("programCodes") List<String> programCodes);
 }

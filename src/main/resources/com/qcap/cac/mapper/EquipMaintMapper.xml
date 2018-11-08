@@ -15,6 +15,7 @@
         MAINT_TYPE maintType,
         EQUIP_CYCLE equipCycle,
         DATE_FORMAT(MAINT_TIME,'%Y-%m-%d') maintTime,
+        MAINT_MONEY maintMoney,
         MAINT_RECORD maintRecord,
         MAINT_STATE maintState,
         MAINT_DESC maintDesc,

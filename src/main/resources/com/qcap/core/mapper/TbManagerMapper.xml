@@ -10,6 +10,7 @@
         m.mail,
         DATE_FORMAT(m.create_date,'%Y-%m-%d %H:%i:%S') createTime,
         m.status,
+        pro.program_name programName,
         o.fullnames orgName,
         info.USER_ID userId,
         info.USER_INFO_ID userInfoId,
@@ -23,7 +24,9 @@
         info.GOOD_CAP_KEY goodCapKey,
         info.LIVING_KEY livingKey,
         info.ENTER_NO enterNo,
+        info.ENTER_EXPIRY_DATE enterExpiryDate,
         info.PASS_NO passNo,
+        info.PASS_EXPIRY_DATE passExpiryDate,
         info.DOOR_OPEN doorOpen,
         info.EQUIP_USE equipUse,
         info.PASS_AREA passArea,
@@ -33,6 +36,7 @@
         info.GENDER gender,
         DATE_FORMAT(info.BIRTH,'%Y-%m-%d') birth,
         DATE_FORMAT(info.WORK_DATE,'%Y-%m-%d') workDate,
+        info.WORK_STATUS workStatus,
         info.MARRIAGE_SIT marriageSit,
         info.MOBILE mobile,
         info.EMAIL email,
@@ -43,12 +47,19 @@
         left join tb_user_info info on info.user_id = m.id
         left join tb_manager_org mo on m.id = mo.manager_id
         left join tb_org o ON mo.org_id = o.id
+        left join tb_program pro ON info.PROGRAM_CODE  = pro.PROGRAM_CODE
         where m.status != 3
         <if test="map.userName!=null and map.userName!=''">
             and m.name like #{map.userName}
         </if>
         <if test="map.phone!=null and map.phone!=''">
             and m.phone like #{map.phone}
+        </if>
+        <if test="map.workStatus!=null and map.workStatus!=''">
+            and info.WORK_STATUS = #{map.workStatus}
+        </if>
+        <if test="map.programCode!=null and map.programCode!=''">
+            and info.PROGRAM_CODE = #{map.programCode}
         </if>
         ORDER BY info.WORK_NO
     </select>
@@ -73,5 +84,18 @@
         tb_manager
         WHERE
         account = #{employeeCode}
+    </select>
+
+    <select id="getprojectCodesByManagerId" parameterType="String" resultType="String">
+        SELECT
+          org.PROGRAM_CODE code
+        from tb_org org
+        WHERE
+        org.fullcodes like
+        CONCAT((SELECT o.fullcodes from tb_manager_org mo
+        left join tb_org o
+        on mo.org_id = o.id
+        where mo.manager_id = #{managerId}),'%')
+        AND org.PROGRAM_CODE is NOT NULL
     </select>
 </mapper>

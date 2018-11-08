@@ -61,8 +61,11 @@ public class ManagerController {
 	}
 
 	@PostMapping("/list")
-	public PageResParams list(IPage<Map<String, Object>> page, @RequestParam(required = false) String userName,
-			@RequestParam(required = false) String phone) {
+	public PageResParams list(IPage<Map<String, Object>> page,
+							  @RequestParam(required = false) String userName,
+							  @RequestParam(required = false) String phone,
+							  @RequestParam(required = false) String workStatus,
+							  @RequestParam(required = false) String programCode) {
 		Map<String, Object> parameter = new HashMap<>();
 		if (StringUtils.isNotEmpty(userName)) {
 			parameter.put("userName", userName + "%");
@@ -70,7 +73,9 @@ public class ManagerController {
 		if (StringUtils.isNotEmpty(phone)) {
 			parameter.put("phone", phone + "%");
 		}
-		managerService.getUserList(page, parameter);
+		parameter.put("workStatus",workStatus);
+		parameter.put("programCode",programCode);
+		this.managerService.getUserList(page, parameter);
 		return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", page.getTotal(), page.getRecords());
 	}
 

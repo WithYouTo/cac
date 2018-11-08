@@ -352,6 +352,27 @@ public final class AppUtils {
 		return null;
 	}
 
+
+	/**
+	 * 获取当前登录用户的项目编码
+	 *
+	 * @author 彭浩
+	 * @date 2018/6/19 10:13
+	 */
+	public static List<String> getLoginUserProjectCodes() {
+		RedisUtil ru = SpringContextHolder.getBean(RedisUtil.class);
+		JwtTokenUtil jtu = SpringContextHolder.getBean(JwtTokenUtil.class);
+		HttpServletRequest request = getCurrentRequest();
+		if (request != null) {
+			String token = request.getHeader(JwtProperties.getTokenHeader());
+			if(StringUtils.isNotEmpty(token)){
+				String managerId = jtu.getUsernameFromToken(token);
+				return ru.get(getApplicationName() + ":programCodes:" + managerId, List.class);
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * 获取当前登录对象名称 TbManager.name
 	 *

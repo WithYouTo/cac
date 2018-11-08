@@ -105,6 +105,7 @@
         tbpubcode01
         WHERE
         CONFIG_CODE_ = #{code}
+        ORDER by seq_
     </select>
     
     <select id="getOrgByWorkNo" parameterType="String"  resultType="com.qcap.core.entity.TbOrg">
@@ -181,4 +182,16 @@
         	WORK_NO = #{work_no}
     </select>
 
+	<select id="getProgramCodes" parameterType="String"  resultType="map">
+		SELECT
+			program_code id,
+			program_name text
+		FROM
+			tb_program
+		WHERE
+			program_code in
+		<foreach item="item" index="index" collection="programCodes" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 </mapper>

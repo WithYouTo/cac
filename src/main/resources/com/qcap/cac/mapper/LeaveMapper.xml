@@ -13,6 +13,7 @@
         DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%i:%S') leaveStartTime,
         DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%i:%S') leaveEndTime,
         LEAVE_TOTAL_TIME leaveTotalTime,
+        LEAVE_STATUS leaveStatus,
         REMARK remark
         FROM TB_LEAVE
         WHERE 1=1

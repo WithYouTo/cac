@@ -3,7 +3,9 @@ package com.qcap.cac.controller;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.service.CommonSrv;
+import com.qcap.core.entity.TbManager;
 import com.qcap.core.model.ResParams;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -246,7 +248,25 @@ public class CommonController {
     public Object initGender(){
         List<Map<String,String>> list = this.commonSrv.getListByCode(CommonCodeConstant.INIT_GENDER_SELECT);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
+    }
 
+    /**
+     *
+     * @Description: 初始化员工状态下拉框
+     *
+     *
+     * @MethodName: initWorkStatus
+     * @Parameters: []
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/11/7 13:42
+     */
+    @ResponseBody
+    @RequestMapping(value = "/initWorkStatus", method = RequestMethod.POST)
+    public Object initWorkStatus(){
+        List<Map<String,String>> list = this.commonSrv.getListByCode(CommonCodeConstant.INIT_WORK_STATUS);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
     }
 
     /**
@@ -267,6 +287,14 @@ public class CommonController {
         List<Map<String,String>> list = this.commonSrv.getListByCode(CommonCodeConstant.INIT_MARRIAGE_SIT_SELECT);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
 
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/initProgramCode", method = RequestMethod.POST)
+    public Object initProgramCodes(){
+        List<String> projectCodes = AppUtils.getLoginUserProjectCodes();
+        List<Map<String,String>> list = this.commonSrv.getProgramCodes(projectCodes);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
     }
 
     /**

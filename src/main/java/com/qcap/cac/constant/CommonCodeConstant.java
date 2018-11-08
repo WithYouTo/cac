@@ -50,5 +50,7 @@ public class CommonCodeConstant {
 
 	public static final String INIT_MARRIAGE_SIT_SELECT = "MARRIAGE_SIT";
 
+	public static final String INIT_WORK_STATUS = "WORK_STATUS";
+
 	public static final String USER_ALREADY_REG = "用户已存在！";
 }
