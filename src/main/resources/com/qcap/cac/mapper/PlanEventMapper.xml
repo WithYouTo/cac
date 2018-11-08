@@ -93,5 +93,61 @@
 			PLAN_EVENT_ID = #{planEventId}
 	</delete>
 	
+	<update id="batchUpdatePlanEvent" parameterType="java.util.List">
+        UPDATE tb_plan_event
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="CHECK_FLAG =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.checkFlag != null and item.checkFlag != ''">
+                        WHEN PLAN_EVENT_ID = #{item.planEventId} THEN #{item.checkFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="UPLOAD_PIC_FLAG =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.uploadPicFlag != null and item.uploadPicFlag != ''">
+                        WHEN PLAN_EVENT_ID = #{item.planEventId} THEN #{item.uploadPicFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="START_SCAN_FLAG =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.startScanFlag != null and item.startScanFlag != ''">
+                        WHEN PLAN_EVENT_ID = #{item.planEventId} THEN #{item.startScanFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="END_SCAN_FLAG =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.endScanFlag != null and item.endScanFlag != ''">
+                        WHEN PLAN_EVENT_ID = #{item.planEventId} THEN #{item.endScanFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="UPDATE_EMP =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.updateEmp != null and item.updateEmp != ''">
+                        WHEN PLAN_EVENT_ID = #{item.planEventId} THEN #{item.updateEmp}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="UPDATE_DATE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+					WHEN PLAN_EVENT_ID = #{item.planEventId} THEN #{item.updateDate}
+                </foreach>
+            </trim>
+            <trim prefix="VERSION =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    WHEN PLAN_EVENT_ID = #{item.planEventId} THEN VERSION + 1
+                </foreach>
+            </trim>
+        </trim>
+        WHERE PLAN_EVENT_ID IN (
+        <foreach collection="list" item="item" index="index" separator="," >
+            #{item.planEventId}
+        </foreach>
+        )
+    </update>
+	
   
 </mapper>

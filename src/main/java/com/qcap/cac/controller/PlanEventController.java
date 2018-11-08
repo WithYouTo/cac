@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
+import com.qcap.cac.dto.BatchUpdatePlanEventDto;
 import com.qcap.cac.dto.PlanEventDto;
 import com.qcap.cac.dto.QueryPlanEventListDto;
 import com.qcap.cac.service.CommonSrv;
@@ -26,10 +26,7 @@ import com.qcap.core.common.CoreConstant;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
-import com.qcap.core.utils.jwt.JwtProperties;
-import com.qcap.core.utils.jwt.JwtTokenUtil;
 
-@SuppressWarnings("static-access")
 @RestController
 @RequestMapping("/planEvent")
 public class PlanEventController {
@@ -40,52 +37,30 @@ public class PlanEventController {
 	@Resource
 	private CommonSrv commonSrv;
 
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-
-	@Autowired
-	private JwtProperties jwtProperties;
-
 	@RequestMapping(value = "/queryPlanEventListByPage", method = RequestMethod.POST)
 	public PageResParams queryPlanListByPage(IPage<Map<String, String>> page,
 			@Valid QueryPlanEventListDto queryPlanEventListDto) {
-		// new PageFactory<Map<String, Object>>().defaultPage();
-		// List<Map<String, Object>> list =
-		// this.planEventSrv.queryPlanEventListByPage(queryPlanEventListDto);
-		// for (Map<String, Object> map : list) {
-		// String eventType = Objects.toString(map.get("eventType"));
-		// String guaranteeType = Objects.toString(map.get("guaranteeType"));
-		// map.put("eventTypeName", CommonConstant.EVENT_TYPE.get(eventType));
-		// map.put("guaranteeTypeName",
-		// CommonConstant.GUARANTEE_TYPE.get(guaranteeType));
-		// map.put("remark", map.get("remark1"));
-		// }
-		//
-		// PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String,
-		// Object>>(list);
-		// return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,
-		// CommonCodeConstant.SUCCESS_QUERY_DESC,
-		// pageInfo.getTotal(), pageInfo.getList());
 		this.planEventSrv.queryPlanEventListByPage(page, queryPlanEventListDto);
 		return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,
 				page.getTotal(), page.getRecords());
 	}
 
 	@RequestMapping(value = "/addPlanEvent", method = RequestMethod.POST)
-	public ResParams addPlan(HttpServletRequest request, @Valid PlanEventDto planEventDto) throws Exception {
-
-		String token = request.getHeader(jwtProperties.getTokenHeader());
-		String userId = jwtTokenUtil.getUsernameFromToken(token);
-		this.planEventSrv.addPlanEvent(planEventDto, userId);
+	public ResParams addPlan(@Valid PlanEventDto planEventDto) throws Exception {
+		this.planEventSrv.addPlanEvent(planEventDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC);
 	}
 
 	@RequestMapping(value = "/editPlanEvent", method = RequestMethod.POST)
-	public ResParams editPlan(HttpServletRequest request, @Valid PlanEventDto planEventDto) throws Exception {
+	public ResParams editPlan(@Valid PlanEventDto planEventDto) throws Exception {
+		this.planEventSrv.editPlanEvent(planEventDto);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
+	}
 
-		String token = request.getHeader(jwtProperties.getTokenHeader());
-		String userId = jwtTokenUtil.getUsernameFromToken(token);
-		this.planEventSrv.editPlanEvent(planEventDto, userId);
+	@RequestMapping(value = "/batchUpdatePlanEvent", method = RequestMethod.POST)
+	public ResParams batchUpdatePlanEvent(@RequestBody BatchUpdatePlanEventDto batchUpdatePlanEventDto)
+			throws Exception {
+		this.planEventSrv.batchUpdatePlanEvent(batchUpdatePlanEventDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
 	}
 

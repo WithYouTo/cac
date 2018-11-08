@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,7 +52,7 @@ public class PlanController {
 	}
 
 	@RequestMapping(value = "/editPlan", method = RequestMethod.POST)
-	public ResParams editPlan(HttpServletRequest request, @Valid PlanDto planDto) throws Exception {
+	public ResParams editPlan(@Valid PlanDto planDto) throws Exception {
 		this.planSrv.editPlan(planDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
 	}
@@ -67,7 +66,7 @@ public class PlanController {
 	@RequestMapping(value = "/batchUpdatePlan", method = RequestMethod.POST)
 	public ResParams batchUpdatePlan(@RequestBody BatchUpdatePlanDto batchUpdatePlanDto) throws Exception {
 		this.planSrv.batchUpdatePlan(batchUpdatePlanDto);
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
 	}
 
 	@RequestMapping(value = "/selectPlanTimeTypeList", method = RequestMethod.POST)

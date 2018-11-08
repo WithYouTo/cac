@@ -147,7 +147,7 @@
             </trim>
             <trim prefix="VERSION =case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    WHEN PLAN_ID = #{item.planId} THEN VERSION+1
+                    WHEN PLAN_ID = #{item.planId} THEN VERSION + 1
                 </foreach>
             </trim>
         </trim>
