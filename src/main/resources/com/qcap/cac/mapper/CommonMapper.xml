@@ -194,4 +194,12 @@
 			#{item}
 		</foreach>
 	</select>
+
+	<select id="getAllProgramCodes" resultType="map">
+		SELECT
+			program_code id,
+			program_name text
+		FROM
+			tb_program
+	</select>
 </mapper>

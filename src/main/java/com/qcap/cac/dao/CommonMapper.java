@@ -40,4 +40,6 @@ public interface CommonMapper extends BaseMapper<TbManager> {
 	List<TbUserInfo> getUserInfoByWorkNo(String workNo);
 
     List<Map<String,String>> getProgramCodes(@Param("programCodes") List<String> programCodes);
+
+    List<Map<String,String>> getAllProgramCodes();
 }

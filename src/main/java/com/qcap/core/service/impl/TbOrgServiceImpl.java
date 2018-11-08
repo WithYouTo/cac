@@ -6,6 +6,7 @@ import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Resource;
@@ -45,7 +46,7 @@ public class TbOrgServiceImpl implements ITbOrgService {
 	private TbManagerOrgMapper tbManagerOrgMapper;
 
 	@Override
-	public void getOrgList(IPage<TbOrg> page, TbOrg org) {
+	public void getOrgList(IPage<Map<String,String>> page, TbOrg org) {
 //		QueryWrapper<TbOrg> wrapper = new QueryWrapper<>();
 //		wrapper.eq("status", "1");
 //		if (StringUtils.isNotEmpty(org.getName())) {
@@ -54,7 +55,7 @@ public class TbOrgServiceImpl implements ITbOrgService {
 //		if (StringUtils.isNotEmpty(org.getCode())) {
 //			wrapper.lambda().eq(TbOrg::getCode, org.getCode());
 //		}
-		List<TbOrg> orgList = tbOrgMapper.selectOrgByOrgCode(page, org);
+		List<Map<String,String>> orgList = tbOrgMapper.selectOrgByOrgCode(page, org);
 		page.setRecords(orgList);
 	}
 
@@ -91,6 +92,8 @@ public class TbOrgServiceImpl implements ITbOrgService {
 		// 通过Id获取修改前的组织信息
 		TbOrg oldOrg = tbOrgMapper.selectById(org.getId());
 		final String oldName = oldOrg.getName();
+		oldOrg.setProgramCode(org.getProgramCode());
+
 		// 判断是否修改父级组织
 		if (Objects.equals(oldOrg.getParentCode(), org.getParentCode())) {
 			oldOrg.setName(org.getName());

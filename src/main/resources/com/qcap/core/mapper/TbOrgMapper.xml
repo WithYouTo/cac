@@ -44,20 +44,24 @@
         FROM tb_org r
     </select>
 
-    <select id="selectOrgByOrgCode" resultType="com.qcap.core.entity.TbOrg">
+    <select id="selectOrgByOrgCode" resultType="map">
         SELECT
-        id id,
-        code code,
-        parent_code parentCode,
-        fullcodes fullCodes,
-        num num,
-        parent_num parentNum,
-        name name,
-        fullnames fullnames,
-        is_open isOpen,
-        seq seq
+        o.id id,
+        o.code code,
+        o.parent_code parentCode,
+        o.PROGRAM_CODE programCode,
+        p.PROGRAM_NAME programName,
+        o.fullcodes fullCodes,
+        o.num num,
+        o.parent_num parentNum,
+        o.name name,
+        o.fullnames fullnames,
+        o.is_open isOpen,
+        o.seq seq
         FROM
-        tb_org
+        tb_org o
+        LEFT JOIN tb_program p
+        ON o.program_Code = p.program_Code
         WHERE 1=1
         <if test="org.name!=null and org.name!=''">
            AND name = #{org.name}

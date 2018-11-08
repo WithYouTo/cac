@@ -2,6 +2,7 @@ package com.qcap.core.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -41,7 +42,7 @@ public class OrgController {
 	 * @return PageResParams 结果包装
 	 */
 	@PostMapping("/list")
-	public PageResParams list(TbOrg org, IPage<TbOrg> page) {
+	public PageResParams list(TbOrg org, IPage<Map<String,String>> page) {
 		tbOrgService.getOrgList(page, org);
 		return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功", page.getTotal(), page.getRecords());
 	}

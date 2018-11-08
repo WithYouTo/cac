@@ -34,4 +34,6 @@ public interface CommonSrv {
 	TbUserInfo getUserInfoByWorkNo(String workNo);
 
     List<Map<String,String>> getProgramCodes(List<String> programCodes);
+
+    List<Map<String,String>> getAllProgramCodes();
 }
