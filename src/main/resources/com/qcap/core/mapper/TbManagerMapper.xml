@@ -47,7 +47,7 @@
         left join tb_user_info info on info.user_id = m.id
         left join tb_manager_org mo on m.id = mo.manager_id
         left join tb_org o ON mo.org_id = o.id
-        left join tb_program pro ON info.PROGRAM_CODE  = pro.PROGRAM_CODE
+        left join tb_program pro ON o.PROGRAM_CODE  = pro.PROGRAM_CODE
         where m.status != 3
         <if test="map.userName!=null and map.userName!=''">
             and m.name like #{map.userName}
@@ -59,7 +59,7 @@
             and info.WORK_STATUS = #{map.workStatus}
         </if>
         <if test="map.programCode!=null and map.programCode!=''">
-            and info.PROGRAM_CODE = #{map.programCode}
+            and pro.PROGRAM_CODE = #{map.programCode}
         </if>
         ORDER BY info.WORK_NO
     </select>

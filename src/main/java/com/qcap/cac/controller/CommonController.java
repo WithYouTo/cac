@@ -289,12 +289,44 @@ public class CommonController {
 
     }
 
+    /**
+     *
+     * @Description: 获取当前登录人有权限查看的项目下拉框
+     *
+     *
+     * @MethodName: initProgramCodes
+     * @Parameters: []
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/11/8 16:53
+     */
     @ResponseBody
     @RequestMapping(value = "/initProgramCode", method = RequestMethod.POST)
     public Object initProgramCodes(){
         List<String> projectCodes = AppUtils.getLoginUserProjectCodes();
         List<Map<String,String>> list = this.commonSrv.getProgramCodes(projectCodes);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
+    }
+
+    /**
+     *
+     * @Description: 获取所有项目下拉框
+     *
+     *
+     * @MethodName: initProgramCodeSelect
+     * @Parameters: []
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/11/8 16:54
+     */
+    @ResponseBody
+    @RequestMapping(value = "/initProgramCodeSelect", method = RequestMethod.POST)
+    public Object initProgramCodeSelect(){
+        List<Map<String,String>> list = this.commonSrv.getAllProgramCodes();
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
+
     }
 
     /**

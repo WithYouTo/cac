@@ -34,6 +34,8 @@ public class TbOrg implements Serializable {
 	private String fullcodes;
 	private String num;
 	private String parentNum;
+
+	private String programCode;
 	/**
 	 * 组织名称
 	 */
@@ -188,12 +190,35 @@ public class TbOrg implements Serializable {
 		this.version = version;
 	}
 
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
+
 	@Override
 	public String toString() {
-		return "TbOrg{" + ", id=" + id + ", code=" + code + ", parentCode=" + parentCode + ", fullcodes=" + fullcodes
-				+ ", num=" + num + ", parentNum=" + parentNum + ", name=" + name + ", fullnames=" + fullnames
-				+ ", isOpen=" + isOpen + ", seq=" + seq + ", createEmp=" + createEmp + ", createTime=" + createTime
-				+ ", updateEmp=" + updateEmp + ", updateTime=" + updateTime + ", status=" + status + ", version="
-				+ version + "}";
+		return "TbOrg{" +
+				"id='" + id + '\'' +
+				", code='" + code + '\'' +
+				", parentCode='" + parentCode + '\'' +
+				", fullcodes='" + fullcodes + '\'' +
+				", num='" + num + '\'' +
+				", parentNum='" + parentNum + '\'' +
+				", programCode='" + programCode + '\'' +
+				", name='" + name + '\'' +
+				", fullnames='" + fullnames + '\'' +
+				", isOpen=" + isOpen +
+				", seq=" + seq +
+				", createEmp='" + createEmp + '\'' +
+				", createTime=" + createTime +
+				", updateEmp='" + updateEmp + '\'' +
+				", updateTime=" + updateTime +
+				", status='" + status + '\'' +
+				", version=" + version +
+				'}';
 	}
 }

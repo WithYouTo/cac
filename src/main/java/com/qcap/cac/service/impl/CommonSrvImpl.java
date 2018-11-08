@@ -128,8 +128,13 @@ public class CommonSrvImpl implements CommonSrv {
 
 	@Override
 	public List<Map<String, String>> getProgramCodes(List<String> programCodes) {
-		List<Map<String, String>> ls = commonMapper.getProgramCodes(programCodes);
+		List<Map<String, String>> ls = this.commonMapper.getProgramCodes(programCodes);
+		return ls;
+	}
 
+	@Override
+	public List<Map<String, String>> getAllProgramCodes() {
+		List<Map<String, String>> ls = this.commonMapper.getAllProgramCodes();
 		return ls;
 	}
 }
