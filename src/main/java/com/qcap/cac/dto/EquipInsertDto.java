@@ -4,7 +4,7 @@ public class EquipInsertDto {
 
     private String equipId;
 
-    private String projectCode;
+    private String programCode;
 
     private String equipType;
 
@@ -68,12 +68,12 @@ public class EquipInsertDto {
         this.equipId = equipId;
     }
 
-    public String getProjectCode() {
-        return projectCode;
+    public String getProgramCode() {
+        return programCode;
     }
 
-    public void setProjectCode(String projectCode) {
-        this.projectCode = projectCode;
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getEquipType() {
@@ -296,7 +296,7 @@ public class EquipInsertDto {
     public String toString() {
         return "EquipInsertDto{" +
                 "equipId='" + equipId + '\'' +
-                ", projectCode='" + projectCode + '\'' +
+                ", programCode='" + programCode + '\'' +
                 ", equipType='" + equipType + '\'' +
                 ", equipModel='" + equipModel + '\'' +
                 ", equipName='" + equipName + '\'' +

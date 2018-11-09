@@ -24,7 +24,10 @@
             and PERSON_NAME = #{obj.personName}
         </if>
         <if test="obj.leaveStartTime != null and obj.leaveStartTime != ''">
-            and LEAVE_START_TIME &gt; #{obj.leaveStartTime}
+            and LEAVE_START_TIME &gt; substring(#{obj.leaveStartTime},1,19)
+        </if>
+        <if test="obj.leaveStartTime != null and obj.leaveStartTime != ''">
+            and LEAVE_START_TIME &lt; substring(#{obj.leaveStartTime},22,19)
         </if>
         ORDER BY LEAVE_START_TIME
     </select>

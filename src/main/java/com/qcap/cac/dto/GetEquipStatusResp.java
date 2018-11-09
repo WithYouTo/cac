@@ -8,10 +8,10 @@ public class GetEquipStatusResp {
     private String url;
     private String equipName;
     private String equipNo;
+    private String equipType;
     private String status;
     private String statusName;
     private String stopPlace;
-    private List<Map<String,String>> optionList;
 
     public String getUrl() {
         return url;
@@ -61,12 +61,12 @@ public class GetEquipStatusResp {
         this.statusName = statusName;
     }
 
-    public List<Map<String, String>> getOptionList() {
-        return optionList;
+    public String getEquipType() {
+        return equipType;
     }
 
-    public void setOptionList(List<Map<String, String>> optionList) {
-        this.optionList = optionList;
+    public void setEquipType(String equipType) {
+        this.equipType = equipType;
     }
 
     @Override
@@ -75,10 +75,10 @@ public class GetEquipStatusResp {
                 "url='" + url + '\'' +
                 ", equipName='" + equipName + '\'' +
                 ", equipNo='" + equipNo + '\'' +
+                ", equipType='" + equipType + '\'' +
                 ", status='" + status + '\'' +
                 ", statusName='" + statusName + '\'' +
                 ", stopPlace='" + stopPlace + '\'' +
-                ", optionList=" + optionList +
                 '}';
     }
 }

@@ -80,6 +80,7 @@
 		IMG_URL url,
 		EQUIP_NAME equipName,
 		EQUIP_NO equipNo,
+		EQUIP_TYPE equipType,
 		EQUIP_WORK_STATE status,
 		STOP_PLACE stopPlace
 		FROM

@@ -79,9 +79,8 @@ public class EquipRestController {
     @PostMapping("/getEquipStatus")
     @ApiOperation(value="获取设备状态",notes="获取设备状态",response=Map.class,httpMethod="POST")
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
-    public ResParams getEquipStatus(String equipNo){
-        GetEquipStatusResp esr = this.equipRestSrv.getEquipStatus(equipNo);
-        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, esr);
+    public ResParams getEquipStatus(String equipNo,String equipType){
+        return this.equipRestSrv.getEquipStatus(equipNo,equipType);
     }
 
     /**

@@ -62,14 +62,18 @@ public class EquipRestSrvImpl implements EquipRestSrv {
     }
 
     @Override
-    public GetEquipStatusResp getEquipStatus(String equipNo) {
-        //todo 获取当前设备类型，判断是否一致
+    public ResParams getEquipStatus(String equipNo,String equipType) {
         String url = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
         GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
-        String status = Objects.toString(esr.getStatus());
-        esr.setStatusName(CommonConstant.EQUIP_WORK_STATUS.get(status));
-        esr.setUrl(url+esr.getUrl());
-        return esr;
+        String et =esr.getEquipType();
+        if(et.equals(equipType)){
+            String status = Objects.toString(esr.getStatus());
+            esr.setStatusName(CommonConstant.EQUIP_WORK_STATUS.get(status));
+            esr.setUrl(url+esr.getUrl());
+            return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, esr);
+        }else{
+            return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.EQUIP_TYPE_NOT_MATCH, null);
+        }
     }
 
     @Override

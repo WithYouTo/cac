@@ -21,7 +21,10 @@
             and PERSON_NAME = #{obj.personName}
         </if>
         <if test="obj.attenceTime != null and obj.attenceTime != ''">
-            and ATTENCE_TIME = #{obj.attenceTime}
+            and ATTENCE_TIME &gt; substring(#{obj.attenceTime},1,19)
+        </if>
+        <if test="obj.attenceTime != null and obj.attenceTime != ''">
+            and ATTENCE_TIME &lt; substring(#{obj.attenceTime},22,19)
         </if>
         ORDER BY ATTENCE_TIME
     </select>

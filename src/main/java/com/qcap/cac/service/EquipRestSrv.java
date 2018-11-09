@@ -11,7 +11,7 @@ public interface EquipRestSrv {
 
     List<ListUnrevertEquipResp> getUnrevertEquipList(String employeeNo);
 
-    GetEquipStatusResp getEquipStatus(String equipNo);
+    ResParams getEquipStatus(String equipNo,String EquipType);
 
     ResParams updateStopEquipStatus(UpdateStopEquipStatusReq updateStopEquipStatusReq);
 
