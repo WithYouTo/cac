@@ -23,7 +23,6 @@ import com.qcap.cac.entity.TbPlan;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.PlanSrv;
 import com.qcap.cac.tools.EntityTools;
-import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 
 @Service
@@ -57,7 +56,7 @@ public class PlanSrvImpl implements PlanSrv {
 					}
 				}
 				if (StringUtils.isNotBlank(week)) {
-					map.put("weekName", "周" + ToolUtil.toChinese(week));
+					map.put("weekName", CommonConstant.WEEK.get(week));
 				}
 			}
 		}

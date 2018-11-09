@@ -44,7 +44,7 @@ public class CommonConstant {
 		EQUIP_WORK_STATUS.put("INABORT", "已停用");
 	}
 
-	//员工状态：在职，离职
+	// 员工状态：在职，离职
 	public final static String USER_WORK_STATUS_INPOSITION = "INPOSITION";
 	public final static String USER_WORK_STATUS_LEAVE = "LEAVE";
 	public static Map<String, String> USER_WORK_STATUS = new LinkedHashMap<String, String>();
@@ -84,7 +84,7 @@ public class CommonConstant {
 		EQUIP_STATUS.put("ABORT", "损坏");
 	}
 
-	//设备操作状态，用于在设备信息中显示设备操作记录，设备充电状态与设备使用状态的合集
+	// 设备操作状态，用于在设备信息中显示设备操作记录，设备充电状态与设备使用状态的合集
 	public final static String EQUIP_OPERATE_STATUS_INCHARGE = "INCHARGE";
 	public final static String EQUIP_OPERATE_STATUS_CHARGED = "CHARGED";
 	public final static String EQUIP_OPERATE_STATUS_INUSE = "INUSE";
@@ -298,9 +298,30 @@ public class CommonConstant {
 		AREA_TYPE.put("ARRIVE", "登机口");
 		AREA_TYPE.put("LEAVE", "廊桥");
 	}
-	
-	//专项任务每次延迟天数
-	public final static int SPECIAL_TASK_DELAY_DAYS_1 =1;
-	public final static int SPECIAL_TASK_DELAY_DAYS_7 =7;
+
+	// 专项任务每次延迟天数
+	public final static int SPECIAL_TASK_DELAY_DAYS_1 = 1;
+	public final static int SPECIAL_TASK_DELAY_DAYS_7 = 7;
+
+	// 二维码类型
+	public final static String QRCODE_TYPE_EQUIP = "EQUIP";
+	public final static String QRCODE_TYPE_POSITION = "POSITION";
+	public static Map<String, String> QRCODE_TYPE = new LinkedHashMap<String, String>();
+	static {
+		QRCODE_TYPE.put("EQUIP", "设备");
+		QRCODE_TYPE.put("POSITION", "岗位");
+	}
+
+	// 周
+	public static Map<String, String> WEEK = new LinkedHashMap<String, String>();
+	static {
+		WEEK.put("1", "周日");
+		WEEK.put("2", "周一");
+		WEEK.put("3", "周二");
+		WEEK.put("4", "周三");
+		WEEK.put("5", "周四");
+		WEEK.put("6", "周五");
+		WEEK.put("7", "周六");
+	}
 
 }
