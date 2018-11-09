@@ -1,6 +1,7 @@
 package com.qcap.cac.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dao.LoginRestMapper;
 import com.qcap.cac.dto.MyInfoResp;
 import com.qcap.cac.dto.ResetPasswordReq;
@@ -106,10 +107,10 @@ public class LoginRestSrvImpl implements LoginRestSrv {
                 tbManager.setPassword(newMd5);
                 this.loginRestMapper.updateManagerPwd(tbManager);
             } else {
-                throw new BaseException("密码错误！");
+                throw new BaseException(CommonCodeConstant.SUCCESS_CODE,"密码错误！");
             }
         } else {
-            throw new BaseException("用户不存在！");
+            throw new BaseException(CommonCodeConstant.SUCCESS_CODE,"用户不存在！");
         }
 
     }

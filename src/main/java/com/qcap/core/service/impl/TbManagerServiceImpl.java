@@ -45,6 +45,7 @@ import com.qcap.core.utils.jwt.JwtTokenUtil;
  * @since 2018-07-29
  */
 @Service
+@Transactional
 public class TbManagerServiceImpl implements ITbManagerService {
 	@Resource
 	private TbManagerMapper tbManagerMapper;
@@ -146,14 +147,16 @@ public class TbManagerServiceImpl implements ITbManagerService {
 			manager.setPassword(Md5Util.encrypt(CoreConstant.SYS_DEFAULT_PASSWORD, manager.getSalt()));
 			manager.setStatus(ManagerStatus.OK.getCode());
 
-
-			Date birth = format.parse(userInsertDto.getBirth());
-			Date workDate = format.parse(userInsertDto.getWorkDate());
-
+			if(!Objects.isNull(userInsertDto.getBirth()) && !("").equals(userInsertDto.getBirth())){
+				Date birth = format.parse(userInsertDto.getBirth());
+				userInfo.setBirth(birth);
+			}
+			if(!Objects.isNull(userInsertDto.getWorkDate()) && !("").equals(userInsertDto.getWorkDate())) {
+				Date workDate = format.parse(userInsertDto.getWorkDate());
+				userInfo.setWorkDate(workDate);
+			}
 			userInfo.setUserInfoId(UUIDUtils.getUUID());
 			userInfo.setUserId(manager.getId());
-			userInfo.setBirth(birth);
-			userInfo.setWorkDate(workDate);
 
 			EntityTools.setCreateEmpAndTime(userInfo);
 			tbManagerMapper.insert(manager);
@@ -178,12 +181,14 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		try {
 			TbUserInfo userInfo = new TbUserInfo();
 			BeanUtils.copyProperties(userInsertDto,userInfo);
-
-			Date birth = format.parse(userInsertDto.getBirth());
-			Date workDate = format.parse(userInsertDto.getWorkDate());
-
-			userInfo.setBirth(birth);
-			userInfo.setWorkDate(workDate);
+			if(!Objects.isNull(userInsertDto.getBirth()) && !("").equals(userInsertDto.getBirth())){
+				Date birth = format.parse(userInsertDto.getBirth());
+				userInfo.setBirth(birth);
+			}
+			if(!Objects.isNull(userInsertDto.getWorkDate()) && !("").equals(userInsertDto.getWorkDate())) {
+				Date workDate = format.parse(userInsertDto.getWorkDate());
+				userInfo.setWorkDate(workDate);
+			}
 			EntityTools.setUpdateEmpAndTime(userInfo);
 
 			tbManagerMapper.updateById(manager);
