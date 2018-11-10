@@ -152,25 +152,21 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 	@Override
 	public Object edit(@Valid CleaningStandardDto cleaningStandardDto) {
 		
-		//1.修改标准时标准名称不能出现2次重复
+		//判断标准是否重名，当系统没有该标准名称是则没有同名
 		int countStandardName = this.selectStandardName(cleaningStandardDto.getStandardName());
-		if(countStandardName > 0){
+		if(countStandardName <= 1){
+			
+			TbAreaStandard tbAreaStandard = new TbAreaStandard();
+			BeanUtils.copyProperties(cleaningStandardDto, tbAreaStandard);
+			
+			
+			this.cleaningStandardMapper.editTbAreaStandard(tbAreaStandard);
+			
+			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "修改清洁标准成功", null);
+			
+		}else{
 			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "清洁标准名称重复，请重新编写名称。", null);
 		}
-		//2.判断是否有与该清洁标准相关已经生成但是还未执行的清洁任务
-//		int countTask = this.selectTask(cleaningStandardDto.getStandardName());
-//		if(countTask > 0){
-//			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "清洁任务已经使用到该清洁标准", null);
-//		}
-		
-		//3.修改清洁标准
-		TbAreaStandard tbAreaStandard = new TbAreaStandard();
-		BeanUtils.copyProperties(cleaningStandardDto, tbAreaStandard);
-		
-		
-		this.cleaningStandardMapper.editTbAreaStandard(tbAreaStandard);
-		
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "修改清洁标准成功", null);
 	}
 
 
@@ -256,17 +252,19 @@ public class CleaningStandardSrvImpl implements CleaningStandardSrv {
 		
 		int count  = this.cleaningStandardMapper.selectStandardMaterial(map);
 		
-		if(count > 0){
+		if(count <=1){
+			TbAreaStandardDetail tbAreaStandardDetail = new TbAreaStandardDetail();
+			BeanUtils.copyProperties(cleaningStandardDetailDto, tbAreaStandardDetail);
+			
+			this.cleaningStandardMapper.editStandardDetail(tbAreaStandardDetail);
+			
+			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "修改清洁标准明细成功", null);
+		}else{
 			return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "清洁标准材质已经存在。", null);
 		}
 		
 		
-		TbAreaStandardDetail tbAreaStandardDetail = new TbAreaStandardDetail();
-		BeanUtils.copyProperties(cleaningStandardDetailDto, tbAreaStandardDetail);
 		
-		this.cleaningStandardMapper.editStandardDetail(tbAreaStandardDetail);
-		
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "修改清洁标准成功", null);
 	}
 
 
