@@ -32,8 +32,8 @@
 		 when 'CANCEL' then '已撤销'
 		else '' END leaveStatusName,
 		AUDIT_PERSON,
-		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%m') leaveStartTime,
-		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%m') leaveEndTime,
+		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%i') leaveStartTime,
+		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%i') leaveEndTime,
 		LEAVE_URL,
 		LEAVE_TOTAL_TIME,
 		REMARK,
@@ -89,8 +89,8 @@
 		 when 'CANCEL' then '已撤销'
 		else '' END leaveStatusName,
 		AUDIT_PERSON,
-		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%m') leaveStartTime,
-		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%m') leaveEndTime,
+		DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%i') leaveStartTime,
+		DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%i') leaveEndTime,
 		LEAVE_URL,
 		LEAVE_TOTAL_TIME,
 		REMARK,

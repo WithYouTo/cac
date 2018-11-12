@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.LeaveRestMapper;
 import com.qcap.cac.dao.LoginRestMapper;
-import com.qcap.cac.dto.AppLeaveApplyReq;
 import com.qcap.cac.dto.AppLeaveReq;
 import com.qcap.cac.dto.UserListResp;
 import com.qcap.cac.entity.TbLeave;
@@ -19,7 +18,6 @@ import com.qcap.core.dao.TbManagerMapper;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -88,27 +86,25 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         }
 
         //请假申请参数转化为对象
-        AppLeaveApplyReq appLeaveApplyReq = new AppLeaveApplyReq();
-        appLeaveApplyReq.setWorkNo(req.getParameter("employeeCode"));
-        appLeaveApplyReq.setPersonId(req.getParameter("employeeId"));
-        appLeaveApplyReq.setPersonName(manager.getName());
-        appLeaveApplyReq.setPersonMobile(manager.getPhone());
-        appLeaveApplyReq.setLeaveStartTime(req.getParameter("leaveStartTime"));
-        appLeaveApplyReq.setLeaveEndTime(req.getParameter("leaveEndTime"));
-        appLeaveApplyReq.setLeaveType(req.getParameter("leaveType"));
-        appLeaveApplyReq.setLeaveReason(req.getParameter("leaveReason"));
+        TbLeave leave = new TbLeave();
+        leave.setWorkNo(req.getParameter("employeeCode"));
+        leave.setPersonId(req.getParameter("employeeId"));
+        leave.setPersonName(manager.getName());
+        leave.setPersonMobile(manager.getPhone());
+        leave.setLeaveStartTime(req.getParameter("leaveStartTime"));
+        leave.setLeaveEndTime(req.getParameter("leaveEndTime"));
+        leave.setLeaveType(req.getParameter("leaveType"));
+        leave.setLeaveReason(req.getParameter("leaveReason"));
 
         //请假时长（以小时为单位）
-        Long hour = DateUtil.between(DateUtil.parse(appLeaveApplyReq.getLeaveStartTime()),
-                DateUtil.parse(appLeaveApplyReq.getLeaveEndTime()), DateUnit.HOUR);
-        appLeaveApplyReq.setLeaveTotalTime(ToolUtil.toStr(hour));
+        Long hour = DateUtil.between(DateUtil.parse(leave.getLeaveStartTime()),
+                DateUtil.parse(leave.getLeaveEndTime()), DateUnit.HOUR);
+        leave.setLeaveTotalTime(ToolUtil.toStr(hour));
 
         //存储图片
         String path = fileUploadReturnPath(mapFile);
-        appLeaveApplyReq.setLeaveUrl(path);
+        leave.setLeaveUrl(path);
 
-        TbLeave leave = new TbLeave();
-        BeanUtils.copyProperties(appLeaveApplyReq,leave);
         leave.setLeaveId(UUIDUtils.getUUID());
         EntityTools.setCreateEmpAndTime(leave);
         EntityTools.setUpdateEmpAndTime(leave);
