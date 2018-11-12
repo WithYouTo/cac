@@ -262,7 +262,7 @@ public class CommonConstant {
 		EVENT_TYPE.put("LEAVE", "离港");
 	}
 
-	// 事件类型
+	// 保障等级
 	public final static String GUARANTEE_TYPE_NORMAL = "NORMAL";
 	public final static String GUARANTEE_TYPE_IMPORTANT = "IMPORTANT";
 	public static Map<String, String> GUARANTEE_TYPE = new LinkedHashMap<String, String>();
