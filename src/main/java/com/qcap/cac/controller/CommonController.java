@@ -3,18 +3,15 @@ package com.qcap.cac.controller;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.service.CommonSrv;
-import com.qcap.core.entity.TbManager;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.warpper.FastDFSClientWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -363,5 +360,14 @@ public class CommonController {
     public ResParams delete(String url){
         dfsClient.deleteFile(url);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_FILE_DESC, "");
+    }
+
+    @RequestMapping("/getFileAccessDomain")
+    public Object getFileAccessDomain(){
+        //查询配置管理中存放的文件访问地址前缀
+        String configValue = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+        Map<String,String > result = new HashMap<>();
+        result.put("configValue",configValue);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_QUERY_DESC,result);
     }
 }

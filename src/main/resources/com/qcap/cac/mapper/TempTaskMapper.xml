@@ -32,6 +32,7 @@
 		m.DISQUALIFIED_REASON  AS  disqualifiedReason,
 		m.FEEDBACK_IMG_URL  AS  feedbackImgUrl,
 		m.CHECK_IMG_URL  AS  checkImgUrl,
+		m.TASK_IMG_URL AS taskImgUrl,
 		m.LINE_NO  AS  lineNo,
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,
@@ -39,11 +40,8 @@
 		DATE_FORMAT(m.CREATE_DATE,'%Y-%m-%d %T') AS createDate
 		FROM tb_task m
 		WHERE m.TASK_STATUS !='CANCLE'
-		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeName)">
-		AND m.EMPLOYEE_NAME LIKE CONCAT('%',#{employeeName},'%')
-		</if>
-		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeTel)">
-		AND m.EMPLOYEE_TEL LIKE CONCAT('%',#{employeeTel},'%')
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
+		AND m.EMPLOYEE_CODE =#{employeeCode}
 		</if>
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
 		AND m.TASK_STATUS=#{taskStatus}
