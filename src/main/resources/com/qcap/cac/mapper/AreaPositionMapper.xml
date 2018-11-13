@@ -13,6 +13,20 @@
 		limit 1
 	</select>
 
+	<!--查询岗位是否排班-->
+	<select id="checkTaskByPosition" parameterType="Map" resultType="Integer">
+		select count(*) from  tb_task_arrangement
+		where MONTH = #{month} AND POSITION_CODE = #{positionCode}
+	</select>
+
+
+	<!--未完成状态的任务无法删除-->
+	<select id="checkUndoStatusByPosition" parameterType="String" resultType="Integer">
+		select count(*) from  tb_task_arrangement
+		where TASK_STATUS in ('WAIT','WORKING')
+		AND POSITION_CODE = #{positionCode}
+	</select>
+
 
 	
 

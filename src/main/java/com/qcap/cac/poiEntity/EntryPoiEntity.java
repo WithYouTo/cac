@@ -3,7 +3,6 @@ package com.qcap.cac.poiEntity;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @Auther: zengxin
@@ -64,6 +63,9 @@ public class EntryPoiEntity implements Serializable {
 
     @Excel(name = "采购单位",orderNum = "17")
     private String buyUnit;
+
+    @Excel(name = "采购周期",orderNum = "18")
+    private String buyDuration;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -203,6 +205,14 @@ public class EntryPoiEntity implements Serializable {
 
     public void setBuyUnit(String buyUnit) {
         this.buyUnit = buyUnit;
+    }
+
+    public String getBuyDuration() {
+        return buyDuration;
+    }
+
+    public void setBuyDuration(String buyDuration) {
+        this.buyDuration = buyDuration;
     }
 
     @Override

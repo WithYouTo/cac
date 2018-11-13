@@ -20,15 +20,51 @@ import java.util.Map;
  */
 public interface AreaMapper extends BaseMapper<TbArea> {
 
-    List<Map<String, Object>> selectAreaList(IPage<Map<String, Object>> page, @Param("areaCode") String areaCode);
+    List<Map<String, Object>> selectAreaList(IPage<Map<String, Object>> page,@Param("paramMap") Map paramMap);
 
-    List<Map> initTree();
+    List<Map> initTree(Map paramMap);
 
     @Select("select IFNULL(MAX(SUBSTRING(AREA_CODE, - 3)),99) + 1 from tb_area t WHERE `LEVEL` = #{level} ")
     Integer selectMaxNum(Integer level);
 
     @Select("select IFNULL(MAX(SEQ_NO),0) + 1 from tb_area t WHERE `SUPER_AREA_CODE` = #{superAreaCode} ")
     Integer selectMaxSeqNo(String superAreaCode);
+
+    /**
+     *
+     * 删除区域之前，判断是否有计划已经包含
+     * @author 曾欣
+     * @date 2018/11/12 15:51
+     * @param
+     * @param areaCode
+     * @return java.lang.Integer
+     */
+
+    Integer checkPlanExistAreaCode(String areaCode);
+
+    /**
+     *
+     * 删除区域之前，判断是否有岗位已经包含
+     * @author 曾欣
+     * @date 2018/11/12 15:51
+     * @param
+     * @param areaCode
+     * @return java.lang.Integer
+     */
+
+    Integer checkPositionExistAreaCode(String areaCode);
+
+    /**
+     *
+     * 删除区域之前，判断是否有子区域
+     * @author 曾欣
+     * @date 2018/11/13 17:00
+     * @param
+     * @param areaCode
+     * @return java.lang.Integer
+     */
+
+    Integer checkSubAreaByAreaCode(String areaCode);
 
 
 

@@ -66,6 +66,9 @@
         tb_warehouse_distribution a LEFT JOIN tb_manager b
         ON a.EMPLOYEE_CODE = b.account
         <where>
+        <if test="obj.storeroomId!=null and obj.storeroomId!=''">
+            and a.STOREROOM_ID = #{obj.storeroomId}
+        </if>
         <if test="obj.areaName!=null and obj.areaName!=''">
             and a.AREA_NAME like concat('%',#{obj.areaName},'%')
         </if>

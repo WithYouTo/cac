@@ -19,6 +19,7 @@ import com.qcap.cac.poiEntity.EntryPoiEntity;
 import com.qcap.cac.service.WarehouseEntryService;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +62,10 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
 
     @Override
     public List<Map> getStoreRoomList() {
-        return this.warehouseEntryMapper.getStoreRoomList();
+        List<String> projectCodes = AppUtils.getLoginUserProjectCodes();
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectCodes",projectCodes);
+        return this.warehouseEntryMapper.getStoreRoomList(map);
     }
 
     @Override
@@ -150,6 +155,12 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             if(StringUtils.isEmpty(buyUnit)){
                 throw new RuntimeException("第" + (i + 1) + "行的采购单位不能为空！");
             }
+            String buyDuration = item.getBuyDuration();
+            if(StringUtils.isNotEmpty(buyDuration)){
+                if(!ToolUtil.isNumeric(buyDuration)){
+                    throw new RuntimeException("第" + (i + 1) + "行的采购周期的格式不正确！");
+                }
+            }
 
             String storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
             if(StringUtils.isEmpty(storeroomId)){
@@ -178,7 +189,6 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             //判断物品编码是否在库存表中存在
             QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
             wrapper.eq("GOODS_NO",buyNo)
-                    //.eq("SUPPLIER_NAME",supplierName)
                     .eq("STOREROOM_ID",storeroomId);
 
              //存在，直接更新库存数量
@@ -191,6 +201,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 BigDecimal oldNum = new BigDecimal(warehouseStock.getGoodsNum());
                 BigDecimal goodsNum = oldNum.add(new BigDecimal(sumNum));
                 warehouseStock.setGoodsNum(ToolUtil.toInt(goodsNum));
+                warehouseStock.setBuyDuration(ToolUtil.toInt(buyDuration));
                 warehouseStockMapper.updateById(warehouseStock);
                 //库存主键
                 stockId = warehouseStock.getWarehouseStockId();
@@ -211,6 +222,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 stock.setSupplierName(supplierName);
                 stock.setGoodsNum(ToolUtil.toInt(sumNum));
                 stock.setMinUnit(minUnit);
+                stock.setBuyDuration(ToolUtil.toInt(buyDuration));
                 stock.setStockInstrution("EXCEL导入");
                 stock.setDeleteFlag("N");
                 stock.setCreateEmp("SYS");

@@ -35,7 +35,7 @@ public class AreaController {
 
 
     /**
-     * 查询区域树
+     * 初始化区域树
      */
     @ResponseBody
     @RequestMapping(value = "/initTree", method = RequestMethod.POST)
@@ -46,7 +46,7 @@ public class AreaController {
 
 
     /**
-     * 选择节点查询管辖区域
+     * 选择树节点查询管辖清洁区域
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -99,6 +99,20 @@ public class AreaController {
             return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
         }
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, area);
+    }
+
+    /**
+     * 删除
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResParams deleteArea(@Valid  String areaId) {
+        try {
+           this.areaSrv.deleteArea(areaId);
+        } catch (Exception e) {
+            return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
+        }
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
     }
 
 

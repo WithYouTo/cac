@@ -30,4 +30,6 @@ public interface WarehouseStockService extends IService<TbWarehouseStock> {
 
     List<PurchasePoiEntity>  generatePurchaseOrder(String date);
 
+    void checkBeforeExport();
+
 }

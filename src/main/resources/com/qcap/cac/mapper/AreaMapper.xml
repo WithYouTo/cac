@@ -4,7 +4,7 @@
 
 
 	<!--查询区域列表-->
-	<select id="selectAreaList" resultType="Map" parameterType="String">
+	<select id="selectAreaList" resultType="Map" parameterType="Map">
 		<!--SELECT
 		AREA_ID,
 		AREA_CODE,
@@ -30,7 +30,8 @@
 		t.AREA_ID,
 		t.AREA_CODE,
 		t.AREA_NAME areaName,
-		t.AREA_TYPE,
+		t.AREA_TYPE areaType,
+		(select desc1_ from  tbpubcode01 a where a.desc_ =  t.AREA_TYPE and  a.CONFIG_CODE_ = 'AREA_TYPE') areaTypeName,
 		t.SUPER_AREA_CODE pAreaCode,
 		b.AREA_NAME pAreaName,
 		t.BUILDING_PURPOSE,
@@ -47,9 +48,16 @@
 		LEVEL,
 		REMARK1
 		FROM tb_area where  1 = 1
-		<if test="areaCode!=null and areaCode!=''">
-			and (AREA_CODE = #{areaCode}
-			OR SUPER_AREA_CODE = #{areaCode})
+		<if test="paramMap.areaCode!=null and paramMap.areaCode!=''">
+			and (AREA_CODE = #{paramMap.areaCode}
+			OR SUPER_AREA_CODE = #{paramMap.areaCode})
+		</if>
+		<if test="paramMap.programCodes !=null and paramMap.programCodes.size > 0">
+			and PROGRAM_CODE in
+			<foreach item="item" index="index" collection="paramMap.programCodes"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
 		</if>
 		) t
 		LEFT JOIN tb_area b
@@ -60,7 +68,7 @@
 
 
 	<!--查询区域树列表-->
-	<select id="initTree" resultType="Map" >
+	<select id="initTree" resultType="Map" parameterType="Map">
 		SELECT
 		m.AREA_CODE areaCode,
 		m.AREA_NAME areaName,
@@ -69,7 +77,36 @@
 		FROM
 		tb_area m
 		LEFT JOIN tb_area n ON m.SUPER_AREA_CODE = n.AREA_CODE
+		<if test="programCodes !=null and programCodes.size > 0">
+			and m.PROGRAM_CODE in
+			<foreach item="item" index="index" collection="programCodes"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
         ORDER BY m.`LEVEL`,m.SEQ_NO
+	</select>
+
+
+	<!--删除区域，判断区域是否包含子区域-->
+	<select id="checkSubAreaByAreaCode" parameterType="String" resultType="Integer">
+	SELECT count(*)
+	FROM tb_area WHERE FIND_IN_SET(#{areaCode},SUPER_AREA_CODE)
+	</select>
+
+	<!--删除区域，判断计划是否已经包含该区域-->
+	<select id="checkPlanExistAreaCode" parameterType="String" resultType="Integer">
+	SELECT SUM(num)
+	FROM
+	(SELECT COUNT(*) num FROM tb_plan WHERE AREA_CODE = #{areaCode}
+	UNION
+	SELECT COUNT(*) num FROM tb_plan_event WHERE AREA_CODE =  #{areaCode}) a
+	</select>
+
+	<!--删除区域，判断是否有岗位包含该区域-->
+	<select id="checkPositionExistAreaCode" parameterType="String" resultType="Integer">
+	SELECT count(*)
+	FROM tb_area_position WHERE FIND_IN_SET(#{areaCode},AREA_CODE)
 	</select>
 	
 

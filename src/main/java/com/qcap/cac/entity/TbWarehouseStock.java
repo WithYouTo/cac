@@ -1,5 +1,7 @@
 package com.qcap.cac.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -54,6 +56,21 @@ public class TbWarehouseStock {
      *   采购数量
      */
     private Integer buyNum;
+
+    /**
+     *   采购周期
+     */
+    private  Integer buyDuration;
+
+    /**
+     *   采购起期
+     */
+    private String buyStart;
+
+    /**
+     *   采购止期
+     */
+    private String buyEnd;
 
     /**
      *   采购单位
@@ -119,6 +136,31 @@ public class TbWarehouseStock {
      *   版本
      */
     private Integer version;
+
+
+    public Integer getBuyDuration() {
+        return buyDuration;
+    }
+
+    public void setBuyDuration(Integer buyDuration) {
+        this.buyDuration = buyDuration;
+    }
+
+    public String getBuyStart() {
+        return buyStart;
+    }
+
+    public void setBuyStart(String buyStart) {
+        this.buyStart = buyStart;
+    }
+
+    public String getBuyEnd() {
+        return buyEnd;
+    }
+
+    public void setBuyEnd(String buyEnd) {
+        this.buyEnd = buyEnd;
+    }
 
     public String getMinUnit() {
         return minUnit;

@@ -24,7 +24,18 @@ public interface WarehouseEntryMapper extends BaseMapper<TbWarehouseEntry> {
 
     List<Map<String, Object>> getWarehouseEntryList(IPage<Map<String, Object>> page,@Param("obj") @Valid WarehouseEntryDto warehouseEntryDto);
 
-    List<Map> getStoreRoomList();
+
+    /**
+     *
+     * 根据项目编号查询储藏室下拉框
+     * @author 曾欣
+     * @date 2018/11/12 14:05
+     * @param
+     * @param paramMap
+     * @return java.util.List<java.util.Map>
+     */
+
+    List<Map> getStoreRoomList(Map<String,Object> paramMap);
 
     @Select("select AREA_ID from tb_area WHERE AREA_NAME = #{storeRoom}")
     String selecStoreRoomId(@Param("storeRoom") String storeRoom);

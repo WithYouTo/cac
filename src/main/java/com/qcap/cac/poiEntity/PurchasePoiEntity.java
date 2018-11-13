@@ -17,7 +17,6 @@ public class PurchasePoiEntity implements Serializable {
     @Excel(name = "序号", orderNum = "0")
     private String seqNo;
 
-
     @Excel(name = "采购编号", orderNum = "1")
     private String buyNo;
 
@@ -38,6 +37,39 @@ public class PurchasePoiEntity implements Serializable {
 
     @Excel(name = "采购单位",orderNum = "7")
     private String entryUnit;
+
+    @Excel(name = "采购周期（单位:天）",orderNum = "8")
+    private String buyDuration;
+
+    @Excel(name = "采购起期",orderNum = "9")
+    private String buyStart;
+
+    @Excel(name = "采购止期",orderNum = "10")
+    private String buyEnd;
+
+    public String getBuyDuration() {
+        return buyDuration;
+    }
+
+    public void setBuyDuration(String buyDuration) {
+        this.buyDuration = buyDuration;
+    }
+
+    public String getBuyStart() {
+        return buyStart;
+    }
+
+    public void setBuyStart(String buyStart) {
+        this.buyStart = buyStart;
+    }
+
+    public String getBuyEnd() {
+        return buyEnd;
+    }
+
+    public void setBuyEnd(String buyEnd) {
+        this.buyEnd = buyEnd;
+    }
 
     public String getSeqNo() {
         return seqNo;

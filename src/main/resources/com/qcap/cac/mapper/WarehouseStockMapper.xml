@@ -96,6 +96,9 @@
             <if test="remark != null" >
                 REMARK = #{remark,jdbcType=VARCHAR},
             </if>
+            <if test="buyDuration != null and buyDuration != ''" >
+                BUY_DURATION = #{buyDuration,jdbcType=VARCHAR},
+            </if>
             <if test="deleteFlag != null" >
                 DELETE_FLAG = #{deleteFlag,jdbcType=VARCHAR},
             </if>
@@ -111,7 +114,7 @@
     </update>
 
 
-    <select id="getLeastStockNumList" resultType="com.qcap.cac.poiEntity.PurchasePoiEntity">
+    <select id="getLeastStockNumList" parameterType="String" resultType="com.qcap.cac.poiEntity.PurchasePoiEntity">
        <!-- select
         WAREHOUSE_STOCK_ID,
         STOREROOM_ID,
@@ -133,19 +136,118 @@
         where GOODS_NUM &lt; LIMIT_STORE-->
         SELECT @ROWNO := @ROWNO + 1 AS seqNo,
         T.*
-        FROM (SELECT r.BUY_NO,
+        FROM (
+        SELECT
+        r.BUY_NO,
         r.BUY_TYPE,
         r.GOODS_TYPE,
         r.GOODS_NAME,
         r.SUPPLIER_NAME,
         r.BUY_NUM,
+        r.BUY_DURATION,
+        DATE_FORMAT(r.BUY_START, '%Y-%m-%d') buyStart,
+        DATE_FORMAT(r.BUY_END, '%Y-%m-%d') buyEnd,
         r.ENTRY_UNIT
         FROM
-        tb_warehouse_stock r where r.GOODS_NUM &lt; r.LIMIT_STORE
+        tb_warehouse_stock r where r.BUY_END IS NULL
+        AND  r.GOODS_NUM &lt; r.LIMIT_STORE
+        UNION
+        SELECT
+        r.BUY_NO,
+        r.BUY_TYPE,
+        r.GOODS_TYPE,
+        r.GOODS_NAME,
+        r.SUPPLIER_NAME,
+        r.BUY_NUM,
+        r.BUY_DURATION,
+        DATE_FORMAT(r.BUY_START, '%Y-%m-%d') buyStart,
+        DATE_FORMAT(r.BUY_END, '%Y-%m-%d') buyEnd,
+        r.ENTRY_UNIT
+        FROM
+        tb_warehouse_stock r where r.BUY_END &lt; #{date}
+        AND  r.GOODS_NUM  &lt; r.LIMIT_STORE
         ORDER BY BUY_NO ASC) T,
         (SELECT @ROWNO := 0) T3
         ORDER BY seqNo
     </select>
+
+
+    <select id="getLowLimitStockList" parameterType="String" resultType="com.qcap.cac.entity.TbWarehouseStock">
+        <!-- select
+         WAREHOUSE_STOCK_ID,
+         STOREROOM_ID,
+         STOREROOM,
+         GOODS_TYPE,
+         GOODS_NO,
+         GOODS_NAME,
+         LIMIT_STORE,
+         BUY_TYPE,
+         BUY_NO,
+         BUY_NUM,
+         ENTRY_UNIT,
+         SUPPLIER_NO,
+         SUPPLIER_NAME,
+         GOODS_NUM,
+         STOCK_INSTRUTION,
+         REMARK
+         from tb_warehouse_stock
+         where GOODS_NUM &lt; LIMIT_STORE-->
+        SELECT @ROWNO := @ROWNO + 1 AS seqNo,
+        T.*
+        FROM (
+        SELECT
+        r.WAREHOUSE_STOCK_ID,
+        r.BUY_NO,
+        r.BUY_TYPE,
+        r.GOODS_TYPE,
+        r.GOODS_NAME,
+        r.SUPPLIER_NAME,
+        r.BUY_NUM,
+        r.BUY_DURATION,
+        DATE_FORMAT(r.BUY_START, '%Y-%m-%d') buyStart,
+        DATE_FORMAT(r.BUY_END, '%Y-%m-%d') buyEnd,
+        r.ENTRY_UNIT
+        FROM
+        tb_warehouse_stock r where r.BUY_END IS NULL
+        AND  r.GOODS_NUM &lt; r.LIMIT_STORE
+        UNION
+        SELECT
+        r.WAREHOUSE_STOCK_ID,
+        r.BUY_NO,
+        r.BUY_TYPE,
+        r.GOODS_TYPE,
+        r.GOODS_NAME,
+        r.SUPPLIER_NAME,
+        r.BUY_NUM,
+        r.BUY_DURATION,
+        DATE_FORMAT(r.BUY_START, '%Y-%m-%d') buyStart,
+        DATE_FORMAT(r.BUY_END, '%Y-%m-%d') buyEnd,
+        r.ENTRY_UNIT
+        FROM
+        tb_warehouse_stock r where r.BUY_END &lt; #{date}
+        AND  r.GOODS_NUM  &lt; r.LIMIT_STORE
+        ORDER BY BUY_NO ASC) T,
+        (SELECT @ROWNO := 0) T3
+        ORDER BY seqNo
+    </select>
+
+    <sql id="Base_Column_List">
+        WAREHOUSE_STOCK_ID, STOREROOM_ID, STOREROOM, GOODS_TYPE, GOODS_NO, GOODS_NAME, LIMIT_STORE,
+        BUY_TYPE, BUY_NO, BUY_NUM,BUY_DURATION,
+        DATE_FORMAT(BUY_START,'%Y-%m-%d') buyStart,
+        DATE_FORMAT(BUY_END,'%Y-%m-%d') buyEnd,
+         ENTRY_UNIT, SUPPLIER_NO, SUPPLIER_NAME, GOODS_NUM, MIN_UNIT,
+        STOCK_INSTRUTION, REMARK, DELETE_FLAG,
+        VERSION
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="com.qcap.cac.entity.TbWarehouseStock">
+        select
+        <include refid="Base_Column_List" />
+        from tb_warehouse_stock
+        where WAREHOUSE_STOCK_ID = #{warehouseStockId,jdbcType=VARCHAR}
+    </select>
+
 
 
 </mapper>

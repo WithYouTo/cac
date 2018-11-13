@@ -13,7 +13,9 @@ import com.qcap.cac.entity.TbWarehouseStockLog;
 import com.qcap.cac.poiEntity.PurchasePoiEntity;
 import com.qcap.cac.service.WarehouseStockService;
 import com.qcap.cac.tools.EntityTools;
+import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -111,21 +113,29 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
 
     /**
      * 低于警戒线，生成请购单
+     * date YYYY-MM-DD
      */
     public List<PurchasePoiEntity>  generatePurchaseOrder(String date){
+        return this.warehouseStockMapper.getLeastStockNumList(date);
+
+    }
+
+    @Override
+    public void checkBeforeExport() {
         //查询数据库中低于警戒线中的记录
-        return this.warehouseStockMapper.getLeastStockNumList();
-//        for(TbWarehouseStock item : list){
-//            //新增请购单
-//            TbWarehousePurchase purchaseuse = new TbWarehousePurchase();
-//            BeanUtil.copyProperties(item,purchaseuse);
-//            purchaseuse.setWarehousePurchaseId(UUIDUtils.getUUID());
-//            purchaseuse.setBuyType(item.getGoodsType());
-//            purchaseuse.setBuyNo(item.getBuyNo());
-//            purchaseuse.setBuyTime(date);
-//            this.warehousePurchaseMapper.insert(purchaseuse);
-//        }
-
-
+        List<TbWarehouseStock> list = this.warehouseStockMapper.getLowLimitStockList(DateUtil.getDay());
+        //遍历更新采购的起止日期
+        for(TbWarehouseStock item : list) {
+            if (StringUtils.isEmpty(item.getWarehouseStockId())) {
+                throw new RuntimeException("请购单中物品信息主键为空");
+            }
+            TbWarehouseStock stock = this.warehouseStockMapper.selectById(item.getWarehouseStockId());
+            if (null == stock) {
+                throw new RuntimeException("请购单中根据主键没有查询到信息");
+            }
+            if (ToolUtil.isEmpty(item.getBuyDuration())) {
+                throw new RuntimeException("物品名称为【" + item.getGoodsName() + "】没有设置采购周期");
+            }
+        }
     }
 }

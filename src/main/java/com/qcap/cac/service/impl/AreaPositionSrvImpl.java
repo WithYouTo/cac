@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -11,8 +12,10 @@ import com.qcap.cac.dao.AreaPositionMapper;
 import com.qcap.cac.dto.AreaPositionDto;
 import com.qcap.cac.entity.TbAreaPosition;
 import com.qcap.cac.service.AreaPositionSrv;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.AppUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
@@ -26,9 +29,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -46,7 +47,10 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
 
     @Override
     public List<Map> initTree() {
-        return areaMapper.initTree();
+        Map<String,Object> paraMap = new HashMap();
+        List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+        paraMap.put("programCodes",programCodes);
+        return areaMapper.initTree(paraMap);
     }
 
     @Override
@@ -95,8 +99,14 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
         areaPosition.setPositionCode(positionCode);
         areaPosition.setPositionUrl(positionUrl);
         areaPosition.setPositionId(UUIDUtils.getUUID());
-        areaPosition.setCreateDate(new Date());
-        areaPosition.setCreateEmp("SYS");
+
+        //项目编码
+        List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+        programCodes.removeAll(Collections.singleton(""));
+        areaPosition.setProgramCode(StringUtils.join(programCodes,","));
+//        areaPosition.setCreateDate(new Date());
+//        areaPosition.setCreateEmp("SYS");
+        EntityTools.setCreateEmpAndTime(areaPosition);
         return this.areaPositionMapper.insert(areaPosition);
     }
 
@@ -142,6 +152,7 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
             throw  new RuntimeException("岗位修改主键为空");
         }
 
+        //原始岗位记录
         TbAreaPosition area = this.areaPositionMapper.selectById(positionId);
         if(null == area){
             throw  new RuntimeException("根据主键没有查询到岗位信息");
@@ -157,11 +168,37 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
             areaPosition.setPositionUrl(positionUrl);
         }
 
+        if(StringUtils.isEmpty(area.getPositionCode())){
+            //项目编码
+            List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+            programCodes.removeAll(Collections.singleton(""));
+            areaPosition.setProgramCode(StringUtils.join(programCodes,","));
+        }
+
         return this.areaPositionMapper.updateById(areaPosition);
     }
 
     @Override
     public Integer deleteAreaPosition(String positionId) {
+        if(StringUtils.isEmpty(positionId)){
+           throw new RuntimeException("未选择记录");
+        }
+        TbAreaPosition position = this.areaPositionMapper.selectById(positionId);
+        if(null == position){
+            throw new RuntimeException("根据主键没有查询到记录");
+        }
+        //当月是否有排班
+        Map<String,String> paramMap = new HashMap<>();
+        paramMap.put("month", DateUtil.format(new Date(),"yyyyMM"));
+        paramMap.put("positionCode",position.getPositionCode());
+        if(areaPositionMapper.checkTaskByPosition(paramMap) > 0){
+            throw new RuntimeException("该岗位当月有排班，无法删除");
+        }
+        //该岗位上有任务未完成
+        if(areaPositionMapper.checkUndoStatusByPosition(position.getPositionCode()) > 0){
+            throw new RuntimeException("该岗位上有任务未完成，无法删除");
+        }
+
         return this.areaPositionMapper.deleteById(positionId);
     }
 

@@ -26,6 +26,10 @@ public class TbWarehouseDistribution implements Serializable {
      */
     private String warehouseReqdetailId;
     /**
+     * 储藏室Id
+     */
+    private String storeroomId;
+    /**
      * 物品编码
      */
     private String goodsNo;
@@ -91,6 +95,14 @@ public class TbWarehouseDistribution implements Serializable {
      * 版本
      */
     private Integer version;
+
+    public String getStoreroomId() {
+        return storeroomId;
+    }
+
+    public void setStoreroomId(String storeroomId) {
+        this.storeroomId = storeroomId;
+    }
 
     public String getDistrDate() {
         return distrDate;

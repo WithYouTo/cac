@@ -3,6 +3,7 @@ package com.qcap.cac.dto;
 public class WarehouseDistruDto {
 
 
+    private String storeroomId;
     private String areaName;
     private String goodsNo;
     private String goodsName;
@@ -10,6 +11,14 @@ public class WarehouseDistruDto {
     private String startDate;
     private String endDate;
     private String userName;
+
+    public String getStoreroomId() {
+        return storeroomId;
+    }
+
+    public void setStoreroomId(String storeroomId) {
+        this.storeroomId = storeroomId;
+    }
 
     public String getAreaName() {
         return areaName;

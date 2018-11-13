@@ -48,11 +48,21 @@
         order by a.ENTRY_TIME DESC,b.GOODS_NO ASC
     </select>
 
-    <select id="getStoreRoomList" resultType="Map">
+    <!--根据项目编号查询储藏室下拉框-->
+    <select id="getStoreRoomList" resultType="Map" parameterType="Map">
         select
-        AREA_ID id,
-        AREA_NAME text
-        from tb_area
+        a.AREA_ID id,
+        CONCAT(IFNULL(b.PROGRAM_NAME,''),'-',IFNULL(a.AREA_NAME,'')) text
+        from tb_area a
+        LEFT JOIN tb_program b
+        on a.PROGRAM_CODE = b.PROGRAM_CODE
         where AREA_TYPE = "WAREHOUSE"
+        <if test="projectCodes!=null and projectCodes.size > 0">
+            and a.PROGRAM_CODE in
+            <foreach collection="projectCodes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
+
 </mapper>

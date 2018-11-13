@@ -4,19 +4,21 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.AreaMapper;
-import com.qcap.cac.dao.PubCodeMapper;
 import com.qcap.cac.dto.AreaDto;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.service.AreaSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,17 +29,22 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
     @Resource
     private  AreaMapper areaMapper;
 
-    @Resource
-    private PubCodeMapper pubCodeMapper;
-
     @Override
     public List<Map> initTree() {
-        return areaMapper.initTree();
+
+        Map<String,Object> paraMap = new HashMap();
+        List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+        paraMap.put("programCodes",programCodes);
+        return areaMapper.initTree(paraMap);
     }
 
     @Override
     public void getAreaList(IPage<Map<String, Object>> page, String areaCode) {
-        List<Map<String, Object>> list =  areaMapper.selectAreaList(page,areaCode);
+        Map<String,Object> paraMap = new HashMap();
+        List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+        paraMap.put("programCodes",programCodes);
+        paraMap.put("areaCode",areaCode);
+        List<Map<String, Object>> list =  areaMapper.selectAreaList(page,paraMap);
         page.setRecords(list);
     }
 
@@ -49,11 +56,11 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
         }
 
         if(StringUtils.isEmpty(areaDto.getLevel())){
-            throw new  RuntimeException("选择树节点的层级为空");
+            throw new  RuntimeException("当前选择节点的层级为空");
         }
 
-        QueryWrapper<TbArea> wrapper = new QueryWrapper<>();
         //不同的父级，可以有相同的区域名称
+        QueryWrapper<TbArea> wrapper = new QueryWrapper<>();
         wrapper.eq("SUPER_AREA_CODE",areaDto.getSuperAreaCode());
         wrapper.eq("AREA_NAME",areaDto.getAreaName());
         if(areaMapper.selectCount(wrapper) > 0){
@@ -67,6 +74,10 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
 
         TbArea area = new TbArea();
         BeanUtils.copyProperties(areaDto,area);
+        //项目编码
+        List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+        programCodes.removeAll(Collections.singleton(""));
+        area.setProgramCode(StringUtils.join(programCodes,","));
 
         String areaId = UUIDUtils.getUUID();
         area.setAreaId(areaId);
@@ -109,20 +120,11 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
      * @return
      */
     private String initAreaCode(Integer level){
-
-        //查询通用代码档----区域编号前缀(100)
-//        Map<String,String> param = new HashMap();
-//        param.put("configCode","AREA_PREFIX");
-//        List<Map> list = pubCodeMapper.selectConfigCodeApp(param);
-//        if(CollectionUtils.isEmpty(list)){
-//            throw new  RuntimeException("系统区域编码前缀未配置");
-//        }
         //查询系统配置档----区域编号前缀(100)
         String prefix = RedisTools.getCommonConfig("CAC_AREA_PREFIX");
         if(StringUtils.isEmpty(prefix)){
             throw new  RuntimeException("系统区域编码前缀未配置");
         }
-
         StringBuffer sb  = new StringBuffer();
         //第一级100  第二级100100
         if(level > 0){
@@ -130,11 +132,34 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
                 sb.append(prefix);
             }
         }
-
         //后缀编号
         Integer suffix = this.areaMapper.selectMaxNum(level + 1);
         String areaCode = sb.toString() + suffix;
-
         return areaCode;
+    }
+
+
+    @Override
+    public void deleteArea(String areaId) {
+        if(StringUtils.isEmpty(areaId)){
+            throw new  RuntimeException("未选中记录");
+        }
+        TbArea area = this.areaMapper.selectById(areaId);
+        if(null == area){
+            throw new  RuntimeException("根据区域主键没有查询到信息");
+        }
+        //判断是否有子级，如果有则提示无法删除
+        if(areaMapper.checkSubAreaByAreaCode(area.getAreaCode()) > 0){
+            throw new  RuntimeException("系统中此区域包含子区域，无法删除");
+        }
+        //判断是否有计划包含该区域
+        if(areaMapper.checkPlanExistAreaCode(area.getAreaCode()) > 0){
+            throw new  RuntimeException("系统中已有计划包含该区域，无法删除");
+        }
+        //判断是否有岗位包含该区域
+        if(areaMapper.checkPositionExistAreaCode(area.getAreaCode()) > 0){
+            throw new  RuntimeException("系统中已有岗位包含该区域，无法删除");
+        }
+        this.areaMapper.deleteById(areaId);
     }
 }

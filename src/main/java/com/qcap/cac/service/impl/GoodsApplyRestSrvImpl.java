@@ -73,6 +73,10 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
     }
 
 
+    /**
+     * 物品出库
+     * @param goodsOutListReq
+     */
     public void updateDelivery(GoodsOutListReq goodsOutListReq){
 
         List<GoodsOutReq> list = goodsOutListReq.getGoodsOutReqList();
@@ -88,6 +92,9 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             if(null == warehouseReqdetail){
                 throw new RuntimeException("根据主键查询不到领用单明细信息");
             }
+
+
+
 
             String goodsNo = warehouseReqdetail.getGoodsNo();
             String goodsName = warehouseReqdetail.getGoodsName();
@@ -142,8 +149,22 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
     @Override
     public void updateDistribution(GoodsOutDistruListReq goodsOutDistruListReq) {
         //发放前---判断是否有余量
+
+
+
         List<GoodsOutDistruReq> list = goodsOutDistruListReq.getGoodsOutDistruReqList();
         for(GoodsOutDistruReq item : list){
+
+            String requDetailId = item.getWarehouseReqDetailId();
+            TbWarehouseReqdetail warehouseReqdetail = this.warehouseReqDetailMapper.selectById(requDetailId);
+            if(null == warehouseReqdetail){
+                throw new RuntimeException("根据主键查询不到领用明细单信息");
+            }
+            TbWarehouseRequ warehouseRequ = this.warehouseRequMapper.selectById(warehouseReqdetail.getWarehouseRequId());
+            if(null == warehouseRequ){
+                throw new RuntimeException("根据主键查询不到领用主单信息");
+            }
+
 
             String employeeCode = item.getEmployeeCode();
             String positionCode = item.getPositionCode();
@@ -181,6 +202,7 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             distribution.setDistrDate(DateUtil.dateToString(new Date()));
             distribution.setWarehouseDistributionId(UUIDUtils.getUUID());
             distribution.setWarehouseReqdetailId(item.getWarehouseReqDetailId());
+            distribution.setStoreroomId(warehouseRequ.getStoreroomId());
             EntityTools.setCreateEmpAndTime(distribution);
             if(MapUtils.isNotEmpty(user) && "1".equals(ToolUtil.toStr(user.get("flag")))){
                 distribution.setUserCode(ToolUtil.toStr(user.get("employeeCode")));

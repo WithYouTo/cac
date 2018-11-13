@@ -27,7 +27,7 @@ public interface AreaSrv extends IService<TbArea> {
 
     /**
      * 新增区域
-     * @param area
+     * @param areaDto
      * @return
      */
     TbArea insertArea(AreaDto areaDto);
@@ -39,6 +39,17 @@ public interface AreaSrv extends IService<TbArea> {
      * @return
      */
     TbArea updateArea(TbArea area);
+
+    /**
+     *
+     * 删除区域
+     * @author 曾欣
+     * @date 2018/11/12 15:36
+     * @param
+     * @param areaId
+     * @return void
+     */
+    public void deleteArea(String areaId);
 
 
 }
