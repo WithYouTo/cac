@@ -5,6 +5,7 @@ public class LeaveSearchDto {
     private String workNo;
     private String personName;
     private String leaveStartTime;
+    private String programCode;
 
     public String getWorkNo() {
         return workNo;
@@ -30,12 +31,21 @@ public class LeaveSearchDto {
         this.leaveStartTime = leaveStartTime;
     }
 
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
+
     @Override
     public String toString() {
         return "LeaveSearchDto{" +
                 "workNo='" + workNo + '\'' +
                 ", personName='" + personName + '\'' +
                 ", leaveStartTime='" + leaveStartTime + '\'' +
+                ", programCode='" + programCode + '\'' +
                 '}';
     }
 }

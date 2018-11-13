@@ -22,6 +22,11 @@ public class TbEquipMaint implements Serializable {
      * 主键ID
      */
     private String equipMaintId;
+
+    /**
+     * 主键ID
+     */
+    private String programCode;
     /**
      * 设备管理表主键
      */
@@ -106,6 +111,22 @@ public class TbEquipMaint implements Serializable {
 
     public void setEquipMaintId(String equipMaintId) {
         this.equipMaintId = equipMaintId;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
+
+    public Date getMaintTime() {
+        return maintTime;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
     }
 
     public String getEquipId() {
@@ -256,26 +277,27 @@ public class TbEquipMaint implements Serializable {
     @Override
     public String toString() {
         return "TbEquipMaint{" +
-        ", equipMaintId=" + equipMaintId +
-        ", equipId=" + equipId +
-        ", equipNo=" + equipNo +
-        ", equipName=" + equipName +
-        ", equipType=" + equipType +
-        ", equipModel=" + equipModel +
-        ", partsName=" + partsName +
-        ", partsNo=" + partsNo +
-        ", maintType=" + maintType +
-        ", equipCycle=" + equipCycle +
-        ", maintTime=" + maintTime +
-        ", maintRecord=" + maintRecord +
-        ", maintState=" + maintState +
-        ", maintDesc=" + maintDesc +
-        ", remark=" + remark +
-        ", createEmp=" + createEmp +
-        ", createDate=" + createDate +
-        ", updateEmp=" + updateEmp +
-        ", updateDate=" + updateDate +
-        ", version=" + version +
-        "}";
+                "equipMaintId='" + equipMaintId + '\'' +
+                ", programCode='" + programCode + '\'' +
+                ", equipId='" + equipId + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipType='" + equipType + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", partsName='" + partsName + '\'' +
+                ", partsNo='" + partsNo + '\'' +
+                ", maintType='" + maintType + '\'' +
+                ", equipCycle='" + equipCycle + '\'' +
+                ", maintTime=" + maintTime +
+                ", maintRecord='" + maintRecord + '\'' +
+                ", maintState='" + maintState + '\'' +
+                ", maintDesc='" + maintDesc + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
     }
 }

@@ -271,7 +271,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
 
     /**
      *
-     * @Description: 若设备当前状态为INUSE(使用中)，先更新设备使用记录，再插入设备使用记录
+     * @Description: 若设备当前状态为INUSE(使用中)，更新设备使用记录
      *
      *
      * @MethodName: handlerWhenEquipInUse
@@ -299,7 +299,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
 
     /**
      *
-     * @Description: 若设备当前状态为INCHARGE(充电中)，先更新设备充电记录，再插入设备使用记录
+     * @Description: 若设备当前状态为INCHARGE(充电中)，更新设备充电记录
      *
      *
      * @MethodName: handlerWhenEquipInCharge

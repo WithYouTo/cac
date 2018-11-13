@@ -23,6 +23,10 @@ public class TbEquipUse implements Serializable {
      */
     private String equipUseId;
     /**
+     * 项目编号
+     */
+    private String programCode;
+    /**
      * 设备管理表主键
      */
     private String equipId;
@@ -106,6 +110,14 @@ public class TbEquipUse implements Serializable {
 
     public void setEquipUseId(String equipUseId) {
         this.equipUseId = equipUseId;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getEquipId() {
@@ -266,26 +278,27 @@ public class TbEquipUse implements Serializable {
     @Override
     public String toString() {
         return "TbEquipUse{" +
-        ", equipUseId=" + equipUseId +
-        ", equipId=" + equipId +
-        ", equipNo=" + equipNo +
-        ", equipName=" + equipName +
-        ", equipType=" + equipType +
-        ", equipModel=" + equipModel +
-        ", area=" + area +
-        ", personNo=" + personNo +
-        ", personName=" + personName +
-        ", personMobile=" + personMobile +
-        ", startUseTime=" + startUseTime +
-        ", endUseTime=" + endUseTime +
-        ", totalUseTime=" + totalUseTime +
-        ", status=" + status +
-        ", remark=" + remark +
-        ", createEmp=" + createEmp +
-        ", createDate=" + createDate +
-        ", updateEmp=" + updateEmp +
-        ", updateDate=" + updateDate +
-        ", version=" + version +
-        "}";
+                "equipUseId='" + equipUseId + '\'' +
+                ", programCode='" + programCode + '\'' +
+                ", equipId='" + equipId + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipType='" + equipType + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", area='" + area + '\'' +
+                ", personNo='" + personNo + '\'' +
+                ", personName='" + personName + '\'' +
+                ", personMobile='" + personMobile + '\'' +
+                ", startUseTime=" + startUseTime +
+                ", endUseTime=" + endUseTime +
+                ", totalUseTime='" + totalUseTime + '\'' +
+                ", status='" + status + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
     }
 }

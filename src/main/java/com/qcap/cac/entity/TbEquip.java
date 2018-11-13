@@ -26,7 +26,7 @@ public class TbEquip implements Serializable {
     /**
      * 项目编号
      */
-    private String projectCode;
+    private String programCode;
     /**
      * 设备编号
      */
@@ -237,12 +237,12 @@ public class TbEquip implements Serializable {
         this.equipId = equipId;
     }
 
-    public String getProjectCode() {
-        return projectCode;
+    public String getProgramCode() {
+        return programCode;
     }
 
-    public void setProjectCode(String projectCode) {
-        this.projectCode = projectCode;
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getEquipNo() {
@@ -645,5 +645,61 @@ public class TbEquip implements Serializable {
         this.version = version;
     }
 
-
+    @Override
+    public String toString() {
+        return "TbEquip{" +
+                "equipId='" + equipId + '\'' +
+                ", programCode='" + programCode + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", equipCodeUrl='" + equipCodeUrl + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipType='" + equipType + '\'' +
+                ", equipFullName='" + equipFullName + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", equipParams='" + equipParams + '\'' +
+                ", responseNo='" + responseNo + '\'' +
+                ", responseName='" + responseName + '\'' +
+                ", buliding='" + buliding + '\'' +
+                ", floor='" + floor + '\'' +
+                ", area='" + area + '\'' +
+                ", room='" + room + '\'' +
+                ", roomArea='" + roomArea + '\'' +
+                ", equipUse='" + equipUse + '\'' +
+                ", useArea='" + useArea + '\'' +
+                ", stopPlace='" + stopPlace + '\'' +
+                ", storeArea='" + storeArea + '\'' +
+                ", chargePlace='" + chargePlace + '\'' +
+                ", chargeArea='" + chargeArea + '\'' +
+                ", manufact='" + manufact + '\'' +
+                ", advanceTime='" + advanceTime + '\'' +
+                ", noticeDate='" + noticeDate + '\'' +
+                ", agenceNo='" + agenceNo + '\'' +
+                ", agenceName='" + agenceName + '\'' +
+                ", relateName='" + relateName + '\'' +
+                ", relateMobile='" + relateMobile + '\'' +
+                ", lifeCycle='" + lifeCycle + '\'' +
+                ", dailyMaint='" + dailyMaint + '\'' +
+                ", maintCycle='" + maintCycle + '\'' +
+                ", latestMaintTime=" + latestMaintTime +
+                ", nextMaintTime=" + nextMaintTime +
+                ", warranty='" + warranty + '\'' +
+                ", buyTime=" + buyTime +
+                ", startUseTime=" + startUseTime +
+                ", scrapTime=" + scrapTime +
+                ", scrapReason='" + scrapReason + '\'' +
+                ", baseRequire='" + baseRequire + '\'' +
+                ", attention='" + attention + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", fileUrls='" + fileUrls + '\'' +
+                ", fileNames='" + fileNames + '\'' +
+                ", equipState='" + equipState + '\'' +
+                ", equipWorkState='" + equipWorkState + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
+    }
 }

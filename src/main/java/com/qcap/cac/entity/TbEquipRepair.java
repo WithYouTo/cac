@@ -27,6 +27,10 @@ public class TbEquipRepair implements Serializable {
      */
     private String equipId;
     /**
+     * 项目编号
+     */
+    private String programCode;
+    /**
      * 设备编号
      */
     private String equipNo;
@@ -99,6 +103,14 @@ public class TbEquipRepair implements Serializable {
 
     public void setEquipRepairId(String equipRepairId) {
         this.equipRepairId = equipRepairId;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getEquipId() {
@@ -246,6 +258,7 @@ public class TbEquipRepair implements Serializable {
         return "TbEquipRepair{" +
                 "equipRepairId='" + equipRepairId + '\'' +
                 ", equipId='" + equipId + '\'' +
+                ", programCode='" + programCode + '\'' +
                 ", equipNo='" + equipNo + '\'' +
                 ", equipName='" + equipName + '\'' +
                 ", equipModel='" + equipModel + '\'' +
