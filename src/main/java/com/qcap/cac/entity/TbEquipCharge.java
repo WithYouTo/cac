@@ -24,6 +24,10 @@ public class TbEquipCharge implements Serializable {
     private String equipChargeId;
     private String equipId;
     /**
+     * 项目编号
+     */
+    private String programCode;
+    /**
      * 设备名称
      */
     private String equipName;
@@ -108,6 +112,22 @@ public class TbEquipCharge implements Serializable {
 
     public void setEquipId(String equipId) {
         this.equipId = equipId;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
     public String getEquipName() {
@@ -250,26 +270,27 @@ public class TbEquipCharge implements Serializable {
     @Override
     public String toString() {
         return "TbEquipCharge{" +
-        ", equipChargeId=" + equipChargeId +
-        ", equipId=" + equipId +
-        ", equipName=" + equipName +
-        ", equipNo=" + equipNo +
-        ", equipType=" + equipType +
-        ", equipModel=" + equipModel +
-        ", startChargeTime=" + startChargeTime +
-        ", endChargeTime=" + endChargeTime +
-        ", totalChargeTime=" + totalChargeTime +
-        ", area=" + area +
-        ", personNo=" + personNo +
-        ", personName=" + personName +
-        ", personMobile=" + personMobile +
-        ", status=" + status +
-        ", remark=" + remark +
-        ", createEmp=" + createEmp +
-        ", createDate=" + createDate +
-        ", updateEmp=" + updateEmp +
-        ", updateDate=" + updateDate +
-        ", version=" + version +
-        "}";
+                "equipChargeId='" + equipChargeId + '\'' +
+                ", equipId='" + equipId + '\'' +
+                ", programCode='" + programCode + '\'' +
+                ", equipName='" + equipName + '\'' +
+                ", equipNo='" + equipNo + '\'' +
+                ", equipType='" + equipType + '\'' +
+                ", equipModel='" + equipModel + '\'' +
+                ", startChargeTime=" + startChargeTime +
+                ", endChargeTime=" + endChargeTime +
+                ", totalChargeTime='" + totalChargeTime + '\'' +
+                ", area='" + area + '\'' +
+                ", personNo='" + personNo + '\'' +
+                ", personName='" + personName + '\'' +
+                ", personMobile='" + personMobile + '\'' +
+                ", status='" + status + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createEmp='" + createEmp + '\'' +
+                ", createDate=" + createDate +
+                ", updateEmp='" + updateEmp + '\'' +
+                ", updateDate=" + updateDate +
+                ", version=" + version +
+                '}';
     }
 }

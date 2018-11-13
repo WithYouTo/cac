@@ -23,6 +23,11 @@ public class TbEquipParts implements Serializable {
      * 主键ID
      */
     private String partsId;
+
+    /**
+     * 项目编码
+     */
+    private String programCode;
     /**
      * 设备ID
      */
@@ -110,6 +115,14 @@ public class TbEquipParts implements Serializable {
 
     public void setPartsId(String partsId) {
         this.partsId = partsId;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getEquipId() {
@@ -277,6 +290,7 @@ public class TbEquipParts implements Serializable {
     public String toString() {
         return "TbEquipParts{" +
                 "partsId='" + partsId + '\'' +
+                ", programCode='" + programCode + '\'' +
                 ", equipId='" + equipId + '\'' +
                 ", equipNo='" + equipNo + '\'' +
                 ", equipType='" + equipType + '\'' +

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import com.qcap.cac.tools.UUIDUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -140,6 +141,7 @@ public class TbMenuServiceImpl implements ITbMenuService {
 		buildSeqAndCodeByParentCode(tbMenu, tbMenu.getParentCode());
 		buildTbMenuByParentCode(tbMenu, tbMenu.getParentCode());
 		Integer maxNum = tbMenuMapper.selectMaxNum();
+		tbMenu.setId(UUIDUtils.getUUID());
 		tbMenu.setNum(String.valueOf(maxNum));
 		tbMenu.setIcon(StringUtils.trimToEmpty(tbMenu.getIcon()));
 		tbMenu.setStatus(1);

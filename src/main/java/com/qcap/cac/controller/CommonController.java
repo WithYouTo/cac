@@ -303,10 +303,7 @@ public class CommonController {
     public Object initProgramCodes(){
         List<String> projectCodes = AppUtils.getLoginUserProjectCodes();
         List<Map<String,String>> list = this.commonSrv.getProgramCodes(projectCodes);
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("projectCodes",projectCodes);
-        map.put("projectList",list);
-        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,map);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC,list);
     }
 
     /**

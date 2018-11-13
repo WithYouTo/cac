@@ -24,6 +24,7 @@
     <select id="listPartsEntityByEquipId" resultType="com.qcap.cac.entity.TbEquipParts" parameterType="String">
         SELECT
             PARTS_ID partsId,
+            PROGRAM_CODE programCode,
             EQUIP_ID equipId,
             PARTS_NO partsNo,
             PARTS_NAME partsName,
@@ -55,6 +56,7 @@
     <update id="updatePartsByPartsId" parameterType="com.qcap.cac.dto.PartsInsertDto">
         UPDATE tb_equip_parts
         SET
+            PROGRAM_CODE = #{programCode},
             PARTS_NAME = #{partsName},
             PARTS_MODEL = #{partsModel},
             PARTS_AGENCE = #{partsAgence},
@@ -67,6 +69,7 @@
     <update id="updatePartsNoAndNextMaintTimeByPartsId" parameterType="com.qcap.cac.entity.TbEquipParts">
         UPDATE tb_equip_parts
         SET
+            PROGRAM_CODE = #{programCode},
             EQUIP_NO = #{equipNo},
             PARTS_NO = #{partsNo},
             START_USE_TIME = #{startUseTime},

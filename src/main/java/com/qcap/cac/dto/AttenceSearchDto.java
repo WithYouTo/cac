@@ -5,6 +5,7 @@ public class AttenceSearchDto {
     private String workNo;
     private String personName;
     private String attenceTime;
+    private String programCode;
 
     public String getWorkNo() {
         return workNo;
@@ -30,12 +31,21 @@ public class AttenceSearchDto {
         this.attenceTime = attenceTime;
     }
 
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
+
     @Override
     public String toString() {
         return "AttenceSearchDto{" +
                 "workNo='" + workNo + '\'' +
                 ", personName='" + personName + '\'' +
                 ", attenceTime='" + attenceTime + '\'' +
+                ", programCode='" + programCode + '\'' +
                 '}';
     }
 }
