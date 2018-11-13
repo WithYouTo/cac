@@ -64,7 +64,7 @@ public class EntryPoiEntity implements Serializable {
     @Excel(name = "采购单位",orderNum = "17")
     private String buyUnit;
 
-    @Excel(name = "采购周期",orderNum = "18")
+    @Excel(name = "采购周期（天）",orderNum = "18")
     private String buyDuration;
 
     public static long getSerialVersionUID() {

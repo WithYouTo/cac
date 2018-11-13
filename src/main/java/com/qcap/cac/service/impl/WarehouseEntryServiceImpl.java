@@ -26,10 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -162,7 +159,11 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 }
             }
 
-            String storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom);
+            //项目编码
+            List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+            programCodes.removeAll(Collections.singleton(""));
+            String programCode = StringUtils.join(programCodes,",");
+            String storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom,programCode);
             if(StringUtils.isEmpty(storeroomId)){
                 throw new RuntimeException("第" + (i + 1) + "行储藏室在区域中不存在！");
             }
@@ -201,7 +202,9 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 BigDecimal oldNum = new BigDecimal(warehouseStock.getGoodsNum());
                 BigDecimal goodsNum = oldNum.add(new BigDecimal(sumNum));
                 warehouseStock.setGoodsNum(ToolUtil.toInt(goodsNum));
-                warehouseStock.setBuyDuration(ToolUtil.toInt(buyDuration));
+                if(StringUtils.isNotEmpty(buyDuration)){
+                    warehouseStock.setBuyDuration(ToolUtil.toInt(buyDuration));
+                }
                 warehouseStockMapper.updateById(warehouseStock);
                 //库存主键
                 stockId = warehouseStock.getWarehouseStockId();
@@ -222,7 +225,9 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 stock.setSupplierName(supplierName);
                 stock.setGoodsNum(ToolUtil.toInt(sumNum));
                 stock.setMinUnit(minUnit);
-                stock.setBuyDuration(ToolUtil.toInt(buyDuration));
+                if(StringUtils.isNotEmpty(buyDuration)){
+                    stock.setBuyDuration(ToolUtil.toInt(buyDuration));
+                }
                 stock.setStockInstrution("EXCEL导入");
                 stock.setDeleteFlag("N");
                 stock.setCreateEmp("SYS");

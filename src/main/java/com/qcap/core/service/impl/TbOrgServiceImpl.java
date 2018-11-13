@@ -1,24 +1,9 @@
 package com.qcap.core.service.impl;
 
-import static com.qcap.core.common.CoreConstant.ORG_FULLCODES_SEPARATE;
-import static com.qcap.core.common.CoreConstant.ORG_FULLNAMES_SEPARATE;
-import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-
-import com.qcap.cac.tools.UUIDUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.dao.TbManagerOrgMapper;
 import com.qcap.core.dao.TbOrgMapper;
@@ -27,8 +12,20 @@ import com.qcap.core.exception.BizExceptionEnum;
 import com.qcap.core.exception.BussinessException;
 import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.service.ITbOrgService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import cn.hutool.core.util.StrUtil;
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static com.qcap.core.common.CoreConstant.ORG_FULLCODES_SEPARATE;
+import static com.qcap.core.common.CoreConstant.ORG_FULLNAMES_SEPARATE;
+import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
 
 /**
  * <p>

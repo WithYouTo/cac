@@ -133,7 +133,8 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
             }
         }
         //后缀编号
-        Integer suffix = this.areaMapper.selectMaxNum(level + 1);
+        Integer max = this.areaMapper.selectMaxNum(level + 1);
+        Integer suffix = max == -1 ? 100 : max + 1;
         String areaCode = sb.toString() + suffix;
         return areaCode;
     }

@@ -24,10 +24,10 @@ public interface AreaMapper extends BaseMapper<TbArea> {
 
     List<Map> initTree(Map paramMap);
 
-    @Select("select IFNULL(MAX(SUBSTRING(AREA_CODE, - 3)),99) + 1 from tb_area t WHERE `LEVEL` = #{level} ")
+    @Select("select IFNULL(MAX(SUBSTRING(AREA_CODE, - 3)),-1) from tb_area t WHERE `LEVEL` = #{level} ")
     Integer selectMaxNum(Integer level);
 
-    @Select("select IFNULL(MAX(SEQ_NO),0) + 1 from tb_area t WHERE `SUPER_AREA_CODE` = #{superAreaCode} ")
+    @Select("select (IFNULL(MAX(SEQ_NO),0) + 1) from tb_area t WHERE `SUPER_AREA_CODE` = #{superAreaCode} ")
     Integer selectMaxSeqNo(String superAreaCode);
 
     /**
@@ -41,6 +41,21 @@ public interface AreaMapper extends BaseMapper<TbArea> {
      */
 
     Integer checkPlanExistAreaCode(String areaCode);
+
+    /**
+     *
+     * 查询父级的最大区域编码
+     * @author 曾欣
+     * @date 2018/11/13 19:42
+     * @param
+     * @return java.lang.Integer
+     */
+
+    @Select("select (IFNULL(MAX(AREA_CODE),-1) + 1) from tb_area t WHERE `LEVEL` = -1")
+    Integer selectParentLevelMaxNum();
+
+    @Select("select (IFNULL(MAX(SEQ_NO),0) + 1) from tb_area t WHERE `LEVEL` = -1 ")
+    Integer selectParentLevelMaxSeqNo();
 
     /**
      *

@@ -37,7 +37,7 @@ public interface WarehouseEntryMapper extends BaseMapper<TbWarehouseEntry> {
 
     List<Map> getStoreRoomList(Map<String,Object> paramMap);
 
-    @Select("select AREA_ID from tb_area WHERE AREA_NAME = #{storeRoom}")
-    String selecStoreRoomId(@Param("storeRoom") String storeRoom);
+    @Select("select AREA_ID from tb_area WHERE AREA_NAME = #{storeRoom} and PROGRAM_CODE = #{programCode}")
+    String selecStoreRoomId(@Param("storeRoom") String storeRoom,@Param("programCode") String programCode);
 
 }
