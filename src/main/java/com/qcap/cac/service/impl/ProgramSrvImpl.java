@@ -1,16 +1,20 @@
 package com.qcap.cac.service.impl;
 
 import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.ProgramMapper;
 import com.qcap.cac.dto.ProgramAddDto;
 import com.qcap.cac.dto.ProgramSearchDto;
+import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.entity.TbProgram;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.ProgramSrv;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.EntityTools;
+import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +39,9 @@ public class ProgramSrvImpl implements ProgramSrv{
 	
 	@Resource
 	private CommonSrv commonSrvImpl;
+
+	@Resource
+	private AreaMapper areaMapper;
 	
 	@Override
 	public List<Map<String, Object>> selectProgram(ProgramSearchDto programSearchDto) {
@@ -62,11 +70,42 @@ public class ProgramSrvImpl implements ProgramSrv{
 
 			this.programMapper.insertProgram(program);
 
+			//新增区域父级
+			insertParentArea(programAddDto);
+
 		}else {
 			throw  new BaseException(CommonCodeConstant.ERROR_CODE_40402, "项目编号已存在，请更换项目编号");
 		}
 
 		
+	}
+
+
+	/**
+	 *
+	 * 新增区域父级
+	 * @author 曾欣
+	 * @date 2018/11/13 19:28
+	 * @param
+	 * @param programAddDto
+	 * @return void
+	 */
+	void insertParentArea(ProgramAddDto programAddDto){
+		TbArea area = new TbArea();
+		area.setAreaId(UUIDUtils.getUUID());
+		//项目编码
+		List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+		programCodes.removeAll(Collections.singleton(""));
+		area.setProgramCode(org.apache.commons.lang3.StringUtils.join(programCodes,","));
+		//区域编码
+		Integer max = this.areaMapper.selectParentLevelMaxNum();
+		area.setAreaCode(ToolUtil.toStr(max));
+		area.setAreaName(programAddDto.getProgramName());
+		area.setLevel("-1");
+		Integer seqNo = this.areaMapper.selectParentLevelMaxSeqNo();
+		area.setSeqNo(ToolUtil.toStr(seqNo));
+		this.areaMapper.insert(EntityTools.setCreateEmpAndTime(area));
+
 	}
 
 	@Override
