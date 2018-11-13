@@ -62,9 +62,9 @@ public class PrintQrcodeSrvImpl implements PrintQrcodeSrv {
 		if (CollectionUtils.isNotEmpty(ls)) {
 			for (QrcodeDto qrcodeDto : ls) {
 				if (CommonConstant.QRCODE_TYPE_EQUIP.equals(qrcodeDto.getQrcodeType())) {
-					content += "equipCode=" + qrcodeDto.getCode();
+					content += "?equipCode=" + qrcodeDto.getCode();
 				} else if (CommonConstant.QRCODE_TYPE_POSITION.equals(qrcodeDto.getQrcodeType())) {
-					content += "positionCode=" + qrcodeDto.getCode();
+					content += "?positionCode=" + qrcodeDto.getCode();
 				}
 				String url = this.getQrCodeUrlByCode(content);
 				qrcodeDto.setUrl(host + url);
@@ -78,7 +78,7 @@ public class PrintQrcodeSrvImpl implements PrintQrcodeSrv {
 
 		File directory = new File(dir);
 
-		File file = QrCodeUtil.generate(code, 200, 200, directory);
+		File file = QrCodeUtil.generate(code, 76, 76, directory);
 		FileInputStream fileInputStream = new FileInputStream(file);
 		MultipartFile multipartFile = new MockMultipartFile(file.getName(), file.getName(),
 				ContentType.APPLICATION_OCTET_STREAM.toString(), fileInputStream);
