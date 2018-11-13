@@ -46,6 +46,9 @@
 		FROM tb_task_arrangement m
 		WHERE m.SHIFT =#{shift}
 		AND m.MONTH=#{month}
+		<if test=' programCode !=null and programCode !="" '>
+			AND m.PROGRAM_CODE  =#{programCode}
+		</if>
 		<if test=' positionCode !=null and positionCode !="" '>
 		AND m.POSITION_CODE  =#{positionCode}
 		</if>
@@ -58,7 +61,7 @@
 	<insert id="insertTaskArrangeBatch" parameterType="List">
     insert into tb_task_arrangement (ARRANGEMENT_ID, SHIFT, EMPLOYEE_CODE, 
       EMPLOYEE_NAME, EMPLOYEE_TEL, POSITION_CODE, 
-      POSITION_NAME, MONTH, DELETE_FLAG, 
+      POSITION_NAME, MONTH, DELETE_FLAG,PROGRAM_CODE,
       DAY_1, DAY_2, DAY_3, DAY_4, 
       DAY_5, DAY_6, DAY_7, DAY_8, 
       DAY_9, DAY_10, DAY_11, 
@@ -76,7 +79,7 @@
     <foreach collection="list" index="index" item="item" separator=",">
     (#{item.arrangementId}, #{item.shift}, #{item.employeeCode}, 
       #{item.employeeName}, #{item.employeeTel}, #{item.positionCode}, 
-      #{item.positionName}, #{item.month}, #{item.deleteFlag}, 
+      #{item.positionName}, #{item.month}, #{item.deleteFlag},#{item.programCode},
       #{item.day1}, #{item.day2}, #{item.day3}, #{item.day4}, 
       #{item.day5}, #{item.day6}, #{item.day7}, #{item.day8}, 
       #{item.day9}, #{item.day10}, #{item.day11}, 

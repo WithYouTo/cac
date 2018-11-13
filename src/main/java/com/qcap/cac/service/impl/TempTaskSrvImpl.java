@@ -143,6 +143,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		task.setPositionName(positionName);
 		task.setAreaCode(areaCode);
 		task.setAreaName(areaName);
+		task.setProgramCode(taskDto.getProgramCode());
 		// task.setStandardCode(standardCode);
 		// task.setStandardName(standardName);
 		task.setShift(shift);

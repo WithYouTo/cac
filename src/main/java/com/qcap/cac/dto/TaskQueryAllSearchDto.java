@@ -36,6 +36,16 @@ public class TaskQueryAllSearchDto {
 	
 	private String endTimeEnd;
 
+	private String programCode;
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
 	public String getPositionCode() {
 		return positionCode;
 	}

@@ -25,7 +25,17 @@ public class TempTaskDto {
 	private String employeeName;
 	
 	private String employeeTel;
-	
+
+	private String programCode;
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
 	public String getEmployeeCode() {
 		return employeeCode;
 	}

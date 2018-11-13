@@ -37,9 +37,13 @@
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,
 		m.REMARK3  AS  remark3,
+		m.PROGRAM_CODE AS programCode,
 		DATE_FORMAT(m.CREATE_DATE,'%Y-%m-%d %T') AS createDate
 		FROM tb_task m
 		WHERE m.TASK_STATUS !='CANCLE'
+		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programCode)">
+			AND m.PROGRAM_CODE =#{programCode}
+		</if>
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
 		AND m.EMPLOYEE_CODE =#{employeeCode}
 		</if>
@@ -69,7 +73,7 @@
       UPDATE_EMP, VERSION,
       TASK_FINISH_DESC, DISQUALIFIED_REASON, TASK_REMIND_TIME,
       FEEDBACK_IMG_URL, CHECK_IMG_URL, TASK_IMG_URL,
-      START_SCAN_FLAG, END_SCAN_FLAG)
+      START_SCAN_FLAG, END_SCAN_FLAG,PROGRAM_CODE)
     values (#{taskId}, #{taskCode}, #{planId},
       #{taskType}, #{positionCode}, #{positionName},
       #{areaCode}, #{areaName}, #{standardCode},
@@ -83,7 +87,7 @@
       #{updateEmp}, #{version},
       #{taskFinishDesc}, #{disqualifiedReason}, #{taskRemindTime},
       #{feedbackImgUrl}, #{checkImgUrl}, #{taskImgUrl},
-      #{startScanFlag}, #{endScanFlag})
+      #{startScanFlag}, #{endScanFlag},#{programCode})
 	</insert>
 	
 	<insert id="insertTaskBatch" parameterType="java.util.List">
@@ -100,7 +104,7 @@
 		UPDATE_EMP, VERSION,
 		TASK_FINISH_DESC, DISQUALIFIED_REASON, TASK_REMIND_TIME,
 		FEEDBACK_IMG_URL, CHECK_IMG_URL, TASK_IMG_URL,
-		START_SCAN_FLAG, END_SCAN_FLAG)
+		START_SCAN_FLAG, END_SCAN_FLAG,PROGRAM_CODE)
 		values
     <foreach collection="list" item="item" index="index" separator=",">
 		(#{item.taskId}, #{item.taskCode}, #{item.planId},
@@ -116,7 +120,7 @@
 		#{item.updateEmp}, #{item.version},
 		#{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.taskRemindTime},
 		#{item.feedbackImgUrl}, #{item.checkImgUrl}, #{item.taskImgUrl},
-		#{item.startScanFlag}, #{item.endScanFlag})
+		#{item.startScanFlag}, #{item.endScanFlag}#{item.programCode})
       </foreach>
 	</insert>
 	

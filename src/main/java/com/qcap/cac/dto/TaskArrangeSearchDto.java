@@ -10,6 +10,16 @@ public class TaskArrangeSearchDto {
 
 	private String employeeCode;
 
+	private String programCode;
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
 	public String getPositionCode() {
 		return positionCode;
 	}

@@ -8,6 +8,16 @@ public class TaskArrangeDto {
 	
 	private String createEmp;
 
+	private String programCode;
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
 	public String getShift() {
 		return shift;
 	}

@@ -7,7 +7,16 @@ public class TempTaskSearchParam {
 	private String employeeCode;
 	private String taskStatus;
 	private String shift;
+	private String programCode;
 	private static final String taskType=CommonConstant.TASK_TYPE_TEMP;
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
 
 	public String getEmployeeCode() {
 		return employeeCode;
