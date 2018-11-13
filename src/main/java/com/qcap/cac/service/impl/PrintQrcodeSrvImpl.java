@@ -61,6 +61,7 @@ public class PrintQrcodeSrvImpl implements PrintQrcodeSrv {
 		List<QrcodeDto> ls = batchUpdateQrcodeDto.getQrcodeList();
 		if (CollectionUtils.isNotEmpty(ls)) {
 			for (QrcodeDto qrcodeDto : ls) {
+				content = RedisTools.getCommonConfig("CAC_QRCODE_CONTENT");
 				if (CommonConstant.QRCODE_TYPE_EQUIP.equals(qrcodeDto.getQrcodeType())) {
 					content += "?equipCode=" + qrcodeDto.getCode();
 				} else if (CommonConstant.QRCODE_TYPE_POSITION.equals(qrcodeDto.getQrcodeType())) {
@@ -78,7 +79,7 @@ public class PrintQrcodeSrvImpl implements PrintQrcodeSrv {
 
 		File directory = new File(dir);
 
-		File file = QrCodeUtil.generate(code, 76, 76, directory);
+		File file = QrCodeUtil.generate(code, 200, 200, directory);
 		FileInputStream fileInputStream = new FileInputStream(file);
 		MultipartFile multipartFile = new MockMultipartFile(file.getName(), file.getName(),
 				ContentType.APPLICATION_OCTET_STREAM.toString(), fileInputStream);
