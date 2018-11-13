@@ -20,6 +20,9 @@ public class QueryPlanListDto {
 	@ApiModelProperty(value = "清洁时间")
 	private String time;
 
+	@ApiModelProperty(value = "项目编码")
+	private String programCode;
+
 	public String getAreaCode() {
 		return areaCode;
 	}
@@ -52,10 +55,22 @@ public class QueryPlanListDto {
 		this.time = time;
 	}
 
-	@Override
-	public String toString() {
-		return "QueryPlanListDto [areaCode=" + areaCode + ", standardCode=" + standardCode + ", planTimeType="
-				+ planTimeType + ", time=" + time + "]";
+	public String getProgramCode() {
+		return programCode;
 	}
 
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
+	@Override
+	public String toString() {
+		return "QueryPlanListDto{" +
+				"areaCode='" + areaCode + '\'' +
+				", standardCode='" + standardCode + '\'' +
+				", planTimeType='" + planTimeType + '\'' +
+				", time='" + time + '\'' +
+				", programCode='" + programCode + '\'' +
+				'}';
+	}
 }

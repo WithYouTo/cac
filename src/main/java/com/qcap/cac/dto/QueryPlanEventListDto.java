@@ -18,6 +18,9 @@ public class QueryPlanEventListDto {
 	@ApiModelProperty(value = "活动内容")
 	private String guaranteeType;
 
+	@ApiModelProperty(value = "项目编码")
+	private String programCode;
+
 	public String getAreaCode() {
 		return areaCode;
 	}
@@ -50,10 +53,22 @@ public class QueryPlanEventListDto {
 		this.guaranteeType = guaranteeType;
 	}
 
-	@Override
-	public String toString() {
-		return "QueryPlanEventListDto [areaCode=" + areaCode + ", standardCode=" + standardCode + ", eventType="
-				+ eventType + ", guaranteeType=" + guaranteeType + "]";
+	public String getProgramCode() {
+		return programCode;
 	}
 
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
+	@Override
+	public String toString() {
+		return "QueryPlanEventListDto{" +
+				"areaCode='" + areaCode + '\'' +
+				", standardCode='" + standardCode + '\'' +
+				", eventType='" + eventType + '\'' +
+				", guaranteeType='" + guaranteeType + '\'' +
+				", programCode='" + programCode + '\'' +
+				'}';
+	}
 }

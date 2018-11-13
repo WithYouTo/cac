@@ -4,43 +4,46 @@
 
     <select id="listEquip" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipSearchDto">
         select
-        a.EQUIP_ID equipId,
-        a.PROJECT_CODE projectCode,
-        a.EQUIP_NO equipNo,
-        a.EQUIP_CODE_URL equipCodeUrl,
-        a.IMG_URL imgUrl,
-        a.EQUIP_NAME equipName,
-        a.EQUIP_USE equipUse,
-        a.LIFE_CYCLE lifeCycle,
-        a.WARRANTY warranty,
-        a.DAILY_MAINT dailyMaint,
-        a.MAINT_CYCLE maintCycle,
-        a.MANUFACT manufact,
-        b.DESC1_  equipType,
-        a.EQUIP_MODEL equipModel,
-        a.BASE_REQUIRE baseRequire,
-        a.RESPONSE_NO responseNo,
-        a.RESPONSE_NAME responseName,
-        a.AGENCE_NO agenceNo,
-        a.AGENCE_NAME agenceName,
-        a.RELATE_NAME relateName,
-        a.RELATE_MOBILE relateMobile,
-        a.STOP_PLACE stopPlace,
-        a.STORE_AREA storeArea,
-        a.CHARGE_PLACE chargePlace,
-        a.CHARGE_AREA chargeArea,
-        a.ADVANCE_TIME advanceTime,
-        a.NOTICE_DATE noticeDate,
-        DATE_FORMAT(a.BUY_TIME,'%Y-%m-%d') buyTime,
-        DATE_FORMAT(a.START_USE_TIME,'%Y-%m-%d') startUseTime,
-        a.ATTENTION attention,
-        a.EQUIP_STATE equipState,
-        a.EQUIP_WORK_STATE equipWorkState,
-        a.FILE_URLS fileUrls,
-        a.FILE_NAMES fileNames
+            a.EQUIP_ID equipId,
+            a.PROGRAM_CODE programCode,
+            p.PROGRAM_NAME programName,
+            a.EQUIP_NO equipNo,
+            a.EQUIP_CODE_URL equipCodeUrl,
+            a.IMG_URL imgUrl,
+            a.EQUIP_NAME equipName,
+            a.EQUIP_USE equipUse,
+            a.LIFE_CYCLE lifeCycle,
+            a.WARRANTY warranty,
+            a.DAILY_MAINT dailyMaint,
+            a.MAINT_CYCLE maintCycle,
+            a.MANUFACT manufact,
+            b.DESC1_  equipType,
+            a.EQUIP_MODEL equipModel,
+            a.BASE_REQUIRE baseRequire,
+            a.RESPONSE_NO responseNo,
+            a.RESPONSE_NAME responseName,
+            a.AGENCE_NO agenceNo,
+            a.AGENCE_NAME agenceName,
+            a.RELATE_NAME relateName,
+            a.RELATE_MOBILE relateMobile,
+            a.STOP_PLACE stopPlace,
+            a.STORE_AREA storeArea,
+            a.CHARGE_PLACE chargePlace,
+            a.CHARGE_AREA chargeArea,
+            a.ADVANCE_TIME advanceTime,
+            a.NOTICE_DATE noticeDate,
+            DATE_FORMAT(a.BUY_TIME,'%Y-%m-%d') buyTime,
+            DATE_FORMAT(a.START_USE_TIME,'%Y-%m-%d') startUseTime,
+            a.ATTENTION attention,
+            a.EQUIP_STATE equipState,
+            a.EQUIP_WORK_STATE equipWorkState,
+            a.FILE_URLS fileUrls,
+            a.FILE_NAMES fileNames
         from TB_EQUIP a
         LEFT JOIN tbpubcode01 b
         ON a.EQUIP_TYPE = b.DESC_
+        LEFT JOIN tb_program p
+        ON a.PROGRAM_CODE = p.PROGRAM_CODE
         where
         b.CONFIG_CODE_ = 'EQUIP_TYPE'
         AND
@@ -57,13 +60,16 @@
         <if test="obj.equipWorkState != null and obj.equipWorkState != ''">
             AND a.EQUIP_WORK_STATE = #{obj.equipWorkState}
         </if>
+        <if test="obj.programCode != null and obj.programCode != ''">
+            AND a.PROGRAM_CODE = #{obj.programCode}
+        </if>
         ORDER BY a.EQUIP_NO
     </select>
 
     <select id="selectEquipByEquipId"  resultType="com.qcap.cac.entity.TbEquip" parameterType="com.qcap.cac.dto.EquipInsertDto">
         select
             EQUIP_ID equipId,
-            PROJECT_CODE projectCode,
+            PROGRAM_CODE programCode,
             EQUIP_NO equipNo,
             EQUIP_CODE_URL equipCodeUrl,
             EQUIP_NAME equipName,
@@ -93,7 +99,7 @@
     <select id="selectEquipByNoticeDate"  resultType="com.qcap.cac.entity.TbEquip" parameterType="String">
          select
             EQUIP_ID equipId,
-            PROJECT_CODE projectCode,
+            PROGRAM_CODE programCode,
             EQUIP_NO equipNo,
             EQUIP_NAME equipName,
             EQUIP_TYPE equipType,
@@ -118,7 +124,7 @@
     <select id="selectEquipByEquipNo" resultType="com.qcap.cac.entity.TbEquip" parameterType="String">
         select
             EQUIP_ID equipId,
-            PROJECT_CODE projectCode,
+            PROGRAM_CODE programCode,
             EQUIP_NO equipNo,
             EQUIP_CODE_URL equipCodeUrl,
             EQUIP_NAME equipName,

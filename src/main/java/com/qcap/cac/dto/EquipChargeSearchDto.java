@@ -6,6 +6,7 @@ public class EquipChargeSearchDto {
     private String equipNo;
     private String startChargeTime;
     private String status;
+    private String programCode;
 
     public String getArea() {
         return area;
@@ -39,6 +40,14 @@ public class EquipChargeSearchDto {
         this.status = status;
     }
 
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
+
     @Override
     public String toString() {
         return "EquipChargeSearchDto{" +
@@ -46,6 +55,7 @@ public class EquipChargeSearchDto {
                 ", equipNo='" + equipNo + '\'' +
                 ", startChargeTime='" + startChargeTime + '\'' +
                 ", status='" + status + '\'' +
+                ", programCode='" + programCode + '\'' +
                 '}';
     }
 }

@@ -4,34 +4,39 @@
 
     <select id="listEquipCharge" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipChargeSearchDto">
         select
-        EQUIP_CHARGE_ID equipChargeId,
-        EQUIP_ID equipId,
-        EQUIP_NAME equipName,
-        EQUIP_NO equipNo,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        DATE_FORMAT(START_CHARGE_TIME,'%Y-%m-%d %H:%i:%S') startChargeTime,
-        DATE_FORMAT(END_CHARGE_TIME,'%Y-%m-%d %H:%i:%S') endChargeTime,
-        TOTAL_CHARGE_TIME totalChargeTime,
-        AREA area,
-        PERSON_NAME personName,
-        PERSON_MOBILE personMobile,
-        STATUS status
-        from TB_EQUIP_CHARGE
+        ec.EQUIP_CHARGE_ID equipChargeId,
+        ec.EQUIP_ID equipId,
+        ec.EQUIP_NAME equipName,
+        ec.EQUIP_NO equipNo,
+        ec.EQUIP_TYPE equipType,
+        ec.EQUIP_MODEL equipModel,
+        DATE_FORMAT(ec.START_CHARGE_TIME,'%Y-%m-%d %H:%i:%S') startChargeTime,
+        DATE_FORMAT(ec.END_CHARGE_TIME,'%Y-%m-%d %H:%i:%S') endChargeTime,
+        ec.TOTAL_CHARGE_TIME totalChargeTime,
+        ec.AREA area,
+        ec.PERSON_NAME personName,
+        ec.PERSON_MOBILE personMobile,
+        ec.STATUS status
+        from TB_EQUIP_CHARGE ec
+        left join tb_program p
+        ON ec.PROGRAM_CODE = ec.PROGRAM_CODE
         where 1=1
         <if test="obj.equipNo != null and obj.equipNo != ''">
-            and EQUIP_NO = #{obj.equipNo}
+            and ec.EQUIP_NO = #{obj.equipNo}
         </if>
         <if test="obj.startChargeTime != null and obj.startChargeTime != ''">
-            and START_CHARGE_TIME &gt; substring(#{obj.startChargeTime},1,19)
+            and ec.START_CHARGE_TIME &gt; substring(#{obj.startChargeTime},1,19)
         </if>
         <if test="obj.startChargeTime != null and obj.startChargeTime != ''">
-            and START_CHARGE_TIME &lt; substring(#{obj.startChargeTime},22,19)
+            and ec.START_CHARGE_TIME &lt; substring(#{obj.startChargeTime},22,19)
         </if>
         <if test="obj.status != null and obj.status != ''">
-            and STATUS = #{obj.status}
+            and ec.STATUS = #{obj.status}
         </if>
-        ORDER BY START_CHARGE_TIME
+        <if test="obj.programCode != null and obj.programCode != ''">
+            and p.PROGRAM_CODE = #{obj.programCode}
+        </if>
+        ORDER BY ec.START_CHARGE_TIME
     </select>
 
 

@@ -13,11 +13,15 @@
         DATE_FORMAT(a.REPAIR_TIME,'%Y-%m-%d %H:%i:%S') repairTime,
         a.PERSON_NAME personName,
         a.PERSON_MOBILE personMobile,
+        a.program_code programCode,
+        p.program_Name programName,
         a.EQUIP_DESC equipDesc,
         a.STATUS status
         from TB_EQUIP_REPAIR a
         LEFT JOIN tbpubcode01 b
         ON a.EQUIP_TYPE = b.DESC_
+        LEFT JOIN tb_program p
+        ON a.program_code = p.program_code
         where
         b.CONFIG_CODE_ = 'EQUIP_TYPE'
         <if test="obj.equipType != null and obj.equipType != ''">
@@ -34,6 +38,9 @@
         </if>
         <if test="obj.status != null and obj.status != ''">
             and a.STATUS = #{obj.status}
+        </if>
+        <if test="obj.programCode != null and obj.programCode != ''">
+            and a.program_code = #{obj.programCode}
         </if>
         ORDER BY a.REPAIR_TIME
     </select>

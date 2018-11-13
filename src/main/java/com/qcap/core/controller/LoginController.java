@@ -73,6 +73,8 @@ public class LoginController {
 	@PostMapping("/logout")
 	public ResParams logout() {
 		TbManager user = AppUtils.getLoginUser();
+		Map<String, Object> data = new HashMap<>(2);
+
 		if (user != null) {
 			redisUtil.delete(AppUtils.getApplicationName() + ":manager:" + user.getId());
 		}

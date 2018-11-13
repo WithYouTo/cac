@@ -4,18 +4,18 @@
 
     <select id="listPartsByEquipId" resultType="java.util.Map" parameterType="String">
         SELECT
-        PARTS_ID partsId,
-        EQUIP_ID equipId,
-        PARTS_NO partsNo,
-        PARTS_NAME partsName,
-        PARTS_MODEL partsModel,
-        PARTS_AGENCE partsAgence,
-        MAINT_CYCLE maintCycle,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
-        DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
-        DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
-        RELATE_PERSON relatePerson,
-        RELATE_MOBILE relateMobile
+            PARTS_ID partsId,
+            EQUIP_ID equipId,
+            PARTS_NO partsNo,
+            PARTS_NAME partsName,
+            PARTS_MODEL partsModel,
+            PARTS_AGENCE partsAgence,
+            MAINT_CYCLE maintCycle,
+            DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+            DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
+            DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+            RELATE_PERSON relatePerson,
+            RELATE_MOBILE relateMobile
         FROM tb_equip_parts
         WHERE EQUIP_ID = #{equipId}
         ORDER BY CREATE_DATE
@@ -23,23 +23,23 @@
 
     <select id="listPartsEntityByEquipId" resultType="com.qcap.cac.entity.TbEquipParts" parameterType="String">
         SELECT
-        PARTS_ID partsId,
-        EQUIP_ID equipId,
-        PARTS_NO partsNo,
-        PARTS_NAME partsName,
-        PARTS_MODEL partsModel,
-        PARTS_AGENCE partsAgence,
-        MAINT_CYCLE maintCycle,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
-        DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
-        DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
-        RELATE_PERSON relatePerson,
-        RELATE_PERSON relatePerson,
-        RELATE_MOBILE relateMobile,
-        CREATE_EMP createEmp,
-        CREATE_DATE createDate,
-        UPDATE_EMP updateEmp,
-        UPDATE_DATE updateDate
+            PARTS_ID partsId,
+            EQUIP_ID equipId,
+            PARTS_NO partsNo,
+            PARTS_NAME partsName,
+            PARTS_MODEL partsModel,
+            PARTS_AGENCE partsAgence,
+            MAINT_CYCLE maintCycle,
+            DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
+            DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
+            DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+            RELATE_PERSON relatePerson,
+            RELATE_PERSON relatePerson,
+            RELATE_MOBILE relateMobile,
+            CREATE_EMP createEmp,
+            CREATE_DATE createDate,
+            UPDATE_EMP updateEmp,
+            UPDATE_DATE updateDate
         FROM tb_equip_parts
         WHERE EQUIP_ID = #{equipId}
         ORDER BY CREATE_DATE
@@ -55,22 +55,22 @@
     <update id="updatePartsByPartsId" parameterType="com.qcap.cac.dto.PartsInsertDto">
         UPDATE tb_equip_parts
         SET
-        PARTS_NAME = #{partsName},
-        PARTS_MODEL = #{partsModel},
-        PARTS_AGENCE = #{partsAgence},
-        MAINT_CYCLE = #{maintCycle},
-        RELATE_PERSON = #{relatePerson},
-        RELATE_MOBILE = #{relateMobile}
+            PARTS_NAME = #{partsName},
+            PARTS_MODEL = #{partsModel},
+            PARTS_AGENCE = #{partsAgence},
+            MAINT_CYCLE = #{maintCycle},
+            RELATE_PERSON = #{relatePerson},
+            RELATE_MOBILE = #{relateMobile}
         WHERE PARTS_ID = #{partsId}
     </update>
 
     <update id="updatePartsNoAndNextMaintTimeByPartsId" parameterType="com.qcap.cac.entity.TbEquipParts">
         UPDATE tb_equip_parts
         SET
-        EQUIP_NO = #{equipNo},
-        PARTS_NO = #{partsNo},
-        START_USE_TIME = #{startUseTime},
-        NEXT_MAINT_TIME = #{nextMaintTime}
+            EQUIP_NO = #{equipNo},
+            PARTS_NO = #{partsNo},
+            START_USE_TIME = #{startUseTime},
+            NEXT_MAINT_TIME = #{nextMaintTime}
         WHERE PARTS_ID = #{partsId}
     </update>
 

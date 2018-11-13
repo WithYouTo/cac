@@ -4,34 +4,41 @@
 
     <select id="listEquipUse" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipUseSearchDto">
         select
-        EQUIP_USE_ID equipUseId,
-        EQUIP_ID equipId,
-        EQUIP_NAME equipName,
-        EQUIP_NO equipNo,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        DATE_FORMAT(START_USE_TIME,'%Y-%m-%d %H:%i:%S') startUseTime,
-        DATE_FORMAT(END_USE_TIME,'%Y-%m-%d %H:%i:%S') endUseTime,
-        TOTAL_USE_TIME totalUseTime,
-        AREA area,
-        PERSON_NAME personName,
-        PERSON_MOBILE personMobile,
-        STATUS status
-        from TB_EQUIP_USE
+        eu.EQUIP_USE_ID equipUseId,
+        eu.EQUIP_ID equipId,
+        eu.EQUIP_NAME equipName,
+        eu.EQUIP_NO equipNo,
+        eu.EQUIP_TYPE equipType,
+        eu.EQUIP_MODEL equipModel,
+        eu.PROGRAM_CODE programCode,
+        p.PROGRAM_NAME programName,
+        DATE_FORMAT(eu.START_USE_TIME,'%Y-%m-%d %H:%i:%S') startUseTime,
+        DATE_FORMAT(eu.END_USE_TIME,'%Y-%m-%d %H:%i:%S') endUseTime,
+        eu.TOTAL_USE_TIME totalUseTime,
+        eu.AREA area,
+        eu.PERSON_NAME personName,
+        eu.PERSON_MOBILE personMobile,
+        eu.STATUS status
+        from TB_EQUIP_USE eu
+        left join tb_program p
+        ON eu.PROGRAM_CODE = p.PROGRAM_CODE
         where 1=1
         <if test="obj.equipNo != null and obj.equipNo != ''">
-            and EQUIP_NO = #{obj.equipNo}
+            and eu.EQUIP_NO = #{obj.equipNo}
         </if>
         <if test="obj.startUseTime != null and obj.startUseTime != ''">
-            and START_USE_TIME &gt; substring(#{obj.startUseTime},1,19)
+            and eu.START_USE_TIME &gt; substring(#{obj.startUseTime},1,19)
         </if>
         <if test="obj.startUseTime != null and obj.startUseTime != ''">
-            and START_USE_TIME &lt; substring(#{obj.startUseTime},22,19)
+            and eu.START_USE_TIME &lt; substring(#{obj.startUseTime},22,19)
         </if>
         <if test="obj.status != null and obj.status != ''">
-            and STATUS = #{obj.status}
+            and eu.STATUS = #{obj.status}
         </if>
-        ORDER BY START_USE_TIME
+        <if test="obj.programCode != null and obj.programCode != ''">
+            and p.PROGRAM_CODE = #{obj.programCode}
+        </if>
+        ORDER BY eu.START_USE_TIME
     </select>
 
 

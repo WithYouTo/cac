@@ -4,34 +4,39 @@
 
     <select id="listEquipMaint" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipChargeSearchDto">
         select
-        EQUIP_MAINT_ID equipMaintId,
-        EQUIP_ID equipId,
-        EQUIP_NO equipNo,
-        EQUIP_NAME equipName,
-        EQUIP_TYPE equipType,
-        EQUIP_MODEL equipModel,
-        PARTS_NAME partsName,
-        PARTS_NO partsNo,
-        MAINT_TYPE maintType,
-        EQUIP_CYCLE equipCycle,
-        DATE_FORMAT(MAINT_TIME,'%Y-%m-%d') maintTime,
-        MAINT_MONEY maintMoney,
-        MAINT_RECORD maintRecord,
-        MAINT_STATE maintState,
-        MAINT_DESC maintDesc,
-        REMARK remark
-        from TB_EQUIP_MAINT
+            em.EQUIP_MAINT_ID equipMaintId,
+            em.EQUIP_ID equipId,
+            em.EQUIP_NO equipNo,
+            em.EQUIP_NAME equipName,
+            em.EQUIP_TYPE equipType,
+            em.EQUIP_MODEL equipModel,
+            em.PARTS_NAME partsName,
+            em.PARTS_NO partsNo,
+            em.MAINT_TYPE maintType,
+            em.EQUIP_CYCLE equipCycle,
+            DATE_FORMAT(em.MAINT_TIME,'%Y-%m-%d') maintTime,
+            em.MAINT_MONEY maintMoney,
+            em.MAINT_RECORD maintRecord,
+            em.MAINT_STATE maintState,
+            em.MAINT_DESC maintDesc,
+            em.REMARK remark
+        from TB_EQUIP_MAINT em
+        left join tb_program p
+        ON em.program_code = p.program_code
         where 1=1
         <if test="obj.maintType != null and obj.maintType != ''">
-            and MAINT_TYPE = #{obj.maintType}
+            and em.MAINT_TYPE = #{obj.maintType}
         </if>
         <if test="obj.equipName != null and obj.equipName != ''">
-            and EQUIP_NAME = #{obj.equipName}
+            and em.EQUIP_NAME = #{obj.equipName}
         </if>
         <if test="obj.partsName != null and obj.partsName != ''">
-            and PARTS_NAME = #{obj.partsName}
+            and em.PARTS_NAME = #{obj.partsName}
         </if>
-        ORDER BY MAINT_TIME
+        <if test="obj.programCode != null and obj.programCode != ''">
+            and em.program_code = #{obj.programCode}
+        </if>
+        ORDER BY em.MAINT_TIME
     </select>
 
 </mapper>

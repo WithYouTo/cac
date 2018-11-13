@@ -4,32 +4,39 @@
 
     <select id="listLeave" resultType="java.util.Map" parameterType="com.qcap.cac.dto.AttenceSearchDto">
         SELECT
-        LEAVE_ID leaveId,
-        PERSON_ID personId,
-        WORK_NO workNo,
-        PERSON_NAME personName,
-        PERSON_MOBILE personMobile,
-        LEAVE_REASON leaveReason,
-        DATE_FORMAT(LEAVE_START_TIME,'%Y-%m-%d %H:%i:%S') leaveStartTime,
-        DATE_FORMAT(LEAVE_END_TIME,'%Y-%m-%d %H:%i:%S') leaveEndTime,
-        LEAVE_TOTAL_TIME leaveTotalTime,
-        LEAVE_STATUS leaveStatus,
-        REMARK remark
-        FROM TB_LEAVE
+        l.LEAVE_ID leaveId,
+        l.PERSON_ID personId,
+        l.WORK_NO workNo,
+        l.PERSON_NAME personName,
+        l.PERSON_MOBILE personMobile,
+        l.LEAVE_REASON leaveReason,
+        l.PROGRAM_CODE programCode,
+        p.PROGRAM_NAME programName,
+        DATE_FORMAT(l.LEAVE_START_TIME,'%Y-%m-%d %H:%i:%S') leaveStartTime,
+        DATE_FORMAT(l.LEAVE_END_TIME,'%Y-%m-%d %H:%i:%S') leaveEndTime,
+        l.LEAVE_TOTAL_TIME leaveTotalTime,
+        l.LEAVE_STATUS leaveStatus,
+        l.REMARK remark
+        FROM TB_LEAVE l
+        LEFT JOIN tb_program p
+        ON l.PROGRAM_CODE = p.PROGRAM_CODE
         WHERE 1=1
         <if test="obj.workNo != null and obj.workNo != ''">
-            and WORK_NO = #{obj.workNo}
+            and l.WORK_NO = #{obj.workNo}
         </if>
         <if test="obj.personName != null and obj.personName != ''">
-            and PERSON_NAME = #{obj.personName}
+            and l.PERSON_NAME = #{obj.personName}
         </if>
         <if test="obj.leaveStartTime != null and obj.leaveStartTime != ''">
-            and LEAVE_START_TIME &gt; substring(#{obj.leaveStartTime},1,19)
+            and l.LEAVE_START_TIME &gt; substring(#{obj.leaveStartTime},1,19)
         </if>
         <if test="obj.leaveStartTime != null and obj.leaveStartTime != ''">
-            and LEAVE_START_TIME &lt; substring(#{obj.leaveStartTime},22,19)
+            and l.LEAVE_START_TIME &lt; substring(#{obj.leaveStartTime},22,19)
         </if>
-        ORDER BY LEAVE_START_TIME
+        <if test="obj.programCode != null and obj.programCode != ''">
+            AND l.PROGRAM_CODE = #{obj.programCode}
+        </if>
+        ORDER BY l.LEAVE_START_TIME
     </select>
 
 </mapper>

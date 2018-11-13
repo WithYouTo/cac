@@ -5,6 +5,7 @@ public class EquipMaintSearchDto {
     private String maintType;
     private String equipName;
     private String partsName;
+    private String programCode;
 
     public String getMaintType() {
         return maintType;
@@ -30,12 +31,21 @@ public class EquipMaintSearchDto {
         this.partsName = partsName;
     }
 
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
+
     @Override
     public String toString() {
         return "EquipMaintSearchDto{" +
                 "maintType='" + maintType + '\'' +
                 ", equipName='" + equipName + '\'' +
                 ", partsName='" + partsName + '\'' +
+                ", programCode='" + programCode + '\'' +
                 '}';
     }
 }

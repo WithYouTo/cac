@@ -6,6 +6,7 @@ public class EquipRepairSearchDto {
     private String equipName;
     private String repairTime;
     private String status;
+    private String programCode;
 
     public String getEquipType() {
         return equipType;
@@ -39,6 +40,14 @@ public class EquipRepairSearchDto {
         this.status = status;
     }
 
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
+
     @Override
     public String toString() {
         return "EquipRepairSearchDto{" +
@@ -46,6 +55,7 @@ public class EquipRepairSearchDto {
                 ", equipName='" + equipName + '\'' +
                 ", repairTime='" + repairTime + '\'' +
                 ", status='" + status + '\'' +
+                ", programCode='" + programCode + '\'' +
                 '}';
     }
 }

@@ -4,28 +4,35 @@
 
     <select id="listAttence" resultType="java.util.Map" parameterType="com.qcap.cac.dto.AttenceSearchDto">
         SELECT
-        ATTENCE_ID attenceId,
-        ORG_NAME orgName,
-        PERSON_ID personId,
-        WORK_NO workNo,
-        PERSON_NAME personName,
-        PERSON_MOBILE personMobile,
-        DATE_FORMAT(ATTENCE_TIME,'%Y-%m-%d %H:%i:%S') attenceTime,
-        REMARK remark
-        FROM TB_ATTENCE
+        a.ATTENCE_ID attenceId,
+        a.ORG_NAME orgName,
+        a.PERSON_ID personId,
+        a.WORK_NO workNo,
+        a.PERSON_NAME personName,
+        a.PERSON_MOBILE personMobile,
+        p.PROGRAM_NAME programName,
+        a.PROGRAM_CODE programCode,
+        DATE_FORMAT(a.ATTENCE_TIME,'%Y-%m-%d %H:%i:%S') attenceTime,
+        a.REMARK remark
+        FROM TB_ATTENCE a
+        LEFT JOIN tb_program p
+        ON a.PROGRAM_CODE = p.PROGRAM_CODE
         WHERE 1=1
         <if test="obj.workNo != null and obj.workNo != ''">
-            and WORK_NO = #{obj.workNo}
+            and a.WORK_NO = #{obj.workNo}
         </if>
         <if test="obj.personName != null and obj.personName != ''">
-            and PERSON_NAME = #{obj.personName}
+            and a.PERSON_NAME = #{obj.personName}
         </if>
         <if test="obj.attenceTime != null and obj.attenceTime != ''">
-            and ATTENCE_TIME &gt; substring(#{obj.attenceTime},1,19)
+            and a.ATTENCE_TIME &gt; substring(#{obj.attenceTime},1,19)
         </if>
         <if test="obj.attenceTime != null and obj.attenceTime != ''">
-            and ATTENCE_TIME &lt; substring(#{obj.attenceTime},22,19)
+            and a.ATTENCE_TIME &lt; substring(#{obj.attenceTime},22,19)
         </if>
-        ORDER BY ATTENCE_TIME
+        <if test="obj.programCode != null and obj.programCode != ''">
+            and a.PROGRAM_CODE = #{obj.programCode}
+        </if>
+        ORDER BY a.ATTENCE_TIME
     </select>
 </mapper>

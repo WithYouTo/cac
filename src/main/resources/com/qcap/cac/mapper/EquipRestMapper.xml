@@ -62,7 +62,7 @@
 		b.EQUIP_NAME equipName,
 		b.IMG_URL url,
 		b.STORE_AREA storeAreaName,
-		a.STATUS status
+		b.EQUIP_WORK_STATE status
 		FROM
 		tb_equip_use a
 		LEFT JOIN tb_equip b
@@ -70,7 +70,7 @@
 		WHERE
 		b.DEL_FLAG = 'NORMAL'
 		AND
-		a.STATUS = 'INUSE'
+		b.EQUIP_WORK_STATE = 'INUSE'
 		AND
 		a.PERSON_NO = #{employeeCode}
 	</select>

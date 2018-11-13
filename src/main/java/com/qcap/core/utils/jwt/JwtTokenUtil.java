@@ -140,7 +140,7 @@ public class JwtTokenUtil {
 	 */
 	public String doGenerateToken(String subject) {
 		final Date createdDate = new Date();
-		final Date expirationDate = new Date(createdDate.getTime() + jwtProperties.getExpiration() * 1000000);
+		final Date expirationDate = new Date(createdDate.getTime() + jwtProperties.getExpiration()* 1000);
 
 		return Jwts.builder().setSubject(subject).setIssuedAt(createdDate).setExpiration(expirationDate)
 				.signWith(SignatureAlgorithm.HS512, jwtProperties.getSecret()).compact();

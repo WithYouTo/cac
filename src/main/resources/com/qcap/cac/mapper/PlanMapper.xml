@@ -4,45 +4,53 @@
 
 	<select id="selectPlanByPage" parameterType="com.qcap.cac.dto.QueryPlanListDto" resultType="java.util.Map">
 		SELECT
-			PLAN_ID planId,
-			AREA_CODE areaCode,
+			T.PLAN_ID planId,
+			T.AREA_CODE areaCode,
 			(SELECT A.AREA_NAME FROM tb_area A WHERE A.AREA_CODE = T.AREA_CODE) areaName,
-			STANDARD_CODE standardCode,
+			T.STANDARD_CODE standardCode,
 			(SELECT A.STANDARD_NAME FROM tb_area_standard A WHERE A.STANDARD_CODE = T.STANDARD_CODE) standardName,
-			PLAN_TIME_TYPE planTimeType,
-			MONTH month,
-			DAY day,
-			WEEK week,
-			START_TIME startTime,
-			END_TIME endTime,
-			PREV_TASK_DONE_DATE prevTaskDoneDate,
-			REMARK1 remark1,
-			REMARK2 remark2,
-			REMARK3 remark3,
-			CREATE_EMP createEmp,
-			CREATE_DATE createDate,
-			UPDATE_EMP updateEmp,
-			UPDATE_DATE updateDate,
-			VERSION version,
-			CHECK_FLAG checkFlag,
-			UPLOAD_PIC_FLAG uploadPicFlag,
-			START_SCAN_FLAG startScanFlag,
-			END_SCAN_FLAG endScanFlag
+			T.PLAN_TIME_TYPE planTimeType,
+			T.MONTH month,
+			T.DAY day,
+			T.WEEK week,
+			T.START_TIME startTime,
+			T.END_TIME endTime,
+			T.PREV_TASK_DONE_DATE prevTaskDoneDate,
+			T.REMARK1 remark1,
+			T.REMARK2 remark2,
+			T.REMARK3 remark3,
+			T.CREATE_EMP createEmp,
+			T.CREATE_DATE createDate,
+			T.UPDATE_EMP updateEmp,
+			T.UPDATE_DATE updateDate,
+			T.VERSION version,
+			T.CHECK_FLAG checkFlag,
+			T.UPLOAD_PIC_FLAG uploadPicFlag,
+			T.START_SCAN_FLAG startScanFlag,
+			T.END_SCAN_FLAG endScanFlag,
+			T.program_code programCode,
+			p.program_name programName
 		FROM
 			tb_plan T
+		LEFT JOIN
+			tb_program p
+		ON T.program_code = p.program_code
 		<where>
 			<if test="param.areaCode != null and param.areaCode != ''">
-				AND AREA_CODE = #{param.areaCode}
+				AND T.AREA_CODE = #{param.areaCode}
 			</if>
 			<if test="param.standardCode != null and param.standardCode != ''">
-				AND STANDARD_CODE = #{param.standardCode}
+				AND T.STANDARD_CODE = #{param.standardCode}
 			</if>
 			<if test="param.planTimeType != null and param.planTimeType != ''">
-				AND PLAN_TIME_TYPE = #{param.planTimeType}
+				AND T.PLAN_TIME_TYPE = #{param.planTimeType}
 			</if>
 			<if test="param.time != null and param.time != ''">
-				AND START_TIME &gt;= substring(#{param.time},1,8)
-				AND END_TIME &lt;= substring(#{param.time},12,19)
+				AND T.START_TIME &gt;= substring(#{param.time},1,8)
+				AND T.END_TIME &lt;= substring(#{param.time},12,19)
+			</if>
+			<if test="param.programCode != null and param.programCode != ''">
+				AND T.PLAN_TIME_TYPE = #{param.planTimeType}
 			</if>
 		</where>
 	</select>

@@ -2,13 +2,20 @@ package com.qcap.core.filter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.pagehelper.util.StringUtil;
+import com.qcap.core.entity.TbManager;
+import com.qcap.core.utils.AppUtils;
+import com.qcap.core.utils.RedisUtil;
+import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
@@ -39,6 +46,12 @@ public class AuthFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
+	@Resource
+	private JwtProperties jwtProperties;
+
+	@Resource
+	private RedisUtil redisUtil;
+
 	@Autowired
 	private RestProperties restProperties;
 
@@ -55,10 +68,25 @@ public class AuthFilter extends OncePerRequestFilter {
 				List<String> noCheckUrlList = this.getNoCheckUrl();
 				if (noCheckUrlList.stream().noneMatch(e -> antPathMatcher.match(e, servletPath))) {
 					String token = request.getHeader(JwtProperties.getTokenHeader());
+
 					if (StringUtils.isNotEmpty(token)) {
 
 						// 验证token是否过期
 						jwtTokenUtil.isTokenExpired(token);
+//						if(jwtTokenUtil.isTokenExpired(token)){
+//							final Date createdDate = new Date();
+//							final Date expirationDate = new Date(createdDate.getTime() + 10 * 1000);
+//							Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getBody().setExpiration(expirationDate);
+//						}else{
+//							return;
+//						}
+						//						String managerId = jwtTokenUtil.getUsernameFromToken(token);
+//						String m = redisUtil.get(AppUtils.getApplicationName() + ":manager:" + managerId);
+//						if(StringUtil.isEmpty(m)){
+//							return;
+//						}
+//						TbManager m = redisUtil.get(AppUtils.getApplicationName() + ":manager:" + managerId, TbManager.class);
+
 					} else {
 						// header没有token
 						isAjaxOrRestful(servletPath, request, response);

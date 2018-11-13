@@ -4,39 +4,47 @@
 
 	<select id="selectPlanEventByPage" parameterType="com.qcap.cac.dto.QueryPlanEventListDto" resultType="java.util.Map">
 		SELECT
-			PLAN_EVENT_ID planEventId,
-			AREA_CODE areaCode,
+			T.PLAN_EVENT_ID planEventId,
+			T.AREA_CODE areaCode,
 			(SELECT A.AREA_NAME FROM tb_area A WHERE A.AREA_CODE = T.AREA_CODE) areaName,
-			STANDARD_CODE standardCode,
+			T.STANDARD_CODE standardCode,
 			(SELECT A.STANDARD_NAME FROM tb_area_standard A WHERE A.STANDARD_CODE = T.STANDARD_CODE) standardName,
-			EVENT_TYPE eventType,
-			GUARANTEE_TYPE guaranteeType,
-			REMARK1 remark1,
-			REMARK2 remark2,
-			REMARK3 remark3,
-			CREATE_EMP createEmp,
-			CREATE_DATE createDate,
-			UPDATE_EMP updateEmp,
-			UPDATE_DATE updateDate,
-			VERSION version,
-			CHECK_FLAG checkFlag,
-			UPLOAD_PIC_FLAG uploadPicFlag,
-			START_SCAN_FLAG startScanFlag,
-			END_SCAN_FLAG endScanFlag
+			T.EVENT_TYPE eventType,
+			T.GUARANTEE_TYPE guaranteeType,
+			T.REMARK1 remark1,
+			T.REMARK2 remark2,
+			T.REMARK3 remark3,
+			T.CREATE_EMP createEmp,
+			T.CREATE_DATE createDate,
+			T.UPDATE_EMP updateEmp,
+			T.UPDATE_DATE updateDate,
+			T.VERSION version,
+			T.CHECK_FLAG checkFlag,
+			T.UPLOAD_PIC_FLAG uploadPicFlag,
+			T.START_SCAN_FLAG startScanFlag,
+			T.END_SCAN_FLAG endScanFlag,
+			T.program_code programCode,
+			p.program_name programName
 		FROM
 			tb_plan_event T
+		LEFT JOIN
+			tb_program p
+		ON T.program_code = p.program_code
 		<where>
 			<if test="param.areaCode != null and param.areaCode != ''">
-				AND AREA_CODE = #{param.areaCode}
+				AND T.AREA_CODE = #{param.areaCode}
 			</if>
 			<if test="param.standardCode != null and param.standardCode != ''">
-				AND STANDARD_CODE = #{param.standardCode}
+				AND T.STANDARD_CODE = #{param.standardCode}
 			</if>
 			<if test="param.eventType != null and param.eventType != ''">
-				AND EVENT_TYPE = #{param.eventType}
+				AND T.EVENT_TYPE = #{param.eventType}
 			</if>
 			<if test="param.guaranteeType != null and param.guaranteeType != ''">
-				AND GUARANTEE_TYPE = #{param.guaranteeType}
+				AND T.GUARANTEE_TYPE = #{param.guaranteeType}
+			</if>
+			<if test="param.programCode != null and param.programCode != ''">
+				AND T.program_code = #{param.programCode}
 			</if>
 		</where>
 	</select>
