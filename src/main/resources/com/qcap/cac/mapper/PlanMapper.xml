@@ -50,7 +50,7 @@
 				AND T.END_TIME &lt;= substring(#{param.time},12,19)
 			</if>
 			<if test="param.programCode != null and param.programCode != ''">
-				AND T.PLAN_TIME_TYPE = #{param.planTimeType}
+				AND T.program_code = #{param.programCode}
 			</if>
 		</where>
 	</select>
@@ -84,7 +84,40 @@
 		WHERE 
 			PLAN_ID = #{planId}
 	</select>
-	
+
+	<select id="getPlanByPlan"  parameterType="com.qcap.cac.entity.TbPlan" resultType="com.qcap.cac.entity.TbPlan">
+		SELECT
+			AREA_CODE areaCode,
+			STANDARD_CODE standardCode,
+			PLAN_TIME_TYPE planTimeType,
+			MONTH month,
+			DAY day,
+			WEEK week,
+			START_TIME startTime,
+			END_TIME endTime,
+			PREV_TASK_DONE_DATE prevTaskDoneDate,
+			CHECK_FLAG checkFlag,
+			UPLOAD_PIC_FLAG uploadPicFlag,
+			START_SCAN_FLAG startScanFlag,
+			END_SCAN_FLAG endScanFlag
+		FROM
+			tb_plan T
+		WHERE
+			AREA_CODE = #{areaCode}
+			AND STANDARD_CODE = #{standardCode}
+			AND PLAN_TIME_TYPE = #{planTimeType}
+			AND MONTH = #{month}
+			AND DAY = #{day}
+			AND WEEK = #{week}
+			AND START_TIME = #{startTime}
+			AND END_TIME = #{endTime}
+			AND PREV_TASK_DONE_DATE = #{prevTaskDoneDate}
+			AND CHECK_FLAG = #{checkFlag}
+			AND UPLOAD_PIC_FLAG = #{uploadPicFlag}
+			AND START_SCAN_FLAG = #{startScanFlag}
+			AND END_SCAN_FLAG = #{endScanFlag}
+	</select>
+
 	<update id="updatePlan" parameterType="com.qcap.cac.entity.TbPlan">
 		UPDATE tb_plan SET
 			PLAN_ID  = #{planId},

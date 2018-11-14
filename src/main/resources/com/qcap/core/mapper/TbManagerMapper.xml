@@ -11,6 +11,7 @@
         DATE_FORMAT(m.create_date,'%Y-%m-%d %H:%i:%S') createTime,
         m.status,
         pro.program_name programName,
+        pro.PROGRAM_CODE programCode,
         o.fullnames orgName,
         info.USER_ID userId,
         info.USER_INFO_ID userInfoId,
@@ -60,6 +61,10 @@
         </if>
         <if test="map.programCode!=null and map.programCode!=''">
             and pro.PROGRAM_CODE = #{map.programCode}
+        </if>
+        <if test="map.orgCode!=null and map.orgCode!=''">
+            and o.code like CONCAT(#{map.orgCode},'%')
+            or o.code is null
         </if>
         ORDER BY info.WORK_NO
     </select>

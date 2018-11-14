@@ -30,6 +30,8 @@ public class ZTreeNode {
 	 */
 	private Boolean open;
 
+	private Boolean isOpen;
+
 	private String rootName = "top";
 	/**
 	 * 是否被选中
@@ -77,11 +79,11 @@ public class ZTreeNode {
 	}
 
 	public Boolean getIsOpen() {
-		return open;
+		return isOpen;
 	}
 
-	public void setIsOpen(Boolean open) {
-		this.open = open;
+	public void setIsOpen(String isOpen) {
+		this.isOpen = BooleanUtils.toBoolean(isOpen);
 	}
 
 	public Boolean getChecked() {
@@ -138,6 +140,7 @@ public class ZTreeNode {
 		zTreeNode.setId("0");
 		zTreeNode.setName("顶级");
 		zTreeNode.setOpen("true");
+		zTreeNode.setIsOpen("true");
 		zTreeNode.setPid("top");
 		zTreeNode.setChildren(null);
 		return zTreeNode;

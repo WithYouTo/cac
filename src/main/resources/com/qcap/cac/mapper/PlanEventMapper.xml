@@ -48,6 +48,45 @@
 			</if>
 		</where>
 	</select>
+
+	<select id="getPlanEventByPlanEvent" parameterType="com.qcap.cac.entity.TbPlanEvent" resultType="com.qcap.cac.entity.TbPlanEvent">
+		SELECT
+			PLAN_EVENT_ID planEventId,
+			AREA_CODE areaCode,
+			STANDARD_CODE standardCode,
+			EVENT_TYPE eventType,
+			GUARANTEE_TYPE guaranteeType,
+			REMARK1 remark1,
+			REMARK2 remark2,
+			REMARK3 remark3,
+			CREATE_EMP createEmp,
+			CREATE_DATE createDate,
+			UPDATE_EMP updateEmp,
+			UPDATE_DATE updateDate,
+			VERSION version,
+			CHECK_FLAG checkFlag,
+			UPLOAD_PIC_FLAG uploadPicFlag,
+			START_SCAN_FLAG startScanFlag,
+			END_SCAN_FLAG endScanFlag
+		FROM
+			tb_plan_event T
+		WHERE
+			AREA_CODE = #{areaCode}
+			AND
+			STANDARD_CODE = #{standardCode}
+			AND
+			EVENT_TYPE = #{eventType}
+			AND
+			GUARANTEE_TYPE = #{guaranteeType}
+			AND
+			CHECK_FLAG = #{checkFlag}
+			AND
+			UPLOAD_PIC_FLAG = #{uploadPicFlag}
+			AND
+			START_SCAN_FLAG = #{startScanFlag}
+			AND
+			END_SCAN_FLAG = #{endScanFlag}
+	</select>
 	
 	<select id="selectPlanEventById" parameterType="String" resultType="com.qcap.cac.entity.TbPlanEvent">
 		SELECT

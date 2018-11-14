@@ -6,6 +6,7 @@ public class UserInsertDto {
 
     private String userInfoId;
     private String userId;
+    private String programCode;
     private String userName;
     private String workNo;
     private String flower;
@@ -50,6 +51,14 @@ public class UserInsertDto {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getUserName() {
@@ -290,6 +299,7 @@ public class UserInsertDto {
         return "UserInsertDto{" +
                 "userInfoId='" + userInfoId + '\'' +
                 ", userId='" + userId + '\'' +
+                ", programCode='" + programCode + '\'' +
                 ", userName='" + userName + '\'' +
                 ", workNo='" + workNo + '\'' +
                 ", flower='" + flower + '\'' +

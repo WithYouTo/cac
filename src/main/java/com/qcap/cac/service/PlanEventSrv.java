@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.dto.BatchUpdatePlanEventDto;
 import com.qcap.cac.dto.PlanEventDto;
 import com.qcap.cac.dto.QueryPlanEventListDto;
+import com.qcap.core.model.ResParams;
 
 public interface PlanEventSrv {
 

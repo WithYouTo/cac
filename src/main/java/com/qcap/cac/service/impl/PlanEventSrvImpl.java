@@ -3,9 +3,11 @@ package com.qcap.cac.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import com.qcap.core.exception.BussinessException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -52,9 +54,13 @@ public class PlanEventSrvImpl implements PlanEventSrv {
 		BeanUtils.copyProperties(planEvent, planEventDto);
 		planEvent.setPlanEventId(UUIDUtils.getUUID());
 		planEvent.setRemark1(planEventDto.getRemark());
-
-		planEvent = EntityTools.setCreateEmpAndTime(planEvent);
-		planEventMapper.insert(planEvent);
+		TbPlanEvent pe = this.planEventMapper.getPlanEventByPlanEvent(planEvent);
+		if(Objects.isNull(pe)){
+			planEvent = EntityTools.setCreateEmpAndTime(planEvent);
+			planEventMapper.insert(planEvent);
+		}else{
+			throw new BaseException(CommonCodeConstant.PLAN_DUPLICATE);
+		}
 	}
 
 	@Override

@@ -394,6 +394,16 @@ public final class AppUtils {
 	}
 
 	/**
+	 * 获取当前登录对象id TbManager.Id
+	 *
+	 * @date 2018/6/19 10:15
+	 * @return java.lang.String
+	 */
+	public static String getLoginUserId() {
+		return getLoginUser() == null ? "" : getLoginUser().getId();
+	}
+
+	/**
 	 * 获取随机唯一ID
 	 */
 	public final static String getUUID() {

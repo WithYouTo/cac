@@ -19,4 +19,6 @@ import com.qcap.core.entity.TbManagerOrg;
 @Repository
 public interface TbManagerOrgMapper extends BaseMapper<TbManagerOrg> {
 	List<String> getManagerIdByOrgId(@Param("orgId") String orgId);
+
+    String getOrgFullCodeByUserId(@Param("id") String id);
 }

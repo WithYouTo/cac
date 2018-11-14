@@ -24,4 +24,6 @@ public interface PlanEventMapper extends BaseMapper<TbPlanEvent> {
 	int deletePlanEventById(String planEventId);
 
 	void batchUpdatePlanEvent(List<TbPlanEvent> planEventList);
+
+    TbPlanEvent getPlanEventByPlanEvent(TbPlanEvent planEvent);
 }

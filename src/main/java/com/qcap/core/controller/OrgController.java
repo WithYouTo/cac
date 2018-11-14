@@ -108,7 +108,7 @@ public class OrgController {
 	@PostMapping("/selectOrgTreeList")
 	public ResParams selectOrgTreeList() {
 		List<ZTreeNode> orgTreeList = tbOrgService.getOrgTreeList();
-		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功！", buildByRecursive(orgTreeList));
+		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询成功！", orgTreeList);
 	}
 
 	/**

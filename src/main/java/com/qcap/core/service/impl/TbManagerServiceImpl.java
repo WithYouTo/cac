@@ -108,6 +108,12 @@ public class TbManagerServiceImpl implements ITbManagerService {
 
 	@Override
 	public void getUserList(IPage<Map<String, Object>> page, Map<String, Object> params) {
+		String programCode = params.get("programCode").toString();
+		if("".equals(programCode)){
+			String id = AppUtils.getLoginUserId();
+			String orgCode = tbManagerOrgMapper.getOrgFullCodeByUserId(id);
+			params.put("orgCode",orgCode);
+		}
 		List<Map<String, Object>> list = tbManagerMapper.getTbMangerList(page, params);
 		for (Map<String, Object> map : list) {
 			String id = Objects.toString(map.get("id"));

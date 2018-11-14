@@ -58,18 +58,26 @@ public class TbOrgServiceImpl implements ITbOrgService {
 
 	@Override
 	public List<ZTreeNode> getOrgTreeList() {
+//		List<ZTreeNode> target = new ArrayList<>();
 		List<ZTreeNode> orgTreeList = tbOrgMapper.getOrgTreeList();
-		ZTreeNode parent = ZTreeNode.createParent();
-		parent.setId("1");
-		orgTreeList.add(parent);
-		return orgTreeList;
+//		ZTreeNode parent = ZTreeNode.createParent();
+//		parent.setId("1");
+//		orgTreeList.add(parent);
+		orgTreeList.add(ZTreeNode.createParent());
+		return buildZTreeNodeByRecursive(orgTreeList, new ArrayList<>(), e -> Objects.equals("0", e.getPid()));
+//		return buildZTreeNodeByRecursive(orgTreeList, target, e -> Objects.equals("1", e.getPid()));
 	}
 
 	@Override
 	public List<ZTreeNode> getOrgTreeListByManagerId(String managerId) {
 		List<ZTreeNode> target = new ArrayList<>();
 		List<ZTreeNode> list = tbOrgMapper.getOrgTreeListByManagerId(managerId);
-		return buildZTreeNodeByRecursive(list, target, e -> Objects.equals("1", e.getPid()));
+//		list.get(0).setOpen("true");
+//		list.get(0).setIsOpen("true");
+		List<ZTreeNode> l = buildZTreeNodeByRecursive(list, target, e -> Objects.equals("1", e.getPid()));
+		l.get(0).setIsOpen("true");
+		l.get(0).setOpen("true");
+		return l;
 	}
 
 	@Override

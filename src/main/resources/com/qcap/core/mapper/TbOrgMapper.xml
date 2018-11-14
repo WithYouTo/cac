@@ -10,6 +10,9 @@
                     ELSE m2.code END) AS pid,
                (CASE
                     WHEN (m2.code = 0 OR m2.code IS NULL) THEN 'true'
+                    ELSE 'false' END) AS isOpen,
+                (CASE
+                    WHEN (m2.code = 0 OR m2.code IS NULL) THEN 'true'
                     ELSE 'false' END) AS open
         FROM tb_org m1
                  LEFT join tb_org m2 ON m1.parent_code = m2.code

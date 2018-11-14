@@ -82,7 +82,9 @@ public class TbMenuServiceImpl implements ITbMenuService {
 	public List<ZTreeNode> getMenuTreeList() {
 		List<ZTreeNode> list = tbMenuMapper.getMenuTreeList();
 		list.add(ZTreeNode.createParent());
-		return buildZTreeNodeByRecursive(list, new ArrayList<>(), e -> Objects.equals("0", e.getPid()));
+		List<ZTreeNode> l = buildZTreeNodeByRecursive(list, new ArrayList<>(), e -> Objects.equals("0", e.getPid()));
+		l.get(0).setOpen("true");
+		return l;
 	}
 
 	@Override

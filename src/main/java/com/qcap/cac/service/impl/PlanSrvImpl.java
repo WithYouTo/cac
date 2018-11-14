@@ -3,6 +3,7 @@ package com.qcap.cac.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -93,8 +94,15 @@ public class PlanSrvImpl implements PlanSrv {
 					plan.setDay(null);
 				}
 
-				plan = EntityTools.setCreateEmpAndTime(plan);
-				planMapper.insert(plan);
+				TbPlan p = this.planMapper.getPlanByPlan(plan);
+				if(Objects.isNull(p)){
+					plan = EntityTools.setCreateEmpAndTime(plan);
+					planMapper.insert(plan);
+				}else{
+					throw new BaseException(CommonCodeConstant.PLAN_DUPLICATE);
+				}
+
+
 			}
 		}
 	}

@@ -24,6 +24,7 @@ public class TbUserInfo implements Serializable {
     private String userInfoId;
     private String userId;
     private String userName;
+    private String programCode;
     private String workNo;
     private String flower;
     private String winterClo;
@@ -74,6 +75,14 @@ public class TbUserInfo implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getUserName() {
@@ -368,6 +377,7 @@ public class TbUserInfo implements Serializable {
                 "userInfoId='" + userInfoId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", userName='" + userName + '\'' +
+                ", programCode='" + programCode + '\'' +
                 ", workNo='" + workNo + '\'' +
                 ", flower='" + flower + '\'' +
                 ", winterClo='" + winterClo + '\'' +
