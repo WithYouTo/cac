@@ -43,7 +43,7 @@
 	AND START_TIME &lt; #{endTime}
 	AND FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
 	</select>
-	
+
 <!-- 	<select id="queryTaskIntro" parameterType="com.qcap.cac.dto.AppTaskRestDto" resultType="Map">
 	SELECT STANDARD_NAME AS standardName,TASK_CODE AS taskCode,
 	CASE WHEN TASK_TYPE='TEMP' THEN '临时'
@@ -56,7 +56,7 @@
 	FROM tb_task WHERE FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
 	AND TASK_STATUS =#{taskStatus}
 	</select> -->
-	
+
 	<select id="selectTaskIntro" parameterType="Map" resultType="Map">
 		SELECT
 		m.STANDARD_CODE standardCode,
@@ -118,7 +118,7 @@
 	        <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)  and  @com.qcap.cac.tools.Ognl@isNotEmpty(startTimePage) ">
 		        AND CONCAT(UNIX_TIMESTAMP(m.START_TIME),m.LINE_NO) &gt;CONCAT(UNIX_TIMESTAMP(#{startTimePage}),#{lineNo})
 	        </if>
-        ORDER BY m.START_TIME,m.LINE_NO 
+        ORDER BY m.START_TIME,m.LINE_NO
         </if>
         <if test=' pageType =="queryHistory" '>
         	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)  and  @com.qcap.cac.tools.Ognl@isNotEmpty(startTimePage) ">
@@ -128,7 +128,7 @@
         </if>
         LIMIT 0,10
 	</select>
-	
+
 	<select id="queryTaskDetail" parameterType="String" resultType="Map">
 	SELECT
 	m.STANDARD_CODE standardCode,
@@ -163,8 +163,8 @@
 	CASE WHEN m.CHECK_FLAG ='MUST' THEN '是'
 	WHEN m.CHECK_FLAG ='OPTIONAL' THEN '否'
 	END AS checkFlagName,
-	n.UPLOAD_PIC_FLAG AS uploadPicFlag,
-	CASE WHEN n.UPLOAD_PIC_FLAG ='MUST' THEN '是'
+	m.UPLOAD_PIC_FLAG AS uploadPicFlag,
+	CASE WHEN m.UPLOAD_PIC_FLAG ='MUST' THEN '是'
 	WHEN m.UPLOAD_PIC_FLAG ='OPTIONAL' THEN '否'
 	END AS uploadPicFlagName,
 	m.START_SCAN_FLAG  AS  startScanFlag,
@@ -177,7 +177,7 @@
 	ON m.STANDARD_CODE = n.STANDARD_CODE
 	WHERE m.TASK_CODE = #{taskCode}
 	</select>
-	
+
 	<update id="updateTask" parameterType="com.qcap.cac.dto.AppTaskUpdateReq" >
 	    update tb_task
 	    <set>
@@ -211,13 +211,13 @@
 	    </set>
 	    where TASK_CODE = #{taskCode}
 	</update>
-	
+
 	<select id="selectStandardDetailList" parameterType="String" resultType="Map">
 	SELECT STANDARD_DETAIL_ID AS id, MATERIAL AS material 
 	FROM tb_area_standard_detail 
 	where STANDARD_CODE =#{standardCode}
 	</select>
-	
+
 	<select id="selectStandardDetailInfo" parameterType="String" resultType="Map">
 	SELECT
 	m.STANDARD_DETAIL_ID  AS  standardDetailId,
@@ -238,7 +238,7 @@
 		FROM tb_area_position
 		where POSITION_CODE = #{positionCode}
 	</select>
-	
+
 	<select id="queryCheckTaskItem" parameterType="Map" resultType="Map">
 		SELECT COUNT(1) taskNum,CASE WHEN CHECK_STATUS ='TOCHECK' THEN 'toCheckItem'
 		WHEN CHECK_STATUS ='QUALIFIED' THEN 'checkedItem'  END AS taskItem
@@ -290,6 +290,7 @@
 		m.STANDARD_NAME  AS  standardName,
 		m.SHIFT  AS  shift,
 		m.SPEC  AS  spec,
+		m.PROGRAM_CODE AS programCode,
 		m.EMPLOYEE_CODE  AS  employeeCode,
 		m.EMPLOYEE_NAME  AS  employeeName,
 		m.EMPLOYEE_TEL  AS  employeeTel,
@@ -301,7 +302,6 @@
 		m.UPLOAD_PIC_FLAG  AS  uploadPicFlag,
 		m.START_SCAN_FLAG  AS  startScanFlag,
     	m.END_SCAN_FLAG  AS  endScanFlag,
-		m.TASK_IMG_URL AS taskImgUrl,
 		m.REMARK1  AS  remark1,
 		m.REMARK2  AS  remark2,
 		m.REMARK3  AS  remark3,
@@ -331,7 +331,7 @@
 		SELECT
 		m.ARRANGE_SHIFT_ID  AS  arrangeShiftId,
 		m.SHIFT  AS  shift,
-		(SELECT DESC1_ FROM tbpubcode01 
+		(SELECT DESC1_ FROM tbpubcode01
 			WHERE CONFIG_CODE_ ='SHIFT' AND DESC_ = m.SHIFT)AS shiftName,
 		m.POSITION_CODE  AS  positionCode,
 		m.POSITION_NAME  AS  positionName,
@@ -362,15 +362,15 @@
 		AND START_TIME &gt;= #{startTimeStr}
 		AND START_TIME &lt; #{endTimeStr}
 	</update>
-	
+
 	<select id="selectIfTaskExist" parameterType="com.qcap.cac.dto.AppTaskCheckTaskRestReq" resultType="String">
-	SELECT 
-	TASK_ID 
-	FROM tb_task 
-	where TASK_CODE =#{taskCode} 
+	SELECT
+	TASK_ID
+	FROM tb_task
+	where TASK_CODE =#{taskCode}
 	AND  INSTR ((
-			SELECT AREA_CODE 
-			FROM tb_area_position 
+			SELECT AREA_CODE
+			FROM tb_area_position
 			where POSITION_CODE =#{positionCode}
 			<if test=' positionType != "3" '>
 			AND POSITION_TYPE != 3 ) ,AREA_CODE)
@@ -379,7 +379,7 @@
 			AND POSITION_TYPE = 3 ) ,AREA_CODE)
 			</if>
 	</select>
-	
+
 	<select id="selectIfCleanerHaveTasks" parameterType="Map" resultType="String">
 	SELECT
 		TASK_CODE
@@ -390,7 +390,7 @@
 	AND START_TIME &gt;= #{startTime}
 	AND START_TIME &lt; #{endTime}
 	</select>
-	
+
 	  <insert id="insertTaskDelay" parameterType="com.qcap.cac.entity.TbTaskDelay" >
     insert into tb_task_delay (TASK_DELAY_ID, TASK_CODE, DELAY_DAYS, 
       OPERATION_DATE, REMARK1, REMARK2, 
@@ -403,7 +403,7 @@
       #{updateDate}, #{updateEmp}, #{version}
       )
   </insert>
-  
+
   <update id="updateSpecialTask" parameterType="Map">
   UPDATE tb_task SET
 	START_TIME =#{startTime},
@@ -411,7 +411,7 @@
 	WHERE TASK_TYPE ='SPECIAL'
 	AND TASK_CODE =#{taskCode}
   </update>
-  
+
   <select id="selectTaskTime" parameterType="String" resultType="Map">
 	SELECT 
 	DATE_FORMAT(START_TIME,'%Y-%m-%d %T') AS startTime,
@@ -420,7 +420,7 @@
 	FROM tb_task 
 	WHERE TASK_CODE =#{taskCode}
   </select>
-  
+
   <select id="selectSpecialTaskTimeType" parameterType="String" resultType="String">
   SELECT n.PLAN_TIME_TYPE AS planTimeType FROM tb_task m LEFT JOIN tb_plan n
 	ON m.PLAN_ID = n.PLAN_ID

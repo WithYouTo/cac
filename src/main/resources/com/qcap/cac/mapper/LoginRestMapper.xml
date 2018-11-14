@@ -73,6 +73,7 @@
 
 	<select id="getUserListByPositionCode" resultType="com.qcap.cac.dto.UserListResp">
 		SELECT
+		DISTINCT
 		a.id id,
 		a.name employeeName,
 		a.account employeeCode
@@ -81,8 +82,11 @@
 		on a.account = b.employee_code
 		WHERE
 	  	b.month = #{month}
-		<if test="positionCode != null and positionCode != ''">
+		<if test=' positionCode != null and positionCode !="" '>
 			AND b.position_code = #{positionCode}
+		</if>
+		<if test=' shift != null and shift !="" '>
+			AND b.SHIFT = #{shift}
 		</if>
 		AND DELETE_FLAG = 'NORMAL'
 	</select>

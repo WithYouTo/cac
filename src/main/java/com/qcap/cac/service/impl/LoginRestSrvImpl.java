@@ -1,5 +1,19 @@
 package com.qcap.cac.service.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSONObject;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dao.LoginRestMapper;
@@ -18,14 +32,6 @@ import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.Md5Util;
 import com.qcap.core.utils.RedisUtil;
 import com.qcap.core.utils.jwt.JwtTokenUtil;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Service
 @Transactional
@@ -136,10 +142,11 @@ public class LoginRestSrvImpl implements LoginRestSrv {
         String orgCode = userListReq.getOrgCode();
         String positionCode = userListReq.getPositionCode();
         String roleNum = userListReq.getRoleNum();
+        String shift =userListReq.getShift();
 
 //        Set<UserListResp> set = new HashSet<UserListResp>();
-        if(!Objects.isNull(positionCode) && !("").equals(positionCode)){
-            List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s);
+        if(StringUtils.isNotBlank(positionCode) || StringUtils.isNotBlank(shift)){
+            List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s,shift);
             return poList;
         }else if (!("").equals(roleNum) && !Objects.isNull(roleNum)){
             List<UserListResp> roleList = this.loginRestMapper.getUserListByOrgCode(roleNum);

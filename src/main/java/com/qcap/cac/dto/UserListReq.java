@@ -12,8 +12,19 @@ public class UserListReq {
 
     @ApiModelProperty(value="角色编码")
     private String roleNum;
+    
+    @ApiModelProperty(value="班次")
+    private String shift;
 
-    public String getRoleNum() {
+    public String getShift() {
+		return shift;
+	}
+
+	public void setShift(String shift) {
+		this.shift = shift;
+	}
+
+	public String getRoleNum() {
         return roleNum;
     }
 

@@ -151,7 +151,7 @@ public class CommonConstant {
 	public final static String TASK_PREFIX_R = "R";
 	public final static String TASK_PREFIX_S = "S";
 	public final static String TASK_PREFIX_E = "E";
-	public final static String TASK_PREFIX_UQ = "DQ";
+	public final static String TASK_PREFIX_DQ = "DQ";
 	public static Map<String, String> TASK_PREFIX = new LinkedHashMap<String, String>();
 	static {
 		TASK_PREFIX.put("T", "临时任务前缀");

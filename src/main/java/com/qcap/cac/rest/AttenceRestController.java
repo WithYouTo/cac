@@ -1,11 +1,14 @@
 package com.qcap.cac.rest;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,14 +41,19 @@ public class AttenceRestController {
 	@RequestMapping(value = "/attence", method = RequestMethod.POST)
 	@ApiOperation(value = "签到", notes = "签到", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public ResParams attence(@Valid AttenceReq req, MultipartHttpServletRequest request) throws Exception {
+	public ResParams attence(@Valid AttenceReq req, HttpServletRequest request) throws Exception {
+		
 		List<MultipartFile> fileList = new ArrayList<MultipartFile>();
-		Map<String, MultipartFile> mapfile = request.getFileMap();
-		if (mapfile != null && !mapfile.isEmpty()) {
-			for (Entry<String, MultipartFile> ent : mapfile.entrySet()) {
-				fileList.add(ent.getValue());
+		if(request instanceof MultipartHttpServletRequest) {
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)(request);
+			Map<String, MultipartFile> mapfile = multiRequest.getFileMap();
+			if (mapfile != null && !mapfile.isEmpty()) {
+				for (Entry<String, MultipartFile> ent : mapfile.entrySet()) {
+					fileList.add(ent.getValue());
+				}
 			}
 		}
+		
 		attenceRestSrv.attence(req, fileList);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC);
 	}

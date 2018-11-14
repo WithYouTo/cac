@@ -283,9 +283,24 @@ private String dealWithSpecialTaskTime(String startTime) {
     	Map<String, Object> map = this.appTaskRestMapper.selectStandardDetailInfo(standardDetailId);
     	String imgUrl = ToolUtil.toStr(map.get("imgUrl"));
     	
-		//查询配置管理中存放的文件访问地址前缀
-		String addressPrefix = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
-		dealWithPicUrl(map, "imgUrl", addressPrefix, imgUrl);
+		//处理图片和视频
+		if(!StringUtils.isEmpty(imgUrl)) {
+			if(imgUrl.contains(",")) {
+				String [] checkFileArr = imgUrl.split(",");
+				map.put("imgUrl", checkFileArr);
+			}else {
+				String [] fileArray = new String[1];
+				fileArray[0]=imgUrl;
+				if(imgUrl.endsWith("mp4") || imgUrl.endsWith("avi")){
+					map.put("fileUrl", imgUrl);
+					map.remove("imgUrl");
+				}else{
+					map.put("imgUrl", fileArray);
+				}
+			}
+		}else {
+			map.put("imgUrl", new ArrayList<>());
+		}
     	
     	String standardStep = ToolUtil.toStr(map.get("standardStep"));
     	
@@ -300,6 +315,10 @@ private String dealWithSpecialTaskTime(String startTime) {
         	if(standardStep.indexOf(LINUX_REGEX)  != -1) {
         		standardStepArr = standardStep.split(LINUX_REGEX);
         	}
+
+        	if(standardStep.indexOf(WINDOWS_REGEX) == -1 && standardStep.indexOf(LINUX_REGEX)  == -1){
+				standardStepArr=new String[]{standardStep};
+			}
 
         	map.put("standardStep", standardStepArr);
     	}
@@ -448,31 +467,12 @@ private String dealWithSpecialTaskTime(String startTime) {
 			}
 
 			TbTask task = this.appTaskRestMapper.selectTaskByCode(taskCode);
-			String taskType = task.getTaskType();
-			String taskPrefix = "";
-
-			if(CommonConstant.TASK_TYPE_REGULAR.equals(taskType)){
-				taskPrefix = CommonConstant.TASK_PREFIX_R;
-			}
-
-			if(CommonConstant.TASK_TYPE_SPECIAL.equals(taskType)){
-				taskPrefix = CommonConstant.TASK_PREFIX_S;
-			}
-
-			if(CommonConstant.TASK_TYPE_TEMP.equals(taskType)){
-				taskPrefix = CommonConstant.TASK_PREFIX_T;
-			}
-
-			if(CommonConstant.TASK_TYPE_EVENT.equals(taskType)){
-				taskPrefix = CommonConstant.TASK_PREFIX_E;
-			}
-
-			String newTaskCode = taskPrefix + DateUtil.dateTimeToStringForLineNo(new Date());
-
+			String newTaskCode = CommonConstant.TASK_PREFIX_DQ + DateUtil.dateTimeToStringForLineNo(new Date());
 			task.setTaskId(UUIDUtils.getUUID());
 			task.setTaskCode(newTaskCode);
 			task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
 			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
+			task.setTaskImgUrl(imgUrl);
 			task.setVersion(0);
 			task.setCreateDate(new Date());
 			task.setCreateEmp("由检查不合格任务生成,检查不合格任务编码："+taskCode);

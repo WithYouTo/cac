@@ -27,7 +27,7 @@ public interface LoginRestMapper {
 
     List<UserListResp> getUserListByOrgCode(@Param("orgCode") String orgCode);
 
-    List<UserListResp> getUserListByPositionCode(@Param("positionCode")String positionCode,@Param("month")String month);
+    List<UserListResp> getUserListByPositionCode(@Param("positionCode")String positionCode,@Param("month")String month,@Param("shift")String shift);
 
     void updateImgByEmployeeId(@Param("employeeId") String employeeId,@Param("path") String path);
 }

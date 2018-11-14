@@ -32,6 +32,7 @@ import com.qcap.cac.service.AttenceRestSrv;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.tools.DateTool;
 import com.qcap.cac.tools.EntityTools;
+import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.entity.TbOrg;
 import com.qcap.core.entity.TbUserInfo;
@@ -136,6 +137,8 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 	public List<GetAttenceDetailsResp> getAttenceDetails(GetAttenceDetailsReq req) throws Exception {
 		List<GetAttenceDetailsResp> lsRecord = new ArrayList<>();
 		List<Map<String, String>> ls = attenceRestMapper.getAttenceList(req);
+		//查询配置管理中存放的文件访问地址前缀
+		String addressPrefix = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
 		if (CollectionUtils.isNotEmpty(ls)) {
 			for (Map<String, String> attenceMap : ls) {
 				GetAttenceDetailsResp resp = new GetAttenceDetailsResp();
@@ -144,7 +147,11 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 				resp.setAttenceTime(attenceMap.get("attenceTime"));
 				resp.setWorkContent(attenceMap.get("workContent"));
 				if (StringUtils.isNotBlank(attenceMap.get("filesUrl"))) {
-					resp.setUrl(attenceMap.get("filesUrl").split(";"));
+					String [] imgArr = attenceMap.get("filesUrl").split(";");
+					for(int i=0;i<imgArr.length;i++) {
+						imgArr[i] =addressPrefix + imgArr[i];
+					}
+					resp.setUrl(imgArr);
 				} else {
 					resp.setUrl(new String[] {});
 				}
