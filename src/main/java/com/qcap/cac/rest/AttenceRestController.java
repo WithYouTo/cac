@@ -1,7 +1,5 @@
 package com.qcap.cac.rest;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
