@@ -7,14 +7,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
-import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.AreaPositionMapper;
 import com.qcap.cac.dto.AreaPositionDto;
 import com.qcap.cac.entity.TbAreaPosition;
 import com.qcap.cac.service.AreaPositionSrv;
+import com.qcap.cac.service.AreaSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.utils.AppUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,18 +40,15 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
     private  AreaPositionMapper areaPositionMapper;
 
     @Resource
-    private  AreaMapper areaMapper;
+    private AreaSrv areaSrv;
 
     @Autowired
     private FastFileStorageClient storageClient;
 
 
     @Override
-    public List<Map> initTree() {
-        Map<String,Object> paraMap = new HashMap();
-        List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
-        paraMap.put("programCodes",programCodes);
-        return areaMapper.initTree(paraMap);
+    public List<ZTreeNode> initTree() {
+        return areaSrv.initTree();
     }
 
     @Override

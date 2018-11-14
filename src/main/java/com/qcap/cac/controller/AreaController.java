@@ -9,6 +9,7 @@ import com.qcap.cac.service.AreaSrv;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
+import com.qcap.core.model.ZTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class AreaController {
     @ResponseBody
     @RequestMapping(value = "/initTree", method = RequestMethod.POST)
     public ResParams initTree() {
-        List<Map> list = areaSrv.initTree();
+        List<ZTreeNode> list = areaSrv.initTree();
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
     }
 
@@ -50,9 +51,9 @@ public class AreaController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams getAreaList(IPage<Map<String, Object>> page, String pAreaCode) {
+    public PageResParams getAreaList(IPage<Map<String, Object>> page, AreaDto areaDto) {
         try {
-            this.areaSrv.getAreaList(page,pAreaCode);
+            this.areaSrv.getAreaList(page,areaDto);
         } catch (Exception e) {
             return PageResParams.newInstance(CoreConstant.FAIL_CODE, CommonCodeConstant.ERROR_CODE_40401_MSG, page.getTotal(), page.getRecords());
         }

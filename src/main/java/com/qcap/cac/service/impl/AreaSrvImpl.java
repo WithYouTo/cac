@@ -10,6 +10,7 @@ import com.qcap.cac.service.AreaSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -17,10 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
 
 @Service
 @Transactional
@@ -30,20 +30,27 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
     private  AreaMapper areaMapper;
 
     @Override
-    public List<Map> initTree() {
-
+    public List<ZTreeNode> initTree() {
         Map<String,Object> paraMap = new HashMap();
         List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+        programCodes.removeAll(Collections.singleton(""));
         paraMap.put("programCodes",programCodes);
-        return areaMapper.initTree(paraMap);
+        List<ZTreeNode> list = areaMapper.initTree(paraMap);
+        list.add(ZTreeNode.createParent());
+        return buildZTreeNodeByRecursive(list, new ArrayList<>(), e -> Objects.equals("-1", e.getPid()));
+        //return areaMapper.initTree(paraMap);
     }
 
     @Override
-    public void getAreaList(IPage<Map<String, Object>> page, String areaCode) {
+    public void getAreaList(IPage<Map<String, Object>> page, AreaDto areaDto) {
         Map<String,Object> paraMap = new HashMap();
         List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+        programCodes.removeAll(Collections.singleton(""));
         paraMap.put("programCodes",programCodes);
-        paraMap.put("areaCode",areaCode);
+        paraMap.put("areaCode",areaDto.getAreaCode());
+        paraMap.put("areaName",areaDto.getAreaName());
+        paraMap.put("areaType",areaDto.getAreaType());
+        paraMap.put("buildingPurpose",areaDto.getBuildingPurpose());
         List<Map<String, Object>> list =  areaMapper.selectAreaList(page,paraMap);
         page.setRecords(list);
     }

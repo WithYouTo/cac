@@ -22,7 +22,7 @@
 
 	<!--未完成状态的任务无法删除-->
 	<select id="checkUndoStatusByPosition" parameterType="String" resultType="Integer">
-		select count(*) from  tb_task_arrangement
+		select count(*) from  tb_task
 		where TASK_STATUS in ('WAIT','WORKING')
 		AND POSITION_CODE = #{positionCode}
 	</select>

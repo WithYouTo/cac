@@ -2,12 +2,20 @@ package com.qcap.cac.dto;
 
 public class AreaDto {
 
+	private String areaCode;
 	private String areaName;
 	private String areaType;
 	private String superAreaCode;
 	private String buildingPurpose;
 	private String level;
 
+	public String getAreaCode() {
+		return areaCode;
+	}
+
+	public void setAreaCode(String areaCode) {
+		this.areaCode = areaCode;
+	}
 
 	public String getAreaName() {
 		return areaName;

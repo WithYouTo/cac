@@ -52,6 +52,15 @@
 			and (AREA_CODE = #{paramMap.areaCode}
 			OR SUPER_AREA_CODE = #{paramMap.areaCode})
 		</if>
+		<if test="paramMap.areaName!=null and paramMap.areaName!=''">
+			and AREA_NAME like concat('%',#{paramMap.areaName},'%')
+		</if>
+		<if test="paramMap.areaType!=null and paramMap.areaType!=''">
+			and AREA_TYPE = #{paramMap.areaType}
+		</if>
+		<if test="paramMap.buildingPurpose!=null and paramMap.buildingPurpose!=''">
+			and BUILDING_PURPOSE like concat('%',#{paramMap.buildingPurpose},'%')
+		</if>
 		<if test="paramMap.programCodes !=null and paramMap.programCodes.size > 0">
 			and PROGRAM_CODE in
 			<foreach item="item" index="index" collection="paramMap.programCodes"
@@ -68,8 +77,8 @@
 
 
 	<!--查询区域树列表-->
-	<select id="initTree" resultType="Map" parameterType="Map">
-		SELECT
+	<select id="initTree" resultType="com.qcap.core.model.ZTreeNode" parameterType="Map">
+	<!--	SELECT
 		m.AREA_CODE areaCode,
 		m.AREA_NAME areaName,
 		m.SUPER_AREA_CODE pAreaCode,
@@ -84,7 +93,29 @@
 				#{item}
 			</foreach>
 		</if>
-        ORDER BY m.`LEVEL`,m.SEQ_NO
+        ORDER BY m.`LEVEL`,m.SEQ_NO-->
+		SELECT
+		m.AREA_CODE id,
+		m.AREA_NAME name,
+		(CASE
+		WHEN (LENGTH(m.SUPER_AREA_CODE) &lt; 1)
+		THEN '-1'
+		ELSE m.SUPER_AREA_CODE END) as pId,
+		(CASE
+		WHEN (LENGTH(m.SUPER_AREA_CODE) &lt; 1)
+		THEN 'true'
+		ELSE 'false' END) as isOpen
+		FROM
+		tb_area m
+		LEFT JOIN tb_area n ON m.SUPER_AREA_CODE = n.AREA_CODE
+		<if test="programCodes !=null and programCodes.size > 0">
+			and m.PROGRAM_CODE in
+			<foreach item="item" index="index" collection="programCodes"
+					 open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		ORDER BY m.`LEVEL`,m.SEQ_NO
 	</select>
 
 

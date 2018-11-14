@@ -10,6 +10,7 @@ import com.qcap.cac.service.AreaPositionSrv;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
+import com.qcap.core.model.ZTreeNode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 岗位管理
@@ -45,7 +45,7 @@ public class AreaPositionController {
     @ResponseBody
     @RequestMapping(value = "/initTree", method = RequestMethod.POST)
     public ResParams initTree() {
-        List<Map> list = areaPositionSrv.initTree();
+        List<ZTreeNode> list = areaPositionSrv.initTree();
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
     }
 

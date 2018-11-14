@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcap.cac.dto.AreaDto;
 import com.qcap.cac.entity.TbArea;
+import com.qcap.core.model.ZTreeNode;
 
 import java.util.List;
 import java.util.Map;
@@ -14,15 +15,15 @@ public interface AreaSrv extends IService<TbArea> {
      * 加载区域树
      * @return
      */
-    List<Map> initTree();
+    List<ZTreeNode> initTree();
 
 
     /**
      * 根据areaCode查询管辖区域
-     * @param areaCode
+     * @param areaDto
      * @return
      */
-    void getAreaList(IPage<Map<String, Object>> page, String areaCode);
+    void getAreaList(IPage<Map<String, Object>> page, AreaDto areaDto);
 
 
     /**
