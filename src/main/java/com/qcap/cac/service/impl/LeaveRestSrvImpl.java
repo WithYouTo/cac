@@ -10,12 +10,14 @@ import com.qcap.cac.dto.AppLeaveReq;
 import com.qcap.cac.dto.UserListResp;
 import com.qcap.cac.entity.TbLeave;
 import com.qcap.cac.service.LeaveRestSrv;
+import com.qcap.cac.service.MessageRestSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.dao.TbManagerMapper;
 import com.qcap.core.entity.TbManager;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,8 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
     @Resource
     private FastDFSClientWrapper dfsClient;
 
+    @Resource
+    private MessageRestSrv messageRestSrv;
 
     @Override
     public List<AppLeaveReq> queryLeaveList(Map<String, Object> paramMap) {
@@ -108,7 +112,18 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         leave.setLeaveId(UUIDUtils.getUUID());
         EntityTools.setCreateEmpAndTime(leave);
         EntityTools.setUpdateEmpAndTime(leave);
-        return this.leaveRestMapper.insert(leave);
+        this.leaveRestMapper.insert(leave);
+
+        //查询组织下所有的人员
+        String orgCode = this.leaveRestMapper.queryLoginOrgCode(employeeCode);
+        List<UserListResp> user = loginRestMapper.getUserListByOrgCode(orgCode);
+        List<String> userList = user.stream().map(UserListResp::getEmployeeCode).collect(Collectors.toList());
+        //推送消息
+        List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+        String title = "新增请假单";
+        String message = "您有一个新的请假单待审批";
+        messageRestSrv.JpushMessage(userList, StringUtils.join(programCodes,","),message,title);
+        return 1;
     }
 
     @Override
@@ -154,6 +169,10 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
             leave.setLeaveStatus(CommonConstant.LEAVE_STATUS_PASS);
 
             //推送消息
+            String workNo = leave.getWorkNo();
+            List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+            String title = "请假审批通过";
+            messageRestSrv.JpushMessage(workNo, StringUtils.join(programCodes,","),title,title);
 
         }else{
             throw  new RuntimeException("操作类型不正确");
@@ -181,7 +200,15 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         String path = fileUploadReturnPath(mapFile);
         leave.setRefuseUrl(path);
         EntityTools.setUpdateEmpAndTime(leave);
-        return this.leaveRestMapper.updateById(leave);
+        this.leaveRestMapper.updateById(leave);
+
+        //推送消息
+        leave = this.leaveRestMapper.selectById(leaveId);
+        String workNo = leave.getWorkNo();
+        List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+        String title = "请假单被驳回";
+        messageRestSrv.JpushMessage(workNo, StringUtils.join(programCodes,","),title,title);
+        return 1;
     }
 
 
