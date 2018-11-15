@@ -28,7 +28,7 @@
             and a.EQUIP_TYPE = #{obj.equipType}
         </if>
         <if test="obj.equipName != null and obj.equipName != ''">
-            and a.EQUIP_NAME = #{obj.equipName}
+            and a.EQUIP_NAME like CONCAT(CONCAT('%',#{obj.equipName}),'%')
         </if>
         <if test="obj.repairTime != null and obj.repairTime != ''">
             and a.REPAIR_TIME &gt; substring(#{obj.repairTime},1,19)

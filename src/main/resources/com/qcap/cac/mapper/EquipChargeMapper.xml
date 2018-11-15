@@ -22,7 +22,7 @@
         ON ec.PROGRAM_CODE = ec.PROGRAM_CODE
         where 1=1
         <if test="obj.equipNo != null and obj.equipNo != ''">
-            and ec.EQUIP_NO = #{obj.equipNo}
+            and ec.EQUIP_NO like CONCAT(CONCAT('%',#{obj.equipNo}),'%')
         </if>
         <if test="obj.startChargeTime != null and obj.startChargeTime != ''">
             and ec.START_CHARGE_TIME &gt; substring(#{obj.startChargeTime},1,19)

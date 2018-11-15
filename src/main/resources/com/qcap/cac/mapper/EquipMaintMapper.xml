@@ -28,10 +28,10 @@
             and em.MAINT_TYPE = #{obj.maintType}
         </if>
         <if test="obj.equipName != null and obj.equipName != ''">
-            and em.EQUIP_NAME = #{obj.equipName}
+            and em.EQUIP_NAME like CONCAT(CONCAT('%',#{obj.equipName}),'%')
         </if>
         <if test="obj.partsName != null and obj.partsName != ''">
-            and em.PARTS_NAME = #{obj.partsName}
+            and em.PARTS_NAME like CONCAT(CONCAT('%',#{obj.partsName}),'%')
         </if>
         <if test="obj.programCode != null and obj.programCode != ''">
             and em.program_code = #{obj.programCode}

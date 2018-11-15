@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 import javax.servlet.FilterChain;
@@ -73,19 +74,17 @@ public class AuthFilter extends OncePerRequestFilter {
 
 						// 验证token是否过期
 						jwtTokenUtil.isTokenExpired(token);
-//						if(jwtTokenUtil.isTokenExpired(token)){
-//							final Date createdDate = new Date();
-//							final Date expirationDate = new Date(createdDate.getTime() + 10 * 1000);
-//							Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getBody().setExpiration(expirationDate);
-//						}else{
-//							return;
-//						}
-						//						String managerId = jwtTokenUtil.getUsernameFromToken(token);
-//						String m = redisUtil.get(AppUtils.getApplicationName() + ":manager:" + managerId);
-//						if(StringUtil.isEmpty(m)){
-//							return;
-//						}
-//						TbManager m = redisUtil.get(AppUtils.getApplicationName() + ":manager:" + managerId, TbManager.class);
+
+						String managerId = jwtTokenUtil.getUsernameFromToken(token);
+
+						String cachToken = redisUtil.get(AppUtils.getApplicationName() + ":token:" + managerId);
+						if(Objects.isNull(cachToken)){
+							isAjaxOrRestful(servletPath, request, response);
+							return;
+						}else{
+							redisUtil.set(AppUtils.getApplicationName() + ":token:" + managerId, token,60);
+
+						}
 
 					} else {
 						// header没有token
@@ -136,8 +135,10 @@ public class AuthFilter extends OncePerRequestFilter {
 			RenderUtil.renderJson(response, RestParams.newInstance(RestConstant.TOKEN_NOT_EXISTS_CODE,
 					RestConstant.TOKEN_NOT_EXISTS_DESC, null));
 		} else {
+//			RenderUtil.renderJson(response, RestParams.newInstance(RestConstant.TOKEN_NOT_MATCH_CODE,
+//					RestConstant.TOKEN_NOT_EXISTS_DESC, null));
 			RenderUtil.renderJson(response, RestParams.newInstance(RestConstant.TOKEN_NOT_MATCH_CODE,
-					RestConstant.TOKEN_NOT_EXISTS_DESC, null));
+					"静置时间过长，需重新登录，请刷新", null));
 		}
 	}
 

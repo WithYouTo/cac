@@ -426,4 +426,36 @@ public final class AppUtils {
 		return list.isEmpty() ? null : list;
 	}
 
+
+	/**
+	 * 使用递归方法建树
+	 * @param menulist
+	 * @return
+	 */
+	public static List<ZTreeNode> buildByRecursive(List<ZTreeNode> menulist) {
+		List<ZTreeNode> trees = new ArrayList<ZTreeNode>();
+		for (ZTreeNode menuPoiEntity : menulist) {
+			if (menuPoiEntity.getId() == null) {
+				trees.add(findChildren(menuPoiEntity,menulist));
+			}
+		}
+		return trees;
+	}
+	/**
+	 * 递归查找子节点
+	 * @param menulist
+	 * @return
+	 */
+	public static ZTreeNode findChildren(ZTreeNode menuPoiEntity, List<ZTreeNode> menulist) {
+		for (ZTreeNode menu : menulist) {
+			if(menuPoiEntity.getId().equals(menu.getPid())) {
+				if (menuPoiEntity.getChildren() == null) {
+					menuPoiEntity.setChildren(new ArrayList<ZTreeNode>());
+				}
+				menuPoiEntity.getChildren().add(findChildren(menu,menulist));
+			}
+		}
+		return menuPoiEntity;
+	}
+
 }

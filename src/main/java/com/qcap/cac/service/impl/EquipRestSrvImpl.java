@@ -16,6 +16,7 @@ import com.qcap.core.common.CoreConstant;
 import com.qcap.core.dao.TbManagerMapper;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.model.ResParams;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
     @Resource
     private TbManagerMapper tbManagerMapper;
 
+    @Resource
+    private MessageRestSrvImpl messageRestSrv;
+
     @Override
     public List<EquipListResp> getEquipList(EquipListReq equipListReq) {
         List<EquipListResp> list = this.equipRestMapper.getEquipTypeList(equipListReq);
@@ -72,7 +76,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
             esr.setUrl(url+esr.getUrl());
             return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, esr);
         }else{
-            return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.EQUIP_TYPE_NOT_MATCH, null);
+            return ResParams.newInstance(CommonCodeConstant.EQUIP_NOT_MATCH_CODE, CommonCodeConstant.EQUIP_TYPE_NOT_MATCH, null);
         }
     }
 
@@ -193,6 +197,16 @@ public class EquipRestSrvImpl implements EquipRestSrv {
                 handlerWhenOperateCodeIsInabort(equip,manager,employeeCode);
             }
         }
+    }
+
+    @Override
+    public ResParams getEquipStatusByEquipNo(String equipNo) {
+        String url = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
+        String status = Objects.toString(esr.getStatus());
+        esr.setStatusName(CommonConstant.EQUIP_WORK_STATUS.get(status));
+        esr.setUrl(url+esr.getUrl());
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, esr);
     }
 
     /**
@@ -429,6 +443,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         equipRepair.setPersonNo(manager.getAccount());
         equipRepair.setPersonName(manager.getName());
         equipRepair.setRepairTime(new Date());
+
         //新增一条设备报修记录
         this.equipRepairMapper.insert(equipRepair);
         //通过设备编号将设备信息表中的设备工作状态改为使用中

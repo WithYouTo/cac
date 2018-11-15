@@ -70,7 +70,7 @@
 		WHERE
 		b.DEL_FLAG = 'NORMAL'
 		AND
-		b.EQUIP_WORK_STATE = 'INUSE'
+		a.status = 'INUSE'
 		AND
 		a.PERSON_NO = #{employeeCode}
 	</select>
