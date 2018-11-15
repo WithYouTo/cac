@@ -2,6 +2,7 @@ package com.qcap.cac.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qcap.cac.entity.TbAreaPosition;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
@@ -42,6 +43,18 @@ public interface AreaPositionMapper extends BaseMapper<TbAreaPosition> {
      */
 
     Integer checkUndoStatusByPosition(String positionCode);
+
+    /**
+     *
+     * 判斷區域編碼是否已經存在崗位中
+     * @author 曾欣
+     * @date 2018/11/15 15:31
+     * @param
+     * @param areaCode
+     * @return java.lang.Integer
+     */
+
+    Integer checkExistPositionByAreaCodes(@Param("areaCode") String areaCode);
 
 
 }

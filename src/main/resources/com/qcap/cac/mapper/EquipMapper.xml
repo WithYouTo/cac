@@ -49,7 +49,7 @@
         AND
         a.DEL_FLAG = 'NORMAL'
         <if test="obj.equipName != null and obj.equipName != ''">
-          AND a.EQUIP_NAME = #{obj.equipName}
+          AND a.EQUIP_NAME like CONCAT(CONCAT('%',#{obj.equipName}),'%')
         </if>
         <if test="obj.equipState != null and obj.equipState != ''">
           AND a.EQUIP_STATE = #{obj.equipState}

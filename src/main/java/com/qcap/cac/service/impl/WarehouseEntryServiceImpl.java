@@ -153,10 +153,11 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 throw new RuntimeException("第" + (i + 1) + "行的采购单位不能为空！");
             }
             String buyDuration = item.getBuyDuration();
-            if(StringUtils.isNotEmpty(buyDuration)){
-                if(!ToolUtil.isNumeric(buyDuration)){
-                    throw new RuntimeException("第" + (i + 1) + "行的采购周期的格式不正确！");
-                }
+            if(StringUtils.isEmpty(buyDuration)){
+                throw new RuntimeException("第" + (i + 1) + "行的采购周期不能为空！");
+            }
+            if(!ToolUtil.isNumeric(buyDuration)){
+                throw new RuntimeException("第" + (i + 1) + "行的采购周期的格式不正确！");
             }
 
             //项目编码

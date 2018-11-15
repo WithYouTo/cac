@@ -1,6 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import cn.jiguang.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.*;
@@ -10,11 +9,17 @@ import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.entity.TbWarehouseRequ;
 import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.service.GoodsApplyRestSrv;
+import com.qcap.cac.service.MessageRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
-import com.qcap.cac.tools.*;
+import com.qcap.cac.tools.EntityTools;
+import com.qcap.cac.tools.RedisTools;
+import com.qcap.cac.tools.ToolUtil;
+import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +56,9 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
     @Resource
     private TempTaskSrv tempTaskSrv;
+
+    @Resource
+    private MessageRestSrv messageRestSrv;
 
     @Override
     public List<GoodsReqRestReq> queryReqList(Map<String, String> paramMap) {
@@ -140,7 +148,10 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
                 List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum);
                 List<String> pushList = userList.stream().map(UserListResp::getEmployeeCode).collect(Collectors.toList());
                 message = "物品编码【" + goodsNo + "】/物品名称【" + goodsName + "】的" + message;
-                JpushTools.pushArray(pushList,message);
+                //JpushTools.pushArray(pushList,message);
+                List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+                String title = "库管物品出库";
+                messageRestSrv.JpushMessage(pushList, StringUtils.join(programCodes,","),message,title);
             }
         }
 
@@ -149,9 +160,6 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
     @Override
     public void updateDistribution(GoodsOutDistruListReq goodsOutDistruListReq) {
         //发放前---判断是否有余量
-
-
-
         List<GoodsOutDistruReq> list = goodsOutDistruListReq.getGoodsOutDistruReqList();
         for(GoodsOutDistruReq item : list){
 
@@ -164,7 +172,6 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             if(null == warehouseRequ){
                 throw new RuntimeException("根据主键查询不到领用主单信息");
             }
-
 
             String employeeCode = item.getEmployeeCode();
             String positionCode = item.getPositionCode();

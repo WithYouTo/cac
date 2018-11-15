@@ -28,8 +28,8 @@ public interface WarehouseStockService extends IService<TbWarehouseStock> {
 
     void updateGoodsNum(TbWarehouseStock warehouseStock);
 
-    List<PurchasePoiEntity>  generatePurchaseOrder(String date);
+    List<PurchasePoiEntity>  generatePurchaseOrder(String storeroomId,String date);
 
-    void checkBeforeExport();
+    void checkBeforeExport(String storeroomId);
 
 }

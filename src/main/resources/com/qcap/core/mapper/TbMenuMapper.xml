@@ -25,7 +25,7 @@
                     ELSE 'false' END) as isOpen
         FROM tb_menu m1
                  LEFT join tb_menu m2 ON m1.parent_code = m2.code
-        ORDER BY m1.seq
+        ORDER BY m1.level,m1.seq
     </select>
 
     <select id="getMenuTreeListByMenuCode" resultType="com.qcap.core.model.ZTreeNode">

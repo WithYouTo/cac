@@ -66,7 +66,7 @@ public class EquipRestController {
 
     /**
      *
-     * @Description: 获取设备状态
+     * @Description: 获取设备状态（扫二维码）
      *
      *
      * @MethodName: getEquipStatus
@@ -81,6 +81,26 @@ public class EquipRestController {
     @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
     public ResParams getEquipStatus(String equipNo,String equipType){
         return this.equipRestSrv.getEquipStatus(equipNo,equipType);
+    }
+
+
+    /**
+     *
+     * @Description: 获取设备状态(点击按钮跳转，无需扫二维码)
+     *
+     *
+     * @MethodName: getEquipStatus
+     * @Parameters: [equipNo]
+     * @ReturnType: com.qcap.core.model.ResParams
+     *
+     * @author huangxiang
+     * @date 2018/10/25 18:42
+     */
+    @PostMapping("/getEquipStatusByEquipNo")
+    @ApiOperation(value="获取设备状态",notes="获取设备状态",response=Map.class,httpMethod="POST")
+    @ApiImplicitParam(paramType="header",name="api_version",defaultValue="v1",required=true,dataType="String")
+    public ResParams getEquipStatusByEquipNo(String equipNo){
+        return this.equipRestSrv.getEquipStatusByEquipNo(equipNo);
     }
 
     /**

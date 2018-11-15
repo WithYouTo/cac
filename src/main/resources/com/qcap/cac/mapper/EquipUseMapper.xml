@@ -24,7 +24,7 @@
         ON eu.PROGRAM_CODE = p.PROGRAM_CODE
         where 1=1
         <if test="obj.equipNo != null and obj.equipNo != ''">
-            and eu.EQUIP_NO = #{obj.equipNo}
+            and eu.EQUIP_NO like CONCAT(CONCAT('%',#{obj.equipNo}),'%')
         </if>
         <if test="obj.startUseTime != null and obj.startUseTime != ''">
             and eu.START_USE_TIME &gt; substring(#{obj.startUseTime},1,19)
@@ -52,9 +52,9 @@
 
     <insert id="insertEquipUse" parameterType="com.qcap.cac.entity.TbEquipUse">
         INSERT INTO tb_equip_use
-        (EQUIP_USE_ID,EQUIP_ID,EQUIP_NO,EQUIP_NAME,EQUIP_TYPE,EQUIP_MODEL,AREA,PERSON_NO,PERSON_NAME,PERSON_MOBILE,START_USE_TIME,STATUS,CREATE_EMP,CREATE_DATE,UPDATE_EMP,UPDATE_DATE)
+        (EQUIP_USE_ID,EQUIP_ID,EQUIP_NO,PROGRAM_CODE,EQUIP_NAME,EQUIP_TYPE,EQUIP_MODEL,AREA,PERSON_NO,PERSON_NAME,PERSON_MOBILE,START_USE_TIME,STATUS,CREATE_EMP,CREATE_DATE,UPDATE_EMP,UPDATE_DATE)
         VALUE
-        (#{equipUseId},#{equipId},#{equipNo},#{equipName},#{equipType},#{equipModel},#{area},#{personNo},#{personName},#{personMobile},#{startUseTime},#{status},#{createEmp},now(),#{updateEmp},now())
+        (#{equipUseId},#{equipId},#{equipNo},#{programCode},#{equipName},#{equipType},#{equipModel},#{area},#{personNo},#{personName},#{personMobile},#{startUseTime},#{status},#{createEmp},now(),#{updateEmp},now())
     </insert>
 
     <select id="getEquipUseIdByEquipNoAndStatus" resultType="com.qcap.cac.entity.TbEquipUse" parameterType="java.lang.String">

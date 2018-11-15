@@ -28,6 +28,12 @@
 	</select>
 
 
-	
+	<!--查询区域编码是否已经存在岗位中-->
+	<select id="checkExistPositionByAreaCodes" parameterType="String"  resultType="Integer">
+		select count(*) from
+		tb_area_position
+		where POSITION_TYPE = '3' and FIND_IN_SET(#{areaCode},AREA_CODE)
+	</select>
+
 
 </mapper>

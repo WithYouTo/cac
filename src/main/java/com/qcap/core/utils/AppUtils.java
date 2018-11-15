@@ -417,7 +417,7 @@ public final class AppUtils {
 
 	public static List<ZTreeNode> buildZTreeNodeByRecursive(List<ZTreeNode> source, List<ZTreeNode> target,
 			Predicate<ZTreeNode> predicate) {
-		List<ZTreeNode> list = source.parallelStream().filter(predicate).reduce(target, (u, t) -> {
+		List<ZTreeNode> list = source.stream().filter(predicate).reduce(target, (u, t) -> {
 			t.setChildren(
 					buildZTreeNodeByRecursive(source, new ArrayList<>(), e -> Objects.equals(t.getId(), e.getPid())));
 			u.add(t);
@@ -425,5 +425,4 @@ public final class AppUtils {
 		}, (u, t) -> u);
 		return list.isEmpty() ? null : list;
 	}
-
 }

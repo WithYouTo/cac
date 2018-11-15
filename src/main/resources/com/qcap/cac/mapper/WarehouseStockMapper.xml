@@ -99,6 +99,12 @@
             <if test="buyDuration != null and buyDuration != ''" >
                 BUY_DURATION = #{buyDuration,jdbcType=VARCHAR},
             </if>
+            <if test="buyStart != null and buyStart != ''" >
+                BUY_START = #{buyStart,jdbcType=VARCHAR},
+            </if>
+            <if test="buyEnd != null and buyEnd != ''" >
+                BUY_END = #{buyEnd,jdbcType=VARCHAR},
+            </if>
             <if test="deleteFlag != null" >
                 DELETE_FLAG = #{deleteFlag,jdbcType=VARCHAR},
             </if>
@@ -114,26 +120,7 @@
     </update>
 
 
-    <select id="getLeastStockNumList" parameterType="String" resultType="com.qcap.cac.poiEntity.PurchasePoiEntity">
-       <!-- select
-        WAREHOUSE_STOCK_ID,
-        STOREROOM_ID,
-        STOREROOM,
-        GOODS_TYPE,
-        GOODS_NO,
-        GOODS_NAME,
-        LIMIT_STORE,
-        BUY_TYPE,
-        BUY_NO,
-        BUY_NUM,
-        ENTRY_UNIT,
-        SUPPLIER_NO,
-        SUPPLIER_NAME,
-        GOODS_NUM,
-        STOCK_INSTRUTION,
-        REMARK
-        from tb_warehouse_stock
-        where GOODS_NUM &lt; LIMIT_STORE-->
+    <select id="getLeastStockNumList"  resultType="com.qcap.cac.poiEntity.PurchasePoiEntity">
         SELECT @ROWNO := @ROWNO + 1 AS seqNo,
         T.*
         FROM (
@@ -149,22 +136,9 @@
         DATE_FORMAT(r.BUY_END, '%Y-%m-%d') buyEnd,
         r.ENTRY_UNIT
         FROM
-        tb_warehouse_stock r where r.BUY_END IS NULL
-        AND  r.GOODS_NUM &lt; r.LIMIT_STORE
-        UNION
-        SELECT
-        r.BUY_NO,
-        r.BUY_TYPE,
-        r.GOODS_TYPE,
-        r.GOODS_NAME,
-        r.SUPPLIER_NAME,
-        r.BUY_NUM,
-        r.BUY_DURATION,
-        DATE_FORMAT(r.BUY_START, '%Y-%m-%d') buyStart,
-        DATE_FORMAT(r.BUY_END, '%Y-%m-%d') buyEnd,
-        r.ENTRY_UNIT
-        FROM
-        tb_warehouse_stock r where r.BUY_END &lt; #{date}
+        tb_warehouse_stock r
+        where r.BUY_START = #{date}
+        AND  r.STOREROOM_ID = #{storeroomId}
         AND  r.GOODS_NUM  &lt; r.LIMIT_STORE
         ORDER BY BUY_NO ASC) T,
         (SELECT @ROWNO := 0) T3
@@ -172,26 +146,7 @@
     </select>
 
 
-    <select id="getLowLimitStockList" parameterType="String" resultType="com.qcap.cac.entity.TbWarehouseStock">
-        <!-- select
-         WAREHOUSE_STOCK_ID,
-         STOREROOM_ID,
-         STOREROOM,
-         GOODS_TYPE,
-         GOODS_NO,
-         GOODS_NAME,
-         LIMIT_STORE,
-         BUY_TYPE,
-         BUY_NO,
-         BUY_NUM,
-         ENTRY_UNIT,
-         SUPPLIER_NO,
-         SUPPLIER_NAME,
-         GOODS_NUM,
-         STOCK_INSTRUTION,
-         REMARK
-         from tb_warehouse_stock
-         where GOODS_NUM &lt; LIMIT_STORE-->
+    <select id="getLowLimitStockList"  resultType="com.qcap.cac.entity.TbWarehouseStock">
         SELECT @ROWNO := @ROWNO + 1 AS seqNo,
         T.*
         FROM (
@@ -208,7 +163,9 @@
         DATE_FORMAT(r.BUY_END, '%Y-%m-%d') buyEnd,
         r.ENTRY_UNIT
         FROM
-        tb_warehouse_stock r where r.BUY_END IS NULL
+        tb_warehouse_stock r where
+        r.STOREROOM_ID = #{storeroomId}
+        AND r.BUY_END IS NULL
         AND  r.GOODS_NUM &lt; r.LIMIT_STORE
         UNION
         SELECT
@@ -225,6 +182,7 @@
         r.ENTRY_UNIT
         FROM
         tb_warehouse_stock r where r.BUY_END &lt; #{date}
+        AND r.STOREROOM_ID = #{storeroomId}
         AND  r.GOODS_NUM  &lt; r.LIMIT_STORE
         ORDER BY BUY_NO ASC) T,
         (SELECT @ROWNO := 0) T3

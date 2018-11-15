@@ -20,4 +20,6 @@ public interface EquipRestSrv {
     void updateEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq);
 
     void updateDamageEquipStatusInManagerMode(UpdateUsingEquipStatusReq updateUsingEquipStatusReq);
+
+    ResParams getEquipStatusByEquipNo(String equipNo);
 }

@@ -63,8 +63,8 @@
             and pro.PROGRAM_CODE = #{map.programCode}
         </if>
         <if test="map.orgCode!=null and map.orgCode!=''">
-            and o.code like CONCAT(#{map.orgCode},'%')
-            or o.code is null
+            and (o.code like CONCAT(#{map.orgCode},'%')
+            or o.code is null)
         </if>
         ORDER BY info.WORK_NO
     </select>
