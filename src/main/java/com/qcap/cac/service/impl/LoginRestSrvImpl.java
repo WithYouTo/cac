@@ -113,10 +113,10 @@ public class LoginRestSrvImpl implements LoginRestSrv {
                 tbManager.setPassword(newMd5);
                 this.loginRestMapper.updateManagerPwd(tbManager);
             } else {
-                throw new BaseException(CommonCodeConstant.SUCCESS_CODE,"密码错误！");
+                throw new BaseException(CommonCodeConstant.FAIL_CODE,"密码错误！");
             }
         } else {
-            throw new BaseException(CommonCodeConstant.SUCCESS_CODE,"用户不存在！");
+            throw new BaseException(CommonCodeConstant.FAIL_CODE,"用户不存在！");
         }
 
     }

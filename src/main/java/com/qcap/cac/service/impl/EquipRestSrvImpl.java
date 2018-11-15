@@ -356,6 +356,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         String responseNo = equip.getResponseNo();
         String equipName = equip.getEquipName();
         String equipNo = equip.getEquipNo();
+        List<String> programList = AppUtils.getLoginUserProjectCodes();
+        String s = String.join(",", programList);
+        messageRestSrv.JpushMessage(responseNo,s,equipName+"("+equipNo+")"+"出现故障，请前往查看！","设备报修");
         JpushTools.pushSingle(responseNo,equipName+"("+equipNo+")"+"出现故障，请前往查看！");
     }
 
