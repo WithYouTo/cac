@@ -18,6 +18,7 @@ import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -115,15 +116,16 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
      * 低于警戒线，生成请购单
      * date YYYY-MM-DD
      */
-    public List<PurchasePoiEntity>  generatePurchaseOrder(String date){
-        return this.warehouseStockMapper.getLeastStockNumList(date);
+    public List<PurchasePoiEntity>  generatePurchaseOrder(String storeroomId,String date){
+        return this.warehouseStockMapper.getLeastStockNumList(storeroomId,date);
 
     }
 
     @Override
-    public void checkBeforeExport() {
+    @Transactional
+    public void checkBeforeExport(String storeroomId) {
         //查询数据库中低于警戒线中的记录
-        List<TbWarehouseStock> list = this.warehouseStockMapper.getLowLimitStockList(DateUtil.getDay());
+        List<TbWarehouseStock> list = this.warehouseStockMapper.getLowLimitStockList(storeroomId,DateUtil.getDay());
         //遍历更新采购的起止日期
         for(TbWarehouseStock item : list) {
             if (StringUtils.isEmpty(item.getWarehouseStockId())) {
@@ -136,6 +138,10 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
             if (ToolUtil.isEmpty(item.getBuyDuration())) {
                 throw new RuntimeException("物品名称为【" + item.getGoodsName() + "】没有设置采购周期");
             }
+
+            stock.setBuyStart(DateUtil.getDay());
+            stock.setBuyEnd(DateUtil.getAfterDayDate(ToolUtil.toStr(item.getBuyDuration())));
+            this.warehouseStockMapper.updateById(EntityTools.setUpdateEmpAndTime(stock));
         }
     }
 }

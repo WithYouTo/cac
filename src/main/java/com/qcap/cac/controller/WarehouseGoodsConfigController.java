@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 仓库配置管理
@@ -71,13 +74,15 @@ public class WarehouseGoodsConfigController {
      */
     @ResponseBody
     @RequestMapping(value = "/checkBeforeExport", method = RequestMethod.POST)
-    public Object checkBeforeExport() {
+    public Object checkBeforeExport(String storeroomId) {
+        Map<String,String> param = new HashMap<>();
+        param.put("storeroomId",storeroomId);
         try {
-            this.warehouseStockService.checkBeforeExport();
+            this.warehouseStockService.checkBeforeExport(storeroomId);
         } catch (Exception e) {
             return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
         }
-        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, param);
     }
 
 
@@ -85,11 +90,12 @@ public class WarehouseGoodsConfigController {
      * 生成请购单
      */
     @RequestMapping(value = "/generatePurchaseOrder")
-    public void generatePurchaseOrder(HttpServletResponse response) {
+    public void generatePurchaseOrder(HttpServletRequest request,HttpServletResponse response) {
         //生成请购单的操作日期
         String date = DateUtil.getDay();
+        String storeroomId = request.getParameter("storeroomId");
         try {
-            List<PurchasePoiEntity> list = this.warehouseStockService.generatePurchaseOrder(date);
+            List<PurchasePoiEntity> list = this.warehouseStockService.generatePurchaseOrder(storeroomId,date);
             //导出
             PoiUtils.exportExcel(list,"请购单" + date,"请购单",PurchasePoiEntity.class,"请购单.xls",response);
         } catch (Exception e) {

@@ -152,6 +152,9 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
             leave.setAuditPerson(ToolUtil.toStr(paramMap.get("employeeCode")));
             leave.setAuditTime(DateUtil.formatDateTime(new Date()));
             leave.setLeaveStatus(CommonConstant.LEAVE_STATUS_PASS);
+
+            //推送消息
+
         }else{
             throw  new RuntimeException("操作类型不正确");
         }

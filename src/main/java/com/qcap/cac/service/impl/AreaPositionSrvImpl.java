@@ -76,20 +76,39 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
     public Integer insertAreaPosition(TbAreaPosition areaPosition) throws Exception{
 
         String positionCode = UUIDUtils.getPositionCode();
+        String areaCodes = areaPosition.getAreaCode();
+        String positionType = areaPosition.getPositionType();
 
-        QueryWrapper<TbAreaPosition> wrapper = new QueryWrapper<>();
+        if(StringUtils.isEmpty(areaCodes)){
+            throw  new RuntimeException("新增岗位前请先选择区域");
+        }
+
+        if(StringUtils.isEmpty(positionType)){
+            throw  new RuntimeException("新增岗位前请先选择岗位类型");
+        }
+
         //岗位编码是否重复
+        QueryWrapper<TbAreaPosition> wrapper = new QueryWrapper<>();
         wrapper.eq("POSITION_CODE", areaPosition.getPositionCode());
         if(areaPositionMapper.selectCount(wrapper) > 0){
             throw new  RuntimeException("岗位编码已经存在");
         }
 
-        wrapper = new QueryWrapper<>();
         //岗位名称是否存在
+        wrapper = new QueryWrapper<>();
         wrapper.eq("POSITION_NAME", areaPosition.getPositionName());
-        //wrapper.eq("AREA_CODE", areaPosition.getAreaCode());
         if(areaPositionMapper.selectCount(wrapper) > 0){
             throw new  RuntimeException("岗位已经存在");
+        }
+
+        //岗位类型为清洁人员时候，同一个区域不能属于多个岗位
+        if("3".equals(positionType)){
+            List<String> areaCodeList = Arrays.asList(areaPosition.getAreaCode().split(","));
+           for(String areaCode : areaCodeList){
+               if(areaPositionMapper.checkExistPositionByAreaCodes(areaCode) > 0){
+                   throw new  RuntimeException("选择的区域已存在其他岗位中，无法新增");
+               }
+           }
         }
 
         //根据岗位编码生成二维码
