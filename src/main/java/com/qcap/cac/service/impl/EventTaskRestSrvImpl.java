@@ -11,6 +11,7 @@
  */
 package com.qcap.cac.service.impl;
 
+import com.mysql.fabric.xmlrpc.base.Array;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.EventTaskRestMapper;
@@ -22,6 +23,7 @@ import com.qcap.cac.entity.TbFlightInfo;
 import com.qcap.cac.entity.TbTask;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.EventTaskRestSrv;
+import com.qcap.cac.service.MessageRestSrv;
 import com.qcap.cac.tools.JpushTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
@@ -55,6 +57,9 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 
 	@Resource
 	private JdbcTemplate jdbcTemplate;
+	
+    @Resource
+    private MessageRestSrv messageRestSrvImpl;
 
 	@Override
 	public void geneEventTask(EventTaskRestDto eventTaskDto) {
@@ -114,9 +119,12 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		List<Map<String, String>> eventPlanList = this.getEventPlan(eventTaskDto);
 
 		List<TbTask> taskList = new ArrayList<>();
+		Set<String> programSet = new HashSet<>();
 		for (Map<String, String> eventPlanMap : eventPlanList) {
 			Date now = new Date();
 			TbTask task = new TbTask();
+			String programCode = eventPlanMap.get("programCode");
+			programSet.add(programCode);
 			task.setTaskId(UUIDUtils.getUUID());
 			task.setPlanId(eventPlanMap.get("planEventId"));
 			task.setTaskType(CommonConstant.TASK_TYPE_EVENT);
@@ -125,6 +133,7 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 			task.setAreaCode(eventTaskDto.getAreaCode());
 			task.setAreaName(eventTaskDto.getAreaName());
 			task.setShift(shift);
+			task.setProgramCode(eventPlanMap.get("programCode"));
 			task.setEmployeeCode(employeeCode);
 			task.setEmployeeName(employeeName);
 			task.setEmployeeTel(employeeTel);
@@ -156,6 +165,9 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 
 		// 根据工号推送任务通知
 		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
+		for(String programCode: programSet) {
+			messageRestSrvImpl.JpushMessage(employeeCodeList, programCode, "您有临时任务生成，请注意查阅", "临时任务");
+		}
 	}
 
 	@Override

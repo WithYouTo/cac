@@ -54,6 +54,7 @@
 			m.GUARANTEE_TYPE  AS  guaranteeType,
 			m.UPLOAD_PIC_FLAG  AS  uploadPicFlag,
 			m.CHECK_FLAG  AS  checkFlag,
+			m.PROGRAM_CODE AS programCode,
 			m.START_SCAN_FLAG  AS  startScanFlag,
 			m.END_SCAN_FLAG  AS  EndScanFlag
 		FROM 

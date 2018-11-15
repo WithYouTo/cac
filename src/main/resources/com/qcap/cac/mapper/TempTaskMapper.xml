@@ -120,7 +120,7 @@
 		#{item.updateEmp}, #{item.version},
 		#{item.taskFinishDesc}, #{item.disqualifiedReason}, #{item.taskRemindTime},
 		#{item.feedbackImgUrl}, #{item.checkImgUrl}, #{item.taskImgUrl},
-		#{item.startScanFlag}, #{item.endScanFlag}#{item.programCode})
+		#{item.startScanFlag}, #{item.endScanFlag},#{item.programCode})
       </foreach>
 	</insert>
 	
@@ -260,6 +260,8 @@
 	SELECT POSITION_CODE positionCode,POSITION_NAME positionName from tb_area_position 
 	WHERE FIND_IN_SET(#{areaCode},AREA_CODE)
 	AND POSITION_TYPE = '3'
+	ORDER BY LENGTH(AREA_CODE) 
+	LIMIT 1
 	</select>
 	
 	<sql id="selectWorkIngItem">

@@ -1,11 +1,31 @@
 package com.qcap.cac.service.impl;
 
+import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.TempTaskDto;
 import com.qcap.cac.dto.TempTaskSearchParam;
 import com.qcap.cac.entity.TbTask;
+import com.qcap.cac.service.MessageRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.ToolUtil;
@@ -13,16 +33,6 @@ import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.utils.DateUtil;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
-import java.util.*;
-
-import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
 
 @Service
 @Transactional
@@ -30,6 +40,9 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 
 	@Resource
 	private TempTaskMapper tempTaskMapper;
+	
+    @Resource
+    private MessageRestSrv messageRestSrvImpl;
 
 	@Override
 	public List<Map<String, Object>> listTask(TempTaskSearchParam paramDto) {
@@ -190,6 +203,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		String [] employeeCodeArr = employeeCode.split(",");
 		List<String> employeeCodeList = Arrays.asList(employeeCodeArr);
 //		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
+		messageRestSrvImpl.JpushMessage(employeeCodeList, taskDto.getProgramCode(), "您有临时任务生成，请注意查阅", "临时任务");
 
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
 		map.put(CommonConstant.BACK_MESSAGE, "新增临时任务成功");

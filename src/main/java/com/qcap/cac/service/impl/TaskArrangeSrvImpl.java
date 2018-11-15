@@ -1,5 +1,6 @@
 package com.qcap.cac.service.impl;
 
+import com.mysql.fabric.xmlrpc.base.Array;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TaskArrangeMapper;
@@ -47,6 +48,7 @@ public class TaskArrangeSrvImpl implements TaskArrangeSrv {
         // 1、Excel表格List排序
         sortList(list);
         //遍历Excel表格List
+        Map<String,String> empMap = new HashMap<>();
         int count=0;
         for (TaskArrangeUploadEntity entity : list) {
             count ++;
@@ -122,6 +124,13 @@ public class TaskArrangeSrvImpl implements TaskArrangeSrv {
             EntityTools.setCreateEmpAndTime(taskArrangement);
             taskArrangement.setVersion(0);
             taskArrangeList.add(taskArrangement);
+            
+            //验证同一个人是否导入两条数据
+            if(!empMap.containsKey(employeeCode)) {
+            	empMap.put(employeeCode, employeeCode);
+            }else {
+            	throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "用户：" + employeeName + "-" + employeeCode + "存在多条排版记录");
+            }
 
             //遍历到最后一个岗位时，验证该岗位每天是否有人上班
             if(list.size() == count ){

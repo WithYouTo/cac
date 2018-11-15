@@ -10,6 +10,7 @@ import com.qcap.cac.entity.TbTaskArrangeShift;
 import com.qcap.cac.entity.TbTaskDelay;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AppTaskRestSrv;
+import com.qcap.cac.service.MessageRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.*;
 import com.qcap.core.model.ResParams;
@@ -57,6 +58,9 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    
+    @Resource
+    private MessageRestSrv messageRestSrvImpl;
 
 //    @Resource
 //    private TaskArrangeSrv taskArrangeSrvImpl;
@@ -331,6 +335,14 @@ private String dealWithSpecialTaskTime(String startTime) {
         AppTaskUpdateReq appTaskUpdateReq = new AppTaskUpdateReq();
         appTaskUpdateReq.setTaskCode(taskCode);
         appTaskUpdateReq.setTaskStatus(CommonConstant.TASK_STATUS_WORKING);
+        /**
+    	 * TODO
+    	 * 更改当前任务执行人员
+    	 */
+//    	String employeeName =this.appTaskRestMapper.selectEmployeeName(employeeCode);
+//    	appTaskUpdateReq.setEmployeeCode(employeeCode);
+//    	appTaskUpdateReq.setEmployeeName(employeeName);
+    	
         this.appTaskRestMapper.updateTask(appTaskUpdateReq);
     }
 
@@ -477,6 +489,9 @@ private String dealWithSpecialTaskTime(String startTime) {
 			task.setCreateDate(new Date());
 			task.setCreateEmp("由检查不合格任务生成,检查不合格任务编码："+taskCode);
 			this.tempTaskMapper.insertTempTask(task);
+			
+//			JpushTools.pushSingle(task.getEmployeeCode(), "你有一个任务检查不合格,请在App内查看");
+			messageRestSrvImpl.JpushMessage(task.getEmployeeCode(), task.getProgramCode(), "你有一个任务检查不合格,请在App内查看", "检查不合格任务");
 
 		}
 	}
@@ -548,6 +563,7 @@ private String dealWithSpecialTaskTime(String startTime) {
 		String [] employeeCodeArr = appTaskAddRestReq.getEmployeeCode().split(",");
 		List<String> employeeCodeList = Arrays.asList(employeeCodeArr);
 //		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
+		messageRestSrvImpl.JpushMessage(employeeCodeList, task.getProgramCode(), "您有临时任务生成，请注意查阅", "临时任务");
 		
 	};
 
@@ -724,7 +740,14 @@ private String dealWithSpecialTaskTime(String startTime) {
 		arrangeShift.setCreateEmp(appTaskArrangeShiftRestReq.getLoginName());
 
 		this.appTaskRestMapper.insertArrangeShift(arrangeShift);
-
+		
+		String employeeCode = appTaskArrangeShiftRestReq.getEmployeeCode();
+		String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(employeeCode);
+		messageRestSrvImpl.JpushMessage(employeeCode, programCode, "调班成功：您的任务将分派给顶班人员", "调班");
+		
+		String extraEmployeeCode = appTaskArrangeShiftRestReq.getExtraEmployeeCode();
+		String extraProgramCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(extraEmployeeCode);
+		messageRestSrvImpl.JpushMessage(extraEmployeeCode, extraProgramCode, "调班成功：您将接受其他人的任务，请注意查看", "调班");
     }
     
     @Override

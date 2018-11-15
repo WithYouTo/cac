@@ -57,4 +57,8 @@ public interface AppTaskRestMapper {
 	
 	String selectSpecialTaskTimeType (@Param("taskCode") String taskCode);
 	
+	String selectEmployeeName (@Param("employeeCode") String employeeCode);
+	
+	String selectProgramCodeByEmployeeCode (@Param("employeeCode") String employeeCode);
+	
 }

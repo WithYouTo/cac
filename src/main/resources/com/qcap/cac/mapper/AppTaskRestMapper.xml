@@ -22,6 +22,7 @@
 	WHEN TASK_STATUS ='WORKING' THEN 'workingItem' END AS taskItem
 	FROM tb_task 
 	WHERE TASK_STATUS !='CANCLE'
+	AND CHECK_STATUS != 'DISQUALIFIED'
 	AND START_TIME &gt;= #{startTime}
 	AND START_TIME &lt; #{endTime}
 	AND FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
@@ -37,7 +38,8 @@
 	UNION
 	select COUNT(1), 'disqualifiedItem' 
 	FROM tb_task 
-	WHERE TASK_STATUS !='CANCLE' 
+	WHERE TASK_STATUS ='WAIT' 
+	AND CHECK_STATUS != 'DISQUALIFIED'
 	AND TASK_CODE LIKE 'DQ%' 
 	AND START_TIME &gt;= #{startTime}
 	AND START_TIME &lt; #{endTime}
@@ -86,9 +88,15 @@
 		m.START_SCAN_FLAG  AS  startScanFlag,
 		m.END_SCAN_FLAG  AS  endScanFlag,
 		m.TASK_PLAN_TIME AS taskPlanTime,
-		m.LINE_NO  AS  lineNo
+		CASE WHEN TASK_CODE LIKE 'DQ%' THEN CONCAT('AA',DATE(m.START_TIME),m.LINE_NO)
+		WHEN TASK_TYPE ='TEMP' THEN CONCAT('BB',DATE(m.START_TIME),m.LINE_NO)
+		WHEN TASK_TYPE ='EVENT' THEN CONCAT('CC',DATE(m.START_TIME),m.LINE_NO)
+		WHEN TASK_TYPE ='SPECIAL' THEN CONCAT('DD',DATE(m.START_TIME),m.LINE_NO)
+		WHEN TASK_TYPE ='REGULAR' THEN CONCAT('EE',DATE(m.START_TIME),m.LINE_NO)
+		END AS lineNo
 		FROM tb_task m
-		WHERE 1=1
+		WHERE m.CHECK_STATUS != 'DISQUALIFIED'
+		AND m.TASK_STATUS !='CANCLE'
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
 		AND m.TASK_STATUS = #{taskStatus}
 		</if>
@@ -111,14 +119,18 @@
 		AND INSTR(#{areaCode},m.AREA_CODE)
         AND m.START_TIME &gt;= #{startTime}
         AND m.START_TIME &lt; #{endTime}
-		AND m.CHECK_STATUS != 'DISQUALIFIED'
-		AND m.TASK_STATUS !='CANCLE'
         </if>
         <if test='pageType == null or pageType =="" '>
-	        <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)  and  @com.qcap.cac.tools.Ognl@isNotEmpty(startTimePage) ">
-		        AND CONCAT(UNIX_TIMESTAMP(m.START_TIME),m.LINE_NO) &gt;CONCAT(UNIX_TIMESTAMP(#{startTimePage}),#{lineNo})
+	        <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)">
+		        <!-- AND CONCAT(UNIX_TIMESTAMP(m.START_TIME),m.LINE_NO) &gt;CONCAT(UNIX_TIMESTAMP(#{startTimePage}),#{lineNo}) -->
+		        	AND (CASE WHEN TASK_CODE LIKE 'DQ%' THEN CONCAT('AA',DATE(m.START_TIME),m.LINE_NO)
+						WHEN TASK_TYPE ='TEMP' THEN CONCAT('BB',DATE(m.START_TIME),m.LINE_NO)
+						WHEN TASK_TYPE ='EVENT' THEN CONCAT('CC',DATE(m.START_TIME),m.LINE_NO)
+						WHEN TASK_TYPE ='SPECIAL' THEN CONCAT('DD',DATE(m.START_TIME),m.LINE_NO)
+						WHEN TASK_TYPE ='REGULAR' THEN CONCAT('EE',DATE(m.START_TIME),m.LINE_NO)
+						END) &gt; #{lineNo}
 	        </if>
-        ORDER BY m.START_TIME,m.LINE_NO
+        ORDER BY lineNo
         </if>
         <if test=' pageType =="queryHistory" '>
         	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(lineNo)  and  @com.qcap.cac.tools.Ognl@isNotEmpty(startTimePage) ">
@@ -207,6 +219,12 @@
 			</if>
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkImgUrl)">
 				CHECK_IMG_URL = #{checkImgUrl},
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
+				EMPLOYEE_CODE =#{employeeCode}
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeName)">
+				EMPLOYEE_NAME =#{employeeName}
 			</if>
 	    </set>
 	    where TASK_CODE = #{taskCode}
@@ -425,6 +443,19 @@
   SELECT n.PLAN_TIME_TYPE AS planTimeType FROM tb_task m LEFT JOIN tb_plan n
 	ON m.PLAN_ID = n.PLAN_ID
 	where TASK_CODE =#{taskCode}
+  </select>
+  
+  <select id="selectEmployeeName" parameterType="String" resultType="String">
+  SELECT `name` AS 'name'
+	from tb_manager 
+	where  account =#{employeeCode}
+  </select>
+  
+  <select id="selectProgramCodeByEmployeeCode" parameterType="String" resultType="String">
+    SELECT DISTINCT PROGRAM_CODE 
+	from tb_task_arrangement
+	WHERE EMPLOYEE_CODE =#{employeeCode}
+	LIMIT 1
   </select>
 
 </mapper>
