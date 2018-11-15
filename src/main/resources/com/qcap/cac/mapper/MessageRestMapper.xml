@@ -4,49 +4,59 @@
 
 	<select id="getMessageForNewest" parameterType="com.qcap.cac.dto.GetMessageReq" resultType="com.qcap.cac.entity.TbMessage">
 		SELECT
-			MESSAGE_ID messageId,
-			TITLE title,
-			CONTENT content,
-			READ_FLAG readFlag,
-			USER_ID userId,
-			LINE_NO lineNo,
-			REMARK1 remark1,
-			REMARK2 remark2,
-			REMARK3 remark3,
-			CREATE_EMP createEmp,
-			CREATE_DATE createDate,
-			UPDATE_EMP updateEmp,
-			UPDATE_DATE updateDate,
+			MESSAGE_ID messageId, 
+			PROGRAM_CODE programCode, 
+			TITLE title, 
+			CONTENT content, 
+			READ_FLAG readFlag, 
+			USER_ID userId, 
+			TYPE type, 
+			LINE_NO lineNo, 
+			REMARK1 remark1,    
+			REMARK2 remark2, 
+			REMARK3 remark3, 
+			CREATE_EMP createEmp, 
+			CREATE_DATE createDate, 
+			UPDATE_DATE updateDate, 
+			UPDATE_EMP updateEmp, 
 			VERSION version
 		FROM
 			tb_message T
-		WHERE USER_ID = #{employeeCode} 
+		WHERE 1 = 1
+		<if test=' employeeCode !=null and employeeCode !="" '>
+			AND (USER_ID = #{employeeCode} OR USER_ID IS NULL)
+		</if>
 		ORDER BY LINE_NO DESC
 		LIMIT 0,3
 	</select>
 	
 	<select id="getMessage" parameterType="com.qcap.cac.dto.GetMessageReq" resultType="com.qcap.cac.entity.TbMessage">
 		SELECT
-			MESSAGE_ID messageId,
-			TITLE title,
-			CONTENT content,
-			READ_FLAG readFlag,
-			USER_ID userId,
-			LINE_NO lineNo,
-			REMARK1 remark1,
-			REMARK2 remark2,
-			REMARK3 remark3,
-			CREATE_EMP createEmp,
-			CREATE_DATE createDate,
-			UPDATE_EMP updateEmp,
-			UPDATE_DATE updateDate,
+			MESSAGE_ID messageId, 
+			PROGRAM_CODE programCode, 
+			TITLE title, 
+			CONTENT content, 
+			READ_FLAG readFlag, 
+			USER_ID userId, 
+			TYPE type, 
+			LINE_NO lineNo, 
+			REMARK1 remark1,    
+			REMARK2 remark2, 
+			REMARK3 remark3, 
+			CREATE_EMP createEmp, 
+			CREATE_DATE createDate, 
+			UPDATE_DATE updateDate, 
+			UPDATE_EMP updateEmp, 
 			VERSION version
 		FROM
 			tb_message T
-		WHERE USER_ID = #{employeeCode} 
-			<if test="lineNo != null and lineNo != ''">
-				AND LINE_NO &gt;= #{lineNo}
-			</if>
+		WHERE 1=1
+		<if test=' employeeCode !=null and employeeCode !="" '>
+			AND (USER_ID = #{employeeCode} OR USER_ID IS NULL)
+		</if>
+		<if test='lineNo != null and lineNo != ""'>
+			AND LINE_NO &gt;= #{lineNo}
+		</if>
 		ORDER BY LINE_NO DESC
 		LIMIT 0,10
 	</select>
@@ -60,8 +70,8 @@
 		WHERE 
 			MESSAGE_ID = #{messageId}
 	</update>
-	
-	
+
+	<!-- 批量修改已读 -->
 	<update id="updateMessageALLForRead" parameterType="com.qcap.cac.entity.TbMessage">
 		UPDATE tb_message SET
 			READ_FLAG  = #{readFlag},
@@ -80,5 +90,70 @@
 		WHERE USER_ID = #{employeeCode} AND READ_FLAG = '0'
 	</select>
 	
-  
+	 <!--新增-->
+	<insert id="insertMessage" parameterType="com.qcap.cac.entity.TbMessage" >
+    insert into tb_message (MESSAGE_ID, PROGRAM_CODE, TITLE, 
+      CONTENT, READ_FLAG, USER_ID, 
+      TYPE, LINE_NO, REMARK1, 
+      REMARK2, REMARK3, CREATE_EMP, 
+      CREATE_DATE, UPDATE_DATE, UPDATE_EMP, 
+      VERSION)
+    values (#{messageId,jdbcType=VARCHAR}, #{programCode,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{readFlag,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{lineNo,jdbcType=INTEGER}, #{remark1,jdbcType=VARCHAR}, 
+      #{remark2,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}, #{createEmp,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{updateEmp,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+
+ 	<select id="ListMessageForProgram" resultType="java.util.Map" parameterType="com.qcap.cac.dto.MessageDto">
+		SELECT
+			MESSAGE_ID messageId, 
+			PROGRAM_CODE programCode, 
+			TITLE title, 
+			CONTENT content, 
+			READ_FLAG readFlag, 
+			USER_ID userId, 
+			TYPE type, 
+			LINE_NO lineNo, 
+			REMARK1 remark1,    
+			REMARK2 remark2, 
+			REMARK3 remark3, 
+			CREATE_EMP createEmp, 
+			CREATE_DATE createDate, 
+			UPDATE_DATE updateDate, 
+			UPDATE_EMP updateEmp, 
+			VERSION version
+		FROM
+			tb_message 
+		where TYPE = '2'
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(title)">
+				AND TITLE  like concat('%',#{title},'%')
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programCode)">
+				AND program_code = #{programCode}
+			</if>
+		ORDER BY CREATE_DATE DESC
+	</select>
+	
+	<update id="updateMessage" parameterType="com.qcap.cac.entity.TbMessage">
+		UPDATE tb_message SET
+			PROGRAM_CODE = #{programCode}, 
+			TITLE = #{title}, 
+			CONTENT = #{content}, 
+			READ_FLAG  = #{readFlag},
+			UPDATE_EMP = #{updateEmp},
+			UPDATE_DATE = #{updateDate},
+			VERSION = VERSION + 1
+		WHERE 
+			MESSAGE_ID = #{messageId}
+	</update>
+	
+	<delete id="deleteMessage" parameterType="String">
+	
+    delete from tb_message
+    where MESSAGE_ID = #{messageId}
+	
+	</delete>
+
 </mapper>

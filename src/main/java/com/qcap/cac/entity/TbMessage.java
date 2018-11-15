@@ -16,6 +16,11 @@ public class TbMessage implements Serializable {
 	private String MessageId;
 
 	/**
+	 * 项目编号
+	 */
+	private String programCode;
+
+	/**
 	 * 标题
 	 */
 	private String title;
@@ -34,6 +39,27 @@ public class TbMessage implements Serializable {
 	 * 用户ID
 	 */
 	private String userId;
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * 用户ID
+	 */
+	private String type;
 
 	/**
 	 * 用户ID
