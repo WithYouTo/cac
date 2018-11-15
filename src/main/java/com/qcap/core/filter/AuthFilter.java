@@ -75,15 +75,16 @@ public class AuthFilter extends OncePerRequestFilter {
 						// 验证token是否过期
 						jwtTokenUtil.isTokenExpired(token);
 
-						String managerId = jwtTokenUtil.getUsernameFromToken(token);
+						if (!servletPath.contains(restProperties.getRestfulSign())) {
+							String managerId = jwtTokenUtil.getUsernameFromToken(token);
 
-						String cachToken = redisUtil.get(AppUtils.getApplicationName() + ":token:" + managerId);
-						if(Objects.isNull(cachToken)){
-							isAjaxOrRestful(servletPath, request, response);
-							return;
-						}else{
-							redisUtil.set(AppUtils.getApplicationName() + ":token:" + managerId, token,60);
-
+							String cachToken = redisUtil.get(AppUtils.getApplicationName() + ":token:" + managerId);
+							if(Objects.isNull(cachToken)){
+								isAjaxOrRestful(servletPath, request, response);
+								return;
+							}else{
+								redisUtil.set(AppUtils.getApplicationName() + ":token:" + managerId, token,60);
+							}
 						}
 
 					} else {
