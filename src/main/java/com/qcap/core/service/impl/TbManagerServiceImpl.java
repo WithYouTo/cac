@@ -1,33 +1,18 @@
 package com.qcap.core.service.impl;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.common.CoreConstant;
+import com.qcap.core.common.ManagerStatus;
 import com.qcap.core.dao.*;
 import com.qcap.core.entity.*;
-import com.qcap.core.common.CoreConstant;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.qcap.core.common.ManagerStatus;
-import com.qcap.core.exception.BizExceptionEnum;
-import com.qcap.core.exception.BussinessException;
 import com.qcap.core.log.LogManager;
 import com.qcap.core.log.factory.LogTaskFactory;
 import com.qcap.core.service.ITbManagerService;
@@ -35,6 +20,16 @@ import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.Md5Util;
 import com.qcap.core.utils.RedisUtil;
 import com.qcap.core.utils.jwt.JwtTokenUtil;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>

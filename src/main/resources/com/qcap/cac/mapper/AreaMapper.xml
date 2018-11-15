@@ -98,7 +98,7 @@
 		m.AREA_CODE id,
 		m.AREA_NAME name,
 		(CASE
-		WHEN (LENGTH(m.SUPER_AREA_CODE) &lt; 1)
+		WHEN (LENGTH(IFNULL(m.SUPER_AREA_CODE,'')) &lt; 1)
 		THEN '-1'
 		ELSE m.SUPER_AREA_CODE END) as pId,
 		(CASE
