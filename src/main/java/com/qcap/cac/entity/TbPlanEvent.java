@@ -17,6 +17,11 @@ public class TbPlanEvent implements Serializable {
 	private String planEventId;
 
 	/**
+	 * 主键
+	 */
+	private String programCode;
+
+	/**
 	 * 区域编码
 	 */
 	private String areaCode;
@@ -441,4 +446,11 @@ public class TbPlanEvent implements Serializable {
 		this.endScanFlag = endScanFlag;
 	}
 
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
 }

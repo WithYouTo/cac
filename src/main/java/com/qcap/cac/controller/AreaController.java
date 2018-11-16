@@ -4,8 +4,11 @@ package com.qcap.cac.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.AreaDto;
+import com.qcap.cac.dto.GetAreaReq;
+import com.qcap.cac.dto.GetAreaResp;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.service.AreaSrv;
+import com.qcap.cac.service.CommonRestSrv;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +37,9 @@ public class AreaController {
 
     @Autowired
     private AreaSrv areaSrv;
+
+    @Resource
+    private CommonRestSrv commonRestSrv;
 
 
     /**
@@ -116,5 +123,11 @@ public class AreaController {
         return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC, null);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/getArea", method = RequestMethod.POST)
+    public ResParams getArea(@Valid GetAreaReq req) {
+        List<GetAreaResp> ls = commonRestSrv.getArea(req);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
+    }
 
 }

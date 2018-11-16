@@ -74,17 +74,15 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
             throw new  RuntimeException("区域名称已经存在");
         }
 
+        TbArea area = new TbArea();
         //选中父级层级
         Integer level = Integer.parseInt(areaDto.getLevel());
-        //查询新增子级的区域编码
+        //新增子级的区域编码
         String areaCode = initAreaCode(level);
-
-        TbArea area = new TbArea();
         BeanUtils.copyProperties(areaDto,area);
-        //项目编码
-        List<String> programCodes = AppUtils.getLoginUserProjectCodes();
-        programCodes.removeAll(Collections.singleton(""));
-        area.setProgramCode(StringUtils.join(programCodes,","));
+        //项目编码(查询父级的项目编码)
+        String programCode = this.areaMapper.selectProgramCodeByAreaCode(area.getSuperAreaCode());
+        area.setProgramCode(programCode);
 
         String areaId = UUIDUtils.getUUID();
         area.setAreaId(areaId);

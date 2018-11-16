@@ -72,8 +72,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
                 BeanUtils.copyProperties(equipInfo,equipPlan);
                 equipMaint.setMaintType(CommonConstant.MAINT_TYPE_EQUIP);
                 Date time = format.parse(equipMaintInsertDto.getMaintTime());
-
-
+                equipMaint.setMaintMoney(equipMaintInsertDto.getMaintMoney());
                 equipMaint.setMaintTime(time);
                 equipMaint.setEquipCycle(equipInfo.getMaintCycle());
 
@@ -94,7 +93,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
                 this.equipMaintMapper.insert(equipMaint);
 
                 //3、更新维保计划
-                updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan,equipInfo);
+                updateEquipPlanTime(equipMaintInsertDto.getMaintTime(),equipPlan,equipInfo,maintType);
             }
         } catch (ParseException e) {
 //                e.printStackTrace();
@@ -114,17 +113,19 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
      * @author huangxiang
      * @date 2018/10/14 17:07
      */
-    private void updateEquipPlanTime(String maintTime,TbEquipPlan equipPlan,TbEquip equipInfo) {
+    private void updateEquipPlanTime(String maintTime,TbEquipPlan equipPlan,TbEquip equipInfo,String maintType) {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date time = DateUtil.parseDate(maintTime);
         Date nextTime = getNewPlanDate(time,equipPlan.getMaintCycle());
         equipPlan.setNextMaintTime(nextTime);
         equipPlan.setLatestMaintTime(time);
 
-        //根据下次维保时间和提前提醒时间更新维保提醒时间
-        String noticeDateStr = format.format(getNoticeDate(nextTime,equipInfo.getAdvanceTime()));
-        equipPlan.setNoticeDate(noticeDateStr);
-
+        //若维保类型是设备，计算提醒时间
+        if((CommonConstant.MAINT_TYPE_EQUIP).equals(maintType)) {
+            //根据下次维保时间和提前提醒时间更新维保提醒时间
+            String noticeDateStr = format.format(getNoticeDate(nextTime, equipInfo.getAdvanceTime()));
+            equipPlan.setNoticeDate(noticeDateStr);
+        }
         if(StringUtils.isEmpty(equipPlan.getPartsId())){
             String planId = this.equipPlanMapper.selectPlanIdByEquipId(equipPlan);
             equipPlan.setPlanId(planId);

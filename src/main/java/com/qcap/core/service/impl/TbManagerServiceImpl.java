@@ -83,7 +83,7 @@ public class TbManagerServiceImpl implements ITbManagerService {
 //				redisUtil.set(AppUtils.getApplicationName()+"managerName:" + managerId, tbManager.getName());
 				LogManager.me().executeLog(LogTaskFactory.loginLog(tbManager.getAccount(), ip));
 				String token = jwtTokenUtil.doGenerateToken(managerId);
-				redisUtil.set(AppUtils.getApplicationName() + ":token:" + managerId, token,60);
+				redisUtil.set(AppUtils.getApplicationName() + ":token:" + managerId, token,180);
 				return token;
 			} else {
 				LogManager.me().executeLog(LogTaskFactory.loginLog(account, "密码错误", ip));

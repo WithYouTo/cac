@@ -14,18 +14,29 @@
     </select>
     
     <select id="getAreaList" parameterType="com.qcap.cac.dto.GetAreaReq"  resultType="com.qcap.cac.dto.GetAreaResp">
-        SELECT
-	        AREA_ID areaId,
-	        AREA_CODE areaCode,
-	        AREA_NAME areaName,
-	        AREA_TYPE areaType,
-	        SUPER_AREA_CODE superAreaCode
-        FROM
-        	tb_area
+		SELECT
+		AREA_ID areaId,
+		AREA_CODE areaCode,
+		AREA_NAME areaName,
+		(
+		SELECT
+		DESC1_
+		FROM
+		tbpubcode01 a
+		WHERE
+		a.DESC_ = b.AREA_TYPE
+		AND CONFIG_CODE_ = 'AREA_TYPE'
+		)  areaType,
+		SUPER_AREA_CODE superAreaCode
+		FROM
+		tb_area b
         <where>
         	<if test="getAreaReq.areaType != null and getAreaReq.areaType != ''">
-	            AND AREA_TYPE = #{getAreaReq.areaType}
+	            AND b.AREA_TYPE = #{getAreaReq.areaType}
 	        </if>
+			<if test="getAreaReq.programCode !=null and getAreaReq.programCode!= ''">
+				and b.PROGRAM_CODE = #{getAreaReq.programCode}
+			</if>
 	   	</where>
     </select>
     
