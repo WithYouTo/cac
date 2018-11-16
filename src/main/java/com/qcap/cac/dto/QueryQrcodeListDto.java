@@ -10,6 +10,9 @@ public class QueryQrcodeListDto {
 	@ApiModelProperty(value = "二维码类型")
 	private String qrcodeType;
 
+	@ApiModelProperty(value = "项目编码")
+	private String programCode;
+
 	public String getQrcodeType() {
 		return qrcodeType;
 	}
@@ -18,9 +21,19 @@ public class QueryQrcodeListDto {
 		this.qrcodeType = qrcodeType;
 	}
 
-	@Override
-	public String toString() {
-		return "QueryQrcodeListDto [qrcodeType=" + qrcodeType + "]";
+	public String getProgramCode() {
+		return programCode;
 	}
 
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
+	@Override
+	public String toString() {
+		return "QueryQrcodeListDto{" +
+				"qrcodeType='" + qrcodeType + '\'' +
+				", programCode='" + programCode + '\'' +
+				'}';
+	}
 }

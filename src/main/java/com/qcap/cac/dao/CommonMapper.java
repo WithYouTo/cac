@@ -15,7 +15,7 @@ import com.qcap.core.entity.TbUserInfo;
 @Repository
 public interface CommonMapper extends BaseMapper<TbManager> {
 
-	List<Map<String, String>> getEquipNameByEquipType(@Param("equipType") String equipType);
+	List<Map<String, String>> getEquipNameByEquipType(@Param("equipType") String equipType,@Param("programCode") String programCode);
 
 	List<Map<String, String>> getPartsNameByEquipNo(@Param("equipNo") String equipNo);
 

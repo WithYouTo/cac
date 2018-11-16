@@ -14,6 +14,7 @@ import com.qcap.cac.entity.TbEquipMaint;
 import com.qcap.cac.entity.TbEquipParts;
 import com.qcap.cac.entity.TbEquipPlan;
 import com.qcap.cac.service.EquipMaintSrv;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -131,6 +132,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
             String planId = this.equipPlanMapper.selectPlanIdByEquipIdAndPartsId(equipPlan);
             equipPlan.setPlanId(planId);
         }
+        EntityTools.setUpdateEmpAndTime(equipPlan);
         this.equipPlanMapper.updateEquipPlan(equipPlan);
     }
 

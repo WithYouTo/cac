@@ -19,10 +19,10 @@
         ON a.PROGRAM_CODE = p.PROGRAM_CODE
         WHERE 1=1
         <if test="obj.workNo != null and obj.workNo != ''">
-            and a.WORK_NO = #{obj.workNo}
+            and a.WORK_NO like concat(concat('%',#{obj.workNo}),'%')
         </if>
         <if test="obj.personName != null and obj.personName != ''">
-            and a.PERSON_NAME = #{obj.personName}
+            and a.PERSON_NAME like concat(concat('%',#{obj.personName}),'%')
         </if>
         <if test="obj.attenceTime != null and obj.attenceTime != ''">
             and a.ATTENCE_TIME &gt; substring(#{obj.attenceTime},1,19)
@@ -33,6 +33,6 @@
         <if test="obj.programCode != null and obj.programCode != ''">
             and a.PROGRAM_CODE = #{obj.programCode}
         </if>
-        ORDER BY a.ATTENCE_TIME
+        ORDER BY a.ATTENCE_TIME DESC
     </select>
 </mapper>

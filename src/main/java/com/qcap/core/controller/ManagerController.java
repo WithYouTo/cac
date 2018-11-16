@@ -68,10 +68,10 @@ public class ManagerController {
 							  @RequestParam(required = false) String programCode) {
 		Map<String, Object> parameter = new HashMap<>();
 		if (StringUtils.isNotEmpty(userName)) {
-			parameter.put("userName", userName + "%");
+			parameter.put("userName", "%" + userName + "%");
 		}
 		if (StringUtils.isNotEmpty(phone)) {
-			parameter.put("phone", phone + "%");
+			parameter.put("phone", "%" +  phone + "%");
 		}
 		parameter.put("workStatus",workStatus);
 		parameter.put("programCode",programCode);

@@ -155,7 +155,10 @@
         SELECT
         count(EQUIP_ID)+1 num
         FROM TB_EQUIP
-        WHERE EQUIP_TYPE = #{equipType}
+        WHERE
+        EQUIP_TYPE = #{equipType}
+        AND
+        PROGRAM_CODE = #{programCode}
     </select>
 
     <select id="getEquipOperateRecordByEquipId" parameterType="String" resultType="map">

@@ -19,7 +19,7 @@
         ec.STATUS status
         from TB_EQUIP_CHARGE ec
         left join tb_program p
-        ON ec.PROGRAM_CODE = ec.PROGRAM_CODE
+        ON ec.PROGRAM_CODE = p.PROGRAM_CODE
         where 1=1
         <if test="obj.equipNo != null and obj.equipNo != ''">
             and ec.EQUIP_NO like CONCAT(CONCAT('%',#{obj.equipNo}),'%')

@@ -8,6 +8,7 @@
 			'EQUIP' qrcodeType,
 			'设备' qrcodeTypeName,
 			EQUIP_NAME NAME,
+			PROGRAM_CODE programCode,
 			EQUIP_NO CODE,
 			EQUIP_CODE_URL url
 		FROM
@@ -15,6 +16,9 @@
 		<where>
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.qrcodeType) and param.qrcodeType == 'POSITION'">
 				EQUIP_NO = #{param.qrcodeType}
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.programCode) and param.programCode != ''">
+				PROGRAM_CODE = #{param.programCode}
 			</if>
 		</where>
 		
@@ -25,6 +29,7 @@
 			'POSITION' qrcodeType,
 			'岗位' qrcodeTypeName,
 			POSITION_NAME NAME,
+			PROGRAM_CODE programCode,
 			POSITION_CODE CODE,
 			POSITION_URL url
 		FROM
@@ -32,6 +37,9 @@
 		<where>
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.qrcodeType) and param.qrcodeType == 'EQUIP'">
 				POSITION_CODE = #{param.qrcodeType}
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.programCode) and param.programCode != ''">
+				PROGRAM_CODE = #{param.programCode}
 			</if>
 		</where>
 		

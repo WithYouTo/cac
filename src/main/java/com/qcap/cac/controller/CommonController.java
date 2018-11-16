@@ -151,23 +151,22 @@ public class CommonController {
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, equipTypeList);
     }
 
-
-   /**
-    *
-    * @Description: 根据设备类型获取设备名称下拉框,返回map为设备编号和设备名称（设备编号）
-    *
-    *
-    * @MethodName: initEquipNameSelect
-    * @Parameters: [equipType]
-    * @ReturnType: java.lang.Object
-    *
-    * @author huangxiang
-    * @date 2018/10/13 12:22
-    */
+    /**
+     *
+     * @Description: 根据设备类型获取设备名称下拉框,返回map为设备编号和设备名称（设备编号）
+     *
+     *
+     * @MethodName: initEquipNameSelect
+     * @Parameters: [equipType]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/10/13 12:22
+     */
     @ResponseBody
     @RequestMapping(value = "/initEquipNameSelect", method = RequestMethod.POST)
-    public Object initEquipNameSelect(String equipType){
-        List<Map<String,String>> list = this.commonSrv.getEquipNameByEquipType(equipType);
+    public Object initEquipNameSelect(String equipType,String programCode){
+        List<Map<String,String>> list = this.commonSrv.getEquipNameByEquipType(equipType,programCode);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
     }
 
@@ -398,4 +397,6 @@ public class CommonController {
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_QUERY_DESC,list);
     }
     
+
+
 }
