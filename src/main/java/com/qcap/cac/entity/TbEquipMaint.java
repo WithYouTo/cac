@@ -80,6 +80,10 @@ public class TbEquipMaint implements Serializable {
      */
     private String maintDesc;
     /**
+     * 维保金额
+     */
+    private String maintMoney;
+    /**
      * 备注
      */
     private String remark;
@@ -274,6 +278,14 @@ public class TbEquipMaint implements Serializable {
         this.version = version;
     }
 
+    public String getMaintMoney() {
+        return maintMoney;
+    }
+
+    public void setMaintMoney(String maintMoney) {
+        this.maintMoney = maintMoney;
+    }
+
     @Override
     public String toString() {
         return "TbEquipMaint{" +
@@ -292,6 +304,7 @@ public class TbEquipMaint implements Serializable {
                 ", maintRecord='" + maintRecord + '\'' +
                 ", maintState='" + maintState + '\'' +
                 ", maintDesc='" + maintDesc + '\'' +
+                ", maintMoney='" + maintMoney + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createEmp='" + createEmp + '\'' +
                 ", createDate=" + createDate +

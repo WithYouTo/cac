@@ -8,6 +8,7 @@ public class EquipMaintInsertDto {
     private String partsNo;
     private String personName;
     private String maintTime;
+    private String maintMoney;
     private String maintDesc;
 
     public String getMaintType() {
@@ -66,6 +67,14 @@ public class EquipMaintInsertDto {
         this.maintDesc = maintDesc;
     }
 
+    public String getMaintMoney() {
+        return maintMoney;
+    }
+
+    public void setMaintMoney(String maintMoney) {
+        this.maintMoney = maintMoney;
+    }
+
     @Override
     public String toString() {
         return "EquipMaintInsertDto{" +
@@ -75,6 +84,7 @@ public class EquipMaintInsertDto {
                 ", partsNo='" + partsNo + '\'' +
                 ", personName='" + personName + '\'' +
                 ", maintTime='" + maintTime + '\'' +
+                ", maintMoney='" + maintMoney + '\'' +
                 ", maintDesc='" + maintDesc + '\'' +
                 '}';
     }
