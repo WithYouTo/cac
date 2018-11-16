@@ -1,18 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.ProgramMapper;
@@ -27,8 +14,17 @@ import com.qcap.cac.service.ProgramSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
-import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 @Service
 @Transactional
 public class ProgramSrvImpl implements ProgramSrv{
@@ -105,9 +101,7 @@ public class ProgramSrvImpl implements ProgramSrv{
 		TbArea area = new TbArea();
 		area.setAreaId(UUIDUtils.getUUID());
 		//项目编码
-		List<String> programCodes = AppUtils.getLoginUserProjectCodes();
-		programCodes.removeAll(Collections.singleton(""));
-		area.setProgramCode(org.apache.commons.lang3.StringUtils.join(programCodes,","));
+		area.setProgramCode(programAddDto.getProgramCode());
 		//区域编码
 		Integer max = this.areaMapper.selectParentLevelMaxNum();
 		area.setAreaCode(ToolUtil.toStr(max));
