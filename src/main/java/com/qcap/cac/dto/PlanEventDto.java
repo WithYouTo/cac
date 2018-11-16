@@ -9,6 +9,9 @@ public class PlanEventDto {
 	@ApiModelProperty(value = "主键")
 	private String planEventId;
 
+	@ApiModelProperty(value = "项目名称")
+	private String programCode;
+
 	@ApiModelProperty(value = "区域编码")
 	private String areaCode;
 
@@ -138,13 +141,30 @@ public class PlanEventDto {
 		this.endScanFlag = endScanFlag;
 	}
 
-	@Override
-	public String toString() {
-		return "PlanEventDto [planEventId=" + planEventId + ", areaCode=" + areaCode + ", areaName=" + areaName
-				+ ", areaType=" + areaType + ", standardCode=" + standardCode + ", eventType=" + eventType
-				+ ", guaranteeType=" + guaranteeType + ", remark=" + remark + ", checkFlag=" + checkFlag
-				+ ", uploadPicFlag=" + uploadPicFlag + ", startScanFlag=" + startScanFlag + ", endScanFlag="
-				+ endScanFlag + "]";
+	public String getProgramCode() {
+		return programCode;
 	}
 
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
+	@Override
+	public String toString() {
+		return "PlanEventDto{" +
+				"planEventId='" + planEventId + '\'' +
+				", programCode='" + programCode + '\'' +
+				", areaCode='" + areaCode + '\'' +
+				", areaName='" + areaName + '\'' +
+				", areaType='" + areaType + '\'' +
+				", standardCode='" + standardCode + '\'' +
+				", eventType='" + eventType + '\'' +
+				", guaranteeType='" + guaranteeType + '\'' +
+				", remark='" + remark + '\'' +
+				", checkFlag='" + checkFlag + '\'' +
+				", uploadPicFlag='" + uploadPicFlag + '\'' +
+				", startScanFlag='" + startScanFlag + '\'' +
+				", endScanFlag='" + endScanFlag + '\'' +
+				'}';
+	}
 }
