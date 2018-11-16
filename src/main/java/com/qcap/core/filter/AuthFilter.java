@@ -83,7 +83,7 @@ public class AuthFilter extends OncePerRequestFilter {
 								isAjaxOrRestful(servletPath, request, response);
 								return;
 							}else{
-								redisUtil.set(AppUtils.getApplicationName() + ":token:" + managerId, token,60);
+								redisUtil.set(AppUtils.getApplicationName() + ":token:" + managerId, token,180);
 							}
 						}
 
