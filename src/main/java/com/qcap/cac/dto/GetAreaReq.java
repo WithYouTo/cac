@@ -15,6 +15,17 @@ public class GetAreaReq {
 	@ApiModelProperty(value = "事件类型")
 	private String eventType;
 
+	@ApiModelProperty(value = "项目编号")
+	private String programCode;
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
 	public String getPositionCode() {
 		return positionCode;
 	}

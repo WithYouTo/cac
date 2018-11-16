@@ -31,6 +31,9 @@ public interface AreaMapper extends BaseMapper<TbArea> {
     @Select("select (IFNULL(MAX(SEQ_NO),0) + 1) from tb_area t WHERE `SUPER_AREA_CODE` = #{superAreaCode} ")
     Integer selectMaxSeqNo(String superAreaCode);
 
+    @Select("select PROGRAM_CODE from tb_area t WHERE `AREA_CODE` = #{areaCode} limit 1 ")
+    String selectProgramCodeByAreaCode(String areaCode);
+
     /**
      *
      * 删除区域之前，判断是否有计划已经包含
