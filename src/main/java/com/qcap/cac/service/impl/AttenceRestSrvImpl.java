@@ -106,7 +106,9 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 		List<GetAttenceResp> ls = new ArrayList<>();
 		Calendar now = Calendar.getInstance();
 		int currentDay = now.get(Calendar.DAY_OF_MONTH);
-		for (int i = 1; i < 32; i++) {
+		int monthDays = getCurMonthDays(req.getMonth());
+		
+		for (int i = 1; i < (monthDays+1); i++) {
 			GetAttenceResp resp = new GetAttenceResp();
 			String shift = String.valueOf(taskArrangementMap.get("shift_" + i));
 			int attence = Integer.valueOf(String.valueOf(attenceMap.get("attence_" + i)));
@@ -131,6 +133,23 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 			ls.add(resp);
 		}
 		return ls;
+	}
+
+	/** 
+	 * @Title: getCurMonthDays 
+	 * @Description: TODO
+	 * @return: void
+	 */
+	private int getCurMonthDays(String monthNo) {
+		Calendar calendar = Calendar.getInstance();
+		int year = Integer.valueOf(monthNo.substring(0, 4));
+		int month = Integer.valueOf(monthNo.substring(4));
+		calendar.set(Calendar.YEAR, year);  
+		calendar.set(Calendar.MONTH, month - 1);
+		calendar.set(Calendar.DATE, 1);//把日期设置为当月第一天
+		calendar.roll(Calendar.DATE, -1);//日期回滚一天，也就是最后一天
+		int days =calendar.get(Calendar.DATE);
+		return days;
 	}
 
 	@Override
@@ -228,38 +247,38 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 				+ "IFNULL(MAX(shift_24),0) shift_24,IFNULL(MAX(shift_25),0) shift_25,IFNULL(MAX(shift_26),0) shift_26,"
 				+ "IFNULL(MAX(shift_27),0) shift_27,IFNULL(MAX(shift_28),0) shift_28,IFNULL(MAX(shift_29),0) shift_29,"
 				+ "IFNULL(MAX(shift_30),0) shift_30,IFNULL(MAX(shift_31),0) shift_31 FROM(SELECT "
-				+ "CASE DAY_1 WHEN '√' THEN SHIFT ELSE 0 END  shift_1,"
-				+ "CASE DAY_2 WHEN '√' THEN SHIFT ELSE 0 END  shift_2,"
-				+ "CASE DAY_3 WHEN '√' THEN SHIFT ELSE 0 END  shift_3,"
-				+ "CASE DAY_4 WHEN '√' THEN SHIFT ELSE 0 END  shift_4,"
-				+ "CASE DAY_5 WHEN '√' THEN SHIFT ELSE 0 END  shift_5,"
-				+ "CASE DAY_6 WHEN '√' THEN SHIFT ELSE 0 END  shift_6,"
-				+ "CASE DAY_7 WHEN '√' THEN SHIFT ELSE 0 END  shift_7,"
-				+ "CASE DAY_8 WHEN '√' THEN SHIFT ELSE 0 END  shift_8,"
-				+ "CASE DAY_9 WHEN '√' THEN SHIFT ELSE 0 END  shift_9,"
-				+ "CASE DAY_10 WHEN '√' THEN SHIFT ELSE 0 END  shift_10,"
-				+ "CASE DAY_11 WHEN '√' THEN SHIFT ELSE 0 END  shift_11,"
-				+ "CASE DAY_12 WHEN '√' THEN SHIFT ELSE 0 END  shift_12,"
-				+ "CASE DAY_13 WHEN '√' THEN SHIFT ELSE 0 END  shift_13,"
-				+ "CASE DAY_14 WHEN '√' THEN SHIFT ELSE 0 END  shift_14,"
-				+ "CASE DAY_15 WHEN '√' THEN SHIFT ELSE 0 END  shift_15,"
-				+ "CASE DAY_16 WHEN '√' THEN SHIFT ELSE 0 END  shift_16,"
-				+ "CASE DAY_17 WHEN '√' THEN SHIFT ELSE 0 END  shift_17,"
-				+ "CASE DAY_18 WHEN '√' THEN SHIFT ELSE 0 END  shift_18,"
-				+ "CASE DAY_19 WHEN '√' THEN SHIFT ELSE 0 END  shift_19,"
-				+ "CASE DAY_20 WHEN '√' THEN SHIFT ELSE 0 END  shift_20,"
-				+ "CASE DAY_21 WHEN '√' THEN SHIFT ELSE 0 END  shift_21,"
-				+ "CASE DAY_22 WHEN '√' THEN SHIFT ELSE 0 END  shift_22,"
-				+ "CASE DAY_23 WHEN '√' THEN SHIFT ELSE 0 END  shift_23,"
-				+ "CASE DAY_24 WHEN '√' THEN SHIFT ELSE 0 END  shift_24,"
-				+ "CASE DAY_25 WHEN '√' THEN SHIFT ELSE 0 END  shift_25,"
-				+ "CASE DAY_26 WHEN '√' THEN SHIFT ELSE 0 END  shift_26,"
-				+ "CASE DAY_27 WHEN '√' THEN SHIFT ELSE 0 END  shift_27,"
-				+ "CASE DAY_28 WHEN '√' THEN SHIFT ELSE 0 END  shift_28,"
-				+ "CASE DAY_29 WHEN '√' THEN SHIFT ELSE 0 END  shift_29,"
-				+ "CASE DAY_30 WHEN '√' THEN SHIFT ELSE 0 END  shift_30,"
-				+ "CASE DAY_31 WHEN '√' THEN SHIFT ELSE 0 END  shift_31 "
-				+ "FROM tb_task_arrangement WHERE EMPLOYEE_CODE = ? AND DELETE_FLAG = ? AND MONTH = ? GROUP BY SHIFT,EMPLOYEE_CODE,MONTH)A");
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_1)) >0 THEN SHIFT ELSE 0 END  shift_1,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_2)) >0 THEN SHIFT ELSE 0 END  shift_2,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_3)) >0 THEN SHIFT ELSE 0 END  shift_3,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_4)) >0 THEN SHIFT ELSE 0 END  shift_4,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_5)) >0 THEN SHIFT ELSE 0 END  shift_5,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_6)) >0 THEN SHIFT ELSE 0 END  shift_6,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_7)) >0 THEN SHIFT ELSE 0 END  shift_7,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_8)) >0 THEN SHIFT ELSE 0 END  shift_8,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_9)) >0 THEN SHIFT ELSE 0 END  shift_9,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_10)) >0 THEN SHIFT ELSE 0 END  shift_10,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_11)) >0 THEN SHIFT ELSE 0 END  shift_11,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_12)) >0 THEN SHIFT ELSE 0 END  shift_12,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_13)) >0 THEN SHIFT ELSE 0 END  shift_13,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_14)) >0 THEN SHIFT ELSE 0 END  shift_14,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_15)) >0 THEN SHIFT ELSE 0 END  shift_15,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_16)) >0 THEN SHIFT ELSE 0 END  shift_16,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_17)) >0 THEN SHIFT ELSE 0 END  shift_17,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_18)) >0 THEN SHIFT ELSE 0 END  shift_18,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_19)) >0 THEN SHIFT ELSE 0 END  shift_19,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_20)) >0 THEN SHIFT ELSE 0 END  shift_20,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_21)) >0 THEN SHIFT ELSE 0 END  shift_21,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_22)) >0 THEN SHIFT ELSE 0 END  shift_22,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_23)) >0 THEN SHIFT ELSE 0 END  shift_23,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_24)) >0 THEN SHIFT ELSE 0 END  shift_24,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_25)) >0 THEN SHIFT ELSE 0 END  shift_25,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_26)) >0 THEN SHIFT ELSE 0 END  shift_26,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_27)) >0 THEN SHIFT ELSE 0 END  shift_27,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_28)) >0 THEN SHIFT ELSE 0 END  shift_28,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_29)) >0 THEN SHIFT ELSE 0 END  shift_29,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_30)) >0 THEN SHIFT ELSE 0 END  shift_30,"
+				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_31)) >0 THEN SHIFT ELSE 0 END  shift_31 "
+				+ "FROM tb_task_arrangement WHERE EMPLOYEE_CODE = ? AND DELETE_FLAG = ? AND MONTH = ? )A");
 		return jdbcTemplate.queryForMap(sql.toString(),
 				new Object[] { req.getEmployeeCode(), CommonConstant.DELETE_FLAG_NORMAL, req.getMonth() });
 	}

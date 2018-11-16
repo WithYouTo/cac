@@ -113,6 +113,7 @@ public class ProgramSrvImpl implements ProgramSrv{
 		area.setAreaCode(ToolUtil.toStr(max));
 		area.setAreaName(programAddDto.getProgramName());
 		area.setLevel("-1");
+		area.setProgramCode(programAddDto.getProgramCode());
 		Integer seqNo = this.areaMapper.selectParentLevelMaxSeqNo();
 		area.setSeqNo(ToolUtil.toStr(seqNo));
 		this.areaMapper.insert(EntityTools.setCreateEmpAndTime(area));
