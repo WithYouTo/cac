@@ -50,8 +50,8 @@ public class TempTaskController {
 
 	
 	@RequestMapping(value = "/selectArea", method = RequestMethod.POST)
-	public Object selectAreaItem() {
-		List<ZTreeNode> list = this.tempTaskSrv.selectAreaItem();
+	public Object selectAreaItem(@RequestParam("programCode") String programCode) {
+		List<ZTreeNode> list = this.tempTaskSrv.selectAreaItem(programCode);
 		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "查询区域成功", list);
 	}
 

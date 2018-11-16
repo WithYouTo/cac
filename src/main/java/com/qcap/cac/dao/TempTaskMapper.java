@@ -92,7 +92,7 @@ public interface TempTaskMapper {
 	 * @return
 	 * @return: List<Map>
 	 */
-	List<Map<String, Object>> selectAreaItem();
+	List<Map<String, Object>> selectAreaItem(@Param("programCode")String programCode);
 
 	/**
 	 * 根据区域编码查询岗位信息

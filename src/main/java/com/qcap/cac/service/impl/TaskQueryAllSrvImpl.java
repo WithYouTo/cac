@@ -61,8 +61,8 @@ public class TaskQueryAllSrvImpl implements TaskQueryAllSrv {
 	}
 	
 	@Override
-	public List<Map<String,Object>> selectEmployee() {
-		return taskQueryMapper.selectEmployee();
+	public List<Map<String,Object>> selectEmployee(String programCode) {
+		return taskQueryMapper.selectEmployee(programCode);
 	}
 
 }

@@ -64,8 +64,8 @@ public class TaskQueryAllController {
 	
 	@ResponseBody
 	@RequestMapping(value="/selectEmployee",method=RequestMethod.POST)
-	public Object selectEmployee() {
-		List<Map<String,Object>>list=this.taskQueryAllSrvImpl.selectEmployee();
+	public Object selectEmployee(@RequestParam String programCode) {
+		List<Map<String,Object>>list=this.taskQueryAllSrvImpl.selectEmployee(programCode);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
 	

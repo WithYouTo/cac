@@ -16,7 +16,7 @@ public interface TempTaskSrv {
 
 	List<Map<String,Object>> selectStandardItem();
 
-	List<ZTreeNode> selectAreaItem();
+	List<ZTreeNode> selectAreaItem(String programCode);
 
 	Map<String, Object> insertTempTask(TempTaskDto taskDto);
 

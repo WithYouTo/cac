@@ -44,8 +44,11 @@
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programCode)">
 			AND m.PROGRAM_CODE =#{programCode}
 		</if>
-		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
-		AND m.EMPLOYEE_CODE =#{employeeCode}
+		<if test=' employeeCode !=null and employeeCode !="" '>
+			AND m.EMPLOYEE_CODE  LIKE CONCAT('%',#{employeeCode},'%')
+		</if>
+		<if test=' employeeName !=null and employeeName !="" '>
+			AND m.EMPLOYEE_NAME  LIKE CONCAT('%',#{employeeName},'%')
 		</if>
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
 		AND m.TASK_STATUS=#{taskStatus}
@@ -252,10 +255,11 @@
 	ORDER BY STANDARD_CODE
 	</select>
 	
-	<select id="selectAreaItem" resultType="Map">
+	<select id="selectAreaItem" parameterType="String" resultType="Map">
 	SELECT m.AREA_CODE id,m.AREA_NAME name,m.SUPER_AREA_CODE pId,n.AREA_NAME pName 
 	FROM tb_area m LEFT JOIN tb_area n
 	ON m.SUPER_AREA_CODE =n.AREA_CODE
+	WHERE m.PROGRAM_CODE =#{programCode}
 	<!-- SELECT AREA_CODE areaCode,AREA_NAME areaName,SUPER_AREA_CODE PAreaCode FROM tb_area -->
 	</select>
 	

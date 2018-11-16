@@ -46,8 +46,11 @@
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(positionCode)">
 		AND m.POSITION_CODE = #{positionCode}
 		</if>
-		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
-		AND m.EMPLOYEE_CODE =#{employeeCode}
+		<if test=' employeeCode !=null and employeeCode !="" '>
+			AND m.EMPLOYEE_CODE  LIKE CONCAT('%',#{employeeCode},'%')
+		</if>
+		<if test=' employeeName !=null and employeeName !="" '>
+			AND m.EMPLOYEE_NAME  LIKE CONCAT('%',#{employeeName},'%')
 		</if>
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeTel)">
 		AND m.EMPLOYEE_TEL =#{employeeTel}
@@ -134,12 +137,25 @@
 	FROM tb_sys_file m where GROUP_ID =#{groupId}
 	</select>
 	
- 	<select id="selectEmployee" resultType="Map">
-	SELECT
+ 	<select id="selectEmployee" parameterType="String" resultType="Map">
+<!-- 	SELECT
 	DISTINCT
 	account AS employeeCode,CONCAT(`name`,'-',account) AS employeeName,phone AS employeeTel
 	FROM tb_manager
-	WHERE `status` !='3'
+	WHERE `status` !='3' -->
+	SELECT
+	DISTINCT
+	m.account AS employeeCode,CONCAT(m.name,'-',m.account) AS employeeName,m.phone AS employeeTel
+	from tb_manager m
+	left join tb_user_info info on info.user_id = m.id
+	left join tb_manager_org mo on m.id = mo.manager_id
+	left join tb_org o ON mo.org_id = o.id
+	left join tb_program pro ON o.PROGRAM_CODE  = pro.PROGRAM_CODE
+	<where>
+		<if test=' programCode!=null and programCode !="" '>
+			pro.PROGRAM_CODE =#{programCode}
+		</if>
+	</where> 
 	</select>
 	
 	

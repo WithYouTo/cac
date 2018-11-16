@@ -13,7 +13,7 @@ public interface TaskQueryAllSrv {
 	
 	List<Map<String,Object>> selectPosition();
 	
-	List<Map<String,Object>> selectEmployee();
+	List<Map<String,Object>> selectEmployee(String programCode);
 	
 	Map<String,Object> selectStandardDetail(String standardCode);
 }

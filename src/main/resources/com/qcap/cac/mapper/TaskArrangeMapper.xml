@@ -53,7 +53,10 @@
 		AND m.POSITION_CODE  =#{positionCode}
 		</if>
 		<if test=' employeeCode !=null and employeeCode !="" '>
-			AND m.EMPLOYEE_CODE  =#{employeeCode}
+			AND m.EMPLOYEE_CODE  LIKE CONCAT('%',#{employeeCode},'%')
+		</if>
+		<if test=' employeeName !=null and employeeName !="" '>
+			AND m.EMPLOYEE_NAME  LIKE CONCAT('%',#{employeeName},'%')
 		</if>
 		AND m.DELETE_FLAG !='DELETE'
 	</select>

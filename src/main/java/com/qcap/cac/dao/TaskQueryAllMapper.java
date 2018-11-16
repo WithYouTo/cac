@@ -15,7 +15,7 @@ public interface TaskQueryAllMapper {
 	
 	List<Map<String,Object>> selectPosition();
 	
-	List<Map<String,Object>> selectEmployee();
+	List<Map<String,Object>> selectEmployee(@Param("programCode")String programCode);
 	
 	Map<String,Object> selectStandardInfo(@Param("standardCode")String standardCode);
 	

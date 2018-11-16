@@ -5,10 +5,19 @@ import com.qcap.cac.constant.CommonConstant;
 public class TempTaskSearchParam {
 
 	private String employeeCode;
+	private String employeeName;
 	private String taskStatus;
 	private String shift;
 	private String programCode;
 	private static final String taskType=CommonConstant.TASK_TYPE_TEMP;
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
 
 	public String getProgramCode() {
 		return programCode;

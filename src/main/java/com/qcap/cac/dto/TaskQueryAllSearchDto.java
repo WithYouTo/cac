@@ -6,6 +6,8 @@ public class TaskQueryAllSearchDto {
 	
 	private String employeeCode;
 	
+	private String employeeName;
+	
 	private String employeeTel;
 	
 	private String standardCode;
@@ -37,6 +39,14 @@ public class TaskQueryAllSearchDto {
 	private String endTimeEnd;
 
 	private String programCode;
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
 
 	public String getProgramCode() {
 		return programCode;

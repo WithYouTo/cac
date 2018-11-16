@@ -25,6 +25,7 @@ import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.TempTaskDto;
 import com.qcap.cac.dto.TempTaskSearchParam;
 import com.qcap.cac.entity.TbTask;
+import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.MessageRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.EntityTools;
@@ -78,15 +79,21 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 	}
 
 	@Override
-	public List<ZTreeNode> selectAreaItem() {
+	public List<ZTreeNode> selectAreaItem(String programCode) {
+		if(StringUtils.isEmpty(programCode)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"参数为空");
+		}
 		List<ZTreeNode> ls = new ArrayList<>();
-		List<Map<String, Object>> list = this.tempTaskMapper.selectAreaItem();
+		List<Map<String, Object>> list = this.tempTaskMapper.selectAreaItem(programCode);
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (Map<String, Object> map : list) {
 				ZTreeNode zTreeNode = new ZTreeNode();
 				zTreeNode.setId(Objects.toString(map.get("id")));
 				zTreeNode.setName(Objects.toString(map.get("name")));
 				zTreeNode.setPid(Objects.toString(map.get("pId")));
+				if(map.get("pId") == null) {
+					zTreeNode.setPid("0");
+				}
 				if ("0".equals(map.get("pId"))) {
 					zTreeNode.setOpen("true");
 				} else {
