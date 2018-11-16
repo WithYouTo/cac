@@ -98,7 +98,7 @@ public class EquipSrvImpl implements EquipSrv {
         try {
             //2、根据传入的设备类型生成设备编号
             String equipType = equip.getEquipType();
-            String equipNo = getEquipNoByEquipType(equipType);
+            String equipNo = getEquipNoByEquipType(equipInsertDto.getProgramCode(),equipType);
             //3、通过设备编码生成二维码，上传到文件服务器，并返回路径
             String url = getQrCodeUrlByEquipNo(equipNo);
             //4、通过维保周期和启用时间生成下次维保时间
@@ -301,11 +301,11 @@ public class EquipSrvImpl implements EquipSrv {
      * @author huangxiang
      * @date 2018/10/16 19:35
      */
-    private String getEquipNoByEquipType(String equipType) {
-        int num = this.equipMapper.getMaxEquipNumByEquipType(equipType);
+    private String getEquipNoByEquipType(String program,String equipType) {
+        int num = this.equipMapper.getMaxEquipNumByEquipType(equipType,program);
         String equipNo = String.format("%03d", num);
         StringBuffer str = new StringBuffer();
-        str.append(CommonCodeConstant.SYS_EQUIP_TYPE_PREFIX).append(equipType).append(equipNo);
+        str.append(program).append(equipType).append(equipNo);
         return str.toString();
     }
 
@@ -323,14 +323,14 @@ public class EquipSrvImpl implements EquipSrv {
      */
     private String getQrCodeUrlByEquipNo(String equipNo) throws Exception{
         String dir = RedisTools.getCommonConfig("CAC_AREA_SAVE_PATH");
-
+        String host = RedisTools.getCommonConfig("CAC_SERVICE_HOST");
         File directory = new File(dir);
 
-        File file = QrCodeUtil.generate(equipNo, 300, 300, directory);
+        File file = QrCodeUtil.generate(equipNo, 120, 120, directory);
         FileInputStream fileInputStream = new FileInputStream(file);
         MultipartFile multipartFile = new MockMultipartFile(file.getName(), file.getName(), ContentType.APPLICATION_OCTET_STREAM.toString(), fileInputStream);
         StorePath storePath = storageClient.uploadFile(multipartFile.getInputStream(),multipartFile.getSize(), FilenameUtils.getExtension(multipartFile.getOriginalFilename()),null);
-        return  storePath.getFullPath();
+        return  host+storePath.getFullPath();
     }
 
     /**

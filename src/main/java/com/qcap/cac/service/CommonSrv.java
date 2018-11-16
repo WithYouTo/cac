@@ -12,7 +12,7 @@ import com.qcap.core.entity.TbUserInfo;
 import com.qcap.core.model.ZTreeNode;
 
 public interface CommonSrv {
-	List<Map<String, String>> getEquipNameByEquipType(String equipType);
+	List<Map<String, String>> getEquipNameByEquipType(String equipType,String programCode);
 
 	List<Map<String, String>> getPartsNameByEquipNo(String equipNo);
 

@@ -33,10 +33,9 @@ public class CommonSrvImpl implements CommonSrv {
 	
     @Resource
     private FastDFSClientWrapper dfsClient;
-
 	@Override
-	public List<Map<String, String>> getEquipNameByEquipType(String equipType) {
-		return this.commonMapper.getEquipNameByEquipType(equipType);
+	public List<Map<String, String>> getEquipNameByEquipType(String equipType,String programCode) {
+		return this.commonMapper.getEquipNameByEquipType(equipType,programCode);
 	}
 
 	@Override

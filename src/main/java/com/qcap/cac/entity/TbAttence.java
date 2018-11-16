@@ -13,6 +13,12 @@ public class TbAttence {
 	 */
 	private String orgName;
 
+
+	/**
+	 * 项目编码
+	 */
+	private String programCode;
+
 	/**
 	 * 用户ID
 	 */
@@ -37,6 +43,15 @@ public class TbAttence {
 	 * 签到地点
 	 */
 	private String attencePlace;
+
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
 
 	public String getAttencePlace() {
 		return attencePlace;

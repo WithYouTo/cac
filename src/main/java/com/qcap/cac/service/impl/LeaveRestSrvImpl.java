@@ -19,6 +19,7 @@ import com.qcap.core.dao.TbManagerMapper;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.warpper.FastDFSClientWrapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,6 +108,12 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         leave.setLeaveUrl(path);
 
         leave.setLeaveId(UUIDUtils.getUUID());
+
+        List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+        if(!CollectionUtils.isEmpty(programCodes)){
+            programCodes.removeAll(Collections.singleton(""));
+            leave.setProgramCode(StringUtils.join(programCodes,","));
+        }
         EntityTools.setCreateEmpAndTime(leave);
         EntityTools.setUpdateEmpAndTime(leave);
         this.leaveRestMapper.insert(leave);
@@ -119,9 +123,8 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         List<UserListResp> user = loginRestMapper.getUserListByOrgCode(orgCode);
         List<String> userList = user.stream().map(UserListResp::getEmployeeCode).collect(Collectors.toList());
         //推送消息
-        List<String> programCodes = AppUtils.getLoginUserProjectCodes();
-        String title = "新增请假单";
-        String message = "您有一个新的请假单待审批";
+        String title = "新的请假单";
+        String message = "您有一个" + manager.getName() +  "的请假单待审批";
         messageRestSrv.JpushMessage(userList, StringUtils.join(programCodes,","),message,title);
         return 1;
     }
@@ -171,8 +174,11 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
             //推送消息
             String workNo = leave.getWorkNo();
             List<String> programCodes = AppUtils.getLoginUserProjectCodes();
-            String title = "请假审批通过";
-            messageRestSrv.JpushMessage(workNo, StringUtils.join(programCodes,","),title,title);
+            String title = "请假单审批通过";
+            String leaveStartFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveStartTime()),"yyyy-MM-dd HH:ss");
+            String leaveEndFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveEndTime()),"yyyy-MM-dd HH:ss");
+            String message = "您的请假单【" + leaveStartFormat + "至" + leaveEndFormat + "】审批通过";
+            messageRestSrv.JpushMessage(workNo, StringUtils.join(programCodes,","),message,title);
 
         }else{
             throw  new RuntimeException("操作类型不正确");
@@ -207,7 +213,10 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         String workNo = leave.getWorkNo();
         List<String> programCodes = AppUtils.getLoginUserProjectCodes();
         String title = "请假单被驳回";
-        messageRestSrv.JpushMessage(workNo, StringUtils.join(programCodes,","),title,title);
+        String leaveStartFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveStartTime()),"yyyy-MM-dd HH:ss");
+        String leaveEndFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveEndTime()),"yyyy-MM-dd HH:ss");
+        String message = "您的请假单【" + leaveStartFormat + "至" + leaveEndFormat + "】被驳回";
+        messageRestSrv.JpushMessage(workNo, StringUtils.join(programCodes,","),message,title);
         return 1;
     }
 

@@ -104,10 +104,6 @@ public class ProgramSrvImpl implements ProgramSrv{
 	void insertParentArea(ProgramAddDto programAddDto){
 		TbArea area = new TbArea();
 		area.setAreaId(UUIDUtils.getUUID());
-		//项目编码
-		List<String> programCodes = AppUtils.getLoginUserProjectCodes();
-		programCodes.removeAll(Collections.singleton(""));
-		area.setProgramCode(org.apache.commons.lang3.StringUtils.join(programCodes,","));
 		//区域编码
 		Integer max = this.areaMapper.selectParentLevelMaxNum();
 		area.setAreaCode(ToolUtil.toStr(max));

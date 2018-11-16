@@ -1,31 +1,10 @@
 package com.qcap.cac.service.impl;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.AttenceMapper;
 import com.qcap.cac.dao.AttenceRestMapper;
-import com.qcap.cac.dto.AttenceReq;
-import com.qcap.cac.dto.GetAttenceDetailsReq;
-import com.qcap.cac.dto.GetAttenceDetailsResp;
-import com.qcap.cac.dto.GetAttenceReq;
-import com.qcap.cac.dto.GetAttenceResp;
+import com.qcap.cac.dto.*;
 import com.qcap.cac.entity.TbAttence;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.AttenceRestSrv;
@@ -36,7 +15,18 @@ import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.entity.TbOrg;
 import com.qcap.core.entity.TbUserInfo;
+import com.qcap.core.utils.AppUtils;
 import com.qcap.core.warpper.FastDFSClientWrapper;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+import java.util.*;
 
 @Service
 @Transactional
@@ -93,6 +83,12 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 			attence.setFilesUrl(url);
 		}
 
+		//写入项目编码
+		List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+		if(!CollectionUtils.isEmpty(programCodes)){
+			programCodes.removeAll(Collections.singleton(""));
+			attence.setProgramCode(StringUtils.join(programCodes,","));
+		}
 		attence = EntityTools.setCreateEmpAndTime(attence);
 
 		attenceMapper.insert(attence);

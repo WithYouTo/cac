@@ -12,6 +12,8 @@
         DEL_FLAG = 'NORMAL'
         AND
         EQUIP_TYPE = #{equipType}
+		AND
+		PROGRAM_CODE = #{programCode}
     </select>
 
     <select id="getPartsNameByEquipNo" resultType="java.util.Map">

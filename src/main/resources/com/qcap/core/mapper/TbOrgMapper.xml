@@ -67,7 +67,7 @@
         ON o.program_Code = p.program_Code
         WHERE 1=1
         <if test="org.name!=null and org.name!=''">
-           AND name = #{org.name}
+           AND name like concat(concat('%',#{org.name}),'%')
         </if>
         <if test="org.code!=null and org.code!=''">
             AND parent_code = #{org.code}
