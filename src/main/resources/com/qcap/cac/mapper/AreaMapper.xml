@@ -108,13 +108,15 @@
 		FROM
 		tb_area m
 		LEFT JOIN tb_area n ON m.SUPER_AREA_CODE = n.AREA_CODE
-		<if test="programCodes !=null and programCodes.size > 0">
+		<where>
+		<if test="paramMap.programCodes !=null and paramMap.programCodes.size > 0">
 			and m.PROGRAM_CODE in
-			<foreach item="item" index="index" collection="programCodes"
+			<foreach item="item" index="index" collection="paramMap.programCodes"
 					 open="(" separator="," close=")">
 				#{item}
 			</foreach>
 		</if>
+		</where>
 		ORDER BY m.`LEVEL`,m.SEQ_NO
 	</select>
 

@@ -63,19 +63,24 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
             wrapper.like("AREA_NAME","%" + areaPositionDto.getAreaName() + "%");
         }
 
+        if(StringUtils.isNotEmpty(areaPositionDto.getProgramCode())){
+            wrapper.eq("PROGRAM_CODE",areaPositionDto.getProgramCode());
+        }
+
+        wrapper.orderByAsc("POSITION_CODE");
         return this.areaPositionMapper.selectPage(page,wrapper);
-//        for(TbAreaPosition item : list){
-//            String positionTypeName = areaPositionMapper.selectPositionTypeName(item.getPositionType());
-//            item.setPositionTypeName(positionTypeName);
-//        }
-//
-//        return list;
     }
 
     @Override
     public Integer insertAreaPosition(TbAreaPosition areaPosition) throws Exception{
 
-        String positionCode = UUIDUtils.getPositionCode();
+        if(StringUtils.isEmpty(areaPosition.getProgramCode())){
+            throw  new RuntimeException("新增岗位前请先选择项目");
+        }
+
+        //岗位编码 = 项目编码 + GW + 3位连续数
+        String suffix = this.areaPositionMapper.selectMaxSuffixNum();
+        String positionCode = areaPosition.getProgramCode() + "GW" + suffix;
         String areaCodes = areaPosition.getAreaCode();
         String positionType = areaPosition.getPositionType();
 
@@ -117,12 +122,6 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
         areaPosition.setPositionUrl(positionUrl);
         areaPosition.setPositionId(UUIDUtils.getUUID());
 
-        //项目编码
-        List<String> programCodes = AppUtils.getLoginUserProjectCodes();
-        programCodes.removeAll(Collections.singleton(""));
-        areaPosition.setProgramCode(StringUtils.join(programCodes,","));
-//        areaPosition.setCreateDate(new Date());
-//        areaPosition.setCreateEmp("SYS");
         EntityTools.setCreateEmpAndTime(areaPosition);
         return this.areaPositionMapper.insert(areaPosition);
     }
@@ -190,6 +189,17 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
             List<String> programCodes = AppUtils.getLoginUserProjectCodes();
             programCodes.removeAll(Collections.singleton(""));
             areaPosition.setProgramCode(StringUtils.join(programCodes,","));
+        }
+
+
+        //岗位类型为清洁人员时候，同一个区域不能属于多个岗位
+        if("3".equals(areaPosition.getPositionType())){
+            List<String> areaCodeList = Arrays.asList(areaPosition.getAreaCode().split(","));
+            for(String areaCode : areaCodeList){
+                if(areaPositionMapper.checkExistPositionByAreaCodes(areaCode) > 1){
+                    throw new  RuntimeException("选择的区域已存在其他岗位中，无法修改");
+                }
+            }
         }
 
         return this.areaPositionMapper.updateById(areaPosition);

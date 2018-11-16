@@ -3,6 +3,7 @@ package com.qcap.cac.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qcap.cac.entity.TbAreaPosition;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.Map;
 
@@ -55,6 +56,19 @@ public interface AreaPositionMapper extends BaseMapper<TbAreaPosition> {
      */
 
     Integer checkExistPositionByAreaCodes(@Param("areaCode") String areaCode);
+
+
+    /**
+     *
+     * 查询项目编码最后三位的最大值
+     * @author 曾欣
+     * @date 2018/11/15 15:31
+     * @param
+     * @return java.lang.Integer
+     */
+
+    @Select("select IFNULL(MAX(SUBSTRING(POSITION_CODE, -3) + 1),'001') from tb_area_position")
+    String selectMaxSuffixNum();
 
 
 }

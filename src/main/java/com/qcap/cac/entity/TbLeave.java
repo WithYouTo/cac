@@ -27,6 +27,11 @@ public class TbLeave {
     private String workNo;
 
     /**
+     *   项目编号
+     */
+    private String programCode;
+
+    /**
      *   请假类型（获取通用代码档）
      */
     private String leaveType;
@@ -121,6 +126,14 @@ public class TbLeave {
      *   版本
      */
     private Integer version;
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
 
     public String getAuditTime() {
         return auditTime;

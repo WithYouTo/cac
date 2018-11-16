@@ -23,8 +23,7 @@ public interface AreaMapper extends BaseMapper<TbArea> {
 
     List<Map<String, Object>> selectAreaList(IPage<Map<String, Object>> page,@Param("paramMap") Map paramMap);
 
-    //List<Map> initTree(Map paramMap);
-    List<ZTreeNode> initTree(Map paramMap);
+    List<ZTreeNode> initTree(@Param("paramMap") Map paramMap);
 
     @Select("select IFNULL(MAX(SUBSTRING(AREA_CODE, - 3)),-1) from tb_area t WHERE `LEVEL` = #{level} ")
     Integer selectMaxNum(Integer level);
