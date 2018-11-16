@@ -43,8 +43,8 @@
 		m.AREA_NAME  AS  areaName
 		FROM tb_program m
 		WHERE 1=1
-	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programName)">
-        AND PROGRAM_NAME = #{programName}
+	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(programCode)">
+        AND PROGRAM_CODE = #{programCode}
       </if>
 	  <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(areaCode)">
         AND AREA_CODE = #{areaCode}
@@ -234,6 +234,12 @@
       VERSION = VERSION +1
     </set>
     where PROGRAM_ID = #{programId}
+  </update>
+  
+  <update id="updateContractFile" parameterType="com.qcap.cac.dto.DeleteProgramSysFileDto">
+  update tb_program
+  set  CONTRACT_FILE = #{contractFile}
+  where PROGRAM_ID = #{programId}
   </update>
   
     <delete id="deleteProgramByKey" parameterType="java.lang.String" >

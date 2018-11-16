@@ -104,8 +104,8 @@ public class AppTaskRestController {
 	@RequestMapping(value = "/workingTask", method = RequestMethod.POST)
 	@ApiOperation(value = "开始清洁", notes = "开始清洁", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public Object workingTask(@ApiParam(value = "任务编号", required = true) @RequestParam("taskCode") String taskCode) {
-		this.appTaskRestSrv.workingTask(taskCode);
+	public Object workingTask(@Valid AppTaskRestWorkingTaskDto appTaskRestWorkingTaskDto) {
+		this.appTaskRestSrv.workingTask(appTaskRestWorkingTaskDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
 	}
 

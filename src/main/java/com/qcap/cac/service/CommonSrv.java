@@ -1,7 +1,10 @@
 package com.qcap.cac.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.qcap.cac.entity.TbSysFile;
 import com.qcap.core.entity.TbOrg;
@@ -36,4 +39,16 @@ public interface CommonSrv {
     List<Map<String,String>> getProgramCodes(List<String> programCodes);
 
     List<Map<String,String>> getAllProgramCodes();
+    
+    Object uploadAndSaveFile(MultipartFile file) throws IOException;
+    
+    void deleteSavedFile(String url);
+    
+    void updateFileGroupId(Map<String, Object> map);
+    
+    List<Map<String, String>> selectSysFileByGroupId (String groupId);
+    
+    void deleteSysFileByGroupId (String groupId);
+    
+    void deleteSysFileByKey (String fileId);
 }

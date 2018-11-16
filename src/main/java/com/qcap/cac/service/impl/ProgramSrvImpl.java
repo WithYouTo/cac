@@ -1,8 +1,22 @@
 package com.qcap.cac.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.ProgramMapper;
+import com.qcap.cac.dto.DeleteProgramSysFileDto;
 import com.qcap.cac.dto.ProgramAddDto;
 import com.qcap.cac.dto.ProgramSearchDto;
 import com.qcap.cac.entity.TbArea;
@@ -10,32 +24,17 @@ import com.qcap.cac.entity.TbProgram;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.service.ProgramSrv;
-import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
-import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 @Service
 @Transactional
 public class ProgramSrvImpl implements ProgramSrv{
 	
 	@Resource
 	private ProgramMapper programMapper;
-	
-	@Resource
-	private TempTaskSrv tempTaskSrvImpl;
 	
 	@Resource
 	private CommonSrv commonSrvImpl;
@@ -54,10 +53,15 @@ public class ProgramSrvImpl implements ProgramSrv{
 
 		//查询项目编号是否被占用
 		Map<String,Object> map = new HashMap<>();
-		map.put("programCode",programAddDto.getProgramCode());
+		String programCode = programAddDto.getProgramCode();
+		map.put("programCode",programCode);
 		String programId = this.programMapper.selectIfCodeExist(map);
 
 		if(StringUtils.isEmpty(programId)){
+			//文件
+		    String fileIds = programAddDto.getFileIds();
+		    String fileUrls = programAddDto.getFileUrls();
+		    
 			TbProgram program = new TbProgram();
 			BeanUtils.copyProperties(program, programAddDto);
 			program.setProgramId(UUIDUtils.getUUID());
@@ -65,6 +69,7 @@ public class ProgramSrvImpl implements ProgramSrv{
 			program.setEndTime(DateUtil.stringToDate(programAddDto.getEndTimeStr()));
 			program.setEffectDate(DateUtil.stringToDate(programAddDto.getEffectDateStr()));
 			program.setVersion(0);
+			program.setContractFile(fileUrls);
 			/**设置新增时间和新增人**/
 			EntityTools.setCreateEmpAndTime(program);
 
@@ -72,6 +77,12 @@ public class ProgramSrvImpl implements ProgramSrv{
 
 			//新增区域父级
 			insertParentArea(programAddDto);
+			
+			//更新文件groupId
+			Map<String, Object> param = new HashMap<>();
+			param.put("fileIds", fileIds);
+			param.put("groupId", programCode);
+			commonSrvImpl.updateFileGroupId(param);
 
 		}else {
 			throw  new BaseException(CommonCodeConstant.ERROR_CODE_40402, "项目编号已存在，请更换项目编号");
@@ -113,11 +124,16 @@ public class ProgramSrvImpl implements ProgramSrv{
 
 		//查询项目编号是否被占用
 		Map<String,Object> map = new HashMap<>();
-		map.put("programCode",programAddDto.getProgramCode());
+		String programCode = programAddDto.getProgramCode();
+		map.put("programCode",programCode);
 		map.put("programId",programAddDto.getProgramId());
 		String programId = this.programMapper.selectIfCodeExist(map);
 
 		if(StringUtils.isEmpty(programId)){
+			//文件
+		    String fileIds = programAddDto.getFileIds();
+		    String fileUrls = programAddDto.getFileUrls();
+		    
 			TbProgram program = new TbProgram();
 			BeanUtils.copyProperties(program, programAddDto);
 			program.setStartTime(DateUtil.stringToDate(programAddDto.getStartTimeStr()));
@@ -125,8 +141,21 @@ public class ProgramSrvImpl implements ProgramSrv{
 			program.setEffectDate(DateUtil.stringToDate(programAddDto.getEffectDateStr()));
 			/**设置更新时间和更新人**/
 			EntityTools.setUpdateEmpAndTime(program);
+			program.setContractFile(fileUrls);
 
 			this.programMapper.updateProgramByKey(program);
+			
+			
+			//先删除文件信息
+			if(!StringUtils.isEmpty(fileIds)) {
+//				commonSrvImpl.deleteSavedFile(programAddDto.getContractFile());
+				commonSrvImpl.deleteSysFileByGroupId(programCode);
+				//更新文件groupId
+				Map<String, Object> param = new HashMap<>();
+				param.put("fileIds", fileIds);
+				param.put("groupId", programCode);
+				commonSrvImpl.updateFileGroupId(param);
+			}
 		}else{
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"该项目编号已经被占用，请换个项目编号");
 		}
@@ -140,6 +169,13 @@ public class ProgramSrvImpl implements ProgramSrv{
 			throw new BaseException(CommonCodeConstant.PARAM_EMPTY_CODE, "参数为空");
 		}
 		this.programMapper.deleteProgramByKey(programId);
+	}
+
+	@Override
+	public void deleteSysFile(DeleteProgramSysFileDto deleteProgramSysFileDto) {
+		// TODO Auto-generated method stub
+		this.commonSrvImpl.deleteSysFileByKey(deleteProgramSysFileDto.getFileId());
+		this.programMapper.updateContractFile(deleteProgramSysFileDto);
 	}
 	
 }

@@ -24,7 +24,7 @@ public interface AppTaskRestSrv {
 
     Map<String, Object> selectStandardDetailInfo (String standardDetailId);
 
-    void workingTask(String taskCode);
+    void workingTask(AppTaskRestWorkingTaskDto appTaskRestWorkingTaskDto);
 
     void finishTask(List<MultipartFile>list,AppTaskUpdateReq appTaskUpdateReq) throws IOException;
 

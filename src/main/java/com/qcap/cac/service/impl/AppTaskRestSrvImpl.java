@@ -331,17 +331,14 @@ private String dealWithSpecialTaskTime(String startTime) {
     }
 
     @Override
-    public void workingTask(String taskCode) {
+    public void workingTask(AppTaskRestWorkingTaskDto appTaskRestWorkingTaskDto) {
         AppTaskUpdateReq appTaskUpdateReq = new AppTaskUpdateReq();
-        appTaskUpdateReq.setTaskCode(taskCode);
+        appTaskUpdateReq.setTaskCode(appTaskRestWorkingTaskDto.getTaskCode());
         appTaskUpdateReq.setTaskStatus(CommonConstant.TASK_STATUS_WORKING);
-        /**
-    	 * TODO
-    	 * 更改当前任务执行人员
-    	 */
-//    	String employeeName =this.appTaskRestMapper.selectEmployeeName(employeeCode);
-//    	appTaskUpdateReq.setEmployeeCode(employeeCode);
-//    	appTaskUpdateReq.setEmployeeName(employeeName);
+        String employeeCode = appTaskRestWorkingTaskDto.getEmployeeCode();
+    	String employeeName =this.appTaskRestMapper.selectEmployeeName(employeeCode);
+    	appTaskUpdateReq.setEmployeeCode(employeeCode);
+    	appTaskUpdateReq.setEmployeeName(employeeName);
     	
         this.appTaskRestMapper.updateTask(appTaskUpdateReq);
     }

@@ -226,6 +226,9 @@
       <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(version)">
         VERSION = #{version},
       </if>
+      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskImgUrl)">
+        TASK_IMG_URL = #{taskImgUrl},
+      </if>
     </set>
     where TASK_CODE = #{taskCode}
   </update>

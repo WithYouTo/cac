@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.dto.DeleteProgramSysFileDto;
 import com.qcap.cac.dto.ProgramAddDto;
 import com.qcap.cac.dto.ProgramSearchDto;
 import com.qcap.cac.service.ProgramSrv;
@@ -50,6 +51,12 @@ public class ProgramController {
 	@RequestMapping("/delete")
 	public Object deleteProgram(@RequestParam("programId") String programId) {
 		this.programSrvImpl.deleteProgram(programId);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC);
+	}
+	
+	@RequestMapping("/deleteSysFile")
+	public Object deleteSysFile(@Valid DeleteProgramSysFileDto deleteProgramSysFileDto) {
+		this.programSrvImpl.deleteSysFile(deleteProgramSysFileDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC);
 	}
 

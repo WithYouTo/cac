@@ -2,11 +2,13 @@ package com.qcap.cac.controller;
 
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
+import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.CommonSrv;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.warpper.FastDFSClientWrapper;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -370,4 +372,30 @@ public class CommonController {
         result.put("configValue",configValue);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_QUERY_DESC,result);
     }
+    
+    /**
+     * 
+     * @Title: uploadAndSaveFile 
+     * @Description: 上传文件，并将文件存放到tb_sys_file表中
+     * @param file
+     * @return 张天培
+     * @throws Exception
+     * @return: Object
+     */
+    @RequestMapping(value = "/uploadAndSaveFile", method = RequestMethod.POST)
+    public Object uploadAndSaveFile(MultipartFile file) throws Exception {
+        return this.commonSrv.uploadAndSaveFile(file);
+    }
+    
+    @RequestMapping("/selectSysFileByGroupId")
+    public Object selectSysFileByGroupId(@RequestParam("groupId") String groupId){
+    	List<Map<String, String>> list =null;
+    	if(!StringUtils.isEmpty(groupId)) {
+    		list = this.commonSrv.selectSysFileByGroupId(groupId);
+    	}else {
+    		throw new BaseException(CommonCodeConstant.PARAM_EMPTY_CODE,"参数不能为空");
+    	}
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_QUERY_DESC,list);
+    }
+    
 }

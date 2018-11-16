@@ -7,6 +7,10 @@ public class ProgramAddDto {
     private String programId;
 
     private String programCode;
+    
+    private String fileIds;
+    
+    private String fileUrls;
 
     /**
      * 项目名称
@@ -180,7 +184,23 @@ public class ProgramAddDto {
      */
     private String vipRoomNum;
 
-    public String getStoreNum() {
+    public String getFileIds() {
+		return fileIds;
+	}
+
+	public String getFileUrls() {
+		return fileUrls;
+	}
+
+	public void setFileIds(String fileIds) {
+		this.fileIds = fileIds;
+	}
+
+	public void setFileUrls(String fileUrls) {
+		this.fileUrls = fileUrls;
+	}
+
+	public String getStoreNum() {
         return storeNum;
     }
 

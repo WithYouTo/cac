@@ -2,7 +2,7 @@ package com.qcap.cac.dto;
 
 public class ProgramSearchDto {
 	
-	private String programName;
+	private String programCode;
 	
 	private String areaCode;
 
@@ -16,12 +16,12 @@ public class ProgramSearchDto {
 	
 	private String effectDate;
 
-	public String getProgramName() {
-		return programName;
+	public String getProgramCode() {
+		return programCode;
 	}
 
-	public void setProgramName(String programName) {
-		this.programName = programName;
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
 	}
 
 	public String getAreaCode() {

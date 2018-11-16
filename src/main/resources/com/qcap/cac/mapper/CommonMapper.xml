@@ -96,6 +96,37 @@
 	      #{createEmp}, #{createDate}, #{updateDate}, 
 	      #{updateEmp}, #{version})
      </insert>
+     
+     <update id ="updateFileGroupId" parameterType="Map">
+     UPDATE tb_sys_file 
+	 SET GROUP_ID =#{groupId}
+	 WHERE INSTR(#{fileIds},FILE_ID)
+     </update>
+     
+     <select id="selectSysFileByGroupId" parameterType="String" resultType="Map">
+     SELECT 
+		m.FILE_ID  AS  fileId,
+	    m.GROUP_ID  AS  groupId,
+	    m.FILE_NAME  AS  fileName,
+	    m.FILE_TYPE  AS  fileType,
+	    m.STORE_URL  AS  storeUrl,
+	    m.DOWNLOAD_URL  AS  downloadUrl,
+	    m.REMARK1  AS  remark1,
+	    m.REMARK2  AS  remark2,
+	    m.REMARK3  AS  remark3,
+	    m.CREATE_EMP AS createEmp,
+	    DATE_FORMAT(m.CREATE_DATE,'%Y-%m-%d %T') AS createDate
+	 FROM tb_sys_file m
+	 WHERE GROUP_ID = #{groupId}
+     </select>
+     
+     <delete id="deleteSysFileByGroupId" parameterType="String">
+     DELETE FROM tb_sys_file WHERE GROUP_ID = #{groupId}
+     </delete>
+     
+     <delete id="deleteSysFileByKey" parameterType="String">
+     DELETE FROM tb_sys_file WHERE FILE_ID = #{fileId}
+     </delete>
 
     <select id="getListByCode" parameterType="String"  resultType="Map">
         SELECT

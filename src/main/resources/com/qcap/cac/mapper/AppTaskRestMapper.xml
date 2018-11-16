@@ -101,7 +101,7 @@
 		AND m.TASK_STATUS = #{taskStatus}
 		</if>
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
-		AND m.EMPLOYEE_CODE =#{employeeCode}
+		AND FIND_IN_SET(#{employeeCode},m.EMPLOYEE_CODE)
 		</if>
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkStatus)">
 		AND m.CHECK_STATUS = #{checkStatus}
@@ -221,10 +221,10 @@
 				CHECK_IMG_URL = #{checkImgUrl},
 			</if>
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeCode)">
-				EMPLOYEE_CODE =#{employeeCode}
+				EMPLOYEE_CODE =#{employeeCode},
 			</if>
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeName)">
-				EMPLOYEE_NAME =#{employeeName}
+				EMPLOYEE_NAME =#{employeeName},
 			</if>
 	    </set>
 	    where TASK_CODE = #{taskCode}

@@ -135,7 +135,7 @@ public class TaskArrangeSrvImpl implements TaskArrangeSrv {
             if(!empMap.containsKey(employeeCode)) {
             	empMap.put(employeeCode, employeeCode);
             }else {
-            	throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "用户：" + employeeName + "-" + employeeCode + "存在多条排版记录");
+            	throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "用户：" + employeeName + "-" + employeeCode + "存在多条排班记录");
             }
 
             //遍历到最后一个岗位时，验证该岗位每天是否有人上班

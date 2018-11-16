@@ -42,4 +42,12 @@ public interface CommonMapper extends BaseMapper<TbManager> {
     List<Map<String,String>> getProgramCodes(@Param("programCodes") List<String> programCodes);
 
     List<Map<String,String>> getAllProgramCodes();
+    
+    void updateFileGroupId(Map<String, Object> map);
+    
+    List<Map<String, String>> selectSysFileByGroupId (@Param("groupId") String groupId);
+    
+    void deleteSysFileByGroupId (@Param("groupId") String groupId);
+    
+    void deleteSysFileByKey (@Param("fileId") String fileId);
 }
