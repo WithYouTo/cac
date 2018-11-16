@@ -247,6 +247,14 @@ public class EquipSrvImpl implements EquipSrv {
     }
 
     @Override
+    public void updateEquipFileUrls(@Valid EquipInsertDto equipInsertDto) {
+        TbEquip equip = new TbEquip();
+        BeanUtils.copyProperties(equipInsertDto,equip);
+        EntityTools.setUpdateEmpAndTime(equip);
+        this.equipMapper.updateEquip(equip);
+    }
+
+    @Override
     public void listEquip(IPage<Map<String, Object>> page, @Valid EquipSearchDto equipSearchDto) {
         List<Map<String, Object>> list = this.equipMapper.listEquip(page,equipSearchDto);
         for(Map<String,Object> map :list){

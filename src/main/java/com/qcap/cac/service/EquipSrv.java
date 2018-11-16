@@ -34,4 +34,6 @@ public interface EquipSrv {
     void getEquipOperateRecordByEquipId(IPage<Map<String, Object>> page,String equipId);
 
     void tempEquipNoticeJob();
+
+    void updateEquipFileUrls(@Valid EquipInsertDto equipInsertDto);
 }

@@ -170,6 +170,26 @@ public class EquipController {
     }
 
 
+    /**
+     *
+     * @Description: 修改设备文件
+     *
+     *
+     * @MethodName: updateEquipFileUrls
+     * @Parameters: [equipInsertDto]
+     * @ReturnType: java.lang.Object
+     *
+     * @author huangxiang
+     * @date 2018/11/16 18:05
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateEquipFileUrls", method = RequestMethod.POST)
+    public Object updateEquipFileUrls(@Valid EquipInsertDto equipInsertDto){
+        // 修改设备文件
+        this.equipSrv.updateEquipFileUrls(equipInsertDto);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
+
+    }
 
     /**
      *
