@@ -127,8 +127,6 @@
             NOTICE_DATE = #{noticeDate},
             MAINT_CYCLE = #{maintCycle},
             NEXT_MAINT_TIME = #{nextMaintTime},
-            CREATE_EMP = #{createEmp},
-            CREATE_DATE = #{createDate},
             UPDATE_EMP = #{updateEmp},
             UPDATE_DATE = #{updateDate}
         WHERE
