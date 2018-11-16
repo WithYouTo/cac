@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import com.qcap.core.dao.TbManagerMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,9 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     private LoginRestMapper loginRestMapper;
 
     @Resource
+    private TbManagerMapper tbManagerMapper;
+
+    @Resource
     private CommonSrv commonSrv;
 
     @Resource
@@ -64,6 +68,8 @@ public class LoginRestSrvImpl implements LoginRestSrv {
                 tbManager.setSalt("");
                 String str=JSONObject.toJSONString(tbManager);
                 // 存储token的过期时间和用户ID
+                List<String> projectCodes = this.tbManagerMapper.getprojectCodesByManagerId(managerId);
+                redisUtil.set(AppUtils.getApplicationName() + ":programCodes:" + managerId, projectCodes);
                 redisUtil.set(AppUtils.getApplicationName() + ":manager:" + managerId, str);
                 Map<String, Object> data = new HashMap<>();
                 data.put("access_token", jwtTokenUtil.doGenerateToken(managerId));

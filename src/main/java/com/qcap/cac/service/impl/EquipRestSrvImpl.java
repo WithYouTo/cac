@@ -96,6 +96,15 @@ public class EquipRestSrvImpl implements EquipRestSrv {
             //调用设备状态为充电中的方法
             handlerWhenEquipInCharge(manager,equipNo);
         }
+        if(CommonConstant.EQUIP_WORK_STATUS_INUSE.equals(curStatus)){
+            //调用设备状态为使用中的方法
+            handlerWhenEquipInCharge(manager,equipNo);
+        }
+        if(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE.equals(curStatus)){
+            //返回设备已损坏
+//            handlerWhenEquipInCharge(manager,equipNo);
+            return ResParams.newInstance(CommonCodeConstant.FAIL_CODE, CommonCodeConstant.EQUIP_IS_IN_DAMAGE, null);
+        }
         handlerWhenOperateCodeIsInUse(equip,manager,employeeCode);
 
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC, null);
