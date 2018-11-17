@@ -62,9 +62,11 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
         TbEquipPlan equipPlan = new TbEquipPlan();
         try {
             //mybatis-plus封装查询条件，根据设备编号获取设备信息
-            QueryWrapper<TbEquip> equip = new QueryWrapper();
-            equip.eq("equip_No", equipMaintInsertDto.getEquipNo());
-            TbEquip equipInfo=this.equipMapper.selectOne(equip);
+//            QueryWrapper<TbEquip> equip = new QueryWrapper();
+//            equip.eq("equip_No", equipMaintInsertDto.getEquipNo());
+//            TbEquip equipInfo=this.equipMapper.selectOne(equip);
+
+            TbEquip equipInfo=this.equipMapper.selectEquipByEquipNo(equipMaintInsertDto.getEquipNo());
 
             if(equipInfo != null){
                 //1、重组维保记录对象
@@ -90,6 +92,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
 
                 //2、新增一条维保记录
                 equipMaint.setEquipMaintId(UUIDUtils.getUUID());
+                EntityTools.setCreateEmpAndTime(equipMaint);
                 this.equipMaintMapper.insert(equipMaint);
 
                 //3、更新维保计划

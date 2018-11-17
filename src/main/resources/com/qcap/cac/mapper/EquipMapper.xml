@@ -134,6 +134,7 @@
             RESPONSE_NAME responseName,
             MANUFACT manufact,
             ADVANCE_TIME advanceTime,
+            MAINT_CYCLE maintCycle,
             NOTICE_DATE noticeDate,
             AGENCE_NO agenceNo,
             AGENCE_NAME agenceName,
