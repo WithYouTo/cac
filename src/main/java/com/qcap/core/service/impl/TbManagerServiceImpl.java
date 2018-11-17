@@ -149,7 +149,13 @@ public class TbManagerServiceImpl implements ITbManagerService {
 			}
 			// 完善信息
 			manager.setSalt(Md5Util.getSalt());
-			manager.setPassword(Md5Util.encrypt(account.substring(account.length()-6,account.length()), manager.getSalt()));
+
+			if(account.length()>6){
+				manager.setPassword(Md5Util.encrypt(account.substring(account.length()-6,account.length()), manager.getSalt()));
+
+			}else{
+				manager.setPassword(Md5Util.encrypt(account, manager.getSalt()));
+			}
 			manager.setStatus(ManagerStatus.OK.getCode());
 
 			if(!Objects.isNull(userInsertDto.getBirth()) && !("").equals(userInsertDto.getBirth())){
