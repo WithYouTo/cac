@@ -67,7 +67,7 @@ public class PlanEventController {
 	@RequestMapping(value = "/deletePlanEvent", method = RequestMethod.POST)
 	public ResParams deletePlan(@Valid PlanEventDto planEventDto) throws Exception {
 		this.planEventSrv.deletePlanEvent(planEventDto);
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC);
 	}
 
 	@RequestMapping(value = "/selectStandardCodeList", method = RequestMethod.POST)

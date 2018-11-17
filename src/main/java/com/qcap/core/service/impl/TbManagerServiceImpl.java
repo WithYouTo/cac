@@ -288,6 +288,13 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		this.tbManagerMapper.updateManagerDefaultPwd(mgr);
 	}
 
+	@Override
+	public Map<String,Object> getLoginUserInfo() {
+		String id = AppUtils.getLoginUserId();
+		Map<String,Object> map = this.tbManagerMapper.getMangerById(id);
+		return map;
+	}
+
 	private boolean checkPassword(String encryptPassword, String password, String salt) {
 		return Objects.equals(encryptPassword, Md5Util.encrypt(password, salt));
 	}

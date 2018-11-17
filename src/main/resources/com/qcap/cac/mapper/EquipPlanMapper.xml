@@ -33,10 +33,10 @@
             and a.EQUIP_TYPE = #{map.equipType}
         </if>
         <if test="map.equipNo != null and map.equipNo != ''">
-            and a.EQUIP_NO like CONCAT(CONCAT('%',#{obj.equipNo}),'%')
+            and a.EQUIP_NO like CONCAT(CONCAT('%',#{map.equipNo}),'%')
         </if>
         <if test="map.equipModel != null and map.equipModel != ''">
-            and a.EQUIP_MODEL like CONCAT(CONCAT('%',#{obj.equipModel}),'%')
+            and a.EQUIP_MODEL like CONCAT(CONCAT('%',#{map.equipModel}),'%')
         </if>
         <if test="map.nextMaintTime != null and map.nextMaintTime != ''">
             and a.NEXT_MAINT_TIME &gt; substring(#{map.nextMaintTime},1,19)

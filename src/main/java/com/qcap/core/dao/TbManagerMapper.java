@@ -31,4 +31,6 @@ public interface TbManagerMapper extends BaseMapper<TbManager> {
     void updateManagerDefaultPwd(TbManager mgr);
 
     TbManager selectManagerByAccount(@Param("account")String account);
+
+    Map<String,Object> getMangerById(@Param("id")String id);
 }

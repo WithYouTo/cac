@@ -79,6 +79,14 @@ public class ManagerController {
 		return PageResParams.newInstance(CoreConstant.SUCCESS_CODE, "", page.getTotal(), page.getRecords());
 	}
 
+
+	@PostMapping("/getLoginUserInfo")
+	public ResParams getLoginUserInfo(){
+		Map<String,Object> map = this.managerService.getLoginUserInfo();
+		return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "",map );
+
+	}
+
 	/**
 	 * 修改账户
 	 *
