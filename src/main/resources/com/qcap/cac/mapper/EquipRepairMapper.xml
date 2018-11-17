@@ -48,8 +48,9 @@
     <update id="updateEquipRepair" parameterType="com.qcap.cac.entity.TbEquipRepair">
       update TB_EQUIP_REPAIR
       SET
-      STATUS = 'REPAIRED',
-      UPDATE_EMP = #{updateEmp}
+      STATUS = #{status},
+      UPDATE_EMP = #{updateEmp},
+      UPDATE_DATE = #{updateDate}
       WHERE
       EQUIP_REPAIR_ID = #{equipRepairId}
     </update>

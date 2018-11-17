@@ -137,7 +137,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INSTOP.equals(operateCode)){
             //修改设备信息表设备工作状态
-            this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
+            this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP,employeeCode);
         }
     }
 
@@ -171,7 +171,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INSTOP.equals(operateCode)){
             //修改设备信息表设备工作状态
-            this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP);
+            this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equipNo,CommonConstant.EQUIP_WORK_STATUS_INSTOP,employeeCode);
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INUSE.equals(operateCode)){
             //修改设备信息表设备工作状态
@@ -361,7 +361,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
      * @date 2018/10/27 10:24
      */
     private void handlerWhenOperateCodeIsInDamage(TbEquip equip, TbManager manager, String employeeCode) {
-        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INDAMAGE);
+        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INDAMAGE,employeeCode);
         String responseNo = equip.getResponseNo();
         String equipName = equip.getEquipName();
         String equipNo = equip.getEquipNo();
@@ -398,7 +398,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         //新增一条设备充电记录
         this.equipChargeMapper.insert(equipCharge);
         //修改设备信息表设备工作状态
-        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INCHARGE);
+        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INCHARGE,employeeCode);
     }
 
     /**
@@ -428,7 +428,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         //新增设备使用记录
         this.equipUseMapper.insertEquipUse(equipUse);
         //通过设备编号将设备信息表中的设备工作状态改为使用中
-        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INUSE);
+        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INUSE,employeeCode);
     }
 
     /**
@@ -459,7 +459,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         //新增一条设备报修记录
         this.equipRepairMapper.insert(equipRepair);
         //通过设备编号将设备信息表中的设备工作状态改为使用中
-        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INREPAIR);
+        this.equipMapper.updateEquipWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_WORK_STATUS_INREPAIR,employeeCode);
     }
 
 
@@ -476,7 +476,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
      * @date 2018/10/27 13:27
      */
     private void handlerWhenOperateCodeIsInabort(TbEquip equip, TbManager manager, String employeeCode) {
-        this.equipMapper.updateEquipStatusAndWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_STATUS_ABORT,CommonConstant.EQUIP_WORK_STATUS_INABORT);
+        this.equipMapper.updateEquipStatusAndWorkStatusByEquipNoAndStatus(equip.getEquipNo(),CommonConstant.EQUIP_STATUS_ABORT,CommonConstant.EQUIP_WORK_STATUS_INABORT,employeeCode);
     }
 
 

@@ -285,7 +285,9 @@
     <update id="updateEquipWorkStatusByEquipNoAndStatus">
         UPDATE  tb_equip
         SET
-          EQUIP_WORK_STATE = #{status}
+          EQUIP_WORK_STATE = #{status},
+          UPDATE_EMP = #{employeeCode},
+          UPDATE_DATE = now()
         WHERE
           EQUIP_NO = #{equipNo}
     </update>
@@ -294,7 +296,9 @@
         UPDATE  tb_equip
         SET
           EQUIP_STATE = #{status},
-          EQUIP_WORK_STATE = #{workStatus}
+          EQUIP_WORK_STATE = #{workStatus},
+          UPDATE_EMP = #{employeeCode},
+          UPDATE_DATE = now()
         WHERE
           EQUIP_NO = #{equipNo}
     </update>
