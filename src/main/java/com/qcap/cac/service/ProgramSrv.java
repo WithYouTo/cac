@@ -16,7 +16,7 @@ public interface ProgramSrv {
 	
 	void editProgram(ProgramAddDto programAddDto) throws IllegalAccessException, InvocationTargetException;
 	
-	void deleteProgram(String programId);
+	Object deleteProgram(String programId);
 	
 	void deleteSysFile(DeleteProgramSysFileDto deleteProgramSysFileDto);
 }

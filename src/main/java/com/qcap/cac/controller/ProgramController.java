@@ -1,16 +1,5 @@
 package com.qcap.cac.controller;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.validation.Valid;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.github.pagehelper.PageInfo;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.DeleteProgramSysFileDto;
@@ -20,6 +9,15 @@ import com.qcap.cac.service.ProgramSrv;
 import com.qcap.core.factory.PageFactory;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/program")
@@ -50,8 +48,7 @@ public class ProgramController {
 	
 	@RequestMapping("/delete")
 	public Object deleteProgram(@RequestParam("programId") String programId) {
-		this.programSrvImpl.deleteProgram(programId);
-		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_DELETE_DESC);
+		return this.programSrvImpl.deleteProgram(programId);
 	}
 	
 	@RequestMapping("/deleteSysFile")

@@ -14,6 +14,7 @@ import com.qcap.cac.service.ProgramSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
+import com.qcap.core.model.ResParams;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -158,15 +159,16 @@ public class ProgramSrvImpl implements ProgramSrv {
     }
 
     @Override
-    public void deleteProgram(String programId) {
+    public Object deleteProgram(String programId) {
         if (StringUtils.isEmpty(programId)) {
-            throw new BaseException(CommonCodeConstant.PARAM_EMPTY_CODE, "参数为空");
+            return ResParams.newInstance(CommonCodeConstant.PARAM_EMPTY_CODE, "参数为空");
         }
         int areas = this.programMapper.selectIfProgramHaveAreas(programId);
         if(areas >1){
-            throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "该项目下面有子级区域，不允许删除");
+            return ResParams.newInstance(CommonCodeConstant.ERROR_CODE_40402, "该项目下面有子级区域，不允许删除");
         }
         this.programMapper.deleteProgramByKey(programId);
+        return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_DELETE_DESC);
     }
 
     @Override
