@@ -64,7 +64,7 @@ public class TbManagerServiceImpl implements ITbManagerService {
 	@Override
 	public String login(String account, String password) throws Exception {
 		String ip = AppUtils.getCurrentRequest() == null ? "" : AppUtils.getCurrentRequest().getRemoteAddr();
-		TbManager tbManager = tbManagerMapper.selectOne(new QueryWrapper<TbManager>().eq("account", account));
+		TbManager tbManager = tbManagerMapper.selectOne(new QueryWrapper<TbManager>().eq("account", account).eq("status", 1).or().eq("status",4));
 
 		if (tbManager != null) {
 			if (checkPassword(tbManager.getPassword(), password, tbManager.getSalt())) {
