@@ -18,7 +18,7 @@
 				EQUIP_NO = #{param.qrcodeType}
 			</if>
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.programCode) and param.programCode != ''">
-				PROGRAM_CODE = #{param.programCode}
+				AND PROGRAM_CODE = #{param.programCode}
 			</if>
 		</where>
 		
@@ -39,7 +39,7 @@
 				POSITION_CODE = #{param.qrcodeType}
 			</if>
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.programCode) and param.programCode != ''">
-				PROGRAM_CODE = #{param.programCode}
+				and PROGRAM_CODE = #{param.programCode}
 			</if>
 		</where>
 		
