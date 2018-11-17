@@ -70,6 +70,24 @@
         ORDER BY info.WORK_NO
     </select>
 
+    <select id="selectManagerByAccount" parameterType="String" resultType="com.qcap.core.entity.TbManager">
+        SELECT
+        id id,
+        account account,
+        password password,
+        salt salt,
+        name name
+        FROM
+        tb_manager
+        WHERE
+        account = #{account}
+        AND
+        (status = 1
+        OR
+        status = 4
+        )
+    </select>
+
     <update id="updateManagerPwd" parameterType="com.qcap.core.entity.TbManager">
         UPDATE TB_MANAGER
 		SET
