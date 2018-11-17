@@ -50,6 +50,7 @@
         left join tb_org o ON mo.org_id = o.id
         left join tb_program pro ON o.PROGRAM_CODE  = pro.PROGRAM_CODE
         where m.status != 3
+            and m.status != 4
         <if test="map.userName!=null and map.userName!=''">
             and m.name like #{map.userName}
         </if>
