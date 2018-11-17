@@ -1,21 +1,9 @@
 package com.qcap.cac.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
+import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.PlanMapper;
 import com.qcap.cac.dto.BatchUpdatePlanDto;
 import com.qcap.cac.dto.PlanDto;
@@ -25,6 +13,17 @@ import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.PlanSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -32,6 +31,9 @@ public class PlanSrvImpl implements PlanSrv {
 
 	@Resource
 	private PlanMapper planMapper;
+
+	@Resource
+	private AreaMapper areaMapper;
 
 	@Override
 	public void queryPlanListByPage(IPage<Map<String, String>> page, QueryPlanListDto queryPlanListDto) {
@@ -79,6 +81,9 @@ public class PlanSrvImpl implements PlanSrv {
 				plan.setPlanId(UUIDUtils.getUUID());
 				plan.setStartTime(planStartTime);
 				plan.setEndTime(planEndTime);
+
+				String programCode = this.areaMapper.selectProgramCodeByAreaCode(planDto.getAreaCode());
+				plan.setProgramCode(programCode);
 
 				if (CommonConstant.PLAN_TIME_TYPE_DAY.equals(plan.getPlanTimeType())) {
 					plan.setMonth(null);
