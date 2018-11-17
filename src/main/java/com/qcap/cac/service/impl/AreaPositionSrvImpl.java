@@ -82,6 +82,11 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
         String areaCodes = areaPosition.getAreaCode();
         String positionType = areaPosition.getPositionType();
 
+
+        if(StringUtils.isEmpty(areaPosition.getProgramCode())){
+            throw  new RuntimeException("新增岗位前请先选择项目");
+        }
+
         if(StringUtils.isEmpty(areaCodes)){
             throw  new RuntimeException("新增岗位前请先选择区域");
         }
@@ -115,13 +120,13 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
         }
 
         //项目编码(区域编码查询项目编码)
-        String[] areaCodeArr = areaCodes.split(",");
-        String programCode = this.areaMapper.selectProgramCodeByAreaCode(areaCodeArr[0]);
-        areaPosition.setProgramCode(programCode);
+//        String[] areaCodeArr = areaCodes.split(",");
+//        String programCode = this.areaMapper.selectProgramCodeByAreaCode(areaCodeArr[0]);
+//        areaPosition.setProgramCode(programCode);
 
         //岗位编码 = 项目编码 + GW + 3位连续数
         String suffix = this.areaPositionMapper.selectMaxSuffixNum();
-        String positionCode = programCode + "GW" + suffix;
+        String positionCode = areaPosition.getProgramCode() + "GW" + suffix;
 
         //根据岗位编码生成二维码
         String positionUrl = getQrCodeUrlByPositionCode(positionCode);

@@ -23,7 +23,7 @@ public interface LoginRestMapper {
 
     TbAreaPosition selectAreaPositionByWorkNo(String workNo);
 
-    List<UserListResp> getUserListByRoleNum(@Param("roleNum") String roleNum);
+    List<UserListResp> getUserListByRoleNum(@Param("roleNum") String roleNum,@Param("programCode") String programCode);
 
     List<UserListResp> getUserListByOrgCode(@Param("orgCode") String orgCode);
 

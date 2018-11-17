@@ -134,10 +134,18 @@
 		FROM tb_manager a
 		left join tb_manager_role b
 		on a.id = b.manager_id
+		left join tb_manager_org c
+		on a.id = c.manager_id
+		left join tb_org d
+		on c.org_id = d.id
 		WHERE 1=1
-		<if test="roleNum != null and roleNum != ''">
-			AND  b.role_id  = #{roleNum}
+		<if test="programCode != null and programCode != ''">
+			AND  d.PROGRAM_CODE  = #{programCode}
 		</if>
+		<if test="roleNum != null and roleNum != ''">
+			AND  d.num  = #{roleNum}
+		</if>
+		group by a.id
 	</select>
 
 	<update id="updateManagerPwd"  parameterType="com.qcap.core.entity.TbManager">
