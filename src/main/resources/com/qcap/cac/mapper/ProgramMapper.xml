@@ -256,5 +256,21 @@
     </if>
     LIMIT 1
   </select>
+
+  <select id="selectIfProgramHaveAreas" parameterType="String" resultType="Integer">
+    SELECT
+	COUNT(1)
+    FROM
+        tb_area
+    WHERE
+        PROGRAM_CODE = (
+            SELECT
+                PROGRAM_CODE
+            FROM
+                tb_program
+            WHERE
+                PROGRAM_ID = #{programId}
+        )
+  </select>
 	
 </mapper>

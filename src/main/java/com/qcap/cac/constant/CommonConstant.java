@@ -295,8 +295,8 @@ public class CommonConstant {
 
 	public static Map<String, String> AREA_TYPE = new LinkedHashMap<String, String>();
 	static {
-		AREA_TYPE.put("ARRIVE", "BOARDING");
-		AREA_TYPE.put("LEAVE", "GOVERED_BRIDGE");
+		AREA_TYPE.put("ARRIVE", "GOVERED_BRIDGE");
+		AREA_TYPE.put("LEAVE", "BOARDING");
 	}
 
 	// 专项任务每次延迟天数
