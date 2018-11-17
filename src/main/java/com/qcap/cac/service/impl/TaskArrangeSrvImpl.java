@@ -1,22 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TaskArrangeMapper;
@@ -29,6 +12,16 @@ import com.qcap.cac.service.TaskArrangeSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 @Service
 @Transactional
@@ -174,8 +167,8 @@ public class TaskArrangeSrvImpl implements TaskArrangeSrv {
     }
 
     @Override
-    public List<Map<String, String>> selectPositionItem() {
-        return this.taskArrangeMapper.selectPositionItem();
+    public List<Map<String, String>> selectPositionItem(String programCode) {
+        return this.taskArrangeMapper.selectPositionItem(programCode);
     }
 
     private List<Boolean> getBooleanList(String monthNo,int dateNum) {

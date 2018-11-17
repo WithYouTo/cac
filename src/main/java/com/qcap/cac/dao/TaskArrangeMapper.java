@@ -3,6 +3,7 @@ package com.qcap.cac.dao;
 import com.qcap.cac.dto.TaskArrangeDto;
 import com.qcap.cac.dto.TaskArrangeSearchDto;
 import com.qcap.cac.entity.TbTaskArrangement;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface TaskArrangeMapper {
 	
 	void deleteTaskArrange(TaskArrangeDto taskArrangeDto);
 
-	List<Map<String,String>> selectPositionItem();
+	List<Map<String,String>> selectPositionItem(@Param("programCode")String programCode);
 
 	String queryIfPositionExist (Map<String,String> map);
 

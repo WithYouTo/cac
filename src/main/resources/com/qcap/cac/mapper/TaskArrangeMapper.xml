@@ -107,8 +107,13 @@
 	AND CREATE_EMP =#{createEmp}
 	</update>
 
-	<select id="selectPositionItem" resultType="Map">
+	<select id="selectPositionItem" parameterType="String" resultType="Map">
 		SELECT POSITION_CODE AS id,POSITION_NAME AS text FROM tb_area_position
+		<where>
+			<if test=' programCode !=null and programCode !="" '>
+			 PROGRAM_CODE = #{programCode}
+			</if>
+		</where>
 	</select>
 
 	<select id="queryIfPositionExist" parameterType="Map" resultType="String">

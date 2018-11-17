@@ -11,6 +11,7 @@ import com.qcap.core.model.PageResParams;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.poi.PoiUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,8 +62,8 @@ public class TaskArrangeController {
 	}
 
 	@RequestMapping("/selectPositionItem")
-	public Object selectPositionItem() {
-		List<Map<String, String>> list = this.taskArrangeSrvImpl.selectPositionItem();
+	public Object selectPositionItem(@RequestParam("programCode") String programCode) {
+		List<Map<String, String>> list = this.taskArrangeSrvImpl.selectPositionItem(programCode);
 		PageInfo<Map<String, String>> pageInfo =new PageInfo<>(list);
 		return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
 	}

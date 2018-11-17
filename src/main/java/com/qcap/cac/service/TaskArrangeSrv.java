@@ -14,5 +14,5 @@ public interface TaskArrangeSrv {
 	
 	Object importTaskArrange(List<TaskArrangeUploadEntity> list,TaskArrangeDto taskArrangeDto, int row) throws IllegalAccessException, InvocationTargetException;
 
-	List<Map<String,String>> selectPositionItem();
+	List<Map<String,String>> selectPositionItem(String programCode);
 }
