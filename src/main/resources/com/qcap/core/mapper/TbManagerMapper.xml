@@ -80,6 +80,17 @@
 		id = #{id}
     </update>
 
+    <update id="updateManagerDefaultPwd" parameterType="com.qcap.core.entity.TbManager">
+        UPDATE TB_MANAGER
+		SET
+		password = #{password},
+		salt = #{salt},
+		update_date = #{updateDate},
+		update_emp = #{updateEmp}
+		WHERE
+		account = #{account}
+    </update>
+
     <select id="getMangerByEmployeeCode" parameterType="String" resultType="com.qcap.core.entity.TbManager">
         SELECT
         account account,

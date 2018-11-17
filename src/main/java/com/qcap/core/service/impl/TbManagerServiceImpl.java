@@ -269,7 +269,7 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		mgr.setPassword(newMd5);
 
 		EntityTools.setUpdateEmpAndTime(mgr);
-		this.tbManagerMapper.updateManagerPwd(mgr);
+		this.tbManagerMapper.updateManagerDefaultPwd(mgr);
 	}
 
 	private boolean checkPassword(String encryptPassword, String password, String salt) {
