@@ -71,6 +71,28 @@
 		</if>
 	</select>
 
+	<select id="getUserListByOrgCodeAndProgramCodes" resultType="com.qcap.cac.dto.UserListResp" parameterType="map">
+		SELECT
+		a.id id,
+		a.name employeeName,
+		a.account employeeCode
+		FROM tb_manager a
+		left join tb_manager_org b
+		on a.id = b.manager_id
+		left join tb_org c
+		on b.org_id = c.id
+		WHERE 1=1
+		<if test="map.orgCode != null and map.orgCode != ''">
+			AND c.code = #{map.orgCode}
+		</if>
+		<if test="map.programCodes.size() > 0">
+		AND  c.program_code in
+		<foreach item="item" index="index" collection="map.programCodes" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		</if>
+	</select>
+
 	<select id="getUserListByPositionCode" resultType="com.qcap.cac.dto.UserListResp">
 		SELECT
 		DISTINCT
@@ -81,14 +103,20 @@
 		left join tb_task_arrangement b
 		on a.account = b.employee_code
 		WHERE
-	  	b.month = #{month}
-		<if test=' positionCode != null and positionCode !="" '>
-			AND b.position_code = #{positionCode}
+	  	b.month = #{map.month}
+		<if test=' map.positionCode != null and map.positionCode !="" '>
+			AND b.position_code = #{map.positionCode}
 		</if>
-		<if test=' shift != null and shift !="" '>
-			AND b.SHIFT = #{shift}
+		<if test=' map.shift != null and map.shift !="" '>
+			AND b.SHIFT = #{map.shift}
 		</if>
-		AND DELETE_FLAG = 'NORMAL'
+		<if test="map.programCodes.size() > 0">
+		AND  b.program_code in
+		<foreach item="item" index="index" collection="map.programCodes" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		</if>
+		AND b.DELETE_FLAG = 'NORMAL'
 	</select>
 
 

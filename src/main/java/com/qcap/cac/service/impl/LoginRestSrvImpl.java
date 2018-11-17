@@ -2,11 +2,7 @@ package com.qcap.cac.service.impl;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import javax.annotation.Resource;
 
@@ -150,23 +146,29 @@ public class LoginRestSrvImpl implements LoginRestSrv {
         String roleNum = userListReq.getRoleNum();
         String shift =userListReq.getShift();
 
-//        Set<UserListResp> set = new HashSet<UserListResp>();
+        List<String> programCodes = AppUtils.getLoginUserProjectCodes();
+
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("positionCode",positionCode);
+
+        params.put("programCodes",programCodes);
+
+        params.put("roleNum",roleNum);
+        params.put("month",s);
+        params.put("shift",shift);
+        params.put("orgCode",orgCode);
+
+
         if(StringUtils.isNotBlank(positionCode) || StringUtils.isNotBlank(shift)){
-            List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(positionCode,s,shift);
+            List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(params);
             return poList;
         }else if (!("").equals(roleNum) && !Objects.isNull(roleNum)){
-            List<UserListResp> roleList = this.loginRestMapper.getUserListByOrgCode(roleNum);
+            List<UserListResp> roleList = this.loginRestMapper.getUserListByOrgCodeAndProgramCodes(params);
             return roleList;
         }else{
-            List<UserListResp> orgList = this.loginRestMapper.getUserListByOrgCode(orgCode);
+            List<UserListResp> orgList = this.loginRestMapper.getUserListByOrgCodeAndProgramCodes(params);
             return orgList;
         }
-
-//        CollectionUtils.addAll(set, orgList);
-//        CollectionUtils.addAll(set, poList);
-//        CollectionUtils.addAll(set, roleList);
-//        List<UserListResp> result = new ArrayList(set);
-
     }
 
     @Override
