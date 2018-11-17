@@ -1,16 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import javax.annotation.Resource;
-
-import com.qcap.core.dao.TbManagerMapper;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSONObject;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dao.LoginRestMapper;
@@ -24,11 +13,20 @@ import com.qcap.cac.service.LoginRestSrv;
 import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
+import com.qcap.core.dao.TbManagerMapper;
 import com.qcap.core.entity.TbManager;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.Md5Util;
 import com.qcap.core.utils.RedisUtil;
 import com.qcap.core.utils.jwt.JwtTokenUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Transactional
@@ -93,8 +91,10 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     public MyInfoResp getAppUserInfoByManagerCode(String employeeCode) {
         MyInfoResp info = this.loginRestMapper.getAppUserInfoByManagerCode(employeeCode);
         String baseUrl = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
-        String url = baseUrl+info.getUrl();
-        info.setUrl(url);
+        if(StringUtils.isNotEmpty(info.getUrl())){
+            String url = baseUrl+info.getUrl();
+            info.setUrl(url);
+        }
         return info;
 
     }
