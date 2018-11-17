@@ -29,4 +29,6 @@ public interface TbManagerMapper extends BaseMapper<TbManager> {
     List<String> getprojectCodesByManagerId(@Param("managerId")String managerId);
 
     void updateManagerDefaultPwd(TbManager mgr);
+
+    TbManager selectManagerByAccount(@Param("account")String account);
 }

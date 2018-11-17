@@ -14,7 +14,10 @@
 		WHERE
 		account = #{employeeCode}
 		AND
-		status = 1
+		(status = 1
+        OR
+        status = 4
+        )
 	</select>
 
 	<select id="getAppMenuByManagerId" resultType="java.util.Map">
