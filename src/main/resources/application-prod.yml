@@ -66,7 +66,7 @@ logging:
 rest:
   restfulSign: /rest
   coreOpen: true
-  swaggerEnable: true
+  swaggerEnable: false
 mybatis:
   mapper-refresh: true
   iPage:
