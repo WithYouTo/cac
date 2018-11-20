@@ -128,6 +128,8 @@ public class TbManagerServiceImpl implements ITbManagerService {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Map<String,Object> map = new HashMap<String,Object>();
 
+		String account = userInsertDto.getWorkNo();
+
 		TbManager manager = new TbManager();
 		manager.setId(UUIDUtils.getUUID());
 		manager.setMail(userInsertDto.getEmail());
@@ -147,7 +149,13 @@ public class TbManagerServiceImpl implements ITbManagerService {
 			}
 			// 完善信息
 			manager.setSalt(Md5Util.getSalt());
-			manager.setPassword(Md5Util.encrypt(CoreConstant.SYS_DEFAULT_PASSWORD, manager.getSalt()));
+
+			if(account.length()>6){
+				manager.setPassword(Md5Util.encrypt(account.substring(account.length()-6,account.length()), manager.getSalt()));
+
+			}else{
+				manager.setPassword(Md5Util.encrypt(account, manager.getSalt()));
+			}
 			manager.setStatus(ManagerStatus.OK.getCode());
 
 			if(!Objects.isNull(userInsertDto.getBirth()) && !("").equals(userInsertDto.getBirth())){
@@ -264,13 +272,27 @@ public class TbManagerServiceImpl implements ITbManagerService {
 	public void resetPassword(String account) {
 		TbManager mgr = new TbManager();
 		String newSalt = Md5Util.getSalt();
-		String newMd5 = Md5Util.encrypt(CoreConstant.SYS_DEFAULT_PASSWORD, newSalt);
+		if(account.length()>6){
+			String newMd5 = Md5Util.encrypt(account.substring(account.length()-6,account.length()), newSalt);
+			mgr.setPassword(newMd5);
+		}else{
+			String newMd5 = Md5Util.encrypt(account, newSalt);
+			mgr.setPassword(newMd5);
+		}
+
 		mgr.setAccount(account);
 		mgr.setSalt(newSalt);
-		mgr.setPassword(newMd5);
+
 
 		EntityTools.setUpdateEmpAndTime(mgr);
 		this.tbManagerMapper.updateManagerDefaultPwd(mgr);
+	}
+
+	@Override
+	public Map<String,Object> getLoginUserInfo() {
+		String id = AppUtils.getLoginUserId();
+		Map<String,Object> map = this.tbManagerMapper.getMangerById(id);
+		return map;
 	}
 
 	private boolean checkPassword(String encryptPassword, String password, String salt) {

@@ -69,9 +69,9 @@ public class EquipRepairController{
      */
     @ResponseBody
     @RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
-    public Object updateEquipRepair(HttpServletRequest request,String equipRepairId){
+    public Object updateEquipRepair(HttpServletRequest request,String equipNo,String equipRepairId,String operateCode){
         String userName = RedisTools.getUserName(request);
-        this.equipRepairSrv.updateEquipRepair(equipRepairId,userName);
+        this.equipRepairSrv.updateEquipRepair(equipNo,equipRepairId,userName,operateCode);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC, null);
     }
 }

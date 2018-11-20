@@ -94,4 +94,6 @@ public interface ITbManagerService {
 	 * @date 2018/11/6 9:54
 	 */
     void resetPassword(String userId);
+
+    Map<String,Object> getLoginUserInfo();
 }

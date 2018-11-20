@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -141,17 +138,23 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             this.goodsApplyRestMapper.updateStockByGoodsOut(EntityTools.setUpdateEmpAndTime(stock));
 
             //判断库存数量是否小于最低警戒线（库存和最低警戒线的单位在导入必须保持一致）
-            //向角色为库管的人员推送消息
+
             if(goodsNum - realNum  < limitStore){
-                String roleNum = RedisTools.getCommonConfig("WAREHOUSE_ROLE_NUM");
+                String programCode = "";
+                List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+                if(!CollectionUtils.isEmpty(programCodes)){
+                    programCodes.removeAll(Collections.singleton(""));
+                    programCode =  StringUtils.join(programCodes,",");
+                }
+                //向角色为库管的人员推送消息
+                String roleNum = RedisTools.getCommonConfig("CAC_WAREHOUSE_ROLE_NUM");
                 String message = RedisTools.getCommonConfig("CAC_LIMIT_STORE_MESSAGE");
-                List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum);
+                List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum,programCode);
+
                 List<String> pushList = userList.stream().map(UserListResp::getEmployeeCode).collect(Collectors.toList());
                 message = "物品编码【" + goodsNo + "】/物品名称【" + goodsName + "】的" + message;
-                //JpushTools.pushArray(pushList,message);
-                List<String> programCodes = AppUtils.getLoginUserProjectCodes();
                 String title = "库管物品出库";
-                messageRestSrv.JpushMessage(pushList, StringUtils.join(programCodes,","),message,title);
+                messageRestSrv.JpushMessage(pushList, programCode,message,title);
             }
         }
 

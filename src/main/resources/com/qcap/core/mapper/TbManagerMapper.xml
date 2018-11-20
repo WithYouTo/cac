@@ -70,6 +70,57 @@
         ORDER BY info.WORK_NO
     </select>
 
+    <select id="getMangerById" resultType="java.util.Map">
+         select m.id,
+        m.account,
+        m.name,
+        m.phone,
+        m.mail,
+        DATE_FORMAT(m.create_date,'%Y-%m-%d %H:%i:%S') createTime,
+        m.status,
+        pro.program_name programName,
+        pro.PROGRAM_CODE programCode,
+        o.fullnames orgName,
+        info.USER_ID userId,
+        info.USER_INFO_ID userInfoId,
+        info.USER_NAME userName,
+        info.WORK_NO workNo,
+        info.FLOWER flower,
+        info.WINTER_CLO winterClo,
+        info.SUMMER_CLO summerClo,
+        info.WORK_NO_CARD workNoCard,
+        info.TAPE tape,
+        info.GOOD_CAP_KEY goodCapKey,
+        info.LIVING_KEY livingKey,
+        info.ENTER_NO enterNo,
+        info.ENTER_EXPIRY_DATE enterExpiryDate,
+        info.PASS_NO passNo,
+        info.PASS_EXPIRY_DATE passExpiryDate,
+        info.DOOR_OPEN doorOpen,
+        info.EQUIP_USE equipUse,
+        info.PASS_AREA passArea,
+        info.EVALUATE evaluate,
+        info.CARD_TYPE cardType,
+        info.CARD_NO cardNo,
+        info.GENDER gender,
+        DATE_FORMAT(info.BIRTH,'%Y-%m-%d') birth,
+        DATE_FORMAT(info.WORK_DATE,'%Y-%m-%d') workDate,
+        info.WORK_STATUS workStatus,
+        info.MARRIAGE_SIT marriageSit,
+        info.MOBILE mobile,
+        info.EMAIL email,
+        info.ADDRESS address,
+        info.EMER_MOBILE emerMobile,
+        info.EMER_PERSON emerPerson
+        from tb_manager m
+        left join tb_user_info info on info.user_id = m.id
+        left join tb_manager_org mo on m.id = mo.manager_id
+        left join tb_org o ON mo.org_id = o.id
+        left join tb_program pro ON o.PROGRAM_CODE  = pro.PROGRAM_CODE
+        where
+        m.id = #{id}
+    </select>
+
     <select id="selectManagerByAccount" parameterType="String" resultType="com.qcap.core.entity.TbManager">
         SELECT
         id id,

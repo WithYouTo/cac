@@ -27,9 +27,9 @@ public interface EquipMapper extends BaseMapper<TbEquip>{
 
     void deleteEquipByEquipId(@Param("equipId")String equipId);
 
-    void updateEquipWorkStatusByEquipNoAndStatus(@Param("equipNo")String equipNo, @Param("status")String status);
+    void updateEquipWorkStatusByEquipNoAndStatus(@Param("equipNo")String equipNo, @Param("status")String status,@Param("employeeCode")String employeeCode);
 
-    void updateEquipStatusAndWorkStatusByEquipNoAndStatus(@Param("equipNo")String equipNo,  @Param("status")String status, @Param("workStatus")String workStatus);
+    void updateEquipStatusAndWorkStatusByEquipNoAndStatus(@Param("equipNo")String equipNo,  @Param("status")String status, @Param("workStatus")String workStatus,@Param("employeeCode")String employeeCode);
 
     List<Map<String,Object>> getEquipOperateRecordByEquipId(IPage<Map<String, Object>> page, @Param("equipId")String equipId);
 

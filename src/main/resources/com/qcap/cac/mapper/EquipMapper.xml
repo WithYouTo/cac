@@ -263,12 +263,8 @@
         <if test="imgUrl != null and imgUrl != ''">
             IMG_URL = #{imgUrl},
         </if>
-        <if test="fileUrls != null and fileUrls != ''">
-            FILE_URLS = #{fileUrls},
-        </if>
-        <if test="fileNames != null and fileNames != ''">
-            FILE_NAMES = #{fileNames},
-        </if>
+        FILE_URLS = #{fileUrls},
+        FILE_NAMES = #{fileNames},
         UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
         UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
         where EQUIP_ID = #{equipId}
@@ -285,7 +281,9 @@
     <update id="updateEquipWorkStatusByEquipNoAndStatus">
         UPDATE  tb_equip
         SET
-          EQUIP_WORK_STATE = #{status}
+          EQUIP_WORK_STATE = #{status},
+          UPDATE_EMP = #{employeeCode},
+          UPDATE_DATE = now()
         WHERE
           EQUIP_NO = #{equipNo}
     </update>
@@ -294,7 +292,9 @@
         UPDATE  tb_equip
         SET
           EQUIP_STATE = #{status},
-          EQUIP_WORK_STATE = #{workStatus}
+          EQUIP_WORK_STATE = #{workStatus},
+          UPDATE_EMP = #{employeeCode},
+          UPDATE_DATE = now()
         WHERE
           EQUIP_NO = #{equipNo}
     </update>

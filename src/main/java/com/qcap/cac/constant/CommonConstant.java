@@ -126,11 +126,12 @@ public class CommonConstant {
 
 	// 设备维修状态
 	public final static String EQUIP_REPAIR_STATUS_REPAIR = "REPAIR";
-	public final static String EQUIP_REPAIR_STATUS_REPAIRED = "REPAIRED";
+	public final static String EQUIP_REPAIR_STATUS_REPAIRED = "INSTOP";
 	public static Map<String, String> EQUIP_REPAIR_STATUS = new LinkedHashMap<String, String>();
 	static {
-		EQUIP_REPAIR_STATUS.put("REPAIR", "维修中");
-		EQUIP_REPAIR_STATUS.put("REPAIRED", "维修完成");
+		EQUIP_REPAIR_STATUS.put("INREPAIR", "维修中");
+		EQUIP_REPAIR_STATUS.put("INSTOP", "维修完成");
+		EQUIP_REPAIR_STATUS.put("INABORT", "已报废");
 	}
 
 	// 任务状态

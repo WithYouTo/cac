@@ -110,18 +110,19 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         leave.setLeaveId(UUIDUtils.getUUID());
 
         List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+        String programCode = "";
         if(!CollectionUtils.isEmpty(programCodes)){
             programCodes.removeAll(Collections.singleton(""));
-            leave.setProgramCode(StringUtils.join(programCodes,","));
+            programCode = StringUtils.join(programCodes,",");
+            leave.setProgramCode(programCode);
         }
         EntityTools.setCreateEmpAndTime(leave);
         EntityTools.setUpdateEmpAndTime(leave);
         this.leaveRestMapper.insert(leave);
 
-        //查询组织下所有的人员
-        String orgCode = this.leaveRestMapper.queryLoginOrgCode(employeeCode);
-        List<UserListResp> user = loginRestMapper.getUserListByOrgCode(orgCode);
-        List<String> userList = user.stream().map(UserListResp::getEmployeeCode).collect(Collectors.toList());
+        //查询具有审批角色的人员
+        String roleNum = RedisTools.getCommonConfig("CAC_LEAVE_AUDIT_ROLE_NUM");
+        List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum,programCode);
         //推送消息
         String title = "新的请假单";
         String message = "您有一个" + manager.getName() +  "的请假单待审批";
