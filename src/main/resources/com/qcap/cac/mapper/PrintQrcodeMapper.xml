@@ -20,6 +20,9 @@
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.programCode) and param.programCode != ''">
 				AND PROGRAM_CODE = #{param.programCode}
 			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.remark) and param.remark != ''">
+				AND EQUIP_NAME LIKE CONCAT('%',#{param.remark},'%') 
+			</if>
 		</where>
 		
 		UNION
@@ -40,6 +43,9 @@
 			</if>
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.programCode) and param.programCode != ''">
 				and PROGRAM_CODE = #{param.programCode}
+			</if>
+			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(param.remark) and param.remark != ''">
+				AND POSITION_NAME LIKE CONCAT('%',#{param.remark},'%') 
 			</if>
 		</where>
 		
