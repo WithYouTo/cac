@@ -17,11 +17,11 @@
     </properties>
     <dependencies>
         <!-- license -->
-        <!--<dependency>-->
-            <!--<groupId>com.whxx</groupId>-->
-            <!--<artifactId>whxx-license-core</artifactId>-->
-            <!--<version>1.0</version>-->
-        <!--</dependency>-->
+        <!-- <dependency>
+            <groupId>com.whxx</groupId>
+            <artifactId>whxx-license-core</artifactId>
+            <version>1.0</version>
+        </dependency> -->
         <!-- springBoot starters -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

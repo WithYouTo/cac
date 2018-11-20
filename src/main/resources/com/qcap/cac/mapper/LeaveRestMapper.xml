@@ -101,6 +101,23 @@
 		DATE_FORMAT(CREATE_DATE,'%Y.%m.%d') createTime
 		FROM tb_leave b where  LEAVE_ID = #{leaveId}
 	</select>
-
+	
+	<select id="selectAreaCodeByEmployCode" parameterType="String" resultType="String">
+		SELECT
+			AREA_CODE
+		FROM
+			tb_area_position
+		WHERE
+			POSITION_CODE = (
+				SELECT DISTINCT
+					POSITION_CODE
+				FROM
+					tb_task_arrangement
+				WHERE
+					EMPLOYEE_CODE = #{employeeCode}
+				LIMIT 1
+			)
+		LIMIT 1
+	</select>
 
 </mapper>

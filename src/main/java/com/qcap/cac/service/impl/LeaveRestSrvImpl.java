@@ -3,12 +3,14 @@ package com.qcap.cac.service.impl;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.LeaveRestMapper;
 import com.qcap.cac.dao.LoginRestMapper;
 import com.qcap.cac.dto.AppLeaveReq;
 import com.qcap.cac.dto.UserListResp;
 import com.qcap.cac.entity.TbLeave;
+import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.LeaveRestSrv;
 import com.qcap.cac.service.MessageRestSrv;
 import com.qcap.cac.tools.EntityTools;
@@ -21,6 +23,8 @@ import com.qcap.core.utils.AppUtils;
 import com.qcap.core.warpper.FastDFSClientWrapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +52,9 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
 
     @Resource
     private MessageRestSrv messageRestSrv;
+    
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public List<AppLeaveReq> queryLeaveList(Map<String, Object> paramMap) {
@@ -121,12 +128,13 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         this.leaveRestMapper.insert(leave);
 
         //查询具有审批角色的人员
-        String roleNum = RedisTools.getCommonConfig("CAC_LEAVE_AUDIT_ROLE_NUM");
-        List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum,programCode);
+//        String roleNum = RedisTools.getCommonConfig("CAC_LEAVE_AUDIT_ROLE_NUM");
+//        List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum,programCode);
+        List<String> empList = this.getEmpManager( employeeCode);
         //推送消息
         String title = "新的请假单";
         String message = "您有一个" + manager.getName() +  "的请假单待审批";
-        messageRestSrv.JpushMessage(userList, StringUtils.join(programCodes,","),message,title);
+        messageRestSrv.JpushMessage(empList, StringUtils.join(programCodes,","),message,title);
         return 1;
     }
 
@@ -219,6 +227,38 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         String message = "您的请假单【" + leaveStartFormat + "至" + leaveEndFormat + "】被驳回";
         messageRestSrv.JpushMessage(workNo, StringUtils.join(programCodes,","),message,title);
         return 1;
+    }
+    
+    /**
+     * 根据清洁人员工号，获取其上级管理人员工号
+     * @Title: getEmpManager 
+     * @Description: TODO
+     * @param employeeCode
+     * @return
+     * @return: List<String>
+     */
+    private List<String> getEmpManager(String employeeCode) {
+    	String areaCode = this.leaveRestMapper.selectAreaCodeByEmployCode(employeeCode);
+    	if(StringUtils.isBlank(areaCode)) {
+    		throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "根据工号未查询到岗位所对应的区域");
+    	}
+    	String [] areaCodeArr = areaCode.split(",");
+    	String sqlHead= "SELECT EMPLOYEE_CODE " + 
+		    			"FROM tb_task_arrangement " + 
+		    			"WHERE POSITION_CODE =(" + 
+		    			"			SELECT POSITION_CODE FROM tb_area_position " + 
+		    			"			WHERE POSITION_TYPE !='3' " ;
+	    			
+    	String sqlFoot ="			LIMIT 1 )";
+    	String sqlCondition="";
+    	for(String str : areaCodeArr) {
+    		sqlCondition += "	AND INSTR(AREA_CODE,'"+str+"') " ;
+    	}
+    	
+    	String sql =sqlHead + sqlCondition + sqlFoot;
+    	List<String> mgrEmpList = jdbcTemplate.queryForList(sql, String.class);
+		return mgrEmpList;
+    	
     }
 
 
