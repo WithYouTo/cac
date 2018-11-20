@@ -77,7 +77,7 @@ public class EquipMaintSrvImpl implements EquipMaintSrv {
                 equipMaint.setMaintMoney(equipMaintInsertDto.getMaintMoney());
                 equipMaint.setMaintTime(time);
                 equipMaint.setEquipCycle(equipInfo.getMaintCycle());
-
+                equipMaint.setEmployeeCode(equipMaintInsertDto.getEmployeeCode());
                 //若维保类型是配件，继续查询配件信息
                 if((CommonConstant.MAINT_TYPE_PARTS).equals(maintType)){
                     //mybatis-plus封装查询条件，根据设备编号获取设备信息

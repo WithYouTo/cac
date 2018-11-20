@@ -5,6 +5,8 @@
     <select id="listEquipMaint" resultType="java.util.Map" parameterType="com.qcap.cac.dto.EquipChargeSearchDto">
         select
             em.EQUIP_MAINT_ID equipMaintId,
+            em.employee_Code employeeCode,
+            m.name employeeName,
             em.EQUIP_ID equipId,
             em.EQUIP_NO equipNo,
             em.EQUIP_NAME equipName,
@@ -23,6 +25,8 @@
         from TB_EQUIP_MAINT em
         left join tb_program p
         ON em.program_code = p.program_code
+        LEFT join tb_manager m
+        ON m.account = em.employee_Code
         where 1=1
         <if test="obj.maintType != null and obj.maintType != ''">
             and em.MAINT_TYPE = #{obj.maintType}

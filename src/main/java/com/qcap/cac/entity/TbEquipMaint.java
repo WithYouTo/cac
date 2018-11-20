@@ -58,6 +58,10 @@ public class TbEquipMaint implements Serializable {
     /**
      * 维保类别
      */
+    private String employeeCode;
+    /**
+     * 维保类别
+     */
     private String maintType;
     /**
      * 维保周期
@@ -286,6 +290,14 @@ public class TbEquipMaint implements Serializable {
         this.maintMoney = maintMoney;
     }
 
+    public String getEmployeeCode() {
+        return employeeCode;
+    }
+
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
+    }
+
     @Override
     public String toString() {
         return "TbEquipMaint{" +
@@ -298,6 +310,7 @@ public class TbEquipMaint implements Serializable {
                 ", equipModel='" + equipModel + '\'' +
                 ", partsName='" + partsName + '\'' +
                 ", partsNo='" + partsNo + '\'' +
+                ", employeeCode='" + employeeCode + '\'' +
                 ", maintType='" + maintType + '\'' +
                 ", equipCycle='" + equipCycle + '\'' +
                 ", maintTime=" + maintTime +

@@ -6,7 +6,7 @@ public class EquipMaintInsertDto {
     private String equipName;
     private String equipNo;
     private String partsNo;
-    private String personName;
+    private String employeeCode;
     private String maintTime;
     private String maintMoney;
     private String maintDesc;
@@ -43,12 +43,12 @@ public class EquipMaintInsertDto {
         this.partsNo = partsNo;
     }
 
-    public String getPersonName() {
-        return personName;
+    public String getEmployeeCode() {
+        return employeeCode;
     }
 
-    public void setPersonName(String personName) {
-        this.personName = personName;
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
     }
 
     public String getMaintTime() {
@@ -82,7 +82,7 @@ public class EquipMaintInsertDto {
                 ", equipName='" + equipName + '\'' +
                 ", equipNo='" + equipNo + '\'' +
                 ", partsNo='" + partsNo + '\'' +
-                ", personName='" + personName + '\'' +
+                ", employeeCode='" + employeeCode + '\'' +
                 ", maintTime='" + maintTime + '\'' +
                 ", maintMoney='" + maintMoney + '\'' +
                 ", maintDesc='" + maintDesc + '\'' +
