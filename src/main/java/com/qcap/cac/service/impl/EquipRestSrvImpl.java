@@ -98,7 +98,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INUSE.equals(curStatus)){
             //调用设备状态为使用中的方法
-            handlerWhenEquipInCharge(manager,equipNo);
+            handlerWhenEquipInUse(manager,equipNo);
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE.equals(curStatus)){
             //返回设备已损坏
