@@ -4,11 +4,11 @@ server:
     context-path: /cac
 spring:
   datasource:
-    url: jdbc:mysql://10.10.0.12:3333/cac
+    url: jdbc:mysql://192.168.1.92:3306/cac?zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    password: root
-    username: root
+    password: Admin@2018dzwy
+    username: cac
     druid:
       max-pool-prepared-statement-per-connection-size: 20
       min-idle: 5
@@ -31,10 +31,10 @@ spring:
     basename: i18n/messages
   servlet:
     multipart:
-      maxRequestSize: 100Mb
-      maxFileSize: 100Mb
+      maxRequestSize: 100MB
+      maxFileSize: 100MB
   redis:
-    host: 192.168.185.13
+    host: 192.168.1.184
     password: whxx123.
     database: 0
     port: 6379
@@ -45,11 +45,40 @@ spring:
         max-active: 8
         max-wait: -1ms
     timeout: 5000ms
+mybatis-plus:
+  type-aliases-package: com.qcap.*.model, com.qcap.*.entity
+  mapper-locations: classpath:/com/qcap/*/mapper/*.xml
+  global-config:
+    db-config:
+      id-type: uuid
+      field-strategy: not_null
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      capital-mode: false
+      column-underline: true
+  configuration:
+    cache-enabled:  false
+    jdbc-type-for-null: 'null'
+    map-underscore-to-camel-case: true
 logging:
   config: classpath:logback-prod.xml
 
-# DIY
 rest:
   restfulSign: /rest
   coreOpen: true
-  swaggerEnable: false
+  swaggerEnable: true
+mybatis:
+  mapper-refresh: true
+  iPage:
+    page-parameter: page
+    size-parameter: size
+
+#fastdfs配置
+fdfs:
+  soTimeout: 1500
+  connectTimeout: 600
+  thumbImage:
+    width: 150
+    height: 150
+  trackerList:
+    - 192.168.1.226:22122

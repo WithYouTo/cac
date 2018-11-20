@@ -11,15 +11,19 @@
  */
 package com.qcap.cac.service;
 
-import java.util.List;
-
 import com.qcap.cac.dto.EventTaskRestDto;
 import com.qcap.cac.dto.QueryHistoryFlightInfoReq;
 import com.qcap.cac.dto.QueryHistoryFlightInfoResp;
+
+import java.util.List;
+import java.util.Map;
 
 public interface EventTaskRestSrv {
 
 	void geneEventTask(EventTaskRestDto eventTaskDto);
 
 	List<QueryHistoryFlightInfoResp> queryHistoryFlightInfo(QueryHistoryFlightInfoReq req);
+
+	List<Map<String,String>> selectFlightShiftInfo ();
+
 }

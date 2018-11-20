@@ -99,4 +99,25 @@
 		ORDER BY LINE_NO DESC
 		LIMIT 0,10
 	</select>
+
+	<select id="selectFlightShiftInfo" parameterType="String" resultType="Map">
+		SELECT
+			m.FLIGHT_NAME AS flightName,
+			m.AIRCRAFT_TYPE AS aircraftType,
+			m.WAITTING_BUILDING AS waitingBuilding,
+			m.FLIGHT_TYPE AS  flightType,
+			(
+				SELECT
+					DESC1_
+				FROM
+					tbpubcode01
+				WHERE
+					CONFIG_CODE_ = 'FLIGHT_TYPE '
+				AND DESC_ = m.FLIGHT_TYPE
+			) AS filghtTypeName
+		FROM
+			tb_flight_shift m
+		WHERE
+			INSTR(#{programCode},PROGRAM_CODE)
+	</select>
 </mapper>
