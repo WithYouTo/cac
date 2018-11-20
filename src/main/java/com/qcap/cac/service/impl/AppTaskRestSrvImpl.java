@@ -70,6 +70,7 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 		
 		//根据查询时间分白班和夜班进行统计
 		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_ITEM);
+		param.put("curTime", new Date());
 		List<Map<String, String>> list =this.appTaskRestMapper.queryTaskItem(param);
 		
 		Map<String, Object> result = new HashMap<>();
@@ -121,11 +122,12 @@ public class AppTaskRestSrvImpl implements AppTaskRestSrv {
 	public List<Map<String, Object>> queryUnfinishTask(AppTaskRestReq appTaskRestDto){
 		//根据查询时间分白班和夜班进行统计
 		String employeeCode = appTaskRestDto.getEmployeeCode();
-		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_FINISH);
+		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_ITEM);
 		param.put("employeeCode", employeeCode);
 		param.put("taskStatus", appTaskRestDto.getTaskStatus());
 		param.put("startTimePage", appTaskRestDto.getStartTime());
 		param.put("lineNo", appTaskRestDto.getLineNo());
+		param.put("curTime", new Date());
 		return this.appTaskRestMapper.selectTaskIntro(param);
 	}
 
@@ -268,7 +270,7 @@ private String dealWithSpecialTaskTime(String startTime) {
 	public List<Map<String, Object>> queryFinishAndCheckTask (AppTaskRestReq appTaskRestReq){
 		String employeeCode = ToolUtil.toStr(appTaskRestReq.getEmployeeCode());
 		//根据查询时间分白班和夜班进行统计
-		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_FINISH);
+		Map<String, Object> param = getTaskQueryTime(employeeCode,QUERY_TASK_TIME_ITEM);
 		param.put("taskStatus", appTaskRestReq.getTaskStatus());
 		param.put("startTimePage", appTaskRestReq.getStartTime());
 		param.put("lineNo", appTaskRestReq.getLineNo());
@@ -515,6 +517,9 @@ private String dealWithSpecialTaskTime(String startTime) {
 		}
 		String positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
 		String positionName = ToolUtil.toStr(positionMap.get("positionName"));
+		
+		//查询项目编码
+		String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(appTaskAddRestReq.getEmployeeCode());
 
 		// 查询班次
 		/**
@@ -535,6 +540,7 @@ private String dealWithSpecialTaskTime(String startTime) {
 
 		TbTask task = new TbTask();
 		BeanUtils.copyProperties(task,appTaskAddRestReq);
+		task.setProgramCode(programCode);
 		task.setTaskCode(taskCode);
 		task.setPositionCode(positionCode);
 		task.setPositionName(positionName);
@@ -877,7 +883,8 @@ private String dealWithSpecialTaskTime(String startTime) {
 		Map<String, Object> map = null;
 		switch(queryType) {
 		case QUERY_TASK_TIME_ITEM:
-			map = queryTaskItemTime(shift, startTime, endTime, curDate, curTime, nextDate, lastDate);
+//			map = queryTaskItemTime(shift, startTime, endTime, curDate, curTime, nextDate, lastDate);
+			map = queryTaskItemTimeV2(shift, startTime, endTime, curDate, curTime, nextDate, lastDate);
 			break;
 		case QUERY_TASK_TIME_HISTORY:
 			map = queryTaskHistoryTime(endTime, curDate, curTime, lastDate);
@@ -948,6 +955,34 @@ private String dealWithSpecialTaskTime(String startTime) {
 				//往后推一天
 				newEndTime = nextDate +" " + endTime;
 			}
+		}
+		
+		map.put("startTime", newStartTime);
+		map.put("endTime", newEndTime);
+		return map;
+	}
+	
+	private Map<String, Object> queryTaskItemTimeV2(String shift, String startTime, String endTime, String curDate,
+			String curTime, String nextDate, String lastDate) {
+		// 组装查询条件
+		String newStartTime = "";
+		String newEndTime = "";
+		Map<String, Object> map = new HashMap<>();
+		if (CommonConstant.SHIFT_DAYTIME.equals(shift)) {
+			/**
+			 * 白班： 查询当班任务
+			 */
+			newStartTime = curDate +" " + startTime;
+			newEndTime = curDate +" " + endTime;
+		}
+		
+		if(CommonConstant.SHIFT_NIGHT.equals(shift)) {
+			/**
+			 * 夜班：查询当班任务
+			 */
+			newStartTime = curDate +" " + startTime;
+			//往后推一天
+			newEndTime = nextDate +" " + endTime;
 		}
 		
 		map.put("startTime", newStartTime);
