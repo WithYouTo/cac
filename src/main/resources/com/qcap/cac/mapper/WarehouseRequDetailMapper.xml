@@ -141,10 +141,12 @@
     <select id="GoodsNoAppList" parameterType="String" resultType="Map">
         select
         GOODS_NO id,
-        GOODS_NAME text
+        GOODS_NAME text,
+		ENTRY_UNIT entityUnit
         from  tb_warehouse_stock
         where STOREROOM_ID = #{storeroomId}
-        group  by GOODS_NO
+        order by CONVERT( GOODS_NAME USING gbk ) COLLATE gbk_chinese_ci ASC
+        <!-- group  by GOODS_NO -->
     </select>
 
 
