@@ -25,12 +25,14 @@ public interface AreaMapper extends BaseMapper<TbArea> {
 
     List<ZTreeNode> initTree(@Param("paramMap") Map paramMap);
 
-    @Select("select IFNULL(MAX(SUBSTRING(AREA_CODE, - 3)),-1) from tb_area t WHERE `LEVEL` = #{level} ")
-    Integer selectMaxNum(Integer level);
-
     @Select("select (IFNULL(MAX(SEQ_NO),0) + 1) from tb_area t WHERE `SUPER_AREA_CODE` = #{superAreaCode} ")
     Integer selectMaxSeqNo(String superAreaCode);
 
+    /**
+     * 根据父级查询项目编码
+     * @param areaCode
+     * @return
+     */
     @Select("select PROGRAM_CODE from tb_area t WHERE `AREA_CODE` = #{areaCode} limit 1 ")
     String selectProgramCodeByAreaCode(String areaCode);
 
@@ -55,7 +57,7 @@ public interface AreaMapper extends BaseMapper<TbArea> {
      * @return java.lang.Integer
      */
 
-    @Select("select (IFNULL(MAX(AREA_CODE),-1) + 1) from tb_area t WHERE `LEVEL` = -1")
+    @Select("select IFNULL(MAX(AREA_CODE),-1) from tb_area t WHERE `LEVEL` = -1")
     Integer selectParentLevelMaxNum();
 
     @Select("select (IFNULL(MAX(SEQ_NO),0) + 1) from tb_area t WHERE `LEVEL` = -1 ")
@@ -84,6 +86,15 @@ public interface AreaMapper extends BaseMapper<TbArea> {
      */
 
     Integer checkSubAreaByAreaCode(String areaCode);
+
+
+    /**
+     * 查询子级编码的后三位
+     * @param areaCode
+     * @return
+     */
+    @Select("select IFNULL(MAX(SUBSTRING(AREA_CODE, -3)),-1) from tb_area t WHERE`SUPER_AREA_CODE` = #{areaCode} ")
+    Integer selectAreaCodeSuffix(String areaCode);
 
 
 

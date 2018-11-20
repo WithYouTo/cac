@@ -70,7 +70,7 @@ public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, T
 
         //更新领用主表的状态为已提交
         warehouseRequ.setRequStatus(CommonConstant.WAREHOUSE_REQ_STATUS_COMMIT);
-        warehouseRequ.setStoreroomId(warehouseRequ.getStoreroomId());
+        //warehouseRequ.setStoreroomId(warehouseRequ.getStoreroomId());
         EntityTools.setUpdateEmpAndTime(warehouseRequ);
         this.warehouseRequMapper.updateById(warehouseRequ);
         //更新领用明细表的状态为已提交

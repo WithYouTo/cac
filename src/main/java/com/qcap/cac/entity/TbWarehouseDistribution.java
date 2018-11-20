@@ -26,9 +26,9 @@ public class TbWarehouseDistribution implements Serializable {
      */
     private String warehouseReqdetailId;
     /**
-     * 储藏室Id
+     * 项目编码
      */
-    private String storeroomId;
+    private String programCode;
     /**
      * 物品编码
      */
@@ -96,12 +96,12 @@ public class TbWarehouseDistribution implements Serializable {
      */
     private Integer version;
 
-    public String getStoreroomId() {
-        return storeroomId;
+    public String getProgramCode() {
+        return programCode;
     }
 
-    public void setStoreroomId(String storeroomId) {
-        this.storeroomId = storeroomId;
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getDistrDate() {

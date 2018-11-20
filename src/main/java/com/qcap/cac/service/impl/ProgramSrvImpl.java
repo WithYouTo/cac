@@ -104,6 +104,7 @@ public class ProgramSrvImpl implements ProgramSrv {
         area.setAreaId(UUIDUtils.getUUID());
         //区域编码
         Integer max = this.areaMapper.selectParentLevelMaxNum();
+        max = max == -1 ? 100 : max + 1;
         area.setAreaCode(ToolUtil.toStr(max));
         area.setAreaName(programAddDto.getProgramName());
         area.setLevel("-1");

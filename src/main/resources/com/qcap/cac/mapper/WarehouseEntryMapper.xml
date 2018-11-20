@@ -6,6 +6,7 @@
     <select id="getWarehouseEntryList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntryDto">
         select
         WAREHOUSE_ENTRY_ID,
+        a.PROGRAM_CODE,
         a.STOREROOM_ID,
         a.STOREROOM,
         ENTRY_BATCH_NO,
@@ -24,6 +25,9 @@
         left join tb_warehouse_stock b
         on a.WAREHOUSE_STOCK_ID = b.WAREHOUSE_STOCK_ID
         where 1 = 1 AND a.DELETE_FLAG = 'N'
+        <if test="obj.programCode!=null and obj.programCode!=''">
+            and a.PROGRAM_CODE = #{obj.programCode}
+        </if>
         <if test="obj.storeroomId!=null and obj.storeroomId!=''">
             and a.STOREROOM_ID = #{obj.storeroomId}
         </if>
@@ -63,6 +67,19 @@
                 #{item}
             </foreach>
         </if>
+    </select>
+
+    <!--根据项目编号查询储藏室下拉框-->
+    <select id="getStoreRoomListByProgramCode" resultType="Map" parameterType="String">
+        select
+        a.AREA_ID id,
+        a.AREA_NAME text
+        from tb_area a
+        LEFT JOIN tb_program b
+        on a.PROGRAM_CODE = b.PROGRAM_CODE
+        where AREA_TYPE = "WAREHOUSE"
+        AND a.PROGRAM_CODE = #{programCode}
+        ORDER BY a.AREA_CODE
     </select>
 
 </mapper>

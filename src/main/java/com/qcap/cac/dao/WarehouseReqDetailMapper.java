@@ -33,9 +33,9 @@ public interface WarehouseReqDetailMapper extends BaseMapper<TbWarehouseReqdetai
 
     /**
      * 查询物品编码下拉框
-     * @param storeroomId
+     * @param programCode
      * @return
      */
-    List<Map<String,String>> GoodsNoAppList(String storeroomId);
+    List<Map<String,String>> GoodsNoAppList(String programCode);
 
 }

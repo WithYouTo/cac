@@ -1,6 +1,5 @@
 package com.qcap.cac.entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbWarehouseEntry {
@@ -8,6 +7,11 @@ public class TbWarehouseEntry {
      *   入库主键
      */
     private String warehouseEntryId;
+
+    /**
+     *   项目编号
+     */
+    private String programCode;
 
     /**
      *   储藏室
@@ -83,6 +87,14 @@ public class TbWarehouseEntry {
      *   版本
      */
     private Integer version;
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
 
     public String getWarehouseEntryId() {
         return warehouseEntryId;

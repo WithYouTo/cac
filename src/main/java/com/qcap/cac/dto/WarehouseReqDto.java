@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 public class WarehouseReqDto {
 
     @NotBlank
-    private String storeroomId;
+    private String programCode;
     private String requLoc;
     private String requLocName;
     private String goodsNo;
@@ -42,12 +42,12 @@ public class WarehouseReqDto {
         this.requBatchNo = requBatchNo;
     }
 
-    public String getStoreroomId() {
-        return storeroomId;
+    public String getProgramCode() {
+        return programCode;
     }
 
-    public void setStoreroomId(String storeroomId) {
-        this.storeroomId = storeroomId;
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getRequLoc() {

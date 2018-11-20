@@ -55,31 +55,31 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
     }
 
     @Override
-    public IPage<TbWarehouseStock> getGoodsConfigList(IPage<TbWarehouseStock> page, WarehouseEntryDto warehouseEntryDto) {
+    public void  getGoodsConfigList(IPage<TbWarehouseStock> page, WarehouseEntryDto warehouseEntryDto) {
+        List<TbWarehouseStock> list = this.warehouseStockMapper.getGoodsConfigList(page,warehouseEntryDto);
+        page.setRecords(list);
 
-        //组装参数
-        QueryWrapper<TbWarehouseStock> queryWrapper = new QueryWrapper<TbWarehouseStock>()
-                .eq("STOREROOM_ID", warehouseEntryDto.getStoreroomId());
 
-         if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsNo())) {
-             queryWrapper.like("GOODS_NO", warehouseEntryDto.getGoodsNo());
-         }
-
-        if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsName())) {
-            queryWrapper.like("GOODS_NAME", warehouseEntryDto.getGoodsName());
-        }
-
-        if(StringUtils.isNotEmpty(warehouseEntryDto.getSupplierName())) {
-            queryWrapper.like("SUPPLIER_NAME",  warehouseEntryDto.getSupplierName());
-        }
-
-        if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsNo())) {
-            queryWrapper.like("GOODS_NO",  warehouseEntryDto.getGoodsNo());
-        }
-
-        queryWrapper.groupBy("GOODS_NO").groupBy("SUPPLIER_NAME");
-
-        return this.warehouseStockMapper.selectPage(page,queryWrapper);
+//        //组装参数
+//        QueryWrapper<TbWarehouseStock> queryWrapper = new QueryWrapper<TbWarehouseStock>()
+//                .eq("PROGRAM_CODE", warehouseEntryDto.getProgramCode());
+//
+//
+//        if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsNo())) {
+//            queryWrapper.like("GOODS_NO", warehouseEntryDto.getGoodsNo());
+//        }
+//
+//        if(StringUtils.isNotEmpty(warehouseEntryDto.getGoodsName())) {
+//            queryWrapper.like("GOODS_NAME", warehouseEntryDto.getGoodsName());
+//        }
+//
+//        if(StringUtils.isNotEmpty(warehouseEntryDto.getSupplierName())) {
+//            queryWrapper.like("SUPPLIER_NAME",  warehouseEntryDto.getSupplierName());
+//        }
+//
+//        queryWrapper.groupBy("GOODS_NO").groupBy("SUPPLIER_NAME");
+//
+//        return this.warehouseStockMapper.selectPage(page,queryWrapper);
     }
 
     @Override
@@ -116,16 +116,16 @@ public class WarehouseStockServiceImpl extends ServiceImpl<WarehouseStockMapper,
      * 低于警戒线，生成请购单
      * date YYYY-MM-DD
      */
-    public List<PurchasePoiEntity>  generatePurchaseOrder(String storeroomId,String date){
-        return this.warehouseStockMapper.getLeastStockNumList(storeroomId,date);
+    public List<PurchasePoiEntity>  generatePurchaseOrder(String programCode,String date){
+        return this.warehouseStockMapper.getLeastStockNumList(programCode,date);
 
     }
 
     @Override
     @Transactional
-    public void checkBeforeExport(String storeroomId) {
+    public void checkBeforeExport(String programCode) {
         //查询数据库中低于警戒线中的记录
-        List<TbWarehouseStock> list = this.warehouseStockMapper.getLowLimitStockList(storeroomId,DateUtil.getDay());
+        List<TbWarehouseStock> list = this.warehouseStockMapper.getLowLimitStockList(programCode,DateUtil.getDay());
         //遍历更新采购的起止日期
         for(TbWarehouseStock item : list) {
             if (StringUtils.isEmpty(item.getWarehouseStockId())) {
