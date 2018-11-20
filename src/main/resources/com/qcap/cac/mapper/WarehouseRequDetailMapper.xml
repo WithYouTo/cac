@@ -50,6 +50,8 @@
         SELECT
         WAREHOUSE_DISTRIBUTION_ID  warehouseDistributionId,
         WAREHOUSE_REQDETAIL_ID  warehouseReqdetailId,
+        a.PROGRAM_CODE,
+        (SELECT b.PROGRAM_NAME FROM tb_program b WHERE b.PROGRAM_CODE = a.PROGRAM_CODE)  programName,
         GOODS_NO goodsNo,
         GOODS_NAME  goodsName,
         AREA_ID areaId,
@@ -66,8 +68,8 @@
         tb_warehouse_distribution a LEFT JOIN tb_manager b
         ON a.EMPLOYEE_CODE = b.account
         <where>
-        <if test="obj.storeroomId!=null and obj.storeroomId!=''">
-            and a.STOREROOM_ID = #{obj.storeroomId}
+        <if test="obj.programCode!=null and obj.programCode!=''">
+            and a.PROGRAM_CODE = #{obj.programCode}
         </if>
         <if test="obj.areaName!=null and obj.areaName!=''">
             and a.AREA_NAME like concat('%',#{obj.areaName},'%')
@@ -142,9 +144,9 @@
         select
         GOODS_NO id,
         GOODS_NAME text,
-		ENTRY_UNIT entityUnit
+        MIN_UNIT minUnit
         from  tb_warehouse_stock
-        where STOREROOM_ID = #{storeroomId}
+        where PROGRAM_CODE = #{programCode}
         order by CONVERT( GOODS_NAME USING gbk ) COLLATE gbk_chinese_ci ASC
         <!-- group  by GOODS_NO -->
     </select>

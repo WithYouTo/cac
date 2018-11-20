@@ -17,12 +17,14 @@ import com.qcap.cac.entity.TbWarehouseStock;
 import com.qcap.cac.entity.TbWarehouseStorage;
 import com.qcap.cac.poiEntity.EntryPoiEntity;
 import com.qcap.cac.service.WarehouseEntryService;
+import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -66,6 +68,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Integer importExcel(List<EntryPoiEntity> entryList) {
 
         //库入库批次号
@@ -99,9 +102,15 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             if(StringUtils.isEmpty(supplierName)){
                 throw new RuntimeException("第" + (i + 1) + "行的供应商名称不能为空！");
             }
+
+            String programName = item.getProgramName();
+            if(StringUtils.isEmpty(programName)){
+                throw new RuntimeException("第" + (i + 1) + "行的项目名称不能为空！");
+            }
+
             String storeRoom = item.getStoreRoom();
             if(StringUtils.isEmpty(storeRoom)){
-                throw new RuntimeException("第" + (i + 1) + "行的仓库名称不能为空！");
+                throw new RuntimeException("第" + (i + 1) + "行的储藏室名称不能为空！");
             }
 
             String entryNum = item.getEntryNum();
@@ -148,7 +157,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             if(!ToolUtil.isNumeric(buyNum)){
                 throw new RuntimeException("第" + (i + 1) + "行的采购数量的格式不正确！");
             }
-            String buyUnit = item.getMinUnit();
+            String buyUnit = item.getBuyUnit();
             if(StringUtils.isEmpty(buyUnit)){
                 throw new RuntimeException("第" + (i + 1) + "行的采购单位不能为空！");
             }
@@ -160,25 +169,34 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 throw new RuntimeException("第" + (i + 1) + "行的采购周期的格式不正确！");
             }
 
+            if(!limitUnit.equals(minUnit)){
+                throw new RuntimeException("第" + (i + 1) + "行的最低警戒线的单位和最小单位不一致！");
+            }
+
+            if(!entryUnit.equals(buyUnit)){
+                throw new RuntimeException("第" + (i + 1) + "行的入库单位和采购单位不一致！");
+            }
+
             //项目编码
-            List<String> programCodes = AppUtils.getLoginUserProjectCodes();
-            programCodes.removeAll(Collections.singleton(""));
-            String programCode = StringUtils.join(programCodes,",");
-            String storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom,programCode);
+            String programCode = this.warehouseEntryMapper.existProgramCodeByName(programName);
+            if(StringUtils.isEmpty(programCode)){
+                throw new RuntimeException("第" + (i + 1) + "行中项目机场不存在！");
+            }
+            //储藏室ID
+            String storeroomId = this.warehouseEntryMapper.selecStoreRoomId(storeRoom,programCode,"WAREHOUSE");
             if(StringUtils.isEmpty(storeroomId)){
                 throw new RuntimeException("第" + (i + 1) + "行储藏室在区域中不存在！");
             }
-
             //系统默认库位是否存在
             QueryWrapper<TbWarehousePosition> pWrapper = new QueryWrapper<>();
             pWrapper.eq("INSTRUCTION","SYSTEM-CONFIG-EXCEL")
                     .eq("STOREROOM_ID",storeroomId)
+                    .eq("PROGRAM_CODE",programCode)
                     .groupBy("INSTRUCTION");
             TbWarehousePosition warehousePosition = this.warehousePositionMapper.selectOne(pWrapper);
             if(null == warehousePosition){
                 throw new RuntimeException("系统默认库位不存在！");
             }
-
 
             //入库表
             TbWarehouseEntry entry = new TbWarehouseEntry();
@@ -191,29 +209,29 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             //判断物品编码是否在库存表中存在
             QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
             wrapper.eq("GOODS_NO",buyNo)
-                    .eq("STOREROOM_ID",storeroomId);
+                    .eq("PROGRAM_CODE",programCode);
 
-             //存在，直接更新库存数量
-            if( warehouseStockMapper.selectCount(wrapper) > 0){
-                if(warehouseStockMapper.selectCount(wrapper) > 1){
-                    throw new RuntimeException("库存表中物品记录有误，请联系管理员");
-                }
+            if(warehouseStockMapper.selectCount(wrapper) > 1){
+                throw new RuntimeException("库存表中物品记录有误，请联系管理员");
+            }
+            //存在，直接更新库存数量
+            if(warehouseStockMapper.selectCount(wrapper) == 1){
                 TbWarehouseStock warehouseStock = warehouseStockMapper.selectOne(wrapper);
                 BeanUtil.copyProperties(item,warehouseStock);
                 BigDecimal oldNum = new BigDecimal(warehouseStock.getGoodsNum());
                 BigDecimal goodsNum = oldNum.add(new BigDecimal(sumNum));
                 warehouseStock.setGoodsNum(ToolUtil.toInt(goodsNum));
-                if(StringUtils.isNotEmpty(buyDuration)){
-                    warehouseStock.setBuyDuration(ToolUtil.toInt(buyDuration));
-                }
+                warehouseStock.setBuyDuration(ToolUtil.toInt(buyDuration));
+                EntityTools.setUpdateEmpAndTime(warehouseStock);
                 warehouseStockMapper.updateById(warehouseStock);
                 //库存主键
                 stockId = warehouseStock.getWarehouseStockId();
             }else{
                 //新增库存表
                 stock.setWarehouseStockId(stockId);
-                stock.setStoreroom(storeRoom);
-                stock.setStoreroomId(storeroomId);
+                stock.setProgramCode(programCode);
+                //stock.setStoreroom(storeRoom);
+                //stock.setStoreroomId(storeroomId);
                 stock.setGoodsType(buyType);
                 stock.setGoodsNo(buyNo);
                 stock.setGoodsName(goodsName);
@@ -231,8 +249,7 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 }
                 stock.setStockInstrution("EXCEL导入");
                 stock.setDeleteFlag("N");
-                stock.setCreateEmp("SYS");
-                stock.setCreateDate(new Date());
+                EntityTools.setCreateEmpAndTime(stock);
                 this.warehouseStockMapper.insert(stock);
             }
 
@@ -249,12 +266,12 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
                 storage.setWarehouseStorageId(UUIDUtils.getUUID());
                 storage.setWarehousePositionId(positionId);
                 storage.setWarehouseStockId(stockId);
-                storage.setCreateDate(new Date());
-                storage.setCreateEmp("SYS");
+                EntityTools.setCreateEmpAndTime(storage);
                 this.warehouseStorageMapper.insert(storage);
             }
 
             entry.setWarehouseEntryId(UUIDUtils.getUUID());
+            entry.setProgramCode(programCode);
             entry.setStoreroom(storeRoom);
             entry.setStoreroomId(storeroomId);
             entry.setEntryBatchNo(batchNo);
@@ -265,15 +282,17 @@ public class WarehouseEntryServiceImpl extends ServiceImpl<WarehouseEntryMapper,
             entry.setMinUnit(minUnit);
             entry.setEntryTime(DateUtil.dateTimeToString(new Date()));
             entry.setDeleteFlag("N");
-            entry.setCreateEmp("SYS");
-            entry.setCreateDate(new Date());
+            EntityTools.setCreateEmpAndTime(entry);
             this.warehouseEntryMapper.insert(entry);
             count++;
         }
         return count;
     }
 
-
+    @Override
+    public List<Map<String, String>> getStoreRoomListByProgramCode(String programCode) {
+        return this.warehouseEntryMapper.getStoreRoomListByProgramCode(programCode);
+    }
 
 
 }

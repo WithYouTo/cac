@@ -1,11 +1,8 @@
 package com.qcap.cac.dto;
 
-import javax.validation.constraints.NotEmpty;
-
 public class WarehouseEntryDto {
 
-    @NotEmpty
-    private String storeroomId;
+    private String programCode;
     private String entryBatchNo;
     private String goodsNo;
     private String goodsName;
@@ -13,12 +10,12 @@ public class WarehouseEntryDto {
     private String endDate;
     private String supplierName;
 
-    public String getStoreroomId() {
-        return storeroomId;
+    public String getProgramCode() {
+        return programCode;
     }
 
-    public void setStoreroomId(String storeroomId) {
-        this.storeroomId = storeroomId;
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public String getEntryBatchNo() {

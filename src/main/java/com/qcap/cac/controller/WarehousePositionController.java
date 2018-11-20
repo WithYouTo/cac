@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.validation.Valid;
-
 /**
  * 库位管理
  *
@@ -38,7 +36,7 @@ public class WarehousePositionController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams list(IPage<TbWarehousePosition> page, @Valid WarehouseEntryDto warehouseEntryDto) {
+    public PageResParams list(IPage<TbWarehousePosition> page,WarehouseEntryDto warehouseEntryDto) {
         try {
             this.warehousePositionService.getPositionList(page,warehouseEntryDto);
         } catch (Exception e) {

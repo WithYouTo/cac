@@ -1,6 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.*;
 import com.qcap.cac.dto.*;
@@ -15,7 +14,6 @@ import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
-import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -25,7 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,16 +99,21 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
                 throw new RuntimeException("根据主键查询不到领用单明细信息");
             }
 
+            String warehouseReqId = warehouseReqdetail.getWarehouseRequId();
+            TbWarehouseRequ requ = this.warehouseRequMapper.selectById(warehouseReqId);
+            if(null == requ){
+                throw new RuntimeException("根据主键查询不到领用单信息");
+            }
 
-
-
+            String currProgramCode = requ.getProgramCode();
             String goodsNo = warehouseReqdetail.getGoodsNo();
             String goodsName = warehouseReqdetail.getGoodsName();
 
             //查询库存余量（库存表中-一个goodsNo对应一条记录，在入库时做了限制）
-            QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
-            wrapper.eq("GOODS_NO",goodsNo);
-            TbWarehouseStock stock = warehouseStockMapper.selectOne(wrapper);
+//            QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
+//            wrapper.eq("GOODS_NO",goodsNo);
+//            wrapper.eq("PROGRAM_CODE",currProgramCode);
+            TbWarehouseStock stock = goodsApplyRestMapper.selectExistGood(currProgramCode,goodsNo);
             if(null == stock){
                 throw new RuntimeException("根据物品编码没有查询到库存信息");
             }
@@ -128,7 +134,6 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             warehouseReqdetail.setRequStatus(CommonConstant.WAREHOUSE_REQ_STATUS_RECEIVE);
             this.goodsApplyRestMapper.updateReqDetailByGoodsOut(EntityTools.setCreateEmpAndTime(warehouseReqdetail));
 
-            TbWarehouseRequ requ = new TbWarehouseRequ();
             requ.setWarehouseRequId(warehouseReqdetail.getWarehouseRequId());
             requ.setRequStatus(CommonConstant.WAREHOUSE_REQ_STATUS_RECEIVE);
             this.warehouseRequMapper.updateById(requ);
@@ -140,21 +145,21 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             //判断库存数量是否小于最低警戒线（库存和最低警戒线的单位在导入必须保持一致）
 
             if(goodsNum - realNum  < limitStore){
-                String programCode = "";
-                List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
-                if(!CollectionUtils.isEmpty(programCodes)){
-                    programCodes.removeAll(Collections.singleton(""));
-                    programCode =  StringUtils.join(programCodes,",");
-                }
+//                String programCode = "";
+//                List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
+//                if(!CollectionUtils.isEmpty(programCodes)){
+//                    programCodes.removeAll(Collections.singleton(""));
+//                    programCode =  StringUtils.join(programCodes,",");
+//                }
                 //向角色为库管的人员推送消息
                 String roleNum = RedisTools.getCommonConfig("CAC_WAREHOUSE_ROLE_NUM");
                 String message = RedisTools.getCommonConfig("CAC_LIMIT_STORE_MESSAGE");
-                List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum,programCode);
+                List<UserListResp> userList = loginRestMapper.getUserListByRoleNum(roleNum,currProgramCode);
 
                 List<String> pushList = userList.stream().map(UserListResp::getEmployeeCode).collect(Collectors.toList());
                 message = "物品编码【" + goodsNo + "】/物品名称【" + goodsName + "】的" + message;
                 String title = "库管物品出库";
-                messageRestSrv.JpushMessage(pushList, programCode,message,title);
+                messageRestSrv.JpushMessage(pushList, currProgramCode,message,title);
             }
         }
 
@@ -212,7 +217,7 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             distribution.setDistrDate(DateUtil.dateToString(new Date()));
             distribution.setWarehouseDistributionId(UUIDUtils.getUUID());
             distribution.setWarehouseReqdetailId(item.getWarehouseReqDetailId());
-            distribution.setStoreroomId(warehouseRequ.getStoreroomId());
+            distribution.setProgramCode(warehouseRequ.getProgramCode());
             EntityTools.setCreateEmpAndTime(distribution);
             if(MapUtils.isNotEmpty(user) && "1".equals(ToolUtil.toStr(user.get("flag")))){
                 distribution.setUserCode(ToolUtil.toStr(user.get("employeeCode")));

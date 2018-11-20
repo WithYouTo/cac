@@ -74,11 +74,11 @@ public class WarehouseGoodsConfigController {
      */
     @ResponseBody
     @RequestMapping(value = "/checkBeforeExport", method = RequestMethod.POST)
-    public Object checkBeforeExport(String storeroomId) {
+    public Object checkBeforeExport(String programCode) {
         Map<String,String> param = new HashMap<>();
-        param.put("storeroomId",storeroomId);
+        param.put("programCode",programCode);
         try {
-            this.warehouseStockService.checkBeforeExport(storeroomId);
+            this.warehouseStockService.checkBeforeExport(programCode);
         } catch (Exception e) {
             return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
         }
@@ -93,9 +93,9 @@ public class WarehouseGoodsConfigController {
     public void generatePurchaseOrder(HttpServletRequest request,HttpServletResponse response) {
         //生成请购单的操作日期
         String date = DateUtil.getDay();
-        String storeroomId = request.getParameter("storeroomId");
+        String programCode = request.getParameter("programCode");
         try {
-            List<PurchasePoiEntity> list = this.warehouseStockService.generatePurchaseOrder(storeroomId,date);
+            List<PurchasePoiEntity> list = this.warehouseStockService.generatePurchaseOrder(programCode,date);
             //导出
             PoiUtils.exportExcel(list,"请购单" + date,"请购单",PurchasePoiEntity.class,"请购单.xls",response);
         } catch (Exception e) {

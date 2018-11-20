@@ -53,8 +53,16 @@
 		a.GOODS_NAME goodsName,
 		APPLY_NUM,
 		a.LINE_NO,
-		(SELECT MIN_UNIT FROM tb_warehouse_stock c WHERE c.GOODS_NO = a.GOODS_NO) minUnit,
-		(SELECT IFNULL(SUM(GOODS_NUM),0) FROM tb_warehouse_stock c WHERE c.GOODS_NAME = a.GOODS_NAME) goodsNum,
+		a.MIN_UNIT,
+		(
+		SELECT
+		IFNULL(GOODS_NUM, 0)
+		FROM
+		tb_warehouse_stock c
+		WHERE
+		c.GOODS_NO = a.GOODS_NO
+		and c.PROGRAM_CODE = b.PROGRAM_CODE
+		) goodsNum,
 		a.REQU_REMARK
 		from tb_warehouse_reqdetail a
 		LEFT JOIN tb_warehouse_requ b

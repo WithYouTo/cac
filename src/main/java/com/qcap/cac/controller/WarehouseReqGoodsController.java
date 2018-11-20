@@ -156,15 +156,15 @@ public class WarehouseReqGoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/goodsList", method = RequestMethod.POST)
-    public Object goodsList(@Valid  String storeroomId) {
+    public Object goodsList(@Valid  String programCode) {
         //返回结果
         Map<String,Object> map =new HashMap<>();
-        //选择储藏室的物品
-        if(StringUtils.isEmpty(storeroomId)){
-            return ResParams.newInstance(CoreConstant.FAIL_CODE,"请先选择储藏室",null);
+        //选择项目的物品
+        if(StringUtils.isEmpty(programCode)){
+            return ResParams.newInstance(CoreConstant.FAIL_CODE,"请先选择项目",null);
         }
         try {
-            List<Map<String,String>> list = this.warehouseReqDetailService.GoodsNoAppList(storeroomId);
+            List<Map<String,String>> list = this.warehouseReqDetailService.GoodsNoAppList(programCode);
             map.put("goodsList",list);
         } catch (Exception e) {
             return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);

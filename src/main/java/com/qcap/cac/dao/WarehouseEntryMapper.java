@@ -37,7 +37,18 @@ public interface WarehouseEntryMapper extends BaseMapper<TbWarehouseEntry> {
 
     List<Map> getStoreRoomList(Map<String,Object> paramMap);
 
-    @Select("select AREA_ID from tb_area WHERE AREA_NAME = #{storeRoom} and PROGRAM_CODE = #{programCode}")
-    String selecStoreRoomId(@Param("storeRoom") String storeRoom,@Param("programCode") String programCode);
+    /**
+     * 根据项目编号查询储藏室下拉框
+     * @param programCode
+     * @return
+     */
+    List<Map<String,String>> getStoreRoomListByProgramCode(String programCode);
+
+    @Select("select AREA_ID from tb_area WHERE AREA_NAME = #{storeRoom} and PROGRAM_CODE = #{programCode} and AREA_TYPE = #{areaType}")
+    String selecStoreRoomId(@Param("storeRoom") String storeRoom,@Param("programCode") String programCode,@Param("areaType") String areaType);
+
+
+    @Select("select PROGRAM_CODE from tb_program WHERE PROGRAM_NAME = #{programName}")
+    String existProgramCodeByName(String programName);
 
 }

@@ -26,6 +26,13 @@ public interface WarehouseEntryService extends IService<TbWarehouseEntry> {
 
     Integer importExcel(List<EntryPoiEntity> entryList);
 
+    /**
+     * 根据项目编号查询储藏室下拉框
+     * @param programCode
+     * @return
+     */
+    List<Map<String,String>> getStoreRoomListByProgramCode(String programCode);
+
 
 
 }

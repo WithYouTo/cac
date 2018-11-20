@@ -8,7 +8,7 @@ import com.qcap.cac.dto.AreaDto;
 import com.qcap.cac.entity.TbArea;
 import com.qcap.cac.service.AreaSrv;
 import com.qcap.cac.tools.EntityTools;
-import com.qcap.cac.tools.RedisTools;
+import com.qcap.cac.tools.ToolUtil;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.utils.AppUtils;
@@ -38,7 +38,6 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
         List<ZTreeNode> list = areaMapper.initTree(paraMap);
         list.add(ZTreeNode.createParent());
         return buildZTreeNodeByRecursive(list, new ArrayList<>(), e -> Objects.equals("-1", e.getPid()));
-        //return areaMapper.initTree(paraMap);
     }
 
     @Override
@@ -57,6 +56,9 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
 
     @Override
     public TbArea insertArea(AreaDto areaDto) {
+        if(StringUtils.isEmpty(areaDto.getSuperAreaCode())){
+            throw new  RuntimeException("选中节点的区域编码为空");
+        }
 
         if(StringUtils.isEmpty(areaDto.getAreaName())){
             throw new  RuntimeException("区域名称为空");
@@ -66,8 +68,12 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
             throw new  RuntimeException("当前选择节点的层级为空");
         }
 
+        //项目编码(查询父级的项目编码)
+        String programCode = this.areaMapper.selectProgramCodeByAreaCode(areaDto.getSuperAreaCode());
+
         //不同的父级，可以有相同的区域名称
         QueryWrapper<TbArea> wrapper = new QueryWrapper<>();
+        wrapper.eq("PROGRAM_CODE",programCode);
         wrapper.eq("SUPER_AREA_CODE",areaDto.getSuperAreaCode());
         wrapper.eq("AREA_NAME",areaDto.getAreaName());
         if(areaMapper.selectCount(wrapper) > 0){
@@ -75,27 +81,24 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
         }
 
         TbArea area = new TbArea();
-        //选中父级层级
-        Integer level = Integer.parseInt(areaDto.getLevel());
-        //新增子级的区域编码
-        String areaCode = initAreaCode(level);
         BeanUtils.copyProperties(areaDto,area);
-        //项目编码(查询父级的项目编码)
-        String programCode = this.areaMapper.selectProgramCodeByAreaCode(area.getSuperAreaCode());
+        area.setAreaId(UUIDUtils.getUUID());
         area.setProgramCode(programCode);
 
-        String areaId = UUIDUtils.getUUID();
-        area.setAreaId(areaId);
+        //子级区域编码
+        String areaCode = initAreaCode(areaDto);
         area.setAreaCode(areaCode);
-        area.setLevel(Integer.toString(level + 1));//子级
+
+        //子级层级
+        area.setLevel(Integer.toString(ToolUtil.toInt(areaDto.getLevel()) + 1));
+
         //子级排序
         Integer seqNo = this.areaMapper.selectMaxSeqNo(area.getSuperAreaCode());
         area.setSeqNo(Integer.toString(seqNo));
 
-        EntityTools.setCreateEmpAndTime(area);
-        this.areaMapper.insert(area);
 
-        area = this.areaMapper.selectById(areaId);
+        area = EntityTools.setCreateEmpAndTime(area);
+        this.areaMapper.insert(area);
         return area;
     }
 
@@ -106,8 +109,12 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
             throw new  RuntimeException("修改区域的主键为空");
         }
 
+        //项目编码(查询父级的项目编码)
+        String programCode = this.areaMapper.selectProgramCodeByAreaCode(area.getAreaCode());
+
         QueryWrapper<TbArea> wrapper = new QueryWrapper<>();
         //不同的父级，可以有相同的区域名称
+        wrapper.eq("PROGRAM_CODE",programCode);
         wrapper.eq("SUPER_AREA_CODE",area.getSuperAreaCode());
         wrapper.eq("AREA_NAME",area.getAreaName());
         if(areaMapper.selectCount(wrapper) > 1){
@@ -120,27 +127,16 @@ public class AreaSrvImpl  extends ServiceImpl<AreaMapper, TbArea> implements Are
 
 
     /**
-     * 树所在层级
-     * @param level
+     * 查询子级编码
+     * @param areaDto
      * @return
      */
-    private String initAreaCode(Integer level){
-        //查询系统配置档----区域编号前缀(100)
-        String prefix = RedisTools.getCommonConfig("CAC_AREA_PREFIX");
-        if(StringUtils.isEmpty(prefix)){
-            throw new  RuntimeException("系统区域编码前缀未配置");
-        }
-        StringBuffer sb  = new StringBuffer();
-        //第一级100  第二级100100
-        if(level > 0){
-            for(int i = 0 ;i < level; i++){
-                sb.append(prefix);
-            }
-        }
-        //后缀编号
-        Integer max = this.areaMapper.selectMaxNum(level + 1);
-        Integer suffix = max == -1 ? 100 : max + 1;
-        String areaCode = sb.toString() + suffix;
+    private String initAreaCode(AreaDto areaDto){
+        String superAreaCode = areaDto.getSuperAreaCode();
+        //查询子级的后缀
+        Integer suffix = this.areaMapper.selectAreaCodeSuffix(superAreaCode);
+        suffix = suffix == -1 ? 100 : suffix + 1;
+        String areaCode = superAreaCode + suffix;
         return areaCode;
     }
 

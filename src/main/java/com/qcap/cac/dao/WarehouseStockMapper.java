@@ -28,9 +28,17 @@ public interface WarehouseStockMapper extends BaseMapper<TbWarehouseStock> {
 
     Integer updateById(TbWarehouseStock warehouseStock);
 
-    List<PurchasePoiEntity> getLeastStockNumList( @Param("storeroomId")String storeroomId, @Param("date")String date);
+    List<PurchasePoiEntity> getLeastStockNumList( @Param("programCode")String programCode, @Param("date")String date);
 
-    List<TbWarehouseStock> getLowLimitStockList( @Param("storeroomId")String storeroomId, @Param("date")String date);
+    List<TbWarehouseStock> getLowLimitStockList( @Param("programCode")String programCode, @Param("date")String date);
+
+
+    /**
+     * 查询仓库配置信息
+     * @param warehouseEntryDto
+     * @return
+     */
+    List<TbWarehouseStock> getGoodsConfigList(IPage<TbWarehouseStock> page,@Param("obj") WarehouseEntryDto warehouseEntryDto);
 
     /**
      * 查询详情

@@ -28,43 +28,37 @@ public class EntryPoiEntity implements Serializable {
     @Excel(name = "供应商名称", orderNum = "5")
     private String supplierName;
 
-    @Excel(name = "储藏室名称", orderNum = "6")
+    @Excel(name = "项目名称", orderNum = "6")
+    private String programName;
+
+    @Excel(name = "储藏室名称", orderNum = "7")
     private String storeRoom;
 
-    @Excel(name = "建筑物", orderNum = "7")
-    private String building;
-
-    @Excel(name = "楼层", orderNum = "8")
-    private String floor;
-
-    @Excel(name = "室", orderNum = "9")
-    private String room;
-
-    @Excel(name = "数量", orderNum = "10")
+    @Excel(name = "数量", orderNum = "8")
     private String entryNum;
 
-    @Excel(name = "单位",orderNum = "11")
+    @Excel(name = "单位",orderNum = "9")
     private String entryUnit;
 
-    @Excel(name = "最低警戒线",orderNum = "12")
+    @Excel(name = "最低警戒线",orderNum = "10")
     private String limitStore;
 
-    @Excel(name = "最低警戒线单位",orderNum = "13")
+    @Excel(name = "最低警戒线单位",orderNum = "11")
     private String limitStoreUnit;
 
-    @Excel(name = "总数量",orderNum = "14")
+    @Excel(name = "总数量",orderNum = "12")
     private String sumNum;
 
-    @Excel(name = "最小单位",orderNum = "15")
+    @Excel(name = "最小单位",orderNum = "13")
     private String minUnit;
 
-    @Excel(name = "采购数量",orderNum = "16")
+    @Excel(name = "采购数量",orderNum = "14")
     private String buyNum;
 
-    @Excel(name = "采购单位",orderNum = "17")
+    @Excel(name = "采购单位",orderNum = "15")
     private String buyUnit;
 
-    @Excel(name = "采购周期（天）",orderNum = "18")
+    @Excel(name = "采购周期（天）",orderNum = "16")
     private String buyDuration;
 
     public static long getSerialVersionUID() {
@@ -111,36 +105,20 @@ public class EntryPoiEntity implements Serializable {
         this.supplierName = supplierName;
     }
 
+    public String getProgramName() {
+        return programName;
+    }
+
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
+
     public String getStoreRoom() {
         return storeRoom;
     }
 
     public void setStoreRoom(String storeRoom) {
         this.storeRoom = storeRoom;
-    }
-
-    public String getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(String building) {
-        this.building = building;
-    }
-
-    public String getFloor() {
-        return floor;
-    }
-
-    public void setFloor(String floor) {
-        this.floor = floor;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
     }
 
     public String getEntryNum() {
@@ -223,10 +201,8 @@ public class EntryPoiEntity implements Serializable {
                 ", goodsType='" + goodsType + '\'' +
                 ", goodsName='" + goodsName + '\'' +
                 ", supplierName='" + supplierName + '\'' +
+                ", programName='" + programName + '\'' +
                 ", storeRoom='" + storeRoom + '\'' +
-                ", building='" + building + '\'' +
-                ", floor='" + floor + '\'' +
-                ", room='" + room + '\'' +
                 ", entryNum='" + entryNum + '\'' +
                 ", entryUnit='" + entryUnit + '\'' +
                 ", limitStore='" + limitStore + '\'' +
@@ -235,6 +211,7 @@ public class EntryPoiEntity implements Serializable {
                 ", minUnit='" + minUnit + '\'' +
                 ", buyNum='" + buyNum + '\'' +
                 ", buyUnit='" + buyUnit + '\'' +
+                ", buyDuration='" + buyDuration + '\'' +
                 '}';
     }
 }

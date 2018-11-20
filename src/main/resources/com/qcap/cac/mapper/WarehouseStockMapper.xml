@@ -2,9 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcap.cac.dao.WarehouseStockMapper">
 
-    <!--查詢库存信息-->
+    <!--查询库存信息-->
     <select id="getWarehouseStockList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseEntryDto">
         select
+        a.PROGRAM_CODE,
+        (SELECT b.PROGRAM_NAME FROM tb_program b WHERE b.PROGRAM_CODE = a.PROGRAM_CODE)  programName,
         a.WAREHOUSE_STOCK_ID,
         a.STOREROOM_ID,
         a.STOREROOM,
@@ -12,13 +14,13 @@
         a.GOODS_NAME,
         a.SUPPLIER_NAME,
         sum(a.GOODS_NUM) goodsNum,
-        (SELECT MIN_UNIT from tb_warehouse_entry b WHERE b.WAREHOUSE_STOCK_ID = a.WAREHOUSE_STOCK_ID and b.ENTRY_UNIT = a.ENTRY_UNIT LIMIT 1) minUnit,
+        a.MIN_UNIT minUnit,
         a.GOODS_TYPE,
         a.REMARK
         from tb_warehouse_stock a
         where 1 = 1 AND a.DELETE_FLAG = 'N'
-        <if test="obj.storeroomId!=null and obj.storeroomId!=''">
-            and a.STOREROOM_ID = #{obj.storeroomId}
+        <if test="obj.programCode!=null and obj.programCode!=''">
+            and a.PROGRAM_CODE = #{obj.programCode}
         </if>
         <if test="obj.goodsNo!=null and obj.goodsNo!=''">
             and a.GOODS_NO like concat('%',#{obj.goodsNo},'%')
@@ -125,6 +127,7 @@
         T.*
         FROM (
         SELECT
+        (SELECT b.PROGRAM_NAME FROM tb_program b WHERE b.PROGRAM_CODE = r.PROGRAM_CODE)  programName,
         r.BUY_NO,
         r.BUY_TYPE,
         r.GOODS_TYPE,
@@ -138,7 +141,7 @@
         FROM
         tb_warehouse_stock r
         where r.BUY_START = #{date}
-        AND  r.STOREROOM_ID = #{storeroomId}
+        AND  r.PROGRAM_CODE = #{programCode}
         AND  r.GOODS_NUM  &lt; r.LIMIT_STORE
         ORDER BY BUY_NO ASC) T,
         (SELECT @ROWNO := 0) T3
@@ -152,6 +155,7 @@
         FROM (
         SELECT
         r.WAREHOUSE_STOCK_ID,
+        (SELECT b.PROGRAM_NAME FROM tb_program b WHERE b.PROGRAM_CODE = r.PROGRAM_CODE)  programName,
         r.BUY_NO,
         r.BUY_TYPE,
         r.GOODS_TYPE,
@@ -164,12 +168,13 @@
         r.ENTRY_UNIT
         FROM
         tb_warehouse_stock r where
-        r.STOREROOM_ID = #{storeroomId}
+        r.PROGRAM_CODE = #{programCode}
         AND r.BUY_END IS NULL
         AND  r.GOODS_NUM &lt; r.LIMIT_STORE
         UNION
         SELECT
         r.WAREHOUSE_STOCK_ID,
+        (SELECT b.PROGRAM_NAME FROM tb_program b WHERE b.PROGRAM_CODE = r.PROGRAM_CODE)  programName,
         r.BUY_NO,
         r.BUY_TYPE,
         r.GOODS_TYPE,
@@ -182,7 +187,7 @@
         r.ENTRY_UNIT
         FROM
         tb_warehouse_stock r where r.BUY_END &lt; #{date}
-        AND r.STOREROOM_ID = #{storeroomId}
+        AND  r.PROGRAM_CODE = #{programCode}
         AND  r.GOODS_NUM  &lt; r.LIMIT_STORE
         ORDER BY BUY_NO ASC) T,
         (SELECT @ROWNO := 0) T3
@@ -206,6 +211,41 @@
         where WAREHOUSE_STOCK_ID = #{warehouseStockId,jdbcType=VARCHAR}
     </select>
 
+
+    <!--查詢仓库配置信息-->
+    <select id="getGoodsConfigList" resultType="com.qcap.cac.entity.TbWarehouseStock" parameterType="com.qcap.cac.dto.WarehouseEntryDto">
+        select
+        a.WAREHOUSE_STOCK_ID,
+        a.PROGRAM_CODE,
+        (SELECT b.PROGRAM_NAME FROM tb_program b WHERE b.PROGRAM_CODE = a.PROGRAM_CODE)  programName,
+        a.GOODS_TYPE,
+        a.GOODS_NO,
+        a.GOODS_NAME,
+        a.SUPPLIER_NAME,
+        a.LIMIT_STORE,
+        a.BUY_NUM,
+        a.ENTRY_UNIT,
+        a.BUY_DURATION,
+        DATE_FORMAT(a.BUY_START, '%Y-%m-%d') buyStart,
+        DATE_FORMAT(a.BUY_END, '%Y-%m-%d') buyEnd,
+        a.REMARK
+        from tb_warehouse_stock a
+        where 1 = 1 AND a.DELETE_FLAG = 'N'
+        <if test="obj.programCode!=null and obj.programCode!=''">
+            and a.PROGRAM_CODE = #{obj.programCode}
+        </if>
+        <if test="obj.goodsNo!=null and obj.goodsNo!=''">
+            and a.GOODS_NO like concat('%',#{obj.goodsNo},'%')
+        </if>
+        <if test="obj.goodsName!=null and obj.goodsName!=''">
+            and a.GOODS_NAME like  concat('%',#{obj.goodsName},'%')
+        </if>
+        <if test="obj.supplierName!=null and obj.supplierName!=''">
+            and a.SUPPLIER_NAME like concat('%',#{obj.supplierName},'%')
+        </if>
+        group by  a.GOODS_NO
+        ORDER BY  a.GOODS_NO
+    </select>
 
 
 </mapper>

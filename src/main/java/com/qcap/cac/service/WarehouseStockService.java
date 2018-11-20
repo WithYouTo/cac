@@ -24,7 +24,7 @@ public interface WarehouseStockService extends IService<TbWarehouseStock> {
 
     void getPositionList(IPage<Map<String, Object>> page,String warehouseStockId);
 
-    IPage<TbWarehouseStock> getGoodsConfigList(IPage<TbWarehouseStock> page, WarehouseEntryDto warehouseEntryDto);
+    void getGoodsConfigList(IPage<TbWarehouseStock> page, WarehouseEntryDto warehouseEntryDto);
 
     void updateGoodsNum(TbWarehouseStock warehouseStock);
 

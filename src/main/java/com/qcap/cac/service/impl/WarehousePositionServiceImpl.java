@@ -4,6 +4,7 @@ package com.qcap.cac.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.WarehousePositionMapper;
 import com.qcap.cac.dao.WarehouseStorageMapper;
 import com.qcap.cac.dto.WarehouseEntryDto;
@@ -31,6 +32,9 @@ import javax.validation.Valid;
 public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionMapper, TbWarehousePosition> implements WarehousePositionService {
 
     @Resource
+    private AreaMapper areaMapper;
+
+    @Resource
     private WarehousePositionMapper warehousePositionMapper;
 
     @Resource
@@ -40,8 +44,8 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
     @Override
     public IPage<TbWarehousePosition> getPositionList(IPage<TbWarehousePosition> page, @Valid WarehouseEntryDto warehouseEntryDto) {
         return warehousePositionMapper.selectPage(page,new QueryWrapper<TbWarehousePosition>()
-                .eq("storeroom_Id", warehouseEntryDto.getStoreroomId())
-                .eq("delete_flag","N"));
+                .eq("PROGRAM_CODE", warehouseEntryDto.getProgramCode())
+                .eq("DELETE_FLAG","N"));
     }
 
 
@@ -54,6 +58,11 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
             throw new RuntimeException("库位已经存在");
         }
 
+        TbArea area = areaMapper.selectById(tbWarehousePosition.getStoreroomId());
+        if(null == area){
+            throw new RuntimeException("根据选择储藏室没有查询到信息");
+        }
+        tbWarehousePosition.setProgramCode(area.getProgramCode());
         tbWarehousePosition.setWarehousePositionId(UUIDUtils.getUUID());
         tbWarehousePosition.setDeleteFlag("N");
         EntityTools.setCreateEmpAndTime(tbWarehousePosition);
@@ -68,7 +77,11 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
         if(selectExistPosition(tbWarehousePosition) >=  1){
             throw new RuntimeException("库位已经存在");
         }
-
+        TbArea area = areaMapper.selectById(tbWarehousePosition.getStoreroomId());
+        if(null == area){
+            throw new RuntimeException("根据选择储藏室没有查询到信息");
+        }
+        tbWarehousePosition.setProgramCode(area.getProgramCode());
         tbWarehousePosition.setDeleteFlag("N");
         EntityTools.setUpdateEmpAndTime(tbWarehousePosition);
         return this.warehousePositionMapper.updateById(tbWarehousePosition);
@@ -82,7 +95,6 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
         if(selectGoodsExistPosition(tbWarehousePosition.getWarehousePositionId()) > 0){
             throw new RuntimeException("库位存在物品，不能删除");
         }
-
         tbWarehousePosition.setDeleteFlag("Y");
         EntityTools.setUpdateEmpAndTime(tbWarehousePosition);
         return this.warehousePositionMapper.updateById(tbWarehousePosition);
@@ -96,10 +108,11 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
          */
         QueryWrapper<TbWarehousePosition> wrapper = new QueryWrapper<>();
         if(null != tbWarehousePosition) {
-            wrapper.and(condition -> condition.eq("storeRoom", tbWarehousePosition.getStoreroom())
-                    .eq("BUILDING_NAME", tbWarehousePosition.getBuildingName())
-                    .eq("FLOOR_NAME", tbWarehousePosition.getFloorName())
-                    .eq("ROOM_NAME", tbWarehousePosition.getRoomName())
+            wrapper.and(condition -> condition
+                    .eq("PROGRAM_CODE", tbWarehousePosition.getProgramCode())
+                    //.eq("BUILDING_NAME", tbWarehousePosition.getBuildingName())
+                    //.eq("FLOOR_NAME", tbWarehousePosition.getFloorName())
+                   // .eq("ROOM_NAME", tbWarehousePosition.getRoomName())
                     .eq("DELETE_FLAG", "N")
                     .eq("RANGE_SHELF", tbWarehousePosition.getRangeShelf()));
             count = this.warehousePositionMapper.selectCount(wrapper);

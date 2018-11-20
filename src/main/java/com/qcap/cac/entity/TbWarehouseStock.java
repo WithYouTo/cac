@@ -1,7 +1,5 @@
 package com.qcap.cac.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -11,6 +9,16 @@ public class TbWarehouseStock {
      */
     @NotBlank
     private String warehouseStockId;
+
+    /**
+     *   项目编码
+     */
+    private String programCode;
+
+    /**
+     *   项目名称
+     */
+    private String programName;
 
     /**
      *   储藏室
@@ -137,6 +145,13 @@ public class TbWarehouseStock {
      */
     private Integer version;
 
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
 
     public Integer getBuyDuration() {
         return buyDuration;
@@ -344,5 +359,13 @@ public class TbWarehouseStock {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getProgramName() {
+        return programName;
+    }
+
+    public void setProgramName(String programName) {
+        this.programName = programName;
     }
 }

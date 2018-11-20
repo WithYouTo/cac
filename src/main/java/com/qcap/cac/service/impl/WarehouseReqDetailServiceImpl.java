@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.dao.WarehouseReqDetailMapper;
 import com.qcap.cac.dto.WarehouseDistruDto;
-import com.qcap.cac.dto.WarehouseReqDto;
 import com.qcap.cac.entity.TbWarehouseReqdetail;
 import com.qcap.cac.service.WarehouseReqDetailService;
 import com.qcap.cac.tools.EntityTools;
@@ -69,7 +68,7 @@ public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetai
         //判断领用明细是否已经存在
         QueryWrapper<TbWarehouseReqdetail> wrapper = new QueryWrapper<>();
         wrapper.eq("WAREHOUSE_REQU_ID",warehouseReqdetail.getWarehouseRequId());
-        wrapper.eq("GOODS_NAME",warehouseReqdetail.getGoodsName());
+        wrapper.eq("GOODS_NO",warehouseReqdetail.getGoodsNo());
         if(warehouseReqDetailMapper.selectCount(wrapper) > 0){
            //更新数量
             TbWarehouseReqdetail old = warehouseReqDetailMapper.selectOne(wrapper);
@@ -78,11 +77,13 @@ public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetai
             }
             Integer newNum = old.getApplyNum() + warehouseReqdetail.getApplyNum();
             old.setApplyNum(newNum);
+            old.setMinUnit(warehouseReqdetail.getMinUnit());
             EntityTools.setUpdateEmpAndTime(old);
             this.warehouseReqDetailMapper.updateById(old);
         }else{
             warehouseReqdetail.setWarehouseReqdetailId(UUIDUtils.getUUID());
             warehouseReqdetail.setRequStatus("INIT");
+            warehouseReqdetail.setMinUnit(warehouseReqdetail.getMinUnit());
             EntityTools.setCreateEmpAndTime(warehouseReqdetail);
             this.warehouseReqDetailMapper.insert(warehouseReqdetail);
         }
@@ -90,7 +91,7 @@ public class WarehouseReqDetailServiceImpl extends ServiceImpl<WarehouseReqDetai
     }
 
     @Override
-    public List<Map<String, String>> GoodsNoAppList(String storeroomId) {
-        return this.warehouseReqDetailMapper.GoodsNoAppList(storeroomId);
+    public List<Map<String, String>> GoodsNoAppList(String programCode) {
+        return this.warehouseReqDetailMapper.GoodsNoAppList(programCode);
     }
 }

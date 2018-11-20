@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +40,7 @@ public class WarehouseEntryController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageResParams list(IPage<Map<String, Object>> page, @Valid  WarehouseEntryDto warehouseEntryDto) {
+    public PageResParams list(IPage<Map<String, Object>> page,WarehouseEntryDto warehouseEntryDto) {
         try {
             this.warehouseEntryService.getEntryList(page,warehouseEntryDto);
         } catch (Exception e) {
@@ -60,6 +59,18 @@ public class WarehouseEntryController {
        List<Map> list =  this.warehouseEntryService.getStoreRoomList();
        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
     }
+
+    /**
+     * 获取储藏室下拉框
+     */
+    @ResponseBody
+    @RequestMapping(value = "/storeRoomListByProgramCode", method = RequestMethod.POST)
+    public Object getStoreRoomListByProgramCode(String programCode) {
+        List<Map<String,String>> list =  this.warehouseEntryService.getStoreRoomListByProgramCode(programCode);
+        return ResParams.newInstance(CoreConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
+    }
+
+
 
 
     /*

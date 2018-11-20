@@ -6,8 +6,10 @@
     <select id="getRequGoodsList" resultType="java.util.Map" parameterType="com.qcap.cac.dto.WarehouseReqDto">
         select
         WAREHOUSE_REQU_ID,
-        STOREROOM_ID,
-        STOREROOM,
+        a.PROGRAM_CODE,
+        (SELECT b.PROGRAM_NAME FROM tb_program b WHERE b.PROGRAM_CODE = a.PROGRAM_CODE)  programName,
+        <!--STOREROOM_ID,
+        STOREROOM,-->
         REQU_BATCH_NO,
         REQU_PERSON,
         REQU_MOBILE,
@@ -17,8 +19,8 @@
         REQU_STATUS
         from tb_warehouse_requ a
         where 1 = 1
-        <if test="obj.storeroomId!=null and obj.storeroomId!=''">
-            and a.STOREROOM_ID = #{obj.storeroomId}
+        <if test="obj.programCode!=null and obj.programCode!=''">
+            and a.PROGRAM_CODE = #{obj.programCode}
         </if>
         <if test="obj.requMobile!=null and obj.requMobile!=''">
             and a.REQU_MOBILE like concat('%',#{obj.requMobile},'%')

@@ -12,14 +12,10 @@ public class TbWarehouseRequ {
     private String warehouseRequId;
 
     /**
-     *   储藏室主键
+     *   项目编码
      */
-    private String storeroomId;
+    private String programCode;
 
-    /**
-     *   储藏室名称
-     */
-    private String storeroom;
 
     /**
      *   领用批次号生成规则（P +YYMMDDHHMMSS）
@@ -107,20 +103,12 @@ public class TbWarehouseRequ {
         this.positionName = positionName;
     }
 
-    public String getStoreroomId() {
-        return storeroomId;
+    public String getProgramCode() {
+        return programCode;
     }
 
-    public void setStoreroomId(String storeroomId) {
-        this.storeroomId = storeroomId;
-    }
-
-    public String getStoreroom() {
-        return storeroom;
-    }
-
-    public void setStoreroom(String storeroom) {
-        this.storeroom = storeroom;
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     /**
