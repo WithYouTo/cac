@@ -68,6 +68,17 @@
         STATUS ='INUSE'
     </select>
 
+    <select id="getEquipUserByEquipNoAndStatus" resultType="com.qcap.cac.entity.TbEquipUse" parameterType="java.lang.String">
+        select
+        PERSON_NO personNo,
+        PERSON_NAME personName
+        from tb_equip_use
+        where
+        EQUIP_NO = #{equipNo}
+        AND
+        STATUS ='INUSE'
+    </select>
+
     <update id="updateEquipUseByEquipUseId" parameterType="com.qcap.cac.entity.TbEquipUse">
          UPDATE tb_equip_use
         SET

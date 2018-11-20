@@ -96,9 +96,19 @@ public class EquipRestSrvImpl implements EquipRestSrv {
             //调用设备状态为充电中的方法
             handlerWhenEquipInCharge(manager,equipNo);
         }
+        //当设备正在使用中
         if(CommonConstant.EQUIP_WORK_STATUS_INUSE.equals(curStatus)){
+            //todo 判断是否正在由本人使用
+            String desc ="";
+            TbEquipUse equipUse= this.equipUseMapper.getEquipUserByEquipNoAndStatus(equipNo);
+            if(employeeCode.equals(equipUse.getPersonNo())){
+                desc = "您正在使用此设备！";
+            }else{
+                desc = "该设备正由"+equipUse.getPersonName()+"("+equipUse.getPersonNo()+")"+"使用中，请等待归还后再使用！";
+            }
+            return ResParams.newInstance(CommonCodeConstant.FAIL_CODE, desc, null);
             //调用设备状态为使用中的方法
-            handlerWhenEquipInUse(manager,equipNo);
+//            handlerWhenEquipInUse(manager,equipNo);
         }
         if(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE.equals(curStatus)){
             //返回设备已损坏
