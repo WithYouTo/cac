@@ -41,6 +41,19 @@
         ORDER BY eu.START_USE_TIME
     </select>
 
+    <select id="selectUseEquipByEquipNo" resultType="com.qcap.cac.entity.TbEquipUse" parameterType="java.lang.String">
+        select
+            EQUIP_ID equipId,
+            EQUIP_NAME equipName,
+            EQUIP_NO equipNo,
+            EQUIP_USE_ID equipUseId,
+            START_USE_TIME startUseTime
+        from tb_equip_use
+        where
+            PERSON_NO = #{employeeCode}
+        AND
+            STATUS ='INUSE'
+    </select>
 
     <select id="getUseTotalTimeByEquipId" resultType="java.lang.String" parameterType="java.lang.String">
         select

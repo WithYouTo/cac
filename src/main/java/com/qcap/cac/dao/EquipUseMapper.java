@@ -24,4 +24,6 @@ public interface EquipUseMapper {
     void updateEquipUseByEquipUseId(TbEquipUse eu);
 
     TbEquipUse getEquipUserByEquipNoAndStatus(String equipNo);
+
+    List<TbEquipUse> selectUseEquipByEquipNo(@Param("employeeCode")String employeeCode);
 }

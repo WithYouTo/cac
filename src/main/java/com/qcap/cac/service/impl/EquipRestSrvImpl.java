@@ -69,6 +69,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
     public ResParams getEquipStatus(String equipNo,String equipType) {
         String url = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
         GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
+        if(esr == null){
+            return ResParams.newInstance(CommonCodeConstant.FAIL_CODE, CommonCodeConstant.EQUIP_CAN_NOT_USE, null);
+        }
         String et =esr.getEquipType();
         if(et.equals(equipType)){
             String status = Objects.toString(esr.getStatus());
@@ -87,18 +90,9 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         //获取当前设备状态
         TbEquip equip =this.equipMapper.selectEquipByEquipNo(equipNo);
         String curStatus = equip.getEquipWorkState();
-//        GetEquipStatusResp esr = this.equipRestMapper.getEquipStatus(equipNo);
-//        String curStatus = Objects.toString(esr.getStatus());
-        //根据员工编号获取员工信息
-        TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
-        //当设备正在充电中
-        if(CommonConstant.EQUIP_WORK_STATUS_INCHARGE.equals(curStatus)){
-            //调用设备状态为充电中的方法
-            handlerWhenEquipInCharge(manager,equipNo);
-        }
         //当设备正在使用中
         if(CommonConstant.EQUIP_WORK_STATUS_INUSE.equals(curStatus)){
-            //todo 判断是否正在由本人使用
+            //判断是否正在由本人使用
             String desc ="";
             TbEquipUse equipUse= this.equipUseMapper.getEquipUserByEquipNoAndStatus(equipNo);
             if(employeeCode.equals(equipUse.getPersonNo())){
@@ -107,16 +101,30 @@ public class EquipRestSrvImpl implements EquipRestSrv {
                 desc = "该设备正由"+equipUse.getPersonName()+"("+equipUse.getPersonNo()+")"+"使用中，请等待归还后再使用！";
             }
             return ResParams.newInstance(CommonCodeConstant.FAIL_CODE, desc, null);
-            //调用设备状态为使用中的方法
-//            handlerWhenEquipInUse(manager,equipNo);
         }
+
+        //于2018-11-21，应甲方领导要求新增判断:一个员工不可能同时使用两个设备。
+        //判断当前人员是否有为归还的设备，若有,则提示请先归还设备，若无,进行下一步
+        List<TbEquipUse> euList = this.equipUseMapper.selectUseEquipByEquipNo(employeeCode);
+        if(euList.size()>0){
+            String eName = euList.get(0).getEquipName();
+            String eNo = euList.get(0).getEquipNo();
+            String d = "您正在使用"+eName+"("+eNo+"),请归还后再使用其他设备！";
+            return ResParams.newInstance(CommonCodeConstant.FAIL_CODE, d, null);
+        }
+        //根据员工编号获取员工信息
+        TbManager manager = this.tbManagerMapper.getMangerByEmployeeCode(employeeCode);
+        //当设备正在充电中
+        if(CommonConstant.EQUIP_WORK_STATUS_INCHARGE.equals(curStatus)){
+            //调用设备状态为充电中的方法
+            handlerWhenEquipInCharge(manager,equipNo);
+        }
+
         if(CommonConstant.EQUIP_WORK_STATUS_INDAMAGE.equals(curStatus)){
             //返回设备已损坏
-//            handlerWhenEquipInCharge(manager,equipNo);
             return ResParams.newInstance(CommonCodeConstant.FAIL_CODE, CommonCodeConstant.EQUIP_IS_IN_DAMAGE, null);
         }
         handlerWhenOperateCodeIsInUse(equip,manager,employeeCode);
-
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_PROCCESS_DESC, null);
     }
 
