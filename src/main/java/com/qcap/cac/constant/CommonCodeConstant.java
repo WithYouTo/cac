@@ -36,6 +36,8 @@ public class CommonCodeConstant {
 	// 设备类型不符
 	public static final String EQUIP_IS_IN_DAMAGE = "设备已损坏";
 
+	public static final String EQUIP_CAN_NOT_USE = "设备无法使用";
+
 	// 未找对应记录
 	public static final int ERROR_CODE_40401 = 40401;
 	public static final String ERROR_CODE_40401_MSG = "未找对应记录";

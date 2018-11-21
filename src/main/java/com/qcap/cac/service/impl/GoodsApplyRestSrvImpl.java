@@ -74,7 +74,7 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
     @Override
     public List<GoodsDistributionDetailReq> queryAvailDistributionList(Map<String, String> paramMap) {
         paramMap.put("requStatus",CommonConstant.WAREHOUSE_REQ_STATUS_RECEIVE);
-        paramMap.put("date", cn.hutool.core.date.DateUtil.formatDate(new Date()));
+        //paramMap.put("date", cn.hutool.core.date.DateUtil.formatDate(new Date()));
         return this.goodsApplyRestMapper.queryAvailDistributionList(paramMap);
     }
 
