@@ -50,8 +50,8 @@ public class PrintQrcodeSrvImpl implements PrintQrcodeSrv {
 
 	@Override
 	public void batchUpdateQrcode(@Valid BatchUpdateQrcodeDto batchUpdateQrcodeDto) throws Exception {
-		String content = RedisTools.getCommonConfig("CAC_QRCODE_CONTENT");
-		String host = RedisTools.getCommonConfig("CAC_SERVICE_HOST");
+		String content = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
+		String host = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
 		if (StringUtils.isBlank(content)) {
 			throw new BaseException("CAC_QRCODE_CONTENT不能为空");
 		}
@@ -61,7 +61,7 @@ public class PrintQrcodeSrvImpl implements PrintQrcodeSrv {
 		List<QrcodeDto> ls = batchUpdateQrcodeDto.getQrcodeList();
 		if (CollectionUtils.isNotEmpty(ls)) {
 			for (QrcodeDto qrcodeDto : ls) {
-				content = RedisTools.getCommonConfig("CAC_QRCODE_CONTENT");
+				content = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
 				if (CommonConstant.QRCODE_TYPE_EQUIP.equals(qrcodeDto.getQrcodeType())) {
 					content += "?equipCode=" + qrcodeDto.getCode();
 				} else if (CommonConstant.QRCODE_TYPE_POSITION.equals(qrcodeDto.getQrcodeType())) {

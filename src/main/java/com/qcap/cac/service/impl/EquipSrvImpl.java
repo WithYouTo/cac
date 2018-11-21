@@ -331,7 +331,7 @@ public class EquipSrvImpl implements EquipSrv {
      */
     private String getQrCodeUrlByEquipNo(String equipNo) throws Exception{
         String dir = RedisTools.getCommonConfig("CAC_AREA_SAVE_PATH");
-        String host = RedisTools.getCommonConfig("CAC_SERVICE_HOST");
+        String host = RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
         File directory = new File(dir);
 
         File file = QrCodeUtil.generate(equipNo, 120, 120, directory);
