@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
 
+import com.qcap.cac.constant.CommonCodeConstant;
+import com.qcap.cac.constant.CommonConstant;
+
 public class AppTaskArrangeShiftRestReq {
 
     @NotBlank(message = "班次不能为空")
@@ -52,8 +55,18 @@ public class AppTaskArrangeShiftRestReq {
     @NotBlank(message = "登录人名称不能为空")
     @ApiModelProperty(value = "登录人名称",required = true)
     private String loginName;
+    
+    private String programCode;
+    
+    public String getProgramCode() {
+		return programCode;
+	}
 
-    public String getExtraEmployeeTel() {
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
+
+	public String getExtraEmployeeTel() {
         return extraEmployeeTel;
     }
 

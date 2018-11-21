@@ -171,6 +171,7 @@
 	WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
 	END AS taskTypeName,
 	CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %H:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %H:%i')) AS cleanTime,
+	DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T') AS startTime,
 	m.SPEC  AS  spec,
 	m.TASK_SCORE  AS  taskScore,
 	m.CHECK_FLAG  AS  checkFlag,
@@ -195,9 +196,6 @@
 	<update id="updateTask" parameterType="com.qcap.cac.dto.AppTaskUpdateReq" >
 	    update tb_task
 	    <set>
-	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(completeTime)">
-	        COMPLETE_TIME = #{completeTime},
-	      </if>
 	      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(taskStatus)">
 	        TASK_STATUS = #{taskStatus},
 	      </if>
@@ -228,6 +226,21 @@
 			<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(employeeName)">
 				EMPLOYEE_NAME =#{employeeName},
 			</if>
+		      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(startWorkTime)">
+		        START_WORK_TIME = #{startWorkTime},
+		      </if>
+		      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(completeTime)">
+		        COMPLETE_TIME = #{completeTime},
+		      </if>
+		      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkTime)">
+		        CHECK_TIME = #{checkTime},
+		      </if>
+		      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkEmpCode)">
+		        CHECK_EMP_CODE = #{checkEmpCode},
+		      </if>
+		      <if test="@com.qcap.cac.tools.Ognl@isNotEmpty(checkEmpName)">
+		        CHECK_EMP_NAME = #{checkEmpName},
+		      </if>
 	    </set>
 	    where TASK_CODE = #{taskCode}
 	</update>

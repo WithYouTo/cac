@@ -5,6 +5,16 @@ public class AppTaskRestWorkingTaskDto {
 	private String taskCode;
 	
 	private String employeeCode;
+	
+	private String startWorkTime;
+
+	public String getStartWorkTime() {
+		return startWorkTime;
+	}
+
+	public void setStartWorkTime(String startWorkTime) {
+		this.startWorkTime = startWorkTime;
+	}
 
 	public String getTaskCode() {
 		return taskCode;

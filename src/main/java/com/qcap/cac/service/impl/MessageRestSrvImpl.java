@@ -10,6 +10,8 @@ import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.JpushTools;
 import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
+import com.qcap.core.utils.DateUtil;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -176,6 +179,8 @@ public class MessageRestSrvImpl implements MessageRestSrv {
 	public void JpushMessage(Object userNo,String programCode, String msg , String title){
 
 		if(userNo instanceof String){
+			//msg添加时间
+			msg = msg + DateUtil.dateTimeToString(new Date());
 			String userId = (String) userNo;
 			TbMessage message = new TbMessage();
 			message.setMessageId(UUIDUtils.getUUID());

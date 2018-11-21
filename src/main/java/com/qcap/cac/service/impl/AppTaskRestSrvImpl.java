@@ -341,7 +341,7 @@ private String dealWithSpecialTaskTime(String startTime) {
     	String employeeName =this.appTaskRestMapper.selectEmployeeName(employeeCode);
     	appTaskUpdateReq.setEmployeeCode(employeeCode);
     	appTaskUpdateReq.setEmployeeName(employeeName);
-    	
+    	appTaskUpdateReq.setStartWorkTime(DateUtil.dateTimeToString(new Date()));
         this.appTaskRestMapper.updateTask(appTaskUpdateReq);
     }
 
@@ -350,6 +350,7 @@ private String dealWithSpecialTaskTime(String startTime) {
 		String imgUrl = uploadPicture(list);
 		appTaskUpdateReq.setTaskStatus(CommonConstant.TASK_STATUS_FINISH);
 		appTaskUpdateReq.setFeedbackImgUrl(imgUrl);
+		appTaskUpdateReq.setCompleteTime(DateUtil.dateTimeToString(new Date()));
         this.appTaskRestMapper.updateTask(appTaskUpdateReq);
     }
 
@@ -459,6 +460,10 @@ private String dealWithSpecialTaskTime(String startTime) {
 	@Override
 	public void checkTask(List<MultipartFile>list,AppTaskUpdateReq appTaskUpdateReq) throws IOException{
 		String imgUrl = uploadPicture(list);
+		
+		appTaskUpdateReq.setCheckTime(DateUtil.dateTimeToString(new Date()));
+		String checkEmpName =this.appTaskRestMapper.selectEmployeeName(appTaskUpdateReq.getCheckEmpCode());
+		appTaskUpdateReq.setCheckEmpName(checkEmpName);
 		
 		//任务评价
 		if(CommonConstant.TASK_CHECK_STATUS_QUALIFIED.equals(appTaskUpdateReq.getCheckStatus())) {
@@ -770,7 +775,7 @@ private String dealWithSpecialTaskTime(String startTime) {
     	 * 调整推迟清洁的专项任务
     	 */
     	// this.appTaskRestMapper.updateCleanerTask(appTaskArrangeShiftRestReq);
-
+    	
         String workingDateStr = appTaskArrangeShiftRestReq.getWorkingDate();
         String month = workingDateStr.substring(0,7).replace("-","");
         Calendar calendar = Calendar.getInstance();
@@ -789,6 +794,7 @@ private String dealWithSpecialTaskTime(String startTime) {
         String shift = appTaskArrangeShiftRestReq.getShift();
         String employeeCode = appTaskArrangeShiftRestReq.getEmployeeCode();
         String positionCode = appTaskArrangeShiftRestReq.getPositionCode();
+        String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(employeeCode);
         String [] args ={shift,month,employeeCode,positionCode};
 
         int updateItem = jdbcTemplate.update(sql,args);
@@ -798,10 +804,10 @@ private String dealWithSpecialTaskTime(String startTime) {
                     "ARRANGEMENT_ID, SHIFT, EMPLOYEE_CODE, " +
                     "EMPLOYEE_NAME, EMPLOYEE_TEL, POSITION_CODE, " +
                     "POSITION_NAME, MONTH, DELETE_FLAG,DAY_"+ dayNum+"," +
-                    "CREATE_EMP,CREATE_DATE,VERSION)" +
-                    "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "CREATE_EMP,CREATE_DATE,VERSION,PROGRAM_CODE)" +
+                    "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            String [] insertArgs = new String [13];
+            String [] insertArgs = new String [14];
             insertArgs[0] = UUIDUtils.getUUID();
             insertArgs[1] = shift;
             insertArgs[2] = appTaskArrangeShiftRestReq.getExtraEmployeeCode();
@@ -815,6 +821,7 @@ private String dealWithSpecialTaskTime(String startTime) {
             insertArgs[10] = appTaskArrangeShiftRestReq.getLoginName();
             insertArgs[11] = DateUtil.dateTimeToString(new Date());
             insertArgs[12] = "0";
+            insertArgs[13] = programCode;
 
             jdbcTemplate.update(insertSql,insertArgs);
         }
@@ -980,9 +987,18 @@ private String dealWithSpecialTaskTime(String startTime) {
 			/**
 			 * 夜班：查询当班任务
 			 */
-			newStartTime = curDate +" " + startTime;
-			//往后推一天
-			newEndTime = nextDate +" " + endTime;
+			if(curTime.compareTo(startTime)>=0) {
+				newStartTime = curDate +" " + startTime;
+				//往后推一天
+				newEndTime = nextDate +" " + endTime;
+			}
+			
+			if(curTime.compareTo(endTime)<= 0) {
+				newStartTime = lastDate +" " + startTime;
+				//往后推一天
+				newEndTime = curDate +" " + endTime;
+			}
+			
 		}
 		
 		map.put("startTime", newStartTime);

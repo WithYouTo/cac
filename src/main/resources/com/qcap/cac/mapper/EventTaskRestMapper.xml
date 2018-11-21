@@ -114,7 +114,7 @@
 				WHERE
 					CONFIG_CODE_ = 'FLIGHT_TYPE '
 				AND DESC_ = m.FLIGHT_TYPE
-			) AS filghtTypeName
+			) AS flightTypeName
 		FROM
 			tb_flight_shift m
 		WHERE

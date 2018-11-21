@@ -133,7 +133,7 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         List<String> empList = this.getEmpManager( employeeCode);
         //推送消息
         String title = "新的请假单";
-        String message = "您有一个" + manager.getName() +  "的请假单待审批";
+        String message = "您有一个111" + manager.getName() +  "的请假单待审批";
         messageRestSrv.JpushMessage(empList, StringUtils.join(programCodes,","),message,title);
         return 1;
     }

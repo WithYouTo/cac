@@ -27,6 +27,46 @@ public class AppTaskUpdateReq {
 	private String employeeCode;
 	
 	private String employeeName;
+	
+	private String startWorkTime;
+	
+	private String checkTime;
+	
+	private String checkEmpCode;
+	
+	private String checkEmpName;
+
+	public String getStartWorkTime() {
+		return startWorkTime;
+	}
+
+	public String getCheckTime() {
+		return checkTime;
+	}
+
+	public String getCheckEmpCode() {
+		return checkEmpCode;
+	}
+
+	public String getCheckEmpName() {
+		return checkEmpName;
+	}
+
+	public void setStartWorkTime(String startWorkTime) {
+		this.startWorkTime = startWorkTime;
+	}
+
+	public void setCheckTime(String checkTime) {
+		this.checkTime = checkTime;
+	}
+
+	public void setCheckEmpCode(String checkEmpCode) {
+		this.checkEmpCode = checkEmpCode;
+	}
+
+	public void setCheckEmpName(String checkEmpName) {
+		this.checkEmpName = checkEmpName;
+	}
 
 	public String getEmployeeCode() {
 		return employeeCode;

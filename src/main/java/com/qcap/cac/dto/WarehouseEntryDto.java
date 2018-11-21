@@ -9,8 +9,17 @@ public class WarehouseEntryDto {
     private String startDate;
     private String endDate;
     private String supplierName;
+    private String storeroomId;
 
-    public String getProgramCode() {
+    public String getStoreroomId() {
+		return storeroomId;
+	}
+
+	public void setStoreroomId(String storeroomId) {
+		this.storeroomId = storeroomId;
+	}
+
+	public String getProgramCode() {
         return programCode;
     }
 
