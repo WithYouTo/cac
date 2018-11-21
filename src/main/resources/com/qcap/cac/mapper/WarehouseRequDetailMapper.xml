@@ -50,7 +50,7 @@
         SELECT
         WAREHOUSE_DISTRIBUTION_ID  warehouseDistributionId,
         WAREHOUSE_REQDETAIL_ID  warehouseReqdetailId,
-        a.PROGRAM_CODE,
+        a.PROGRAM_CODE programCode,
         (SELECT b.PROGRAM_NAME FROM tb_program b WHERE b.PROGRAM_CODE = a.PROGRAM_CODE)  programName,
         GOODS_NO goodsNo,
         GOODS_NAME  goodsName,
