@@ -102,12 +102,12 @@
 				SUM(a.REAL_NUM) realNum,
         c.POSITION_CODE,
         c.POSITION_NAME,
-		(SELECT MIN_UNIT FROM tb_warehouse_stock c WHERE c.GOODS_NO = a.GOODS_NO) minUnit
+		a.MIN_UNIT minUnit
 			FROM
 				tb_warehouse_reqdetail a LEFT JOIN tb_warehouse_requ c
         on a.WAREHOUSE_REQU_ID = c.WAREHOUSE_REQU_ID
 			WHERE
-				a.REQU_STATUS = #{requStatus} AND DATE(c.REQU_TIME) =#{date}
+				a.REQU_STATUS = #{requStatus}
 			<if test="positionCode!=null and positionCode!=''">
 				AND c.POSITION_CODE = #{positionCode}
 			</if>
@@ -133,7 +133,7 @@
 		ORDER BY
 			b.GOODS_NO
 	) b ON a.ids = b.ids
-	where  1= 1
+	where  (IFNULL(a.realNum, 0) - IFNULL(b.distrNum, 0)) > 0
 	<if test="lineNo!=null and lineNo!=''">
 		and a.LINE_NO &gt; #{lineNo}
 	</if>
