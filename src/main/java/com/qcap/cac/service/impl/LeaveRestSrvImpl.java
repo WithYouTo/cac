@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.LeaveRestMapper;
-import com.qcap.cac.dao.LoginRestMapper;
 import com.qcap.cac.dto.AppLeaveReq;
 import com.qcap.cac.entity.TbLeave;
 import com.qcap.cac.exception.BaseException;
@@ -254,7 +253,10 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
     	
     	String sql =sqlHead + sqlCondition + sqlFoot;
     	List<String> mgrEmpList = jdbcTemplate.queryForList(sql, String.class);
-		return mgrEmpList;
+		if(CollectionUtils.isEmpty(mgrEmpList)){
+		    throw new RuntimeException("根据工号【" + employeeCode + "】未查询到上级主管");
+        }
+    	return mgrEmpList;
     	
     }
 
