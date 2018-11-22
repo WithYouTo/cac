@@ -26,6 +26,8 @@ public interface WarehouseRequService extends IService<TbWarehouseRequ> {
 
     void delete(String warehouseRequId);
 
-    void insertWarehouseRequ(TbWarehouseRequ warehouseRequ,String userId);
+    void insertWarehouseRequ(TbWarehouseRequ warehouseRequ);
+
+    void updateWarehouseRequ(TbWarehouseRequ warehouseRequ);
 
 }

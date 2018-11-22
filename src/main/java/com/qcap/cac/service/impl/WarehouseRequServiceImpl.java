@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,11 +100,64 @@ public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, T
     }
 
     @Override
-    public void insertWarehouseRequ(TbWarehouseRequ warehouseRequ,String employeeCode) {
-
+    public void insertWarehouseRequ(TbWarehouseRequ warehouseRequ) {
+        //工号
+        String requName = warehouseRequ.getRequName();
+        if(StringUtils.isEmpty(requName)){
+            throw new RuntimeException("请选择领用人");
+        }
         //查询当前登录人的岗位
-        List<Map<String,Object>> positionList = tempTaskSrv.selectCurrountWorkingEmployee(employeeCode);
+//        List<Map<String,Object>> positionList = tempTaskSrv.selectCurrountWorkingEmployee(requName);
+//        if(CollectionUtils.isNotEmpty(positionList)){
+//            List<String> positionCodeList = new ArrayList<>();
+//            List<String> positionNameList = new ArrayList<>();
+//            for (Map<String, Object> m : positionList) {
+//                positionCodeList.add(ToolUtil.toStr(m.get("positionCode")));
+//                positionNameList.add(ToolUtil.toStr(m.get("positionName")));
+//            }
+//            String positionCode = String.join(",", positionCodeList);
+//            String positionName = String.join(",", positionNameList);
+//
+//            warehouseRequ.setPositionCode(positionCode);
+//            warehouseRequ.setPositionName(positionName);
+//        }
+        Map<String,String> map = getCurrPositionByEmpCode(requName);
+        warehouseRequ.setPositionCode(map.get("positionCode"));
+        warehouseRequ.setPositionName(map.get("positionName"));
 
+        warehouseRequ.setRequBatchNo(UUIDUtils.getBatchNo());
+        warehouseRequ.setRequStatus("INIT");
+        EntityTools.setCreateEmpAndTime(warehouseRequ);
+        this.warehouseRequMapper.insert(warehouseRequ);
+    }
+
+    @Override
+    public void updateWarehouseRequ(TbWarehouseRequ warehouseRequ) {
+
+        TbWarehouseRequ old = this.warehouseRequMapper.selectById(warehouseRequ.getWarehouseRequId());
+        if(null == old){
+            throw new RuntimeException("根据主键没有查询到领用单信息");
+        }
+
+        if(!old.getRequName().equals(warehouseRequ.getRequName())){
+            //查询当前登录人的岗位
+            Map<String,String> map = getCurrPositionByEmpCode(warehouseRequ.getRequName());
+            warehouseRequ.setPositionCode(map.get("positionCode"));
+            warehouseRequ.setPositionName(map.get("positionName"));
+        }
+        //更新时间
+        EntityTools.setUpdateEmpAndTime(warehouseRequ);
+        this.warehouseRequMapper.updateById(warehouseRequ);
+
+
+    }
+
+
+    //查询当前登录人的岗位
+    private Map<String,String> getCurrPositionByEmpCode(String employCode){
+        Map<String,String> map = new HashMap<>();
+
+        List<Map<String,Object>> positionList = tempTaskSrv.selectCurrountWorkingEmployee(employCode);
         if(CollectionUtils.isNotEmpty(positionList)){
             List<String> positionCodeList = new ArrayList<>();
             List<String> positionNameList = new ArrayList<>();
@@ -113,14 +167,11 @@ public class WarehouseRequServiceImpl extends ServiceImpl<WarehouseRequMapper, T
             }
             String positionCode = String.join(",", positionCodeList);
             String positionName = String.join(",", positionNameList);
-
-            warehouseRequ.setPositionCode(positionCode);
-            warehouseRequ.setPositionName(positionName);
+            map.put("positionCode",positionCode);
+            map.put("positionName",positionName);
+        }else{
+            throw new RuntimeException("工号【" + employCode + "】未查询到对应岗位");
         }
-
-        warehouseRequ.setRequBatchNo(UUIDUtils.getBatchNo());
-        warehouseRequ.setRequStatus("INIT");
-        EntityTools.setCreateEmpAndTime(warehouseRequ);
-        this.warehouseRequMapper.insert(warehouseRequ);
+        return map;
     }
 }

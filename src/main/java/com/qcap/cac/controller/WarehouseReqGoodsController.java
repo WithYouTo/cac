@@ -12,7 +12,6 @@ import com.qcap.cac.service.WarehouseRequService;
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.model.PageResParams;
 import com.qcap.core.model.ResParams;
-import com.qcap.core.utils.AppUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -93,14 +92,8 @@ public class WarehouseReqGoodsController {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Object addRequ(@Valid  TbWarehouseRequ warehouseRequ) {
-        //获取当前登录人
-        String employeeCode = AppUtils.getLoginUserAccount();
-        if(StringUtils.isEmpty(employeeCode)){
-            return ResParams.newInstance(CoreConstant.FAIL_CODE,CoreConstant.EXCEL_ILLEGAL_USER_MSG,null);
-        }
-
         try {
-           this.warehouseRequService.insertWarehouseRequ(warehouseRequ,employeeCode);
+           this.warehouseRequService.insertWarehouseRequ(warehouseRequ);
         } catch (Exception e) {
             return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
         }
@@ -115,7 +108,7 @@ public class WarehouseReqGoodsController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Object updateReq(@Valid TbWarehouseRequ warehouseRequ) {
         try {
-            this.warehouseRequService.updateById(warehouseRequ);
+            this.warehouseRequService.updateWarehouseRequ(warehouseRequ);
         } catch (Exception e) {
             return ResParams.newInstance(CoreConstant.FAIL_CODE,e.getMessage(),null);
         }

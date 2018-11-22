@@ -1,7 +1,6 @@
 package com.qcap.cac.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcap.cac.dto.AppLeaveApplyReq;
 import com.qcap.cac.dto.AppLeaveReq;
 import com.qcap.cac.entity.TbLeave;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface LeaveRestSrv extends IService<TbLeave> {
+
 
     List<AppLeaveReq> queryLeaveList(Map<String,Object> paramMap);
 

@@ -83,8 +83,8 @@ public class GoodsApplyRestController {
 		Map<String,Object> map = new HashMap<>();
 		try {
 			Map<String,String> paramMap = new HashMap();
-			//paramMap.put("employeeCode",employeeCode);
-			paramMap.put("positionCode",positionCode);
+			paramMap.put("employeeCode",employeeCode);
+			//paramMap.put("positionCode",positionCode);
 			paramMap.put("lineNo",lineNo);
 			List<GoodsDistributionDetailReq> list = this.goodsApplyRestSrv.queryAvailDistributionList(paramMap);
 			map.put("distributionList",list);

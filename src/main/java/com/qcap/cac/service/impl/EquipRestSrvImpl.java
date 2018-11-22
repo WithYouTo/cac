@@ -95,6 +95,10 @@ public class EquipRestSrvImpl implements EquipRestSrv {
             //判断是否正在由本人使用
             String desc ="";
             TbEquipUse equipUse= this.equipUseMapper.getEquipUserByEquipNoAndStatus(equipNo);
+            //判断设备是否存在
+            if(equipUse == null){
+                return ResParams.newInstance(CommonCodeConstant.FAIL_CODE, CommonCodeConstant.EQUIP_CAN_NOT_USE, null);
+            }
             if(employeeCode.equals(equipUse.getPersonNo())){
                 desc = "您正在使用此设备！";
             }else{
@@ -386,7 +390,7 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         List<String> programList = AppUtils.getLoginUserProjectCodes();
         String s = String.join(",", programList);
         messageRestSrv.JpushMessage(responseNo,s,equipName+"("+equipNo+")"+"出现故障，请前往查看！","设备报修");
-        JpushTools.pushSingle(responseNo,equipName+"("+equipNo+")"+"出现故障，请前往查看！");
+//        JpushTools.pushSingle(responseNo,equipName+"("+equipNo+")"+"出现故障，请前往查看！");
     }
 
     /**
@@ -473,7 +477,6 @@ public class EquipRestSrvImpl implements EquipRestSrv {
         equipRepair.setPersonNo(manager.getAccount());
         equipRepair.setPersonName(manager.getName());
         equipRepair.setRepairTime(new Date());
-
         //新增一条设备报修记录
         this.equipRepairMapper.insert(equipRepair);
         //通过设备编号将设备信息表中的设备工作状态改为使用中
