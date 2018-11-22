@@ -11,7 +11,9 @@ import java.util.Map;
 
 public interface LeaveRestMapper  extends BaseMapper<TbLeave> {
 
-	String queryLoginOrgCode(String employeeCode);
+	//String queryLoginOrgCode(String employeeCode);
+
+	List<String> queryProgramCodesByEmpCode(String employeeCode);
 
 	List<AppLeaveReq> queryLeaveList(Map<String,Object> paramMap);
 

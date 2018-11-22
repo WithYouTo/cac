@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +55,28 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
     @Resource
     private MessageRestSrv messageRestSrv;
 
+    //查询当前登录人的岗位
+    private Map<String,String> getCurrPositionByEmpCode(String employCode){
+        Map<String,String> map = new HashMap<>();
+
+        List<Map<String,Object>> positionList = tempTaskSrv.selectCurrountWorkingEmployee(employCode);
+        if(CollectionUtils.isNotEmpty(positionList)){
+            List<String> positionCodeList = new ArrayList<>();
+            List<String> positionNameList = new ArrayList<>();
+            for (Map<String, Object> m : positionList) {
+                positionCodeList.add(ToolUtil.toStr(m.get("positionCode")));
+                positionNameList.add(ToolUtil.toStr(m.get("positionName")));
+            }
+            String positionCode = String.join(",", positionCodeList);
+            String positionName = String.join(",", positionNameList);
+            map.put("positionCode",positionCode);
+            map.put("positionName",positionName);
+        }else{
+            throw new RuntimeException("工号【" + employCode + "】未查询到对应岗位");
+        }
+        return map;
+    }
+
     @Override
     public List<GoodsReqRestReq> queryReqList(Map<String, String> paramMap) {
         paramMap.put("date", DateUtil.formatDate(new Date(),"yyyy-MM-dd"));
@@ -73,8 +92,15 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
     @Override
     public List<GoodsDistributionDetailReq> queryAvailDistributionList(Map<String, String> paramMap) {
+
+        String employeeCode = paramMap.get("employeeCode");
+        if(StringUtils.isEmpty(employeeCode)){
+            throw new RuntimeException("工号为空");
+        }
+
+        Map<String,String> map = this.getCurrPositionByEmpCode(employeeCode);
+        paramMap.put("positionCode",map.get("positionCode"));
         paramMap.put("requStatus",CommonConstant.WAREHOUSE_REQ_STATUS_RECEIVE);
-        //paramMap.put("date", cn.hutool.core.date.DateUtil.formatDate(new Date()));
         return this.goodsApplyRestMapper.queryAvailDistributionList(paramMap);
     }
 
@@ -110,9 +136,6 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             String goodsName = warehouseReqdetail.getGoodsName();
 
             //查询库存余量（库存表中-一个goodsNo对应一条记录，在入库时做了限制）
-//            QueryWrapper<TbWarehouseStock> wrapper = new QueryWrapper<>();
-//            wrapper.eq("GOODS_NO",goodsNo);
-//            wrapper.eq("PROGRAM_CODE",currProgramCode);
             TbWarehouseStock stock = goodsApplyRestMapper.selectExistGood(currProgramCode,goodsNo);
             if(null == stock){
                 throw new RuntimeException("根据物品编码没有查询到库存信息");
@@ -145,12 +168,6 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
             //判断库存数量是否小于最低警戒线（库存和最低警戒线的单位在导入必须保持一致）
 
             if(goodsNum - realNum  < limitStore){
-//                String programCode = "";
-//                List<String>  programCodes = AppUtils.getLoginUserProjectCodes();
-//                if(!CollectionUtils.isEmpty(programCodes)){
-//                    programCodes.removeAll(Collections.singleton(""));
-//                    programCode =  StringUtils.join(programCodes,",");
-//                }
                 //向角色为库管的人员推送消息
                 String roleNum = RedisTools.getCommonConfig("CAC_WAREHOUSE_ROLE_NUM");
                 String message = RedisTools.getCommonConfig("CAC_LIMIT_STORE_MESSAGE");
@@ -210,6 +227,9 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
 
             //根据岗位查询当班人员
             Map<String, Object> user =  this.tempTaskSrv.selectDefaultEmployee(DateUtil.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"),areaCode);
+            if(CommonConstant.BACK_FAIL_FLAG.equals(user.get(CommonConstant.BACK_FLAG))){
+                throw new RuntimeException(ToolUtil.toStr(user.get(CommonConstant.BACK_MESSAGE)));
+            }
 
             //新增发放记录表
             TbWarehouseDistribution distribution = new TbWarehouseDistribution();

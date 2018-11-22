@@ -11,6 +11,19 @@
         where c.account = #{employeeCode}
 	</select>
 
+	<select id="queryProgramCodesByEmpCode" resultType="String">
+		select
+		pro.PROGRAM_CODE programCode
+		from tb_manager m
+		left join tb_user_info info on info.user_id = m.id
+		left join tb_manager_org mo on m.id = mo.manager_id
+		left join tb_org o ON mo.org_id = o.id
+		left join tb_program pro ON o.PROGRAM_CODE  = pro.PROGRAM_CODE
+		where m.status != 3
+		and m.status != 4
+		and m.account like #{map.account}
+	</select>
+
 
     <!--请假列表-->
 	<select id="queryLeaveList" parameterType="Map" resultType="com.qcap.cac.dto.AppLeaveReq">
@@ -48,7 +61,7 @@
 			and b.LEAVE_STATUS = #{leaveStatus}
 		</if>
 		<if test="auditCode!=null and auditCode!=''">
-			and b.AUDIT_PERSON = #{auditCode}
+			and FIND_IN_SET(#{auditCode},b.AUDIT_PERSON)
 		</if>
 		<if test="employeeCode!=null and employeeCode!=''">
 			and b.WORK_NO = #{employeeCode}
@@ -56,12 +69,8 @@
 		<if test="auditPerson!=null and auditPerson!=''">
 			and b.AUDIT_PERSON = #{auditPerson}
 		</if>
-		<if test="employeeCodeList !=null and employeeCodeList.size > 0">
-			and b.WORK_NO in
-			<foreach item="item" index="index" collection="employeeCodeList"
-					 open="(" separator="," close=")">
-				#{item}
-			</foreach>
+		<if test="employeeCodeList !=null and employeeCodeList != '' ">
+			and FIND_IN_SET(#{employeeCodeList},b.AUDIT_PERSON)
 		</if>
 		<if test="lineNo!=null and lineNo!=''">
 			and b.LINE_NO &gt; #{lineNo}

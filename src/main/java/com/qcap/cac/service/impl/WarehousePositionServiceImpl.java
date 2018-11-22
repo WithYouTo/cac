@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -43,26 +44,33 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
 
     @Override
     public IPage<TbWarehousePosition> getPositionList(IPage<TbWarehousePosition> page, @Valid WarehouseEntryDto warehouseEntryDto) {
-        return warehousePositionMapper.selectPage(page,new QueryWrapper<TbWarehousePosition>()
-                .eq("PROGRAM_CODE", warehouseEntryDto.getProgramCode())
-                .eq("DELETE_FLAG","N"));
+        QueryWrapper<TbWarehousePosition> wrapper = new QueryWrapper<>();
+        wrapper.eq("PROGRAM_CODE", warehouseEntryDto.getProgramCode())
+                .eq("DELETE_FLAG","N");
+        if(StringUtils.isNotEmpty(warehouseEntryDto.getStoreroomId())){
+            wrapper.eq("STOREROOM_ID", warehouseEntryDto.getStoreroomId());
+        }
+        wrapper.orderByAsc("CREATE_DATE");
+        return warehousePositionMapper.selectPage(page,wrapper);
     }
 
 
     @Override
     public Integer insertPosition(TbWarehousePosition tbWarehousePosition) {
-        if(null == tbWarehousePosition){
-            throw new RuntimeException("库位参数为空");
-        }
-        if(selectExistPosition(tbWarehousePosition) >  0){
-            throw new RuntimeException("库位已经存在");
+        if(StringUtils.isEmpty(tbWarehousePosition.getStoreroomId())){
+            throw new RuntimeException("请选择库位");
         }
 
         TbArea area = areaMapper.selectById(tbWarehousePosition.getStoreroomId());
         if(null == area){
             throw new RuntimeException("根据选择储藏室没有查询到信息");
         }
+
         tbWarehousePosition.setProgramCode(area.getProgramCode());
+        if(selectExistPosition(tbWarehousePosition) >  0){
+            throw new RuntimeException("库位已经存在");
+        }
+
         tbWarehousePosition.setWarehousePositionId(UUIDUtils.getUUID());
         tbWarehousePosition.setDeleteFlag("N");
         EntityTools.setCreateEmpAndTime(tbWarehousePosition);
@@ -74,17 +82,31 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
         if(null == tbWarehousePosition){
             throw new RuntimeException("库位参数为空");
         }
-        if(selectExistPosition(tbWarehousePosition) >=  1){
-            throw new RuntimeException("库位已经存在");
-        }
+        //防止新增库位时，未填写programCode
         TbArea area = areaMapper.selectById(tbWarehousePosition.getStoreroomId());
         if(null == area){
             throw new RuntimeException("根据选择储藏室没有查询到信息");
         }
         tbWarehousePosition.setProgramCode(area.getProgramCode());
-        tbWarehousePosition.setDeleteFlag("N");
-        EntityTools.setUpdateEmpAndTime(tbWarehousePosition);
-        return this.warehousePositionMapper.updateById(tbWarehousePosition);
+
+        //是否已经存在
+        QueryWrapper<TbWarehousePosition> wrapper = new QueryWrapper<>();
+        wrapper.and(condition -> condition
+                .eq("PROGRAM_CODE", tbWarehousePosition.getProgramCode())
+                .eq("BUILDING_NAME", tbWarehousePosition.getBuildingName())
+                .eq("FLOOR_NAME", tbWarehousePosition.getFloorName())
+                .eq("ROOM_NAME", tbWarehousePosition.getRoomName())
+                .eq("DELETE_FLAG", "N")
+                .eq("RANGE_SHELF", tbWarehousePosition.getRangeShelf()));
+
+        List<TbWarehousePosition> list = warehousePositionMapper.selectList(wrapper);
+        if(list.size() == 0 || list.size() == 1 && tbWarehousePosition.getWarehousePositionId().equals(list.get(0).getWarehousePositionId())){
+            tbWarehousePosition.setDeleteFlag("N");
+            EntityTools.setUpdateEmpAndTime(tbWarehousePosition);
+            return this.warehousePositionMapper.updateById(tbWarehousePosition);
+        }else{
+            throw new RuntimeException("库位已经存在");
+        }
     }
 
     @Override
@@ -110,9 +132,9 @@ public class WarehousePositionServiceImpl extends ServiceImpl<WarehousePositionM
         if(null != tbWarehousePosition) {
             wrapper.and(condition -> condition
                     .eq("PROGRAM_CODE", tbWarehousePosition.getProgramCode())
-                    //.eq("BUILDING_NAME", tbWarehousePosition.getBuildingName())
-                    //.eq("FLOOR_NAME", tbWarehousePosition.getFloorName())
-                   // .eq("ROOM_NAME", tbWarehousePosition.getRoomName())
+                    .eq("BUILDING_NAME", tbWarehousePosition.getBuildingName())
+                    .eq("FLOOR_NAME", tbWarehousePosition.getFloorName())
+                    .eq("ROOM_NAME", tbWarehousePosition.getRoomName())
                     .eq("DELETE_FLAG", "N")
                     .eq("RANGE_SHELF", tbWarehousePosition.getRangeShelf()));
             count = this.warehousePositionMapper.selectCount(wrapper);

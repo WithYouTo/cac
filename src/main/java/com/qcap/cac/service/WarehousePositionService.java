@@ -57,7 +57,6 @@ public interface WarehousePositionService extends IService<TbWarehousePosition> 
      */
     Integer selectExistPosition(TbWarehousePosition tbWarehousePosition);
 
-
     /**
      * 查询库位是否已经存放物品
      * @param warehousePositionId

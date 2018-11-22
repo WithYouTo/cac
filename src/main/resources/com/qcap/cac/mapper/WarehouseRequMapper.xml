@@ -13,12 +13,14 @@
         REQU_BATCH_NO,
         REQU_PERSON,
         REQU_MOBILE,
-        (SELECT name from tb_manager where account = a.REQU_NAME) AS "requEmp",
+        b.name  AS requEmp,
+        <!--(SELECT name from tb_manager where account = a.REQU_NAME) AS "requEmp",-->
         REQU_NAME ,
         DATE_FORMAT(REQU_TIME,'%Y-%m-%d') requTime,
         REQU_REMARK,
         REQU_STATUS
-        from tb_warehouse_requ a
+        from tb_warehouse_requ a left join tb_manager b
+        on a.REQU_NAME = b.account
         where 1 = 1
         <if test="obj.programCode!=null and obj.programCode!=''">
             and a.PROGRAM_CODE = #{obj.programCode}
@@ -27,7 +29,7 @@
             and a.REQU_MOBILE like concat('%',#{obj.requMobile},'%')
         </if>
         <if test="obj.requName!=null and obj.requName!=''">
-            and a.REQU_NAME like concat('%',#{obj.requName},'%')
+            and  b.name like concat('%',#{obj.requName},'%')
         </if>
         <if test="obj.requStatus!=null and obj.requStatus!=''">
             and a.REQU_STATUS = #{obj.requStatus}
