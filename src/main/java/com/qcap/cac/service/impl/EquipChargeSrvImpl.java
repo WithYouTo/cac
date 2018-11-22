@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,8 @@ public class EquipChargeSrvImpl implements EquipChargeSrv {
 
     @Override
     public String getChargeTotalTimeByEquipId(String equipId) {
-        return this.equipChargeMapper.getChargeTotalTimeByEquipId(equipId);
+        DecimalFormat format = new DecimalFormat("0.00");
+        String totalTime = this.equipChargeMapper.getChargeTotalTimeByEquipId(equipId);
+        return format.format(new BigDecimal(totalTime));
     }
 }

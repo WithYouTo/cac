@@ -57,7 +57,7 @@
 
     <select id="getUseTotalTimeByEquipId" resultType="java.lang.String" parameterType="java.lang.String">
         select
-        sum(TOTAL_USE_TIME) total
+        IFNULL(sum(TOTAL_USE_TIME),0) total
         from TB_EQUIP_USE
         where
         EQUIP_ID = #{equipId}
