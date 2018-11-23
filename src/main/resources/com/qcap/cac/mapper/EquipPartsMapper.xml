@@ -4,21 +4,23 @@
 
     <select id="listPartsByEquipId" resultType="java.util.Map" parameterType="String">
         SELECT
-            PARTS_ID partsId,
-            EQUIP_ID equipId,
-            PARTS_NO partsNo,
-            PARTS_NAME partsName,
-            PARTS_MODEL partsModel,
-            PARTS_AGENCE partsAgence,
-            MAINT_CYCLE maintCycle,
-            DATE_FORMAT(START_USE_TIME,'%Y-%m-%d') startUseTime,
-            DATE_FORMAT(LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
-            DATE_FORMAT(NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
-            RELATE_PERSON relatePerson,
-            RELATE_MOBILE relateMobile
-        FROM tb_equip_parts
-        WHERE EQUIP_ID = #{equipId}
-        ORDER BY CREATE_DATE
+            ep.PARTS_ID partsId,
+            ep.EQUIP_ID equipId,
+            ep.PARTS_NO partsNo,
+            ep.PARTS_NAME partsName,
+            ep.PARTS_MODEL partsModel,
+            ep.PARTS_AGENCE partsAgence,
+            ep.MAINT_CYCLE maintCycle,
+            DATE_FORMAT(ep.START_USE_TIME,'%Y-%m-%d') startUseTime,
+            DATE_FORMAT(eplan.LATEST_MAINT_TIME,'%Y-%m-%d') latestMaintTime,
+            DATE_FORMAT(eplan.NEXT_MAINT_TIME,'%Y-%m-%d') nextMaintTime,
+            ep.RELATE_PERSON relatePerson,
+            ep.RELATE_MOBILE relateMobile
+        FROM tb_equip_parts ep
+        left JOIN tb_equip_plan eplan
+        ON  ep.PARTS_NO =  eplan.PARTS_NO
+        WHERE ep.EQUIP_ID = #{equipId}
+        ORDER BY ep.CREATE_DATE
     </select>
 
     <select id="listPartsEntityByEquipId" resultType="com.qcap.cac.entity.TbEquipParts" parameterType="String">

@@ -257,12 +257,10 @@
         <if test="baseRequire != null and baseRequire != ''">
             BASE_REQUIRE = #{baseRequire},
         </if>
-        <if test="attention != null and attention != ''">
-            ATTENTION = #{attention},
-        </if>
         <if test="imgUrl != null and imgUrl != ''">
             IMG_URL = #{imgUrl},
         </if>
+        ATTENTION = #{attention},
         FILE_URLS = #{fileUrls},
         FILE_NAMES = #{fileNames},
         UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},

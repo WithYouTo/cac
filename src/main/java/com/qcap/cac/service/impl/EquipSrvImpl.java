@@ -182,6 +182,8 @@ public class EquipSrvImpl implements EquipSrv {
         EntityTools.setUpdateEmpAndTime(partsPlan);
         partsPlan.setNextMaintTime(nextPlanTime);
         parts.setNextMaintTime(nextPlanTime);
+        partsPlan.setPartsModel(parts.getPartsModel());
+        partsPlan.setPartsName(parts.getPartsName());
         //修改配件信息
         this.equipPartsMapper.updatePartsByPartsId(parts);
         //修改配件维保记录
@@ -447,7 +449,7 @@ public class EquipSrvImpl implements EquipSrv {
 
     /**
      *
-     * @Description: 生成配件维保记录
+     * @Description: 生成配件维保计划
      *
      *
      * @MethodName: insertMaintPlan 

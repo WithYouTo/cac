@@ -124,6 +124,8 @@
     <update id="updateNextMaintTime"  parameterType="com.qcap.cac.entity.TbEquipPlan">
         UPDATE TB_EQUIP_PLAN
         SET
+            PARTS_NAME = #{partsName},
+            PARTS_MODEL = #{partsModel},
             NOTICE_DATE = #{noticeDate},
             MAINT_CYCLE = #{maintCycle},
             NEXT_MAINT_TIME = #{nextMaintTime},
