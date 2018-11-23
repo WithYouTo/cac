@@ -225,6 +225,7 @@
         a.LIMIT_STORE,
         a.BUY_NUM,
         a.ENTRY_UNIT,
+        a.MIN_UNIT,
         a.BUY_DURATION,
         DATE_FORMAT(a.BUY_START, '%Y-%m-%d') buyStart,
         DATE_FORMAT(a.BUY_END, '%Y-%m-%d') buyEnd,
