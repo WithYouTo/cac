@@ -1,8 +1,8 @@
 package com.qcap.cac.dto;
 
-import javax.validation.constraints.NotBlank;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotBlank;
 
 public class EventTaskRestDto {
 
@@ -44,6 +44,16 @@ public class EventTaskRestDto {
 	@NotBlank(message = "app登陆人不能为空")
 	@ApiModelProperty(value = "app登陆人")
 	private String employeeCode;
+
+	private String programCode;
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
+	}
 
 	public String getFlightName() {
 		return flightName;

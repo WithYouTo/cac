@@ -63,6 +63,7 @@
 			AREA_CODE = #{areaCode} 
 		AND EVENT_TYPE = #{eventType}   
 		AND GUARANTEE_TYPE = #{guaranteeType}
+		AND PROGRAM_CODE = #{programCode}
 	</select>
   
 	<select id="selectAdvanceTime" parameterType="String" resultType="String">

@@ -13,6 +13,7 @@ package com.qcap.cac.service.impl;
 
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
+import com.qcap.cac.dao.AreaMapper;
 import com.qcap.cac.dao.EventTaskRestMapper;
 import com.qcap.cac.dao.TempTaskMapper;
 import com.qcap.cac.dto.EventTaskRestDto;
@@ -56,6 +57,9 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 
 	@Resource
 	private JdbcTemplate jdbcTemplate;
+
+	@Resource
+	private AreaMapper areaMapper;
 	
     @Resource
     private MessageRestSrv messageRestSrvImpl;
@@ -114,16 +118,17 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		employeeName = String.join(",", employeeNameList);
 		employeeTel = String.join(",", employeeTelList);
 
+		//根据areaCode 查询programCode
+		String programCode = areaMapper.selectProgramCodeByAreaCode(eventTaskDto.getAreaCode());
+
 		// 获取事件性计划
+		eventTaskDto.setProgramCode(programCode);
 		List<Map<String, String>> eventPlanList = this.getEventPlan(eventTaskDto);
 
 		List<TbTask> taskList = new ArrayList<>();
-		Set<String> programSet = new HashSet<>();
 		for (Map<String, String> eventPlanMap : eventPlanList) {
 			Date now = new Date();
 			TbTask task = new TbTask();
-			String programCode = eventPlanMap.get("programCode");
-			programSet.add(programCode);
 			task.setTaskId(UUIDUtils.getUUID());
 			task.setPlanId(eventPlanMap.get("planEventId"));
 			task.setTaskType(CommonConstant.TASK_TYPE_EVENT);
@@ -163,10 +168,7 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		tempTaskMapper.insertTaskBatch(taskList);
 
 		// 根据工号推送任务通知
-//		JpushTools.pushArray(employeeCodeList, "您有临时任务生成，请注意查阅");
-		for(String programCode: programSet) {
-			messageRestSrvImpl.JpushMessage(employeeCodeList, programCode, "您有临时任务生成，请注意查阅", "临时任务");
-		}
+		messageRestSrvImpl.JpushMessage(employeeCodeList, programCode, "您有临时任务生成，请注意查阅", "临时任务");
 	}
 
 	@Override

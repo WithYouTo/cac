@@ -482,6 +482,12 @@ private String dealWithSpecialTaskTime(String startTime) {
 				throw new BaseException(CommonCodeConstant.PARAM_EMPTY_CODE, "参数为空");
 			}
 
+			//重新设置任务开始、结束时间
+
+			Calendar calendar = Calendar.getInstance();
+			Date startTime = calendar.getTime();
+			calendar.add(Calendar.HOUR_OF_DAY,1);
+			Date endTime = calendar.getTime();
 			TbTask task = this.appTaskRestMapper.selectTaskByCode(taskCode);
 			String newTaskCode = CommonConstant.TASK_PREFIX_DQ + DateUtil.dateTimeToStringForLineNo(new Date());
 			task.setTaskId(UUIDUtils.getUUID());
@@ -489,6 +495,8 @@ private String dealWithSpecialTaskTime(String startTime) {
 			task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
 			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
 			task.setTaskImgUrl(imgUrl);
+			task.setStartTime(startTime);
+			task.setEndTime(endTime);
 			task.setVersion(0);
 			task.setCreateDate(new Date());
 			task.setCreateEmp("由检查不合格任务生成,检查不合格任务编码："+taskCode);
