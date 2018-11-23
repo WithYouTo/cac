@@ -272,5 +272,17 @@
                 PROGRAM_ID = #{programId}
         )
   </select>
+
+  <delete id="deleteAddedArea" parameterType="String" >
+    DELETE FROM tb_area WHERE  LEVEL ='-1'
+     AND PROGRAM_CODE =(
+            SELECT
+                PROGRAM_CODE
+            FROM
+                tb_program
+            WHERE
+                PROGRAM_ID = #{programId}
+        )
+  </delete>
 	
 </mapper>

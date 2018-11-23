@@ -26,4 +26,6 @@ public interface ProgramMapper {
 
 	Integer selectIfProgramHaveAreas (@Param("programId") String programId);
 
+	void deleteAddedArea (@Param("programId") String programId);
+
 }

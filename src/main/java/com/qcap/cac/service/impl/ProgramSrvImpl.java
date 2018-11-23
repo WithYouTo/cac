@@ -168,6 +168,10 @@ public class ProgramSrvImpl implements ProgramSrv {
         if(areas >1){
             return ResParams.newInstance(CommonCodeConstant.ERROR_CODE_40402, "该项目下面有子级区域，不允许删除");
         }
+
+        //先删除该区域
+        this.programMapper.deleteAddedArea(programId);
+
         this.programMapper.deleteProgramByKey(programId);
         return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE,CommonCodeConstant.SUCCESS_DELETE_DESC);
     }
