@@ -258,6 +258,7 @@ public class EquipSrvImpl implements EquipSrv {
 
     @Override
     public void listEquip(IPage<Map<String, Object>> page, @Valid EquipSearchDto equipSearchDto) {
+        String perfix=RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX");
         List<Map<String, Object>> list = this.equipMapper.listEquip(page,equipSearchDto);
         for(Map<String,Object> map :list){
             String equipState = map.get("equipState").toString();
@@ -268,7 +269,8 @@ public class EquipSrvImpl implements EquipSrv {
             map.put("workStatusName", CommonConstant.EQUIP_WORK_STATUS.get(equipWorkState));
 
             String imgUrl =  Objects.toString(map.get("imgUrl"));
-            map.put("imgUrl",RedisTools.getCommonConfig("CAC_FIPE_PATH_PREFIX")+imgUrl);
+            map.put("imgUrl",perfix+imgUrl);
+            map.put("perfix",perfix);
         }
         page.setRecords(list);
     }
