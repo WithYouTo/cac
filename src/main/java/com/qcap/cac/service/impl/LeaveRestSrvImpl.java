@@ -180,8 +180,8 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
             //推送消息
             String workNo = leave.getWorkNo();
             String title = "请假单审批通过";
-            String leaveStartFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveStartTime()),"yyyy-MM-dd HH:ss");
-            String leaveEndFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveEndTime()),"yyyy-MM-dd HH:ss");
+            String leaveStartFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveStartTime()),"yyyy-MM-dd HH:mm");
+            String leaveEndFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveEndTime()),"yyyy-MM-dd HH:mm");
             String message = "您的请假单【" + leaveStartFormat + "至" + leaveEndFormat + "】审批通过";
             messageRestSrv.JpushMessage(workNo,leave.getProgramCode(),message,title);
 
@@ -218,8 +218,8 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
         String workNo = leave.getWorkNo();
         //List<String> programCodes = AppUtils.getLoginUserProjectCodes();
         String title = "请假单被驳回";
-        String leaveStartFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveStartTime()),"yyyy-MM-dd HH:ss");
-        String leaveEndFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveEndTime()),"yyyy-MM-dd HH:ss");
+        String leaveStartFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveStartTime()),"yyyy-MM-dd HH:mm");
+        String leaveEndFormat = DateUtil.format(DateUtil.parseDateTime(leave.getLeaveEndTime()),"yyyy-MM-dd HH:mm");
         String message = "您的请假单【" + leaveStartFormat + "至" + leaveEndFormat + "】被驳回";
         messageRestSrv.JpushMessage(workNo, leave.getProgramCode(),message,title);
         return 1;
