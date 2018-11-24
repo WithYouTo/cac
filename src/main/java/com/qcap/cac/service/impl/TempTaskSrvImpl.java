@@ -1,24 +1,5 @@
 package com.qcap.cac.service.impl;
 
-import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.constant.CommonConstant;
 import com.qcap.cac.dao.TempTaskMapper;
@@ -34,6 +15,16 @@ import com.qcap.cac.tools.UUIDUtils;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.model.ZTreeNode;
 import com.qcap.core.utils.DateUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
+import java.util.*;
+
+import static com.qcap.core.utils.AppUtils.buildZTreeNodeByRecursive;
 
 @Service
 @Transactional
@@ -91,7 +82,7 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 				zTreeNode.setId(Objects.toString(map.get("id")));
 				zTreeNode.setName(Objects.toString(map.get("name")));
 				zTreeNode.setPid(Objects.toString(map.get("pId")));
-				if(map.get("pId") == null) {
+				if("".equals(Objects.toString(map.get("pId"),""))) {
 					zTreeNode.setPid("0");
 				}
 				if ("0".equals(map.get("pId"))) {
