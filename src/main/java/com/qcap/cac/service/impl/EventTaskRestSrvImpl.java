@@ -127,7 +127,6 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 
 		List<TbTask> taskList = new ArrayList<>();
 		for (Map<String, String> eventPlanMap : eventPlanList) {
-			Date now = new Date();
 			TbTask task = new TbTask();
 			task.setTaskId(UUIDUtils.getUUID());
 			task.setPlanId(eventPlanMap.get("planEventId"));
@@ -145,10 +144,10 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 			task.setEndTime(taskEndTime);
 			task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
 			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
-			task.setCreateDate(now);
+			task.setCreateDate(new Date());
 			task.setCreateEmp(eventTaskDto.getEmployeeCode());
 			task.setVersion(0);
-			task.setTaskCode(CommonConstant.TASK_PREFIX_E + DateUtil.dateTimeToStringForLineNo(now));
+			task.setTaskCode(CommonConstant.TASK_PREFIX_E + DateUtil.dateTimeToStringForLineNo(new Date()));
 			
 			String uploadPicFlag = ToolUtil.toStr(eventPlanMap.get("uploadPicFlag"));
 			String checkFlag = ToolUtil.toStr(eventPlanMap.get("checkFlag"));
