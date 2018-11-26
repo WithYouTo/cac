@@ -65,7 +65,7 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
     private MessageRestSrv messageRestSrvImpl;
 
 	@Override
-	public void geneEventTask(EventTaskRestDto eventTaskDto) {
+	public void geneEventTask(EventTaskRestDto eventTaskDto) throws InterruptedException {
 		Date planningTakeoffDateTime = DateUtil.stringToDateTime(eventTaskDto.getPlanningTakeoffTime());
 		Date estimatedTakeoffDateTime = DateUtil.stringToDateTime(eventTaskDto.getEstimatedTakeoffTime());
 		Date taskStartTime = null;
@@ -127,42 +127,49 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 
 		List<TbTask> taskList = new ArrayList<>();
 		for (Map<String, String> eventPlanMap : eventPlanList) {
-			TbTask task = new TbTask();
-			task.setTaskId(UUIDUtils.getUUID());
-			task.setPlanId(eventPlanMap.get("planEventId"));
-			task.setTaskType(CommonConstant.TASK_TYPE_EVENT);
-			task.setPositionCode(positionCode);
-			task.setPositionName(positionName);
-			task.setAreaCode(eventTaskDto.getAreaCode());
-			task.setAreaName(eventTaskDto.getAreaName());
-			task.setShift(shift);
-			task.setProgramCode(eventPlanMap.get("programCode"));
-			task.setEmployeeCode(employeeCode);
-			task.setEmployeeName(employeeName);
-			task.setEmployeeTel(employeeTel);
-			task.setStartTime(taskStartTime);
-			task.setEndTime(taskEndTime);
-			task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
-			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
-			task.setCreateDate(new Date());
-			task.setCreateEmp(eventTaskDto.getEmployeeCode());
-			task.setVersion(0);
-			task.setTaskCode(CommonConstant.TASK_PREFIX_E + DateUtil.dateTimeToStringForLineNo(new Date()));
-			
-			String uploadPicFlag = ToolUtil.toStr(eventPlanMap.get("uploadPicFlag"));
-			String checkFlag = ToolUtil.toStr(eventPlanMap.get("checkFlag"));
-			String startScanFlag = ToolUtil.toStr(eventPlanMap.get("startScanFlag"));
-			String endScanFlag = ToolUtil.toStr(eventPlanMap.get("endScanFlag"));
-			task.setCheckFlag(checkFlag);
-			task.setUploadPicFlag(uploadPicFlag);
-			task.setStartScanFlag(startScanFlag);
-			task.setEndScanFlag(endScanFlag);
-			// 查询标准详细信息
-			Map<String, Object> standardMap = this.getStandard(eventPlanMap.get("standardCode"));
-			String standardName = ToolUtil.toStr(standardMap.get("standardName"));
-			task.setStandardCode(eventPlanMap.get("standardCode"));
-			task.setStandardName(standardName);
-			taskList.add(task);
+			try{
+				TbTask task = new TbTask();
+				task.setTaskId(UUIDUtils.getUUID());
+				task.setPlanId(eventPlanMap.get("planEventId"));
+				task.setTaskType(CommonConstant.TASK_TYPE_EVENT);
+				task.setPositionCode(positionCode);
+				task.setPositionName(positionName);
+				task.setAreaCode(eventTaskDto.getAreaCode());
+				task.setAreaName(eventTaskDto.getAreaName());
+				task.setShift(shift);
+				task.setProgramCode(eventPlanMap.get("programCode"));
+				task.setEmployeeCode(employeeCode);
+				task.setEmployeeName(employeeName);
+				task.setEmployeeTel(employeeTel);
+				task.setStartTime(taskStartTime);
+				task.setEndTime(taskEndTime);
+				task.setTaskStatus(CommonConstant.TASK_STATUS_WAIT);
+				task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
+				task.setCreateDate(new Date());
+				task.setCreateEmp(eventTaskDto.getEmployeeCode());
+				task.setVersion(0);
+				//避免任务code一样
+				Thread.sleep(1);
+				task.setTaskCode(CommonConstant.TASK_PREFIX_E + DateUtil.dateTimeToStringForLineNo(new Date()));
+
+				String uploadPicFlag = ToolUtil.toStr(eventPlanMap.get("uploadPicFlag"));
+				String checkFlag = ToolUtil.toStr(eventPlanMap.get("checkFlag"));
+				String startScanFlag = ToolUtil.toStr(eventPlanMap.get("startScanFlag"));
+				String endScanFlag = ToolUtil.toStr(eventPlanMap.get("endScanFlag"));
+				task.setCheckFlag(checkFlag);
+				task.setUploadPicFlag(uploadPicFlag);
+				task.setStartScanFlag(startScanFlag);
+				task.setEndScanFlag(endScanFlag);
+				// 查询标准详细信息
+				Map<String, Object> standardMap = this.getStandard(eventPlanMap.get("standardCode"));
+				String standardName = ToolUtil.toStr(standardMap.get("standardName"));
+				task.setStandardCode(eventPlanMap.get("standardCode"));
+				task.setStandardName(standardName);
+				taskList.add(task);
+			}catch ( InterruptedException e){
+				throw e;
+			}
+
 		}
 		tempTaskMapper.insertTaskBatch(taskList);
 

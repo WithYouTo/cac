@@ -2,16 +2,13 @@ package com.qcap.core.controller;
 
 import com.qcap.core.common.CoreConstant;
 import com.qcap.core.entity.TbManager;
-import com.qcap.core.license.LicenseCheckInterceptor;
 import com.qcap.core.model.MenuTree;
 import com.qcap.core.model.ResParams;
 import com.qcap.core.service.ITbManagerService;
 import com.qcap.core.service.ITbMenuService;
 import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.RedisUtil;
-import com.whxx.license.LicenseVerify;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,52 +34,52 @@ public class LoginController {
 	@Resource
 	private RedisUtil redisUtil;
 	
-	private static Logger logger = AppUtils.getLogger(LicenseCheckInterceptor.class,true);
+//	private static Logger logger = AppUtils.getLogger(LicenseCheckInterceptor.class,true);
 
-	/**
-	 * 点击登录执行的动作
-	 */
-//	@PostMapping("/login")
-//	public ResParams login(@RequestParam("username") String username, @RequestParam("password") String password) {
-//		username = StringUtils.trimToEmpty(username);
-//		try {
-//			String token = tbManagerService.login(username, password);
-//			Map<String, Object> buttonAuthMap = tbMenuService.getButtonAuthFromToken(token);
-//			Map<String, Object> data = new HashMap<>(2);
-//			data.put("access_token", token);
-//			data.put("button_auth", buttonAuthMap);
-//			return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "登录成功！", data);
-//		} catch (Exception e) {
-//			return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
-//		}
-//	}
-	
 	/**
 	 * 点击登录执行的动作
 	 */
 	@PostMapping("/login")
 	public ResParams login(@RequestParam("username") String username, @RequestParam("password") String password) {
 		username = StringUtils.trimToEmpty(username);
-        try {
-            LicenseVerify licenseVerify = new LicenseVerify();
-            licenseVerify.verify();
-
-            try {
-                String token = tbManagerService.login(username, password);
-                Map<String, Object> buttonAuthMap = tbMenuService.getButtonAuthFromToken(token);
-                Map<String, Object> data = new HashMap<>(2);
-                data.put("access_token", token);
-                data.put("button_auth", buttonAuthMap);
-                return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "登录成功！", data);
-            } catch (Exception e) {
-                return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
-            }
-        }catch (Exception e) {
-            logger.error("证书校验失败",e);
-            return ResParams.newInstance(CoreConstant.FAIL_CODE, "您的证书无效，请核查服务器是否取得授权或重新申请证书", null);
-            //result.put("result", "您的证书无效，请核查服务器是否取得授权或重新申请证书！");
-        }
+		try {
+			String token = tbManagerService.login(username, password);
+			Map<String, Object> buttonAuthMap = tbMenuService.getButtonAuthFromToken(token);
+			Map<String, Object> data = new HashMap<>(2);
+			data.put("access_token", token);
+			data.put("button_auth", buttonAuthMap);
+			return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "登录成功！", data);
+		} catch (Exception e) {
+			return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
+		}
 	}
+	
+	/**
+	 * 点击登录执行的动作
+	 */
+//	@PostMapping("/login")
+//	public ResParams login(@RequestParam("username") String username, @RequestParam("password") String password) {
+//		username = StringUtils.trimToEmpty(username);
+//        try {
+//            LicenseVerify licenseVerify = new LicenseVerify();
+//            licenseVerify.verify();
+//
+//            try {
+//                String token = tbManagerService.login(username, password);
+//                Map<String, Object> buttonAuthMap = tbMenuService.getButtonAuthFromToken(token);
+//                Map<String, Object> data = new HashMap<>(2);
+//                data.put("access_token", token);
+//                data.put("button_auth", buttonAuthMap);
+//                return ResParams.newInstance(CoreConstant.SUCCESS_CODE, "登录成功！", data);
+//            } catch (Exception e) {
+//                return ResParams.newInstance(CoreConstant.FAIL_CODE, e.getMessage(), null);
+//            }
+//        }catch (Exception e) {
+//            logger.error("证书校验失败",e);
+//            return ResParams.newInstance(CoreConstant.FAIL_CODE, "您的证书无效，请核查服务器是否取得授权或重新申请证书", null);
+//            //result.put("result", "您的证书无效，请核查服务器是否取得授权或重新申请证书！");
+//        }
+//	}
 
 	@PostMapping("/personal")
 	public ResParams getPersonal(@RequestHeader("access_token") String token) {

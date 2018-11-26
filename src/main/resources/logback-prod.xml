@@ -6,7 +6,7 @@
     debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
   <!-- 定义日志文件 输入位置 -->
-  <property name="log_dir" value="/logs/" />
+  <property name="log_dir" value="C:/logs/" />
   <!-- 日志最大的历史 30天 -->
   <property name="maxHistory" value="7"/>
   <property name="projectName" value="cac"/>
@@ -153,7 +153,7 @@
 
 
   <!-- root级别   DEBUG -->
-  <root level="DEBUG">
+  <root level="INFO">
     <!-- 控制台输出 -->
     <appender-ref ref="STDOUT" />
     <!-- 文件输出 -->

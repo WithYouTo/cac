@@ -15,6 +15,7 @@ import com.qcap.cac.constant.CommonCodeConstant;
 import com.qcap.cac.dto.EventTaskRestDto;
 import com.qcap.cac.dto.QueryHistoryFlightInfoReq;
 import com.qcap.cac.dto.QueryHistoryFlightInfoResp;
+import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.EventTaskRestSrv;
 import com.qcap.core.model.ResParams;
 import io.swagger.annotations.Api;
@@ -47,7 +48,12 @@ public class EventTaskRestController {
 	@ApiOperation(value = "航班数据录入及事件性任务生成", notes = "航班数据录入及事件性任务生成", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
 	public ResParams geneEventTask(@Valid EventTaskRestDto eventTaskDto) {
-		eventTaskSrv.geneEventTask(eventTaskDto);
+		try{
+			eventTaskSrv.geneEventTask(eventTaskDto);
+		}catch (Exception e){
+			throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE,CommonCodeConstant.SYS_EXCEPTION_MSG);
+		}
+
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "新增航班数据成功");
 
 	}

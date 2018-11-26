@@ -20,7 +20,7 @@ import java.util.Map;
 
 public interface EventTaskRestSrv {
 
-	void geneEventTask(EventTaskRestDto eventTaskDto);
+	void geneEventTask(EventTaskRestDto eventTaskDto)throws InterruptedException;
 
 	List<QueryHistoryFlightInfoResp> queryHistoryFlightInfo(QueryHistoryFlightInfoReq req);
 
