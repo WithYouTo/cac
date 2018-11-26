@@ -5,10 +5,10 @@ server:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://10.10.0.12:3333/whxxfame?zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true
+    url: jdbc:mysql://192.168.1.92:3306/cac?zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowMultiQueries=true
     driver-class-name: com.mysql.jdbc.Driver
-    password: root
-    username: root
+    password: Admin@2018dzwy
+    username: cac
     druid:
       max-pool-prepared-statement-per-connection-size: 20
       min-idle: 5
@@ -34,7 +34,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   redis:
-    host: 192.168.185.13
+    host: 192.168.1.184
     password: whxx123.
     database: 0
     port: 6379
@@ -67,7 +67,7 @@ logging:
 rest:
   restfulSign: /rest
   coreOpen: true
-  swaggerEnable: true
+  swaggerEnable: false
 mybatis:
   mapper-refresh: true
   iPage:
@@ -82,4 +82,4 @@ fdfs:
     width: 150
     height: 150
   trackerList:
-    - 10.10.0.11:22122
+    - 192.168.1.226:22122
