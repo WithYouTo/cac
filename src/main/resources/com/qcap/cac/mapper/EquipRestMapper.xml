@@ -39,7 +39,7 @@
 			and a.SEQ_ &gt; #{lineNo}
 		</if>
 		GROUP BY  b.EQUIP_TYPE
-		order by a.SEQ_ DESC
+		order by a.SEQ_
 		limit 0,10
 	</select>
 
