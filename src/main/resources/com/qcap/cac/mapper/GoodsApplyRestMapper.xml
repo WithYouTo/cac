@@ -24,7 +24,7 @@
 		a.REQU_MOBILE,
 		a.REQU_NAME,
 		a.POSITION_CODE,
-		(select b.POSITION_NAME from tb_area_position b where a.POSITION_CODE = b.POSITION_CODE) positionName,
+		a.POSITION_NAME positionName,
 		DATE_FORMAT(a.REQU_TIME,'%Y-%m-%d') requTime,
 		DATE_FORMAT(a.CREATE_DATE,'%Y-%m-%d %H:%i:%s') createDate,
 		a.REQU_REMARK,
