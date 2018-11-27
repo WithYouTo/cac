@@ -189,7 +189,12 @@ public class GoodsApplyRestSrvImpl implements GoodsApplyRestSrv {
         for(GoodsOutDistruReq item : list){
 
             String requDetailId = item.getWarehouseReqDetailId();
-            TbWarehouseReqdetail warehouseReqdetail = this.warehouseReqDetailMapper.selectById(requDetailId);
+            if(StringUtils.isEmpty(requDetailId)){
+                throw new RuntimeException("发放明细主键为空");
+            }
+
+            String[] idArr = requDetailId.split(",");
+            TbWarehouseReqdetail warehouseReqdetail = this.warehouseReqDetailMapper.selectById(idArr[0]);
             if(null == warehouseReqdetail){
                 throw new RuntimeException("根据主键查询不到领用明细单信息");
             }
