@@ -197,6 +197,9 @@
         <if test="equipName != null and equipName != ''">
             EQUIP_NAME = #{equipName},
         </if>
+        <if test="equipType != null and equipType != ''">
+            EQUIP_TYPE = #{equipType},
+        </if>
         <if test="equipModel != null and equipModel != ''">
             EQUIP_MODEL = #{equipModel},
         </if>
