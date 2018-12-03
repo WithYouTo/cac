@@ -59,9 +59,16 @@ public class TaskArrangeSrvImpl implements TaskArrangeSrv {
             Map<String, String> param = new HashMap<>();
             param.put("positionCode", positionCode);
             param.put("positionName", positionName);
-            String positionId = this.taskArrangeMapper.queryIfPositionExist(param);
-            if (StringUtils.isBlank(positionId)) {
+            String shift = this.taskArrangeMapper.queryIfPositionExist(param);
+            if (StringUtils.isBlank(shift)) {
                 throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "岗位：" + positionName + "-" + positionCode + "不存在");
+            }
+
+            /**
+             * 判断岗位的班次
+             */
+            if(!taskArrangeDto.getShift().equals(shift)){
+                throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"岗位：" + positionName + "(" + positionCode + ")的班次错误");
             }
 
             /**

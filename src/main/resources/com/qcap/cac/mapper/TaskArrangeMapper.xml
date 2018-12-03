@@ -118,7 +118,7 @@
 
 	<select id="queryIfPositionExist" parameterType="Map" resultType="String">
 		SELECT
-			POSITION_ID AS positionId
+			SHIFT AS shift
 		FROM
 			tb_area_position
 		WHERE
