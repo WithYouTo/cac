@@ -83,9 +83,9 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 				zTreeNode.setName(Objects.toString(map.get("name")));
 				zTreeNode.setPid(Objects.toString(map.get("pId")));
 				if("".equals(Objects.toString(map.get("pId"),""))) {
-					zTreeNode.setPid("0");
+					zTreeNode.setPid("-1");
 				}
-				if ("0".equals(map.get("pId"))) {
+				if ("-1".equals(map.get("pId"))) {
 					zTreeNode.setOpen("true");
 				} else {
 					zTreeNode.setOpen("false");
@@ -414,6 +414,18 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		param.put("month", month);
 		param.put("employeeCode", employeeCode);
 		param.put(queryDay, queryDay);
+		/**
+		 * 添加班次查询
+		 */
+		Date curDate = calendar.getTime();
+		String curTime = DateUtil.dateTimeToString(curDate).substring(11);
+		Map<String ,String > shiftMap = this.tempTaskMapper.selectShiftByTime(curTime);
+		if(MapUtils.isEmpty(shiftMap)){
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"未设置班次");
+		}
+
+		String shift = shiftMap.get("shift");
+		param.put("shift",shift);
 		// 查询当班人员
 		return this.tempTaskMapper.selectCurrountWorkingEmployee(param);
 		

@@ -55,7 +55,7 @@ public interface AreaPositionMapper extends BaseMapper<TbAreaPosition> {
      * @return java.lang.Integer
      */
 
-    Integer checkExistPositionByAreaCodes(@Param("areaCode") String areaCode);
+    Integer checkExistPositionByAreaCodes(@Param("areaCode") String areaCode,@Param("shift") String shift);
 
 
     /**

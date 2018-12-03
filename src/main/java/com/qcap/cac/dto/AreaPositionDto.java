@@ -8,6 +8,16 @@ public class AreaPositionDto {
 	
 	private String areaName;
 
+	private String shift;
+
+	public String getShift() {
+		return shift;
+	}
+
+	public void setShift(String shift) {
+		this.shift = shift;
+	}
+
 	public String getProgramCode() {
 		return programCode;
 	}

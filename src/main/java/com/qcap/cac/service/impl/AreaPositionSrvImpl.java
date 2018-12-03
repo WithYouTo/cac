@@ -72,6 +72,10 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
             wrapper.eq("PROGRAM_CODE",areaPositionDto.getProgramCode());
         }
 
+        if(StringUtils.isNotEmpty(areaPositionDto.getShift())){
+            wrapper.eq("SHIFT",areaPositionDto.getShift());
+        }
+
         wrapper.orderByAsc("POSITION_CODE");
         return this.areaPositionMapper.selectPage(page,wrapper);
     }
@@ -81,7 +85,7 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
 
         String areaCodes = areaPosition.getAreaCode();
         String positionType = areaPosition.getPositionType();
-
+        String shift = areaPosition.getShift();
 
         if(StringUtils.isEmpty(areaPosition.getProgramCode())){
             throw  new RuntimeException("新增岗位前请先选择项目");
@@ -93,6 +97,10 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
 
         if(StringUtils.isEmpty(positionType)){
             throw  new RuntimeException("新增岗位前请先选择岗位类型");
+        }
+
+        if(StringUtils.isEmpty(shift)){
+            throw  new RuntimeException("新增岗位前请先选择班次类型");
         }
 
         //岗位编码是否重复
@@ -113,7 +121,7 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
         if("3".equals(positionType)){
             List<String> areaCodeList = Arrays.asList(areaPosition.getAreaCode().split(","));
            for(String areaCode : areaCodeList){
-               if(areaPositionMapper.checkExistPositionByAreaCodes(areaCode) > 0){
+               if(areaPositionMapper.checkExistPositionByAreaCodes(areaCode,shift) > 0){
                    throw new  RuntimeException("选择的区域已存在其他岗位中，无法新增");
                }
            }
@@ -176,8 +184,12 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
     public Integer updateAreaPosition(TbAreaPosition areaPosition) throws Exception{
 
         String positionId = areaPosition.getPositionId();
+        String shift = areaPosition.getShift();
         if(StringUtils.isEmpty(positionId)){
             throw  new RuntimeException("岗位修改主键为空");
+        }
+        if(StringUtils.isEmpty(shift)){
+            throw  new RuntimeException("新增岗位前请先选择班次类型");
         }
 
         //原始岗位记录
@@ -208,7 +220,7 @@ public class AreaPositionSrvImpl extends ServiceImpl<AreaPositionMapper, TbAreaP
         if("3".equals(areaPosition.getPositionType())){
             List<String> areaCodeList = Arrays.asList(areaPosition.getAreaCode().split(","));
             for(String areaCode : areaCodeList){
-                if(areaPositionMapper.checkExistPositionByAreaCodes(areaCode) > 1){
+                if(areaPositionMapper.checkExistPositionByAreaCodes(areaCode,shift) > 1){
                     throw new  RuntimeException("选择的区域已存在其他岗位中，无法修改");
                 }
             }

@@ -12,6 +12,11 @@ public class TbAreaPosition {
     private String positionId;
 
     /**
+     * 班次
+     */
+    private String shift;
+
+    /**
     *   岗位编码
      */
     private String positionCode;
@@ -91,6 +96,14 @@ public class TbAreaPosition {
     *   版本
      */
     private Integer version;
+
+    public String getShift() {
+        return shift;
+    }
+
+    public void setShift(String shift) {
+        this.shift = shift;
+    }
 
     public String getProgramCode() {
         return programCode;
