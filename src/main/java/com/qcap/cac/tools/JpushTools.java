@@ -10,6 +10,7 @@ import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.push.PushResult;
+import cn.jpush.api.push.model.Options;
 import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
@@ -121,15 +122,29 @@ public class JpushTools {
 	}
 
 	// 所有平台，推送目标是别名为 alias(单个)，通知内容为 alert
+	//.setOptions(Options.newBuilder().setApnsProduction(true).build())设置推送消息在正式环境上生效
 	private static PushPayload buildPushObject_all_alias_alert(String alias, String alert) {
-		return PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.alias(alias))
-				.setNotification(Notification.alert(alert)).build();
+		return PushPayload.newBuilder()
+				.setPlatform(Platform.all())
+				.setAudience(Audience.alias(alias))
+				.setNotification(Notification.alert(alert))
+				.setOptions(Options.newBuilder().setApnsProduction(true).build())
+				.build();
 	}
 
 	// 所有平台，推送目标是别名为 aliasArray(多个)，通知内容为 alert
 	private static PushPayload buildPushObject_all_aliasArray_alert(List<String> aliasArray, String alert) {
 		return PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.alias(aliasArray))
 				.setNotification(Notification.alert(alert)).build();
+	}
+	
+	
+	public static void main(String[] args) {
+		String masterSecret="d12fb1aab79e6c69e7d5e259";
+		String appKey="7964200ebd2f9d0cbc6fda6e";
+		String userNo="8040392";
+		String msg="苹果手机消息通知测试";
+		JpushTools.pushSingle(masterSecret, appKey, userNo, msg);
 	}
 
 }
