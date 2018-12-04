@@ -77,7 +77,10 @@
 		WHEN m.TASK_TYPE ='EVENT' THEN '事件'
 		WHEN m.TASK_TYPE ='SPECIAL' THEN '专项'
 		END AS taskTypeName,
-		CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %H:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %H:%i')) AS cleanTime,
+		CASE WHEN TASK_STATUS !='FINISH'
+		THEN CONCAT(DATE_FORMAT(m.START_TIME,'%m-%d %H:%i'),'至',DATE_FORMAT(m.END_TIME,'%m-%d %H:%i'))
+		ELSE CONCAT(DATE_FORMAT(m.START_WORK_TIME,'%m-%d %H:%i'),'至',DATE_FORMAT(m.COMPLETE_TIME,'%m-%d %H:%i'))
+		END AS cleanTime,
 		DATE_FORMAT(m.START_TIME,'%Y-%m-%d %T') AS startTime,
 		IFNULL(m.SPEC,'') AS  spec,
 		m.TASK_SCORE  AS  taskScore,
