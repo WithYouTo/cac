@@ -13,7 +13,7 @@
 		m.AREA_CODE  AS  areaCode,
 		m.AREA_NAME  AS  areaName,
 		m.STANDARD_CODE  AS  standardCode,
-		CONCAT(m.AREA_NAME,m.STANDARD_NAME)  AS  standardName,
+		m.STANDARD_NAME  AS  standardName,
 		m.SHIFT  AS  shift,
 		m.SPEC  AS  spec,
 		m.EMPLOYEE_CODE  AS  employeeCode,
