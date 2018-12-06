@@ -113,9 +113,10 @@
 	ORDER BY STANDARD_CODE
 	</select>
 	
-	<select id="selectPosition" resultType="Map">
+	<select id="selectPosition" parameterType="String" resultType="Map">
 	SELECT POSITION_CODE AS code,POSITION_NAME AS text 
-	FROM tb_area_position 
+	FROM tb_area_position
+	WHERE SHIFT = #{shift}
 	ORDER BY POSITION_CODE 
 	</select>
 	

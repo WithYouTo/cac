@@ -47,8 +47,8 @@ public class TaskQueryAllSrvImpl implements TaskQueryAllSrv {
 
 
 	@Override
-	public List<Map<String,Object>> selectPosition() {
-		return taskQueryMapper.selectPosition();
+	public List<Map<String,Object>> selectPosition(String shift) {
+		return taskQueryMapper.selectPosition(shift);
 	}
 
 	@Override

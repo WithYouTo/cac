@@ -31,5 +31,28 @@
        	WHERE
        		POSITION_CODE = #{position}
     </select>
+
+	<select id="getEmpArrangeShift" parameterType="com.qcap.cac.dto.GetEmpArrangeShiftDto" resultType="Map">
+<!--		SELECT DISTINCT SHIFT FROM tb_task_arrangement
+		WHERE EMPLOYEE_CODE =#{employeeCode}
+		AND MONTH =#{monthNo}
+		<if test='programCode!=null and programCode!="" '>
+			AND PROGRAM_CODE =#{programCode}
+		</if>
+		AND DELETE_FLAG ='NORMAL'
+		ORDER BY SHIFT-->
+
+		SELECT DISTINCT m.SHIFT AS shift,n.DESC1_ AS shiftName
+		FROM tb_task_arrangement m LEFT JOIN tbpubcode01 n
+		ON m.SHIFT = n.DESC_
+		AND n.CONFIG_CODE_ ='SHIFT'
+		WHERE m.EMPLOYEE_CODE =#{employeeCode}
+		AND m.MONTH =#{monthNo}
+		<if test='programCode!=null and programCode!="" '>
+		AND m.PROGRAM_CODE =#{programCode}
+		</if>
+		AND m.DELETE_FLAG ='NORMAL'
+		ORDER BY SHIFT
+	</select>
 	
 </mapper>

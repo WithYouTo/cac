@@ -50,8 +50,8 @@ public class TaskQueryAllController {
 	
 	@ResponseBody
 	@RequestMapping(value="/selectPosition",method=RequestMethod.POST)
-	public Object selectPosition() {
-		List<Map<String,Object>>list=this.taskQueryAllSrvImpl.selectPosition();
+	public Object selectPosition(@RequestParam("shift") String shift) {
+		List<Map<String,Object>>list=this.taskQueryAllSrvImpl.selectPosition(shift);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
 

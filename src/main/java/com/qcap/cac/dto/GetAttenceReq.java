@@ -16,6 +16,16 @@ public class GetAttenceReq {
 	@ApiModelProperty(value = "排班年月")
 	private String month;
 
+	private String shift;
+
+	public String getShift() {
+		return shift;
+	}
+
+	public void setShift(String shift) {
+		this.shift = shift;
+	}
+
 	public String getEmployeeCode() {
 		return employeeCode;
 	}

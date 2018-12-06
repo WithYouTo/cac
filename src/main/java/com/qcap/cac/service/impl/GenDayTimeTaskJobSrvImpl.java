@@ -114,7 +114,7 @@ public class GenDayTimeTaskJobSrvImpl implements com.qcap.cac.service.GenTaskJob
 			}
 
 			// 3、查询岗位
-            List<Map<String, Object>> positionList = this.genDayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode);
+            List<Map<String, Object>> positionList = this.genDayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode,shift);
             if(CollectionUtils.isEmpty(positionList)){
                 unGeneratePlanList.add("Id为" + planId + "，区域为："+areaCode+"的计划未查询到岗位");
                 continue;

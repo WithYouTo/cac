@@ -13,7 +13,7 @@ public interface TaskQueryAllMapper {
 	
 	List<Map<String,Object>> selectStandard();
 	
-	List<Map<String,Object>> selectPosition();
+	List<Map<String,Object>> selectPosition(@Param("shift")String shift);
 	
 	List<Map<String,Object>> selectEmployee(@Param("programCode")String programCode);
 	

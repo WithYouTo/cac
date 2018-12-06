@@ -109,11 +109,10 @@
 
 	<select id="selectPositionItem" parameterType="String" resultType="Map">
 		SELECT POSITION_CODE AS id,POSITION_NAME AS text FROM tb_area_position
-		<where>
-			<if test=' programCode !=null and programCode !="" '>
-			 PROGRAM_CODE = #{programCode}
-			</if>
-		</where>
+		WHERE SHIFT =#{shift}
+		<if test=' programCode !=null and programCode !="" '>
+		AND PROGRAM_CODE = #{programCode}
+		</if>
 	</select>
 
 	<select id="queryIfPositionExist" parameterType="Map" resultType="String">

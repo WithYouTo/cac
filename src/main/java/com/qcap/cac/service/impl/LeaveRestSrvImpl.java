@@ -11,6 +11,7 @@ import com.qcap.cac.entity.TbLeave;
 import com.qcap.cac.exception.BaseException;
 import com.qcap.cac.service.LeaveRestSrv;
 import com.qcap.cac.service.MessageRestSrv;
+import com.qcap.cac.service.TempTaskSrv;
 import com.qcap.cac.tools.EntityTools;
 import com.qcap.cac.tools.RedisTools;
 import com.qcap.cac.tools.ToolUtil;
@@ -49,6 +50,9 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Resource
+    private TempTaskSrv tempTaskSrv;
 
 
 
@@ -234,18 +238,23 @@ public class LeaveRestSrvImpl extends ServiceImpl<LeaveRestMapper, TbLeave> impl
      * @return: List<String>
      */
     private List<String> getEmpManager(String employeeCode) {
-    	String areaCode = this.leaveRestMapper.selectAreaCodeByEmployCode(employeeCode);
+        /**
+         * 根据通用代码档，查询当前时间所属的班次
+         */
+        String curShift = tempTaskSrv.getShiftByCurTime();
+    	String areaCode = this.leaveRestMapper.selectAreaCodeByEmployCode(employeeCode,curShift);
     	if(StringUtils.isBlank(areaCode)) {
     		throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "根据工号未查询到岗位所对应的区域");
     	}
     	String [] areaCodeArr = areaCode.split(",");
     	String sqlHead= "SELECT EMPLOYEE_CODE " + 
 		    			"FROM tb_task_arrangement " + 
-		    			"WHERE POSITION_CODE =(" + 
+		    			"WHERE POSITION_CODE IN (" +
 		    			"			SELECT POSITION_CODE FROM tb_area_position " + 
-		    			"			WHERE POSITION_TYPE !='3' " ;
+		    			"			WHERE POSITION_TYPE !='3' " +
+                        "          AND  SHIFT = " +"'"+curShift+"'";
 	    			
-    	String sqlFoot ="			LIMIT 1 )";
+    	String sqlFoot ="			 )";
     	String sqlCondition="";
     	for(String str : areaCodeArr) {
     		sqlCondition += "	AND INSTR(AREA_CODE,'"+str+"') " ;

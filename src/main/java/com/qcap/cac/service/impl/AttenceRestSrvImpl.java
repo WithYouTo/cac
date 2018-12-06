@@ -229,6 +229,10 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 	}
 
 	public Map<String, Object> getTaskArrangement(GetAttenceReq req) {
+		/**
+		 * 根据通用代码档，查询当前时间所属的班次
+		 */
+		String curShift = req.getShift();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT "
 				+ "IFNULL(MAX(shift_1),0) shift_1,IFNULL(MAX(shift_2),0) shift_2,IFNULL(MAX(shift_3),0) shift_3,"
@@ -274,13 +278,18 @@ public class AttenceRestSrvImpl implements AttenceRestSrv {
 				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_29)) >0 THEN SHIFT ELSE 0 END  shift_29,"
 				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_30)) >0 THEN SHIFT ELSE 0 END  shift_30,"
 				+ "CASE WHEN LOCATE('√',GROUP_CONCAT(DAY_31)) >0 THEN SHIFT ELSE 0 END  shift_31 "
-				+ "FROM tb_task_arrangement WHERE EMPLOYEE_CODE = ? AND DELETE_FLAG = ? AND MONTH = ? )A");
+				+ "FROM tb_task_arrangement WHERE EMPLOYEE_CODE = ? AND DELETE_FLAG = ? AND MONTH = ? AND SHIFT = ? )A");
 		return jdbcTemplate.queryForMap(sql.toString(),
-				new Object[] { req.getEmployeeCode(), CommonConstant.DELETE_FLAG_NORMAL, req.getMonth() });
+				new Object[] { req.getEmployeeCode(), CommonConstant.DELETE_FLAG_NORMAL, req.getMonth() ,curShift});
 	}
 
 	public boolean checkPositionCode(String positionCode) throws Exception {
 		int i = attenceRestMapper.checkPositionCode(positionCode);
 		return i > 0;
+	}
+
+	@Override
+	public List<Map<String ,String>> getEmpArrangeShift(GetEmpArrangeShiftDto getTaskArrangementDto) throws Exception {
+		return this.attenceRestMapper.getEmpArrangeShift(getTaskArrangementDto);
 	}
 }

@@ -96,13 +96,13 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 		taskStartTime = taskTime.get("start");
 		taskEndTime = taskTime.get("end");
 
-		// 获取岗位
-		Map<String, Object> positionMap = this.getPosition(eventTaskDto);
-		positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
-		positionName = ToolUtil.toStr(positionMap.get("positionName"));
-
 		// 获取班次
 		String shift = this.getShift(taskStartTime);
+
+		// 获取岗位
+		Map<String, Object> positionMap = this.getPosition(eventTaskDto,shift);
+		positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+		positionName = ToolUtil.toStr(positionMap.get("positionName"));
 
 		// 获取当班人员
 		List<Map<String, Object>> list = this.getWorkingEmployee(shift, positionCode, taskStartTime);
@@ -261,8 +261,8 @@ public class EventTaskRestSrvImpl implements EventTaskRestSrv {
 	 * @Title: getPosition @Description: 获取岗位 @param: @param
 	 * eventTaskDto @param: @return @return: Map<String,Object> @throws
 	 */
-	public Map<String, Object> getPosition(EventTaskRestDto eventTaskDto) {
-		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(eventTaskDto.getAreaCode());
+	public Map<String, Object> getPosition(EventTaskRestDto eventTaskDto,String shift) {
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(eventTaskDto.getAreaCode(),shift);
 		if (MapUtils.isEmpty(positionMap)) {
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "该区域未设置岗位");
 		}

@@ -27,4 +27,6 @@ public interface TempTaskSrv {
 	Map<String, Object> selectDefaultEmployee(String startTime, String areaCode);
 	
 	List<Map<String, Object>> selectCurrountWorkingEmployee(String employeeCode);
+
+	String getShiftByCurTime();
 }

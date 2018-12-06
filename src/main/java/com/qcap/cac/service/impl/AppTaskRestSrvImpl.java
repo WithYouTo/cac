@@ -521,19 +521,6 @@ private String dealWithSpecialTaskTime(String startTime) {
 	@Override
 	public void addTempTask (List<MultipartFile>list,AppTaskAddRestReq appTaskAddRestReq) throws IOException, InvocationTargetException, IllegalAccessException {
 		String imgUrl = uploadPicture(list);
-
-		// 查询岗位
-		String areaCode = appTaskAddRestReq.getAreaCode();
-		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
-		if (MapUtils.isEmpty(positionMap)) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"当前区域未设置岗位");
-		}
-		String positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
-		String positionName = ToolUtil.toStr(positionMap.get("positionName"));
-		
-		//查询项目编码
-		String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(appTaskAddRestReq.getEmployeeCode());
-
 		// 查询班次
 		/**
 		 *   时间  ———待确认
@@ -548,6 +535,18 @@ private String dealWithSpecialTaskTime(String startTime) {
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"根据计划时间未查询到班次，请先设置班次");
 		}
 		String shift = shiftMap.get("shift");
+
+		// 查询岗位
+		String areaCode = appTaskAddRestReq.getAreaCode();
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode,shift);
+		if (MapUtils.isEmpty(positionMap)) {
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"当前区域未设置岗位");
+		}
+		String positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+		String positionName = ToolUtil.toStr(positionMap.get("positionName"));
+		
+		//查询项目编码
+		String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(appTaskAddRestReq.getEmployeeCode(),shift);
 
 		String taskCode = CommonConstant.TASK_PREFIX_T + DateUtil.dateTimeToStringForLineNo(now);
 
@@ -756,13 +755,17 @@ private String dealWithSpecialTaskTime(String startTime) {
 		arrangeShift.setCreateEmp(appTaskArrangeShiftRestReq.getLoginName());
 
 		this.appTaskRestMapper.insertArrangeShift(arrangeShift);
-		
+
+		String shift = appTaskArrangeShiftRestReq.getShift();
+		if(StringUtils.isEmpty(shift)){
+			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"调班时班次不能为空");
+		}
 		String employeeCode = appTaskArrangeShiftRestReq.getEmployeeCode();
-		String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(employeeCode);
+		String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(employeeCode,shift);
 		messageRestSrvImpl.JpushMessage(employeeCode, programCode, "调班成功：您的任务将分派给顶班人员", "调班");
 		
 		String extraEmployeeCode = appTaskArrangeShiftRestReq.getExtraEmployeeCode();
-		String extraProgramCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(extraEmployeeCode);
+		String extraProgramCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(extraEmployeeCode,shift);
 		messageRestSrvImpl.JpushMessage(extraEmployeeCode, extraProgramCode, "调班成功：您将接受其他人的任务，请注意查看", "调班");
     }
     
@@ -802,7 +805,7 @@ private String dealWithSpecialTaskTime(String startTime) {
         String shift = appTaskArrangeShiftRestReq.getShift();
         String employeeCode = appTaskArrangeShiftRestReq.getEmployeeCode();
         String positionCode = appTaskArrangeShiftRestReq.getPositionCode();
-        String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(employeeCode);
+        String programCode = this.appTaskRestMapper.selectProgramCodeByEmployeeCode(employeeCode,shift);
         String [] args ={shift,month,employeeCode,positionCode};
 
         int updateItem = jdbcTemplate.update(sql,args);
@@ -859,7 +862,13 @@ private String dealWithSpecialTaskTime(String startTime) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("employeeCode", employeeCode);
 		param.put("monthNo", monthNo);
+		/**
+		 * 根据通用代码档，查询当前时间所属的班次
+		 */
+		String curShift = tempTaskSrvImpl.getShiftByCurTime();
+		param.put("curShift",curShift);
 		String shift = this.appTaskRestMapper.selectShiftType(param);
+
 
 		if (StringUtils.isEmpty(shift)) {
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40401, "未查询到该员工的班次");
@@ -920,7 +929,7 @@ private String dealWithSpecialTaskTime(String startTime) {
 		return map;
 	}
 
-	/** 
+	/**
 	 * 查询任务数量：
 	 * @Title: queryTaskItemTime 
 	 * @Description: TODO

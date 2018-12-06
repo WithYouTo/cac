@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.qcap.cac.dto.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.qcap.cac.constant.CommonCodeConstant;
-import com.qcap.cac.dto.AttenceReq;
-import com.qcap.cac.dto.GetAttenceDetailsReq;
-import com.qcap.cac.dto.GetAttenceDetailsResp;
-import com.qcap.cac.dto.GetAttenceReq;
-import com.qcap.cac.dto.GetAttenceResp;
 import com.qcap.cac.service.AttenceRestSrv;
 import com.qcap.core.model.ResParams;
 
@@ -75,6 +71,14 @@ public class AttenceRestController {
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
 	public ResParams getAttenceDetails(@Valid GetAttenceDetailsReq req) throws Exception {
 		List<GetAttenceDetailsResp> ls = attenceRestSrv.getAttenceDetails(req);
+		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
+	}
+
+	@RequestMapping(value = "/getTaskArrangement", method = RequestMethod.POST)
+	@ApiOperation(value = "获取排班班次", notes = "获取排班班次", response = Map.class, httpMethod = "POST")
+	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
+	public ResParams getTaskArrangement(@Valid GetEmpArrangeShiftDto req) throws Exception {
+		List<Map<String ,String>> ls = attenceRestSrv.getEmpArrangeShift(req);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, ls);
 	}
 

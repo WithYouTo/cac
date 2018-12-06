@@ -21,7 +21,7 @@ public interface LoginRestMapper {
 
     void updateManagerPwd(TbManager tbManager);
 
-    TbAreaPosition selectAreaPositionByWorkNo(String workNo);
+    TbAreaPosition selectAreaPositionByWorkNo(@Param("workNo") String workNo,@Param("shift") String shift);
 
     List<UserListResp> getUserListByRoleNum(@Param("roleNum") String roleNum,@Param("programCode") String programCode);
 

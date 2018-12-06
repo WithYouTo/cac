@@ -13,7 +13,7 @@ public interface GenDayTimeTaskJobMapper {
 	
 	List<Map<String, Object>>selectPlan(Map<String, Object> map);
 	
-	List<Map<String, Object>> selectPositionInfoByAreaCode(@Param("areaCode") String areaCode);
+	List<Map<String, Object>> selectPositionInfoByAreaCode(@Param("areaCode") String areaCode,@Param("shift") String shift);
 	
 	Map<String, Object> selectStandardInfo(@Param("standardCode") String standardCode);
 	

@@ -30,14 +30,14 @@
 		SUPER_AREA_CODE superAreaCode
 		FROM
 		tb_area b
-        <where>
+        WHERE not exists (SELECT c.SUPER_AREA_CODE from tb_area c WHERE b.AREA_CODE=c.SUPER_AREA_CODE)
         	<if test="getAreaReq.areaType != null and getAreaReq.areaType != ''">
 	            AND b.AREA_TYPE = #{getAreaReq.areaType}
 	        </if>
 			<if test="getAreaReq.programCode !=null and getAreaReq.programCode!= ''">
 				and b.PROGRAM_CODE = #{getAreaReq.programCode}
 			</if>
-	   	</where>
+		ORDER BY b.AREA_NAME
     </select>
     
     <select id="getPositionByPositionCode" parameterType="com.qcap.cac.dto.GetAreaReq"  resultType="com.qcap.cac.entity.TbAreaPosition">
@@ -67,6 +67,7 @@
 		   	<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
 	            #{item}
 	        </foreach>
+		ORDER BY AREA_NAME
     </select>
 
 </mapper>

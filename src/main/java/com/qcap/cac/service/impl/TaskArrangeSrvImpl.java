@@ -174,8 +174,8 @@ public class TaskArrangeSrvImpl implements TaskArrangeSrv {
     }
 
     @Override
-    public List<Map<String, String>> selectPositionItem(String programCode) {
-        return this.taskArrangeMapper.selectPositionItem(programCode);
+    public List<Map<String, String>> selectPositionItem(String programCode,String shift) {
+        return this.taskArrangeMapper.selectPositionItem(programCode,shift);
     }
 
     private List<Boolean> getBooleanList(String monthNo,int dateNum) {

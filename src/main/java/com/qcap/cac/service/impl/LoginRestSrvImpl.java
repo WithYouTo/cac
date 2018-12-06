@@ -160,6 +160,17 @@ public class LoginRestSrvImpl implements LoginRestSrv {
 
 
         if(StringUtils.isNotBlank(positionCode) || StringUtils.isNotBlank(shift)){
+            /**
+             * 如果前端没有传入班次参数，则默认根据当前时间查询班次
+             */
+            if(StringUtils.isBlank(shift)){
+                /**
+                 * 根据通用代码档，查询当前时间所属的班次
+                 */
+                String curShift = tempTaskSrv.getShiftByCurTime();
+                params.put("shift",curShift);
+            }
+
             List<UserListResp> poList = this.loginRestMapper.getUserListByPositionCode(params);
             return poList;
         }else if (!("").equals(roleNum) && !Objects.isNull(roleNum)){

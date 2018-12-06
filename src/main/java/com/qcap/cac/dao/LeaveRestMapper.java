@@ -20,5 +20,5 @@ public interface LeaveRestMapper  extends BaseMapper<TbLeave> {
 
 	AppLeaveReq selectLeaveDetailById(String leaveId);
 	
-	String selectAreaCodeByEmployCode (@Param("employeeCode") String employeeCode);
+	String selectAreaCodeByEmployCode (@Param("employeeCode") String employeeCode,@Param("shift") String shift);
 }

@@ -7,6 +7,7 @@
 	FROM tb_task_arrangement 
 	WHERE EMPLOYEE_CODE =#{employeeCode}
 	AND `MONTH` =#{monthNo}
+	AND SHIFT =#{curShift}
 	</select>
 
 	<select id="selectShiftTime" parameterType="String" resultType="Map">
@@ -473,6 +474,7 @@
     SELECT DISTINCT PROGRAM_CODE 
 	from tb_task_arrangement
 	WHERE EMPLOYEE_CODE =#{employeeCode}
+	AND SHIFT = #{shift}
 	LIMIT 1
   </select>
 

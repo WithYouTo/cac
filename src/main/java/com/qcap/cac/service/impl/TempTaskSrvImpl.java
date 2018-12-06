@@ -122,16 +122,6 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		// ToolUtil.toStr(standardList.get(0).get("uploadPicFlag"));
 		// String checkFlag =
 		// ToolUtil.toStr(standardList.get(0).get("checkFlag"));
-		// 查询岗位
-		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
-		if (positionMap != null && !positionMap.isEmpty()) {
-			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
-			positionName = ToolUtil.toStr(positionMap.get("positionName"));
-		} else {
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
-			return map;
-		}
 
 		// 查询班次
 		String queryTime = startTime.substring(11);
@@ -142,6 +132,17 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			return map;
 		}
 		String shift = shiftMap.get("shift");
+
+		// 查询岗位
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode,shift);
+		if (positionMap != null && !positionMap.isEmpty()) {
+			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+			positionName = ToolUtil.toStr(positionMap.get("positionName"));
+		} else {
+			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
+			return map;
+		}
 
 		Date now = new Date();
 		String taskCode = CommonConstant.TASK_PREFIX_T + DateUtil.dateTimeToStringForLineNo(now);
@@ -212,16 +213,6 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 	public  Map<String,Object> selectDefaultEmployee(String startTime,String areaCode) {
 		Map<String,Object> map = new HashMap<>();
 		String positionCode=null;
-		
-		// 查询岗位
-		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
-		if (positionMap != null && !positionMap.isEmpty()) {
-			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
-		} else {
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
-			return map;
-		}
 
 		// 查询班次
 		String queryTime = startTime.substring(11);
@@ -232,6 +223,17 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			return map;
 		}
 		String shift = shiftMap.get("shift");
+
+		// 查询岗位
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode,shift);
+		if (positionMap != null && !positionMap.isEmpty()) {
+			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+		} else {
+			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
+			return map;
+		}
+
 		// 处理日期
 		Date startDate = DateUtil.stringToDate(startTime);
 		Calendar calendar = Calendar.getInstance();
@@ -302,17 +304,6 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			return map;
 		}
 
-		// 查询岗位
-		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode);
-		if (positionMap != null && !positionMap.isEmpty()) {
-			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
-			positionName = ToolUtil.toStr(positionMap.get("positionName"));
-		} else {
-			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
-			map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
-			return map;
-		}
-
 		// 查询班次
 		String queryTime = startTime.substring(11);
 		Map<String, String> shiftMap = this.tempTaskMapper.selectShiftByTime(queryTime);
@@ -322,6 +313,17 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 			return map;
 		}
 		String shift = shiftMap.get("shift");
+
+		// 查询岗位
+		Map<String, Object> positionMap = this.tempTaskMapper.selectPositionInfoByAreaCode(areaCode,shift);
+		if (positionMap != null && !positionMap.isEmpty()) {
+			positionCode = ToolUtil.toStr(positionMap.get("positionCode"));
+			positionName = ToolUtil.toStr(positionMap.get("positionName"));
+		} else {
+			map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_FAIL_FLAG);
+			map.put(CommonConstant.BACK_MESSAGE, "该区域未设置岗位");
+			return map;
+		}
 
 		TbTask task = new TbTask();
 		task.setTaskCode(taskCode);
@@ -396,8 +398,11 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 
 	@Override
 	public List<Map<String, Object>> selectAllEmployee(String monthNo) {
-		// TODO Auto-generated method stub
-		return this.tempTaskMapper.selectAllEmployee(monthNo);
+		/**
+		 * 根据通用代码档，查询当前时间所属的班次
+		 */
+		String curShift = getShiftByCurTime();
+		return this.tempTaskMapper.selectAllEmployee(monthNo,curShift);
 	}
 
 	@Override
@@ -417,18 +422,23 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		/**
 		 * 添加班次查询
 		 */
+		String shift = getShiftByCurTime();
+		param.put("shift",shift);
+		// 查询当班人员
+		return this.tempTaskMapper.selectCurrountWorkingEmployee(param);
+		
+	}
+
+	@Override
+	public  String getShiftByCurTime() {
+		Calendar calendar = Calendar.getInstance();
 		Date curDate = calendar.getTime();
 		String curTime = DateUtil.dateTimeToString(curDate).substring(11);
 		Map<String ,String > shiftMap = this.tempTaskMapper.selectShiftByTime(curTime);
 		if(MapUtils.isEmpty(shiftMap)){
 			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402,"未设置班次");
 		}
-
-		String shift = shiftMap.get("shift");
-		param.put("shift",shift);
-		// 查询当班人员
-		return this.tempTaskMapper.selectCurrountWorkingEmployee(param);
-		
+		return shiftMap.get("shift");
 	}
 
 }

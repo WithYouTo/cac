@@ -59,6 +59,6 @@ public interface AppTaskRestMapper {
 	
 	String selectEmployeeName (@Param("employeeCode") String employeeCode);
 	
-	String selectProgramCodeByEmployeeCode (@Param("employeeCode") String employeeCode);
+	String selectProgramCodeByEmployeeCode (@Param("employeeCode") String employeeCode,@Param("shift") String shift);
 	
 }

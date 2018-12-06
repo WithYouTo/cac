@@ -62,8 +62,8 @@ public class TaskArrangeController {
 	}
 
 	@RequestMapping("/selectPositionItem")
-	public Object selectPositionItem(@RequestParam("programCode") String programCode) {
-		List<Map<String, String>> list = this.taskArrangeSrvImpl.selectPositionItem(programCode);
+	public Object selectPositionItem(@RequestParam("programCode") String programCode,@RequestParam("shift") String shift) {
+		List<Map<String, String>> list = this.taskArrangeSrvImpl.selectPositionItem(programCode,shift);
 		PageInfo<Map<String, String>> pageInfo =new PageInfo<>(list);
 		return PageResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "", pageInfo.getTotal(), list);
 	}

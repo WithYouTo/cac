@@ -35,7 +35,7 @@
 		order by c.seq
 	</select>
 
-	<select id="selectAreaPositionByWorkNo" resultType="com.qcap.cac.entity.TbAreaPosition">
+	<select id="selectAreaPositionByWorkNo" parameterType="String" resultType="com.qcap.cac.entity.TbAreaPosition">
 		SELECT
 		b.POSITION_CODE positionCode,
 		b.POSITION_ID positionId,
@@ -44,6 +44,7 @@
 		LEFT JOIN TB_AREA_POSITION b
 		ON a.POSITION_CODE = B.POSITION_CODE
 		WHERE  CHARINDEX(a.EMPLOYEE_CODE,#{employeeCode})>0
+		AND SHIFT = #{shift}
 	</select>
 
 	<select id="getAppUserInfoByManagerCode" resultType="com.qcap.cac.dto.MyInfoResp"  parameterType="String">

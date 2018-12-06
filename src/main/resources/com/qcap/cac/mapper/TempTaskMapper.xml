@@ -273,7 +273,8 @@
 	SELECT POSITION_CODE positionCode,POSITION_NAME positionName from tb_area_position 
 	WHERE FIND_IN_SET(#{areaCode},AREA_CODE)
 	AND POSITION_TYPE = '3'
-	ORDER BY LENGTH(AREA_CODE) 
+	AND SHIFT = #{shift}
+	ORDER BY LENGTH(AREA_CODE)
 	LIMIT 1
 	</select>
 	
@@ -398,6 +399,7 @@
 	EMPLOYEE_TEL employeeTel
 	FROM tb_task_arrangement 
 	WHERE MONTH =#{monthNo}
+	AND SHIFT = #{shift}
 	AND DELETE_FLAG ='NORMAL'
 	</select>
 	
@@ -414,9 +416,7 @@
 	FROM tb_task_arrangement 
 	WHERE MONTH=#{month} 
 	AND EMPLOYEE_CODE=#{employeeCode}
-	<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(shift)">
 	AND SHIFT =#{shift}
-	</if>
 	AND DELETE_FLAG ='NORMAL'
 	<include refid="selectWorkIngItem"/>
 	</select>

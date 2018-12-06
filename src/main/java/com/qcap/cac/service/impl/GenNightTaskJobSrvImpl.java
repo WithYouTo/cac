@@ -132,7 +132,7 @@ public class GenNightTaskJobSrvImpl implements GenTaskJobSrv {
 			}
 
 			// 3、查询岗位
-			List<Map<String, Object>> positionList = this.dayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode);
+			List<Map<String, Object>> positionList = this.dayTimeTaskMapper.selectPositionInfoByAreaCode(areaCode,shift);
             if(CollectionUtils.isEmpty(positionList)){
                 unGeneratePlanList.add("Id为" + planId + "，区域为："+areaCode+"的计划未查询到岗位");
                 continue;

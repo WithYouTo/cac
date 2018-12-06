@@ -11,7 +11,7 @@ public interface TaskQueryAllSrv {
 	
 	List<Map<String,Object>> selectStandard();
 	
-	List<Map<String,Object>> selectPosition();
+	List<Map<String,Object>> selectPosition(String shift);
 	
 	List<Map<String,Object>> selectEmployee(String programCode);
 	

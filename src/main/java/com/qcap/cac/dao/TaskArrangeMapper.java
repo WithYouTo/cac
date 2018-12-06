@@ -18,7 +18,7 @@ public interface TaskArrangeMapper {
 	
 	void deleteTaskArrange(TaskArrangeDto taskArrangeDto);
 
-	List<Map<String,String>> selectPositionItem(@Param("programCode")String programCode);
+	List<Map<String,String>> selectPositionItem(@Param("programCode")String programCode,@Param("shift") String shift);
 
 	String queryIfPositionExist (Map<String,String> map);
 

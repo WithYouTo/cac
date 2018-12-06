@@ -103,7 +103,7 @@ public interface TempTaskMapper {
 	 * @return
 	 * @return: Map
 	 */
-	Map<String, Object> selectPositionInfoByAreaCode(String areaCode);
+	Map<String, Object> selectPositionInfoByAreaCode(@Param("areaCode") String areaCode,@Param("shift") String shift);
 
 	/**
 	 * 查询当班值班人员
@@ -129,14 +129,11 @@ public interface TempTaskMapper {
 
 	/**
 	 * 查询所有人员
-	 * 
-	 * @Title: selectAllEmployee
-	 * @Description: TODO
 	 * @param monthNo
+	 * @param shift
 	 * @return
-	 * @return: List<Map<String,Object>>
 	 */
-	List<Map<String, Object>> selectAllEmployee(@Param("monthNo") String monthNo);
+	List<Map<String, Object>> selectAllEmployee(@Param("monthNo") String monthNo,@Param("shift") String shift);
 
 	List<Map<String, Object>> selectCurrountWorkingEmployee(Map<String, Object> map);
 }

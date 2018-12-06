@@ -124,6 +124,7 @@
 					tb_task_arrangement
 				WHERE
 					EMPLOYEE_CODE = #{employeeCode}
+					AND SHIFT = #{shift}
 				LIMIT 1
 			)
 		LIMIT 1
