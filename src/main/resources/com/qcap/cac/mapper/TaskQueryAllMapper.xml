@@ -104,6 +104,7 @@
 		<if test="@com.qcap.cac.tools.Ognl@isNotEmpty(endTimeEnd)">
 		AND m.END_TIME &lt;=#{endTimeEnd}
 		</if>
+		AND m.TASK_TYPE != "TEMP"
 		ORDER BY m.CREATE_DATE DESC
 	</select>
 	
