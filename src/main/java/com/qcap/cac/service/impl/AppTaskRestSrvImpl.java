@@ -496,6 +496,7 @@ private String dealWithSpecialTaskTime(String startTime) {
 			task.setCheckStatus(CommonConstant.TASK_CHECK_STATUS_TOCHECK);
 			task.setTaskImgUrl(imgUrl);
 			task.setStartTime(startTime);
+			task.setTaskFinishDesc(appTaskUpdateReq.getDisqualifiedReason());
 			task.setEndTime(endTime);
 			task.setVersion(0);
 			task.setCreateDate(new Date());

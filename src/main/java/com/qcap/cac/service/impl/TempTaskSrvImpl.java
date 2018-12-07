@@ -257,19 +257,23 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 		List<String> employeeCodeList = new ArrayList<>();
 		List<String> employeeNameList = new ArrayList<>();
 		List<String> employeeTelList = new ArrayList<>();
+		List<String> empList = new ArrayList<>();
 		for (Map<String, Object> m : list) {
 			employeeCodeList.add(ToolUtil.toStr(m.get("employeeCode")));
 			employeeNameList.add(ToolUtil.toStr(m.get("employeeName")));
 			employeeTelList.add(ToolUtil.toStr(m.get("employeeTel")));
+			empList.add(ToolUtil.toStr(m.get("employeeName"))+ToolUtil.toStr(m.get("employeeCode")));
 		}
 		String employeeCode = String.join(",", employeeCodeList);
 		String employeeName = String.join(",", employeeNameList);
 		String employeeTel = String.join(",", employeeTelList);
+		String emp = String.join(",", empList);
 		
 		map.put(CommonConstant.BACK_FLAG, CommonConstant.BACK_SUCCESS_FLAG);
 		map.put("employeeCode", employeeCode);
 		map.put("employeeName", employeeName);
 		map.put("employeeTel", employeeTel);
+		map.put("emp", emp);
 		return map;
 	}
 
