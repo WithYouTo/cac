@@ -52,13 +52,8 @@ public class AppTaskRestController {
 	@RequestMapping(value = "/queryHistoryTask", method = RequestMethod.POST)
 	@ApiOperation(value = "清洁人员查询任务历史记录", notes = "清洁人员查询任务历史记录", response = Map.class, httpMethod = "POST")
 	@ApiImplicitParam(paramType = "header", name = "api_version", defaultValue = "v1", required = true, dataType = "String")
-	public Object queryHistoryTask(@Valid AppTaskRestReq appTaskRestDto) {
-		List<Map<String, Object>> list = null;
-		try {
-			list = this.appTaskRestSrv.queryHistoryTask(appTaskRestDto);
-		} catch (Exception e) {
-			throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE, CommonCodeConstant.SYS_EXCEPTION_MSG);
-		}
+	public Object queryHistoryTask(@Valid AppTaskRestReq appTaskRestDto) throws Exception{
+		List<Map<String, Object>> list = this.appTaskRestSrv.queryHistoryTask(appTaskRestDto);
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_QUERY_DESC, list);
 	}
 
