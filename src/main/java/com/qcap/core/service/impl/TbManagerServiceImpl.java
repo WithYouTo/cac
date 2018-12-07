@@ -20,6 +20,8 @@ import com.qcap.core.utils.AppUtils;
 import com.qcap.core.utils.Md5Util;
 import com.qcap.core.utils.RedisUtil;
 import com.qcap.core.utils.jwt.JwtTokenUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +77,10 @@ public class TbManagerServiceImpl implements ITbManagerService {
 
 				String str= JSONObject.toJSONString(tbManager);
 				List<String> projectCodes = this.tbManagerMapper.getprojectCodesByManagerId(managerId);
-
+				if(CollectionUtils.isEmpty(projectCodes)){
+					LogManager.me().executeLog(LogTaskFactory.loginLog(account, "当前人员未分配项目", ip));
+					throw new Exception("当前人员未分配项目！");
+				}
 //				String projectCodestr = StringUtils.join(projectCodes, ",");
 				// 存储token的过期时间和用户ID
 //				redisUtil.set(AppUtils.getApplicationName() + ":manager:" + managerId, tbManager);
