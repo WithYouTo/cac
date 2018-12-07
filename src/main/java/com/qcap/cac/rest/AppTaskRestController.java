@@ -120,10 +120,10 @@ public class AppTaskRestController {
 			this.appTaskRestSrv.finishTask(fileList, appTaskUpdateReq);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE, CommonCodeConstant.SYS_EXCEPTION_MSG);
-		}
+            throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE,CommonCodeConstant.SYS_EXCEPTION_MSG);
+        }catch (BaseException e){
+            throw e;
+        }
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
 	}
 
@@ -162,9 +162,10 @@ public class AppTaskRestController {
 			this.appTaskRestSrv.checkTask(fileList, appTaskUpdateReq);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "检查任务失败");
-		}
+            throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE,CommonCodeConstant.SYS_EXCEPTION_MSG);
+        }catch (BaseException e){
+            throw e;
+        }
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_UPDATE_DESC);
 	}
 
@@ -204,11 +205,16 @@ public class AppTaskRestController {
 			this.appTaskRestSrv.addTempTask(fileList, appTaskAddRestReq);
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE,CommonCodeConstant.SYS_EXCEPTION_MSG);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
+            throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE,CommonCodeConstant.SYS_EXCEPTION_MSG);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		}
+            throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE,CommonCodeConstant.SYS_EXCEPTION_MSG);
+		}catch (BaseException e){
+		    throw e;
+        }
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, CommonCodeConstant.SUCCESS_INSERT_DESC);
 	}
 
@@ -242,12 +248,12 @@ public class AppTaskRestController {
 			this.appTaskRestSrv.changeShift(appTaskArrangeShiftRestReq);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
+            throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE,CommonCodeConstant.SYS_EXCEPTION_MSG);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
+            throw new BaseException(CommonCodeConstant.SYS_EXCEPTION_CODE,CommonCodeConstant.SYS_EXCEPTION_MSG);
 		} catch (BaseException e) {
 			throw e;
-		}catch (Exception e) {
-			throw new BaseException(CommonCodeConstant.ERROR_CODE_40402, "调班失败");
 		}
 		return ResParams.newInstance(CommonCodeConstant.SUCCESS_CODE, "调班成功");
 	}
