@@ -33,7 +33,7 @@
 	select COUNT(1), 'tempItem' 
 	FROM tb_task 
 	WHERE TASK_STATUS ='WAIT' 
-	AND TASK_CODE LIKE 'T%' 
+	AND TASK_TYPE ='TEMP'
 	AND START_TIME &gt;= #{startTime}
 	AND START_TIME &lt; #{endTime}
 	AND FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
@@ -41,11 +41,12 @@
 	select COUNT(1), 'disqualifiedItem' 
 	FROM tb_task 
 	WHERE TASK_STATUS ='WAIT' 
-	AND CHECK_STATUS != 'DISQUALIFIED'
-	AND TASK_CODE LIKE 'DQ%' 
+	AND TASK_CODE LIKE 'DQ%'
 	AND START_TIME &gt;= #{startTime}
 	AND START_TIME &lt; #{endTime}
 	AND FIND_IN_SET(#{employeeCode},EMPLOYEE_CODE)
+	AND END_TIME &gt;(CASE WHEN TASK_TYPE ='REGULAR' AND TASK_STATUS ='WAIT' THEN #{curTime} ELSE '1970-01-01 08:00:01' END)
+	AND CHECK_STATUS != 'DISQUALIFIED'
 	</select>
 
 <!-- 	<select id="queryTaskIntro" parameterType="com.qcap.cac.dto.AppTaskRestDto" resultType="Map">
