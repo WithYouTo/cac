@@ -433,7 +433,6 @@ private String dealWithSpecialTaskTime(String startTime) {
 				param.put("areaCode",areaCode);
 				param.put("checkStatus",appTaskCheckRestReq.getCheckStatus());
 				param.put("taskStatus",CommonConstant.TASK_STATUS_FINISH);
-				param.put("taskStatus",CommonConstant.TASK_STATUS_FINISH);
 				param.put("startTimePage", appTaskCheckRestReq.getStartTime());
 				param.put("lineNo", appTaskCheckRestReq.getLineNo());
 				/**
