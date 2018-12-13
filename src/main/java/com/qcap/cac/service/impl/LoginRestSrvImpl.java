@@ -54,7 +54,8 @@ public class LoginRestSrvImpl implements LoginRestSrv {
     public Map<String,Object> login(String employeeCode, String password) throws Exception{
         TbManager tbManager = this.loginRestMapper.selectManagerByWorkNo(employeeCode);
         List<Map<String,Object>> positionList = this.tempTaskSrv.selectCurrountWorkingEmployee(employeeCode);
-        String positions = getPositionsFromList(positionList);
+//        String positions = getPositionsFromList(positionList);
+        String positions = getPositionsFromListV2(positionList);
         if (tbManager != null) {
             if (checkPassword(tbManager.getPassword(), password, tbManager.getSalt())) {
                 String managerId = tbManager.getId();
@@ -128,7 +129,8 @@ public class LoginRestSrvImpl implements LoginRestSrv {
         TbManager tbManager = this.loginRestMapper.selectManagerByWorkNo(employeeCode);
         List<Map<String,Object>> positionList = this.tempTaskSrv.selectCurrountWorkingEmployee(employeeCode);
 
-        String positions = getPositionsFromList(positionList);
+//        String positions = getPositionsFromList(positionList);
+        String positions = getPositionsFromListV2(positionList);
         Map<String, Object> data = new HashMap<>();
         data.put("access_token", jwtTokenUtil.doGenerateToken(tbManager.getId()));
         data.put("employeeId", tbManager.getId());
@@ -198,5 +200,13 @@ public class LoginRestSrvImpl implements LoginRestSrv {
             sb.append(ToolUtil.toStr(map.get("positionCode")));
         }
         return sb.toString();
+    }
+
+    private String getPositionsFromListV2(List<Map<String, Object>> positionList) {
+        List<String > list = new ArrayList<>();
+        for (Map<String,Object> map : positionList){
+            list.add(ToolUtil.toStr(map.get("positionCode")));
+        }
+        return String.join(",",list);
     }
 }

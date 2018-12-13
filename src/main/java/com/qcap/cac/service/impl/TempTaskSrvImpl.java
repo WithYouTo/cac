@@ -83,9 +83,9 @@ public class TempTaskSrvImpl implements TempTaskSrv {
 				zTreeNode.setName(Objects.toString(map.get("name")));
 				zTreeNode.setPid(Objects.toString(map.get("pId")));
 				if("".equals(Objects.toString(map.get("pId"),""))) {
-					zTreeNode.setPid("-1");
+					zTreeNode.setPid("0");
 				}
-				if ("-1".equals(map.get("pId"))) {
+				if ("0".equals(map.get("pId"))) {
 					zTreeNode.setOpen("true");
 				} else {
 					zTreeNode.setOpen("false");
